@@ -21,22 +21,21 @@ namespace YIUIFramework
         public const string UINamespace = "YIUI"; //所有生成文件的命名空间
 
         [LabelText("YIUI项目资源路径")]
-        public const string UIProjectResPath = "Assets/GameRes/" + UIProjectName; //玩家的预设/图片等资源存放的地方
-
+        public const string UIProjectResPath = "Assets/LocalResources/" + UIProjectName; //玩家的预设/图片等资源存放的地方
+        
         [LabelText("YIUI项目脚本路径")]
-        public const string UIGenerationPath = "Assets/Scripts/YIUIGeneration"; //自动生成的代码
+        public const string UIGenerationPath = "Assets/YIUI/Gen"; //自动生成的代码
 
         [LabelText("YIUI项目自定义脚本路径")]
         public const string UICodeScriptsPath = "Assets/Scripts/" + UIProjectName; //玩家可编写的核心代码部分
 
         [LabelText("YIUI框架所处位置路径")]
-        public const string UIFrameworkPath = "Assets/Plugins/YIUIFramework";
+        public const string UIFrameworkPath = "Assets/YIUI/YIUIFramework";
 
         [LabelText("YIUI项目代码模板路径")]
         public const string UITemplatePath = UIFrameworkPath + "/YIUIEditor/YIUIAutoTool/Template";
 
-        public const string UIRootPrefabPath =
-            UIFrameworkPath + "/YIUIEditor/UIRootPrefab/" + PanelMgr.UIRootName + ".prefab";
+        public const string UIRootPrefabPath = UIFrameworkPath + "/YIUIEditor/UIRootPrefab/" + PanelMgr.UIRootName + ".prefab";
 
         public const string UIBaseName               = nameof(UIBase);
         public const string UIBasePanelName          = nameof(BasePanel);

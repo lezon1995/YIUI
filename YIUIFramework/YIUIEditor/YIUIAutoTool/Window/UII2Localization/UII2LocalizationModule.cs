@@ -29,7 +29,7 @@ namespace YIUIFramework.Editor
         [FolderPath]
         [ShowInInspector]
         [ReadOnly]
-        public const string UII2TargetLanguageResPath = "Assets/GameRes/I2Localization"; //运行时的资源是拆分的 根据需求加载
+        public const string UII2TargetLanguageResPath = "Assets/LocalResources/I2Localization"; //运行时的资源是拆分的 根据需求加载
 
         [Button("打开多语言数据", 50)]
         [GUIColor(0.4f, 0.8f, 1)]

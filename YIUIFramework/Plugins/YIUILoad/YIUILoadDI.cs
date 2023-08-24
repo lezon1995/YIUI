@@ -18,7 +18,7 @@ namespace YIUIFramework
         //同步加载方法
         //参数1: pkgName 包名
         //参数2: resName 资源名
-        //参数3: Type 需要加载的资源类型
+        //参数3: type 需要加载的资源类型
         //返回值: obj对象
         public static Func<string, string, Type, (Object, int)> LoadAssetFunc { internal get; set; }
 

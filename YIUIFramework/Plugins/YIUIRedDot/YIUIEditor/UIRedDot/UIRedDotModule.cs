@@ -18,13 +18,13 @@ namespace YIUIFramework.Editor
         private EnumPrefs<EUIRedDotViewType> m_EUIRedDotViewTypePrefs =
             new EnumPrefs<EUIRedDotViewType>("AutoUIRedDotModule_EUIRedDotViewTypePrefs", null, EUIRedDotViewType.Key);
 
-        private const string UIRedDotAssetFolderPath = "Assets/GameRes/RedDot";
+        private const string UIRedDotAssetFolderPath = "Assets/LocalResources/RedDot";
 
         [LabelText("红点枚举资源路径")]
         [FolderPath]
         [ShowInInspector]
         [ReadOnly]
-        public const string UIRedDotKeyAssetPath = "Assets/GameRes/RedDot/RedDotKeyAsset.asset";
+        public const string UIRedDotKeyAssetPath = "Assets/LocalResources/RedDot/RedDotKeyAsset.asset";
 
         [ShowInInspector]
         [ReadOnly]
@@ -41,7 +41,7 @@ namespace YIUIFramework.Editor
         [FolderPath]
         [ShowInInspector]
         [ReadOnly]
-        public const string UIRedDotConfigAssetPath = "Assets/GameRes/RedDot/RedDotConfigAsset.asset";
+        public const string UIRedDotConfigAssetPath = "Assets/LocalResources/RedDot/RedDotConfigAsset.asset";
 
         [ShowInInspector]
         [ReadOnly]
