@@ -20,24 +20,24 @@ namespace YIUIBind
         internal abstract bool SetValueFrom(UIDataValue dataValue);
 
         //值改变消息 无参
-        private Action m_OnValueChangAction;
+        private Action m_OnValueChangeAction;
 
         internal void AddValueChangeAction(Action action)
         {
-            m_OnValueChangAction -= action;
-            m_OnValueChangAction += action;
+            m_OnValueChangeAction -= action;
+            m_OnValueChangeAction += action;
         }
 
         internal void RemoveValueChangeAction(Action action)
         {
-            m_OnValueChangAction -= action;
+            m_OnValueChangeAction -= action;
         }
 
-        internal void InvokeValueChangAction()
+        internal void InvokeValueChangeAction()
         {
             try
             {
-                m_OnValueChangAction?.Invoke();
+                m_OnValueChangeAction?.Invoke();
             }
             catch (Exception e)
             {

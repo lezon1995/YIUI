@@ -24,7 +24,7 @@ namespace YIUIFramework
         public const string UIProjectResPath = "Assets/LocalResources/" + UIProjectName; //玩家的预设/图片等资源存放的地方
         
         [LabelText("YIUI项目脚本路径")]
-        public const string UIGenerationPath = "Assets/YIUI/Gen"; //自动生成的代码
+        public const string UIGenerationPath = "Assets/Scripts/YIUIGen"; //自动生成的代码
 
         [LabelText("YIUI项目自定义脚本路径")]
         public const string UICodeScriptsPath = "Assets/Scripts/" + UIProjectName; //玩家可编写的核心代码部分

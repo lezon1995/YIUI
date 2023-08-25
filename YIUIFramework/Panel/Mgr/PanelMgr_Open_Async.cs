@@ -37,7 +37,7 @@ namespace YIUIFramework
 
                 AddOpening(panelName);
                 var uiBase = await YIUIFactory.CreatePanelAsync(info);
-                RemovOpening(panelName);
+                RemoveOpening(panelName);
                 if (uiBase == null)
                 {
                     Debug.LogError($"面板[{panelName}]没有创建成功，packName={info.PkgName}, resName={info.ResName}");
@@ -53,8 +53,7 @@ namespace YIUIFramework
             return info;
         }
 
-        public async UniTask<T> OpenPanelAsync<T>()
-            where T : BasePanel, new()
+        public async UniTask<T> OpenPanelAsync<T>() where T : BasePanel, new()
         {
             var info = await OpenPanelStartAsync(GetPanelName<T>());
             if (info == null) return default;
@@ -75,8 +74,7 @@ namespace YIUIFramework
             return (T)await OpenPanelAfter(info, success);
         }
 
-        public async UniTask<T> OpenPanelAsync<T, P1>(P1 p1)
-            where T : BasePanel, IYIUIOpen<P1>, new()
+        public async UniTask<T> OpenPanelAsync<T, P1>(P1 p1) where T : BasePanel, IYIUIOpen<P1>, new()
         {
             var info = await OpenPanelStartAsync(GetPanelName<T>());
             if (info == null) return default;
@@ -97,8 +95,7 @@ namespace YIUIFramework
             return (T)await OpenPanelAfter(info, success);
         }
 
-        public async UniTask<T> OpenPanelAsync<T, P1, P2>(P1 p1, P2 p2)
-            where T : BasePanel, IYIUIOpen<P1, P2>, new()
+        public async UniTask<T> OpenPanelAsync<T, P1, P2>(P1 p1, P2 p2) where T : BasePanel, IYIUIOpen<P1, P2>, new()
         {
             var info = await OpenPanelStartAsync(GetPanelName<T>());
             if (info == null) return default;
@@ -119,8 +116,7 @@ namespace YIUIFramework
             return (T)await OpenPanelAfter(info, success);
         }
 
-        public async UniTask<T> OpenPanelAsync<T, P1, P2, P3>(P1 p1, P2 p2, P3 p3)
-            where T : BasePanel, IYIUIOpen<P1, P2, P3>, new()
+        public async UniTask<T> OpenPanelAsync<T, P1, P2, P3>(P1 p1, P2 p2, P3 p3) where T : BasePanel, IYIUIOpen<P1, P2, P3>, new()
         {
             var info = await OpenPanelStartAsync(GetPanelName<T>());
             if (info == null) return default;
@@ -141,8 +137,7 @@ namespace YIUIFramework
             return (T)await OpenPanelAfter(info, success);
         }
 
-        public async UniTask<T> OpenPanelAsync<T, P1, P2, P3, P4>(P1 p1, P2 p2, P3 p3, P4 p4)
-            where T : BasePanel, IYIUIOpen<P1, P2, P3, P4>, new()
+        public async UniTask<T> OpenPanelAsync<T, P1, P2, P3, P4>(P1 p1, P2 p2, P3 p3, P4 p4) where T : BasePanel, IYIUIOpen<P1, P2, P3, P4>, new()
         {
             var info = await OpenPanelStartAsync(GetPanelName<T>());
             if (info == null) return default;
@@ -163,8 +158,7 @@ namespace YIUIFramework
             return (T)await OpenPanelAfter(info, success);
         }
 
-        public async UniTask<T> OpenPanelAsync<T, P1, P2, P3, P4, P5>(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
-            where T : BasePanel, IYIUIOpen<P1, P2, P3, P4, P5>, new()
+        public async UniTask<T> OpenPanelAsync<T, P1, P2, P3, P4, P5>(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) where T : BasePanel, IYIUIOpen<P1, P2, P3, P4, P5>, new()
         {
             var info = await OpenPanelStartAsync(GetPanelName<T>());
             if (info == null) return default;

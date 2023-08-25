@@ -27,7 +27,7 @@ namespace YIUIBind
         #if UNITY_EDITOR
         private void OnValueChanged()
         {
-            InvokeValueChangAction();
+            InvokeValueChangeAction();
         }
         #endif
 
@@ -45,7 +45,7 @@ namespace YIUIBind
             m_OnValueChangeAction -= action;
         }
 
-        public void InvokeValueChangAction(T newValue, T oldValue)
+        public void InvokeValueChangeAction(T newValue, T oldValue)
         {
             try
             {
@@ -91,9 +91,8 @@ namespace YIUIBind
 
             var oldValue = m_Value;
             SetValueFrom(value);
-            InvokeValueChangAction();
-            if (notify)
-                InvokeValueChangAction(value, oldValue);
+            InvokeValueChangeAction();
+            if (notify) InvokeValueChangeAction(value, oldValue);
             return true;
         }
 

@@ -41,8 +41,7 @@ namespace YIUIFramework
             ListPool<object>.Put(paramList);
         }
 
-        public void OpenPanel(string          panelName, object param1, object param2, object param3, object param4,
-                              params object[] paramMore)
+        public void OpenPanel(string panelName, object param1, object param2, object param3, object param4, params object[] paramMore)
         {
             var paramList = ListPool<object>.Get();
             paramList.Add(param1);

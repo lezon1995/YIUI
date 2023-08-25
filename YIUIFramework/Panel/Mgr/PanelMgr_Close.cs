@@ -10,8 +10,7 @@ namespace YIUIFramework
         /// 默认将返回所有面板的第一个
         /// 可能没有
         /// </summary>
-        public PanelInfo GetTopPanel(EPanelLayer  layer        = EPanelLayer.Any,
-                                     EPanelOption ignoreOption = EPanelOption.Container)
+        public PanelInfo GetTopPanel(EPanelLayer layer = EPanelLayer.Any, EPanelOption ignoreOption = EPanelOption.Container)
         {
             var layerCount = (int)EPanelLayer.Count;
 
@@ -58,8 +57,7 @@ namespace YIUIFramework
         /// </summary>
         /// <param name="layer">层级</param>
         /// <param name="ignoreOption">忽略操作</param>
-        public async UniTask<bool> CloseLayerTopPanelAsync(EPanelLayer  layer,
-                                                           EPanelOption ignoreOption = EPanelOption.Container)
+        public async UniTask<bool> CloseLayerTopPanelAsync(EPanelLayer layer, EPanelOption ignoreOption = EPanelOption.Container)
         {
             var topPanel = GetTopPanel(layer, ignoreOption);
             if (topPanel == null)
@@ -106,15 +104,15 @@ namespace YIUIFramework
         /// <param name="ignoreElse">忽略堆栈操作 -- 不要轻易忽略除非你明白 </param>
         public async UniTask ClosePanelAsync(string panelName, bool tween = true, bool ignoreElse = false)
         {
-            #if YIUIMACRO_PANEL_OPENCLOSE
+#if YIUIMACRO_PANEL_OPENCLOSE
             Debug.Log($"<color=yellow> 关闭UI: {panelName} </color>");
-            #endif
+#endif
 
             m_PanelCfgMap.TryGetValue(panelName, out var info);
 
             if (info?.UIBasePanel == null) return;
 
-            if (info.UIBasePanel.PanelOption.HasFlag(EPanelOption.DisClose))
+            if (info.UIBasePanel.PanelOption.Has(EPanelOption.DisClose))
             {
                 bool allowClose = false; //是否允许关闭
 
@@ -170,9 +168,9 @@ namespace YIUIFramework
         /// <param name="tween">动画</param>
         public async UniTask HomePanel(string homeName, bool tween = true)
         {
-            #if YIUIMACRO_PANEL_OPENCLOSE
+#if YIUIMACRO_PANEL_OPENCLOSE
             Debug.Log($"<color=yellow> Home关闭其他所有Panel UI: {homeName} </color>");
-            #endif
+#endif
 
             m_PanelCfgMap.TryGetValue(homeName, out var homeInfo);
             if (homeInfo?.UIBasePanel != null)

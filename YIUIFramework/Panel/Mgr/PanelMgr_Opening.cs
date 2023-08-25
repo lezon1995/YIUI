@@ -4,14 +4,14 @@ namespace YIUIFramework
 {
     public partial class PanelMgr
     {
-        private HashSet<string> m_PanelOpening = new HashSet<string>();
+        private readonly HashSet<string> m_PanelOpening = new HashSet<string>();
 
         private void AddOpening(string name)
         {
             m_PanelOpening.Add(name);
         }
 
-        private void RemovOpening(string name)
+        private void RemoveOpening(string name)
         {
             m_PanelOpening.Remove(name);
         }

@@ -25,7 +25,7 @@ namespace YIUIFramework
             {
                 var info = new PanelInfo()
                 {
-                    Name    = panelName,
+                    Name = panelName,
                     PkgName = vo.PkgName,
                     ResName = vo.ResName,
                 };
@@ -38,7 +38,7 @@ namespace YIUIFramework
 
         /// <summary>
         /// 用字符串开启 必须保证类名与资源名一致否则无法找到
-        /// 首选使用<T>泛型方法打开UI 字符串只适合于特定场合使用
+        /// 首选使用T泛型方法打开UI 字符串只适合于特定场合使用
         /// </summary>
         public async UniTask<BasePanel> OpenPanelAsync(string panelName, object param = null)
         {
@@ -87,8 +87,7 @@ namespace YIUIFramework
             return panel;
         }
 
-        public async UniTask<BasePanel> OpenPanelAsync(string panelName, object param1, object param2, object param3,
-                                                       object param4)
+        public async UniTask<BasePanel> OpenPanelAsync(string panelName, object param1, object param2, object param3, object param4)
         {
             var paramList = ListPool<object>.Get();
             paramList.Add(param1);
@@ -100,8 +99,7 @@ namespace YIUIFramework
             return panel;
         }
 
-        public async UniTask<BasePanel> OpenPanelAsync(string panelName, object param1, object param2, object param3,
-                                                       object param4,    params object[] paramMore)
+        public async UniTask<BasePanel> OpenPanelAsync(string panelName, object param1, object param2, object param3, object param4, params object[] paramMore)
         {
             var paramList = ListPool<object>.Get();
             paramList.Add(param1);

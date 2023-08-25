@@ -26,50 +26,67 @@ namespace YIUIFramework.Editor
         private static void GetComponentTable(this UIBindCDETable self, StringBuilder sb)
         {
             var tab = self.ComponentTable;
-            if (tab == null) return;
+            var count = tab.AllBindDic.Count;
+            if (tab == null || count == 0) return;
 
-            foreach (var value in tab.AllBindDic)
+            sb.AppendLine();
+            sb.AppendFormat("        #region Component");
+            sb.AppendLine();
+            foreach (var (name, component) in tab.AllBindDic)
             {
-                var name = value.Key;
                 if (string.IsNullOrEmpty(name)) continue;
-                var bindCom = value.Value;
-                if (bindCom == null) continue;
-                sb.AppendFormat("        public {0} {1} {{ get; private set; }}\r\n", bindCom.GetType(), name);
+                if (component == null) continue;
+                sb.AppendFormat("        public {0} {1} {{ get; private set; }}\r\n", component.GetType(), name);
             }
+
+            sb.AppendLine();
+            sb.AppendFormat("        #endregion");
+            sb.AppendLine();
         }
 
         private static void GetDataTable(this UIBindCDETable self, StringBuilder sb)
         {
             var tab = self.DataTable;
-            if (tab == null) return;
+            var count = tab.DataDic.Count;
+            if (tab == null || count == 0) return;
 
-            foreach (var value in tab.DataDic)
+            sb.AppendLine();
+            sb.AppendFormat("        #region Data");
+            sb.AppendLine();
+            foreach (var (name, data) in tab.DataDic)
             {
-                var name = value.Key;
                 if (string.IsNullOrEmpty(name)) continue;
-                var uiData    = value.Value;
-                var dataValue = uiData?.DataValue;
+                var dataValue = data?.DataValue;
                 if (dataValue == null) continue;
                 sb.AppendFormat("        public {0} {1} {{ get; private set; }}\r\n", dataValue.GetType(), name);
             }
+
+            sb.AppendLine();
+            sb.AppendFormat("        #endregion");
+            sb.AppendLine();
         }
 
         private static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
         {
             var tab = self.EventTable;
-            if (tab == null) return;
+            var count = tab.EventDic.Count;
+            if (tab == null || count == 0) return;
 
-            foreach (var value in tab.EventDic)
+            sb.AppendLine();
+            sb.AppendFormat("        #region Event");
+            sb.AppendLine();
+
+            foreach (var (name, eventBase) in tab.EventDic)
             {
-                var name = value.Key;
                 if (string.IsNullOrEmpty(name)) continue;
-                var uiEventBase = value.Value;
-                if (uiEventBase == null) continue;
-                sb.AppendFormat("        protected {0} {1} {{ get; private set; }}\r\n", uiEventBase.GetEventType(),
-                    name);
-                sb.AppendFormat("        protected {0} {1} {{ get; private set; }}\r\n",
-                    uiEventBase.GetEventHandleType(), $"{name}Handle");
+                if (eventBase == null) continue;
+                sb.AppendFormat("        protected {0} {1} {{ get; private set; }}\r\n", eventBase.GetEventType(), name);
+                sb.AppendFormat("        protected {0} {1} {{ get; private set; }}\r\n", eventBase.GetEventHandleType(), $"{name}Handle");
             }
+
+            sb.AppendLine();
+            sb.AppendFormat("        #endregion");
+            sb.AppendLine();
         }
 
         private static void GetCDETable(this UIBindCDETable self, StringBuilder sb)
@@ -93,8 +110,7 @@ namespace YIUIFramework.Editor
                 }
 
                 existName.Add(newName);
-                sb.AppendFormat("        public {0} {1} {{ get; private set; }}\r\n",
-                    $"{UIStaticHelper.UINamespace}.{pkgName}.{resName}", newName);
+                sb.AppendFormat("        public {0} {1} {{ get; private set; }}\r\n", $"{UIStaticHelper.UINamespace}.{pkgName}.{resName}", newName);
             }
         }
 
@@ -119,28 +135,18 @@ namespace YIUIFramework.Editor
                 case EUICodeType.Component:
                     return;
                 case EUICodeType.Panel:
-                    sb.AppendFormat("        public override EWindowOption WindowOption => EWindowOption.{0};\r\n",
-                        self.WindowOption.ToString().Replace(", ", "|EWindowOption."));
-                    sb.AppendFormat("        public override EPanelLayer Layer => EPanelLayer.{0};\r\n",
-                        self.PanelLayer);
-                    sb.AppendFormat("        public override EPanelOption PanelOption => EPanelOption.{0};\r\n",
-                        self.PanelOption.ToString().Replace(", ", "|EPanelOption."));
-                    sb.AppendFormat(
-                        "        public override EPanelStackOption StackOption => EPanelStackOption.{0};\r\n",
-                        self.PanelStackOption);
+                    sb.AppendFormat("        public override EWindowOption WindowOption => EWindowOption.{0};\r\n", self.WindowOption.ToString().Replace(", ", "|EWindowOption."));
+                    sb.AppendFormat("        public override EPanelLayer Layer => EPanelLayer.{0};\r\n", self.PanelLayer);
+                    sb.AppendFormat("        public override EPanelOption PanelOption => EPanelOption.{0};\r\n", self.PanelOption.ToString().Replace(", ", "|EPanelOption."));
+                    sb.AppendFormat("        public override EPanelStackOption StackOption => EPanelStackOption.{0};\r\n", self.PanelStackOption);
                     sb.AppendFormat("        public override int Priority => {0};\r\n", self.Priority);
-                    if (self.PanelOption.HasFlag(EPanelOption.TimeCache))
-                        sb.AppendFormat("        protected override float CachePanelTime => {0};\r\n\r\n",
-                            self.CachePanelTime);
+                    if (self.PanelOption.Has(EPanelOption.TimeCache))
+                        sb.AppendFormat("        protected override float CachePanelTime => {0};\r\n\r\n", self.CachePanelTime);
                     break;
                 case EUICodeType.View:
-                    sb.AppendFormat("        public override EWindowOption WindowOption => EWindowOption.{0};\r\n",
-                        self.WindowOption.ToString().Replace(", ", "|EWindowOption."));
-                    sb.AppendFormat(
-                        "        public override EViewWindowType ViewWindowType => EViewWindowType.{0};\r\n",
-                        self.ViewWindowType);
-                    sb.AppendFormat("        public override EViewStackOption StackOption => EViewStackOption.{0};\r\n",
-                        self.ViewStackOption);
+                    sb.AppendFormat("        public override EWindowOption WindowOption => EWindowOption.{0};\r\n", self.WindowOption.ToString().Replace(", ", "|EWindowOption."));
+                    sb.AppendFormat("        public override EViewWindowType ViewWindowType => EViewWindowType.{0};\r\n", self.ViewWindowType);
+                    sb.AppendFormat("        public override EViewStackOption StackOption => EViewStackOption.{0};\r\n", self.ViewStackOption);
                     break;
                 default:
                     Debug.LogError($"新增类型未实现 {self.UICodeType}");

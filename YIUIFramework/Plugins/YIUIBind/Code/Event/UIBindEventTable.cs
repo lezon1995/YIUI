@@ -18,13 +18,12 @@ namespace YIUIBind
     [AddComponentMenu("YIUIBind/★★★UI Event Table 事件表★★★")]
     public sealed partial class UIBindEventTable : SerializedMonoBehaviour
     {
+        [Delayed]
+        [Searchable]
         [OdinSerialize]
         [ShowInInspector]
         [LabelText("所有事件")]
-        [Searchable]
-        [DictionaryDrawerSettings(KeyLabel = "事件名称", ValueLabel = "事件内容", IsReadOnly = true,
-            DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
-        [Delayed]
+        [DictionaryDrawerSettings(KeyLabel = "事件名称", ValueLabel = "事件内容", IsReadOnly = true, DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
         private Dictionary<string, UIEventBase> m_EventDic = new Dictionary<string, UIEventBase>();
 
         public IReadOnlyDictionary<string, UIEventBase> EventDic => m_EventDic;

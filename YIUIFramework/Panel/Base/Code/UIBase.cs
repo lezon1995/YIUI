@@ -39,6 +39,9 @@ namespace YIUIFramework
         /// </summary>
         [HideInInspector]
         public RectTransform OwnerRectTransform;
+        
+        [HideInInspector]
+        public CanvasGroup OwnerCanvasGroup;
 
         /// <summary>
         /// 初始化状态
@@ -94,6 +97,7 @@ namespace YIUIFramework
             }
 
             OwnerGameObject    = ownerGameObject;
+            OwnerCanvasGroup    = ownerGameObject.GetOrAddComponent<CanvasGroup>();
             OwnerRectTransform = ownerGameObject.GetComponent<RectTransform>();
             m_CDETable         = OwnerGameObject.GetComponent<UIBindCDETable>();
             if (CDETable == null)

@@ -113,7 +113,7 @@ namespace YIUIFramework
 
         //永久屏蔽引用计数 一定要成对使用且保证
         //否则将会出现永久屏蔽的情况只能通过RecoverLayerOptionCountDown 强制恢复
-        private HashSet<int> m_AllForeverBlockCode = new HashSet<int>();
+        private readonly HashSet<int> m_AllForeverBlockCode = new HashSet<int>();
 
         //永久屏蔽
         //适用于 不知道要屏蔽多久 但是能保证可以成对调用的

@@ -15,14 +15,13 @@ namespace YIUIFramework.Editor
 
         public override bool ShowTips => false;
 
-        public CreateUIBindProviderCode(out bool result, string authorName, UIBindProviderData codeData) : base(
-            authorName)
+        public CreateUIBindProviderCode(out bool result, string authorName, UIBindProviderData codeData) : base(authorName)
         {
-            var path     = $"{UIStaticHelper.UIGenerationPath}/{codeData.Name}.cs";
+            var path = $"{UIStaticHelper.UIGenerationPath}/{codeData.Name}.cs";
             var template = $"{UIStaticHelper.UITemplatePath}/UIBindProviderTemplate.txt";
             CreateVo = new CreateVo(template, path);
 
-            ValueDic["Count"]   = codeData.Count.ToString();
+            ValueDic["Count"] = codeData.Count.ToString();
             ValueDic["Content"] = codeData.Content;
 
             result = CreateNewFile();

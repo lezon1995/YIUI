@@ -12,9 +12,9 @@ namespace YIUIFramework
     {
         private UIPanelSplitData m_PanelSplitData;
 
-        private Dictionary<string, BaseView> m_ExistView = new Dictionary<string, BaseView>();
+        private readonly Dictionary<string, BaseView> m_ExistView = new Dictionary<string, BaseView>();
 
-        private Dictionary<string, RectTransform> m_ViewParent = new Dictionary<string, RectTransform>();
+        private readonly Dictionary<string, RectTransform> m_ViewParent = new Dictionary<string, RectTransform>();
 
         private void InitPanelViewData()
         {
@@ -85,9 +85,9 @@ namespace YIUIFramework
                 return null;
             }
 
-            if (m_ExistView.ContainsKey(viewName))
+            if (m_ExistView.TryGetValue(viewName, out var value))
             {
-                return (T)m_ExistView[viewName];
+                return (T)value;
             }
 
             if (ViewIsOpening(viewName))

@@ -8,8 +8,7 @@ namespace YIUIBind
     /// </summary>
     public static class PublicUIEventP0
     {
-        public static readonly ObjectPool<UIEventHandleP0> HandlerPool = new ObjectPool<UIEventHandleP0>(
-            null, handler => handler.Dispose());
+        public static readonly ObjectPool<UIEventHandleP0> HandlerPool = new ObjectPool<UIEventHandleP0>(null, handler => handler.Dispose());
     }
 
     /// <summary>

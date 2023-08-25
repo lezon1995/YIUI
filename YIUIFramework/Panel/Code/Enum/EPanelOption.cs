@@ -39,5 +39,10 @@ namespace YIUIFramework
         {
             owner &= (~option);
         }
+
+        public static bool Has(this EPanelOption owner, EPanelOption option)
+        {
+            return (owner & option) != 0;
+        }
     }
 }

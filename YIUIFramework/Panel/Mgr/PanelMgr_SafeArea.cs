@@ -27,9 +27,7 @@ namespace YIUIFramework
         /// <summary>
         /// 横屏设置时，界面左边离屏幕的距离
         /// </summary>
-        public static float SafeAreaLeft => Screen.orientation == ScreenOrientation.LandscapeRight
-            ? Screen.width - g_SafeArea.xMax
-            : g_SafeArea.x;
+        public static float SafeAreaLeft => Screen.orientation == ScreenOrientation.LandscapeRight ? Screen.width - g_SafeArea.xMax : g_SafeArea.x;
 
         private ScreenOrientation ScreenOrientation = Screen.orientation;
 
@@ -44,9 +42,7 @@ namespace YIUIFramework
             //safeAreaY = 100;
             #endif
 
-            g_SafeArea = new Rect(
-                safeAreaX,
-                safeAreaY,
+            g_SafeArea = new Rect(safeAreaX, safeAreaY,
                 DesignScreenWidth_F - GetSafeValue(safeAreaX),
                 DesignScreenHeight_F - GetSafeValue(safeAreaY));
 

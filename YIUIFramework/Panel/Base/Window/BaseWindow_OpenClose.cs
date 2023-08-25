@@ -24,7 +24,7 @@ namespace YIUIFramework
         /// 打开UI 带参数的
         /// 需要自己解析参数
         /// 适合用字符串开启的 参数可字符串配置那种
-        /// 默认会调用onopen
+        /// 默认会调用OnOpen
         /// </summary>
         protected virtual async UniTask<bool> OnOpen(ParamVo param)
         {
@@ -33,7 +33,7 @@ namespace YIUIFramework
 
         /// <summary>
         /// UI被关闭
-        /// 与OnDisable 不同  Disable 只是显影操作不代表被关闭
+        /// 与OnDisable 不同  Disable 只是显隐操作不代表被关闭
         /// 与OnDestroy 不同  Destroy 是摧毁 但是因为有缓存界面的原因 当被缓存时 OnDestroy是不会来的
         /// 这个时候你想要知道是不是被关闭了就必须通过OnClose
         /// baseView除外 因为view的关闭就是隐藏 所以 view的 OnDisable = OnClose

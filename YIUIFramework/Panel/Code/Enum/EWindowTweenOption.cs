@@ -67,5 +67,10 @@ namespace YIUIFramework
         {
             owner &= (~option);
         }
+        
+        public static bool Has(this EWindowOption owner, EWindowOption option)
+        {
+            return (owner & option) != 0;
+        }
     }
 }

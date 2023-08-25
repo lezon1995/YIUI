@@ -13,7 +13,7 @@ namespace YIUIFramework
         /// K = C#文件名
         /// 主要是作为缓存PanelInfo
         /// </summary>
-        private Dictionary<string, PanelInfo> m_PanelCfgMap = new Dictionary<string, PanelInfo>();
+        private readonly Dictionary<string, PanelInfo> m_PanelCfgMap = new Dictionary<string, PanelInfo>();
 
         /// <summary>
         /// 获取PanelInfo

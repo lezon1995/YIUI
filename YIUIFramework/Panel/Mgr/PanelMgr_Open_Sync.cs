@@ -8,38 +8,32 @@ namespace YIUIFramework
     /// </summary>
     public partial class PanelMgr
     {
-        public void OpenPanel<T>()
-            where T : BasePanel, new()
+        public void OpenPanel<T>() where T : BasePanel, new()
         {
             OpenPanelAsync<T>().Forget();
         }
 
-        public void OpenPanel<T, P1>(P1 p1)
-            where T : BasePanel, IYIUIOpen<P1>, new()
+        public void OpenPanel<T, P1>(P1 p1) where T : BasePanel, IYIUIOpen<P1>, new()
         {
             OpenPanelAsync<T, P1>(p1).Forget();
         }
 
-        public void OpenPanel<T, P1, P2>(P1 p1, P2 p2)
-            where T : BasePanel, IYIUIOpen<P1, P2>, new()
+        public void OpenPanel<T, P1, P2>(P1 p1, P2 p2) where T : BasePanel, IYIUIOpen<P1, P2>, new()
         {
             OpenPanelAsync<T, P1, P2>(p1, p2).Forget();
         }
 
-        public void OpenPanel<T, P1, P2, P3>(P1 p1, P2 p2, P3 p3)
-            where T : BasePanel, IYIUIOpen<P1, P2, P3>, new()
+        public void OpenPanel<T, P1, P2, P3>(P1 p1, P2 p2, P3 p3) where T : BasePanel, IYIUIOpen<P1, P2, P3>, new()
         {
             OpenPanelAsync<T, P1, P2, P3>(p1, p2, p3).Forget();
         }
 
-        public void OpenPanel<T, P1, P2, P3, P4>(P1 p1, P2 p2, P3 p3, P4 p4)
-            where T : BasePanel, IYIUIOpen<P1, P2, P3, P4>, new()
+        public void OpenPanel<T, P1, P2, P3, P4>(P1 p1, P2 p2, P3 p3, P4 p4) where T : BasePanel, IYIUIOpen<P1, P2, P3, P4>, new()
         {
             OpenPanelAsync<T, P1, P2, P3, P4>(p1, p2, p3, p4).Forget();
         }
 
-        public void OpenPanel<T, P1, P2, P3, P4, P5>(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
-            where T : BasePanel, IYIUIOpen<P1, P2, P3, P4, P5>, new()
+        public void OpenPanel<T, P1, P2, P3, P4, P5>(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) where T : BasePanel, IYIUIOpen<P1, P2, P3, P4, P5>, new()
         {
             OpenPanelAsync<T, P1, P2, P3, P4, P5>(p1, p2, p3, p4, p5).Forget();
         }

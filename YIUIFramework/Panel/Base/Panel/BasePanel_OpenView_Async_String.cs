@@ -90,8 +90,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync(string viewName, object param1, object param2, object param3,
-                                                        object param4)
+        protected async UniTask<BaseView> OpenViewAsync(string viewName, object param1, object param2, object param3, object param4)
         {
             var paramList = ListPool<object>.Get();
             paramList.Add(param1);
@@ -103,8 +102,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync(string viewName, object param1, object param2, object param3,
-                                                        object param4,   params object[] paramMore)
+        protected async UniTask<BaseView> OpenViewAsync(string viewName, object param1, object param2, object param3, object param4, params object[] paramMore)
         {
             var paramList = ListPool<object>.Get();
             paramList.Add(param1);

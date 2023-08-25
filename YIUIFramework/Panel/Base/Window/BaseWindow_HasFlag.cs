@@ -12,48 +12,47 @@
         /// 如果允许 别人调用open了一个不存在的Open参数时
         /// 也可以使用默认的open打开界面 则你可以改为true
         /// </summary>
-        public virtual bool WindowCanUseBaseOpen => WindowOption.HasFlag(EWindowOption.CanUseBaseOpen);
+        public virtual bool WindowCanUseBaseOpen => WindowOption.Has(EWindowOption.CanUseBaseOpen);
 
         /// <summary>
         /// 禁止使用ParamOpen
         /// </summary>
-        public virtual bool WindowBanParamOpen => WindowOption.HasFlag(EWindowOption.BanParamOpen);
+        public virtual bool WindowBanParamOpen => WindowOption.Has(EWindowOption.BanParamOpen);
 
         /// <summary>
         /// 我有其他IOpen时 允许用open
         /// 默认fasle 我有其他iopen接口时 是不允许使用open的
         /// </summary>
-        public virtual bool WindowHaveIOpenAllowOpen => WindowOption.HasFlag(EWindowOption.HaveIOpenAllowOpen);
+        public virtual bool WindowHaveIOpenAllowOpen => WindowOption.Has(EWindowOption.HaveIOpenAllowOpen);
 
         //先开
-        public virtual bool WindowFitstOpen => WindowOption.HasFlag(EWindowOption.FitstOpen);
+        public virtual bool WindowFitstOpen => WindowOption.Has(EWindowOption.FitstOpen);
 
         //禁止动画
-        public virtual bool WindowBanTween => WindowOption.HasFlag(EWindowOption.BanTween);
+        public virtual bool WindowBanTween => WindowOption.Has(EWindowOption.BanTween);
 
         //打开动画不可重复播放
-        public virtual bool WindowBanRepetitionOpenTween => WindowOption.HasFlag(EWindowOption.BanRepetitionOpenTween);
+        public virtual bool WindowBanRepetitionOpenTween => WindowOption.Has(EWindowOption.BanRepetitionOpenTween);
 
         //关闭动画不可重复播放
-        public virtual bool WindowBanRepetitionCloseTween =>
-            WindowOption.HasFlag(EWindowOption.BanRepetitionCloseTween);
+        public virtual bool WindowBanRepetitionCloseTween => WindowOption.Has(EWindowOption.BanRepetitionCloseTween);
 
         //不等待打开动画
-        public virtual bool WindowBanAwaitOpenTween => WindowOption.HasFlag(EWindowOption.BanAwaitOpenTween);
+        public virtual bool WindowBanAwaitOpenTween => WindowOption.Has(EWindowOption.BanAwaitOpenTween);
 
         //不等待关闭动画
-        public virtual bool WindowBanAwaitCloseTween => WindowOption.HasFlag(EWindowOption.BanAwaitCloseTween);
+        public virtual bool WindowBanAwaitCloseTween => WindowOption.Has(EWindowOption.BanAwaitCloseTween);
 
         //我关闭时跳过其他的打开动画
-        public virtual bool WindowSkipOtherOpenTween => WindowOption.HasFlag(EWindowOption.SkipOtherOpenTween);
+        public virtual bool WindowSkipOtherOpenTween => WindowOption.Has(EWindowOption.SkipOtherOpenTween);
 
         //我打开时跳过其他的关闭动画
-        public virtual bool WindowSkipOtherCloseTween => WindowOption.HasFlag(EWindowOption.SkipOtherCloseTween);
+        public virtual bool WindowSkipOtherCloseTween => WindowOption.Has(EWindowOption.SkipOtherCloseTween);
 
         //Home时 跳过我自己的打开动画
-        public virtual bool WindowSkipHomeOpenTween => WindowOption.HasFlag(EWindowOption.SkipHomeOpenTween);
+        public virtual bool WindowSkipHomeOpenTween => WindowOption.Has(EWindowOption.SkipHomeOpenTween);
 
         //播放动画时 可以操作  默认播放动画的时候是不能操作UI的 不然容易出问题
-        public virtual bool WindowAllowOptionByTween => WindowOption.HasFlag(EWindowOption.AllowOptionByTween);
+        public virtual bool WindowAllowOptionByTween => WindowOption.Has(EWindowOption.AllowOptionByTween);
     }
 }
