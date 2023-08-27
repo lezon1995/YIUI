@@ -23,16 +23,16 @@ namespace YIUIBind
         [ReadOnly]
         private string m_DataName;
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [ShowInInspector]
         [LabelText("值")]
         [ReadOnly]
         private string m_DataValue;
-        #endif
+#endif
         [SerializeField]
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [OnValueChanged("OnValueChangedCompareMode")]
-        #endif
+#endif
         [ShowIf("ShowCompareMode")]
         private UICompareModeEnum m_CompareMode = UICompareModeEnum.Equal;
 
@@ -71,13 +71,12 @@ namespace YIUIBind
         //刷新数据
         public void Refresh(UIData data)
         {
-            m_Data     = data;
+            m_Data = data;
             m_DataName = m_Data.Name;
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             m_DataValue = m_Data.GetValueToString();
-            #endif
-            if (m_Data.DataValue.UIBindDataType == EUIBindDataType.Bool ||
-                m_Data.DataValue.UIBindDataType == EUIBindDataType.String)
+#endif
+            if (m_Data.DataValue.UIBindDataType is EUIBindDataType.Bool or EUIBindDataType.String)
             {
                 m_CompareMode = UICompareModeEnum.Equal;
             }
@@ -88,7 +87,7 @@ namespace YIUIBind
             }
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
 
         //比较运算的修改
         private void OnValueChangedCompareMode()
@@ -105,7 +104,7 @@ namespace YIUIBind
                 UnityTipsHelper.ShowError($"布尔类型 只允许使用 == 运算判断 != 使用取反");
             }
         }
-        #endif
+#endif
 
         /// <summary>
         /// 获取最终比较结果
@@ -123,12 +122,12 @@ namespace YIUIBind
             switch (m_Data.DataValue.UIBindDataType)
             {
                 case EUIBindDataType.Bool:
-                    var valueBool     = m_Data.GetValue<bool>();
+                    var valueBool = m_Data.GetValue<bool>();
                     var referenceBool = m_ReferenceData.GetValue<bool>();
                     result = valueBool == referenceBool;
                     break;
                 case EUIBindDataType.Int:
-                    var valueInteger     = m_Data.GetValue<int>();
+                    var valueInteger = m_Data.GetValue<int>();
                     var referenceInteger = m_ReferenceData.GetValue<int>();
                     switch (m_CompareMode)
                     {
@@ -154,7 +153,7 @@ namespace YIUIBind
 
                     break;
                 case EUIBindDataType.Float:
-                    var valueFloat     = m_Data.GetValue<float>();
+                    var valueFloat = m_Data.GetValue<float>();
                     var referenceFloat = m_ReferenceData.GetValue<float>();
                     switch (m_CompareMode)
                     {
@@ -181,7 +180,7 @@ namespace YIUIBind
 
                     break;
                 case EUIBindDataType.String:
-                    var valueString     = m_Data.GetValue<string>();
+                    var valueString = m_Data.GetValue<string>();
                     var referenceString = m_ReferenceData.GetValue<string>();
                     switch (m_CompareMode)
                     {

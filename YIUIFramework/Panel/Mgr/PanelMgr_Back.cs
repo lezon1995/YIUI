@@ -1,5 +1,4 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace YIUIFramework
@@ -15,7 +14,7 @@ namespace YIUIFramework
         /// </summary>
         private async UniTask AddUICloseElse(PanelInfo info)
         {
-            if (!(info.UIBasePanel is { Layer: EPanelLayer.Panel }))
+            if (info.UIBasePanel is not { Layer: EPanelLayer.Panel })
             {
                 return;
             }
@@ -46,9 +45,14 @@ namespace YIUIFramework
                 {
                     case EPanelStackOption.Omit:
                         if (skipTween)
+                        {
                             child.UIBasePanel.Close(true, true);
+                        }
                         else
+                        {
                             await child.UIBasePanel.CloseAsync(true, true);
+                        }
+
                         break;
                     case EPanelStackOption.None:
                         break;
@@ -57,7 +61,10 @@ namespace YIUIFramework
                         break;
                     case EPanelStackOption.VisibleTween:
                         if (!skipTween)
+                        {
                             await child.UIBasePanel.InternalOnWindowCloseTween();
+                        }
+
                         child.UIBasePanel.SetActive(false);
                         break;
                     default:
@@ -70,7 +77,7 @@ namespace YIUIFramework
 
         private async UniTask RemoveUIAddElse(PanelInfo info)
         {
-            if (!(info.UIBasePanel is { Layer: EPanelLayer.Panel }))
+            if (info.UIBasePanel is not { Layer: EPanelLayer.Panel })
             {
                 return;
             }
@@ -111,7 +118,10 @@ namespace YIUIFramework
                     case EPanelStackOption.VisibleTween:
                         child.UIBasePanel.SetActive(true);
                         if (!skipTween)
+                        {
                             await child.UIBasePanel.InternalOnWindowOpenTween();
+                        }
+
                         break;
                     default:
                         Debug.LogError($"新增类型未实现 {child.UIBasePanel.StackOption}");
@@ -120,13 +130,15 @@ namespace YIUIFramework
                 }
 
                 if (isBreak)
+                {
                     break;
+                }
             }
         }
 
         private async UniTask RemoveUIToHome(PanelInfo home, bool tween = true)
         {
-            if (!(home.UIBasePanel is { Layer: EPanelLayer.Panel }))
+            if (home.UIBasePanel is not { Layer: EPanelLayer.Panel })
             {
                 return;
             }
@@ -168,7 +180,10 @@ namespace YIUIFramework
                     case EPanelStackOption.VisibleTween:
                         child.UIBasePanel.SetActive(true);
                         if (tween && !skipHomeOpenTween)
+                        {
                             await child.UIBasePanel.InternalOnWindowOpenTween();
+                        }
+
                         break;
                     default:
                         Debug.LogError($"新增类型未实现 {child.UIBasePanel.StackOption}");

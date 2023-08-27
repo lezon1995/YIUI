@@ -1,7 +1,4 @@
-﻿using System;
-using UnityEngine;
-
-namespace YIUIFramework
+﻿namespace YIUIFramework
 {
     /// <summary>
     /// 加入 移除
@@ -14,25 +11,26 @@ namespace YIUIFramework
         private void AddUI(PanelInfo panelInfo)
         {
             var uiBasePanel = panelInfo.UIBasePanel;
-            var panelLayer  = uiBasePanel.Layer;
-            var priority    = uiBasePanel.Priority;
-            var uiRect      = uiBasePanel.OwnerRectTransform;
+            var panelLayer = uiBasePanel.Layer;
+            var priority = uiBasePanel.Priority;
+            var uiRect = uiBasePanel.OwnerRectTransform;
 
             var layerRect = GetLayerRect(panelLayer);
             if (layerRect == null)
             {
                 panelLayer = EPanelLayer.Bottom;
-                layerRect  = GetLayerRect(panelLayer);
-                Debug.LogError($"没有找到这个UILayer {panelLayer}  强制修改为使用最低层 请检查");
+                layerRect = GetLayerRect(panelLayer);
+                UnityEngine.Debug.LogError($"没有找到这个UILayer {panelLayer}  强制修改为使用最低层 请检查");
             }
 
             var addLast = true; //放到最后 也就是最前面
 
-            var infoList     = GetLayerPanelInfoList(panelLayer);
+            var infoList = GetLayerPanelInfoList(panelLayer);
             var removeResult = infoList.Remove(panelInfo);
             if (removeResult)
+            {
                 uiRect.SetParent(UILayerRoot);
-
+            }
 
             /*
              * 使用Unity的层级作为前后显示
@@ -41,13 +39,16 @@ namespace YIUIFramework
              * 当前优先级 >= 目标优先级时 插入
              */
 
-            for (var i = infoList.Count - 1; i >= 0; i--)
+            for (var i = infoList.Count - 1; i >= 0;)
             {
-                var info         = infoList[i];
+                var info = infoList[i];
                 var infoPriority = info.UIBasePanel?.Priority ?? 0;
 
                 //当前优先级比最大的都还大 那么直接放到最前面
-                if (priority >= infoPriority) break;
+                if (priority >= infoPriority)
+                {
+                    break;
+                }
 
                 infoList.Insert(i, panelInfo);
                 uiRect.SetParent(layerRect);
@@ -80,14 +81,14 @@ namespace YIUIFramework
         {
             if (panelInfo.UIBasePanel == null)
             {
-                Debug.LogError($"无法移除一个null panelInfo 数据 {panelInfo.ResName}");
+                UnityEngine.Debug.LogError($"无法移除一个null panelInfo 数据 {panelInfo.ResName}");
                 return;
             }
 
-            var uiBasePanel  = panelInfo.UIBasePanel;
+            var uiBasePanel = panelInfo.UIBasePanel;
             var foreverCache = uiBasePanel.PanelForeverCache;
-            var timeCache    = uiBasePanel.PanelTimeCache;
-            var panelLayer   = uiBasePanel.Layer;
+            var timeCache = uiBasePanel.PanelTimeCache;
+            var panelLayer = uiBasePanel.Layer;
             RemoveLayerPanelInfo(panelLayer, panelInfo);
 
             if (foreverCache || timeCache)
@@ -95,7 +96,7 @@ namespace YIUIFramework
                 //缓存界面只是单纯的吧界面隐藏
                 //再次被打开 如何重构界面需要自行设置
                 var layerRect = GetLayerRect(EPanelLayer.Cache);
-                var uiRect    = uiBasePanel.OwnerRectTransform;
+                var uiRect = uiBasePanel.OwnerRectTransform;
                 uiRect.SetParent(layerRect, false);
                 uiBasePanel.SetActive(false);
 

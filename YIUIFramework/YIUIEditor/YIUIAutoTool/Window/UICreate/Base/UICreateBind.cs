@@ -24,51 +24,52 @@ namespace YIUIFramework.Editor
         private static void GetComponentTable(this UIBindCDETable self, StringBuilder sb)
         {
             var tab = self.ComponentTable;
-            if (tab == null) return;
+            var count = tab.AllBindDic.Count;
+            if (tab == null || count == 0) return;
 
-            foreach (var value in tab.AllBindDic)
+            sb.AppendFormat("            //--------------------------------------Component---------------------------------------------------------------------------------------------------\r\n");
+            foreach (var (name, component) in tab.AllBindDic)
             {
-                var name = value.Key;
                 if (string.IsNullOrEmpty(name)) continue;
-                var bindCom = value.Value;
-                if (bindCom == null) continue;
-                sb.AppendFormat("            {1} = ComponentTable.FindComponent<{0}>(\"{1}\");\r\n", bindCom.GetType(),
-                    name);
+                if (component == null) continue;
+                sb.AppendFormat("            {1} = ComponentTable.FindComponent<{0}>(\"{1}\");\r\n", component.GetType(), name);
             }
         }
 
         private static void GetDataTable(this UIBindCDETable self, StringBuilder sb)
         {
             var tab = self.DataTable;
-            if (tab == null) return;
+            var count = tab.DataDic.Count;
+            if (tab == null || count == 0) return;
 
+            sb.AppendFormat("            //--------------------------------------Data-----------------------------------------------------------------------------------------------------------\r\n");
             foreach (var value in tab.DataDic)
             {
                 var name = value.Key;
                 if (string.IsNullOrEmpty(name)) continue;
-                var uiData    = value.Value;
+                var uiData = value.Value;
                 var dataValue = uiData?.DataValue;
                 if (dataValue == null) continue;
-                sb.AppendFormat("            {1} = DataTable.FindDataValue<{0}>(\"{1}\");\r\n", dataValue.GetType(),
-                    name);
+                sb.AppendFormat("            {1} = DataTable.FindDataValue<{0}>(\"{1}\");\r\n", dataValue.GetType(), name);
             }
         }
 
         private static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
         {
             var tab = self.EventTable;
-            if (tab == null) return;
+            var count = tab.EventDic.Count;
+            if (tab == null || count == 0) return;
 
+            sb.AppendFormat("            //--------------------------------------Event----------------------------------------------------------------------------------------------------------\r\n");
             foreach (var value in tab.EventDic)
             {
                 var name = value.Key;
                 if (string.IsNullOrEmpty(name)) continue;
                 var uiEventBase = value.Value;
                 if (uiEventBase == null) continue;
-                sb.AppendFormat("            {1} = EventTable.FindEvent<{0}>(\"{1}\");\r\n", uiEventBase.GetEventType(),
-                    name);
-                sb.AppendFormat("            {0} = {1}.Add({2});\r\n", $"{name}Handle", name,
-                    $"OnEvent{name.Replace($"{NameUtility.FirstName}{NameUtility.EventName}", "")}Action");
+                sb.AppendFormat("            {1} = EventTable.FindEvent<{0}>(\"{1}\");\r\n", uiEventBase.GetEventType(), name);
+                sb.AppendFormat("            {0} = {1}.Add({2});\r\n", $"{name}Handle", name, $"OnEvent{name.Replace($"{NameUtility.FirstName}{NameUtility.EventName}", "")}Action");
+                sb.AppendLine();
             }
         }
 
@@ -92,10 +93,7 @@ namespace YIUIFramework.Editor
                 }
 
                 existName.Add(newName);
-                sb.AppendFormat("            {0} = CDETable.FindUIBase<{1}>(\"{2}\");\r\n",
-                    newName,
-                    $"{UIStaticHelper.UINamespace}.{pkgName}.{resName}",
-                    name);
+                sb.AppendFormat("            {0} = CDETable.FindUIBase<{1}>(\"{2}\");\r\n", newName, $"{UIStaticHelper.UINamespace}.{pkgName}.{resName}", name);
             }
         }
 

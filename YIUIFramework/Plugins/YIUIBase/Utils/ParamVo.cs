@@ -51,16 +51,15 @@ namespace YIUIFramework
             }
 
             object data;
-            if (Data is IList)
+            if (Data is IList list)
             {
-                IList datas = (IList)Data;
-                if (index >= datas.Count)
+                if (index >= list.Count)
                 {
                     outResult = defaultValue;
                     return ParamGetResult.IndexIsOut;
                 }
 
-                data = datas[index];
+                data = list[index];
             }
             else
             {
@@ -74,9 +73,9 @@ namespace YIUIFramework
             }
 
             //如果数据是字符串，并且相要的值是数值类型，则自动转换
-            if (data is string && typeof(T).IsNumericType())
+            if (data is string str && typeof(T).IsNumericType())
             {
-                if (StrConv.ToNumber<T>((string)data, out outResult))
+                if (StrConv.ToNumber<T>(str, out outResult))
                 {
                     return ParamGetResult.Success;
                 }

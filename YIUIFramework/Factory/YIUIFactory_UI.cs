@@ -1,12 +1,5 @@
-﻿//------------------------------------------------------------
-// Author: 亦亦
-// Mail: 379338943@qq.com
-// Data: 2023年2月12日
-//------------------------------------------------------------
-
-using System;
+﻿using System;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
 
 namespace YIUIFramework
 {
@@ -23,7 +16,7 @@ namespace YIUIFramework
 
         public static T Instantiate<T>(UIBindVo vo, RectTransform parent = null) where T : UIBase
         {
-            var instance = (T)Create(vo);
+            var instance = (T) Create(vo);
             if (instance == null) return null;
 
             SetParent(instance.OwnerRectTransform, parent ? parent : PanelMgr.Inst.UICache);
@@ -56,7 +49,7 @@ namespace YIUIFramework
             if (data == null) return null;
             var vo = data.Value;
 
-            return (T)Create(vo);
+            return (T) Create(vo);
         }
 
         private static UIBase Create(string pkgName, string resName)
@@ -87,7 +80,7 @@ namespace YIUIFramework
             }
 
             cdeTable.CreateComponent();
-            var uiBase = (UIBase)Activator.CreateInstance(vo.CreatorType);
+            var uiBase = (UIBase) Activator.CreateInstance(vo.CreatorType);
             uiBase.InitUIBase(vo, obj);
             return uiBase;
         }
@@ -105,7 +98,7 @@ namespace YIUIFramework
                 var bingVo = UIBindHelper.GetBindVoByPath(childCde.PkgName, childCde.ResName);
                 if (bingVo == null) continue;
 
-                var childBase = (UIBase)Activator.CreateInstance(bingVo.Value.CreatorType);
+                var childBase = (UIBase) Activator.CreateInstance(bingVo.Value.CreatorType);
                 childCde.CreateComponent();
                 childBase.InitUIBase(bingVo.Value, childCde.gameObject);
                 cdeTable.AddUIBase(childCde.gameObject.name, childBase);

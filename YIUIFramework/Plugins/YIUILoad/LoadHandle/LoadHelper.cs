@@ -6,8 +6,7 @@ namespace YIUIFramework
     {
         private static string s_NullPkgName = "Default";
 
-        private static Dictionary<string, Dictionary<string, LoadHandle>> m_AllLoadDic =
-            new Dictionary<string, Dictionary<string, LoadHandle>>();
+        private static readonly Dictionary<string, Dictionary<string, LoadHandle>> m_AllLoadDic = new Dictionary<string, Dictionary<string, LoadHandle>>();
 
         internal static LoadHandle GetLoad(string pkgName, string resName)
         {

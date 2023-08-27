@@ -3,7 +3,6 @@ using Sirenix.OdinInspector;
 using YIUIBind;
 using UnityEngine;
 using UnityEditor;
-
 using YIUIFramework.Editor;
 
 namespace YIUIFramework
@@ -14,7 +13,7 @@ namespace YIUIFramework
         #region 界面参数
 
         [LabelText("组件类型")]
-        [OnValueChanged("OnValueChangedEUICodeType")]
+        [OnValueChanged(nameof(OnValueChangedEUICodeType))]
         [ReadOnly]
         public EUICodeType UICodeType = EUICodeType.Component;
 
@@ -27,7 +26,7 @@ namespace YIUIFramework
 
         [ShowIf("UICodeType", EUICodeType.Panel)]
         [BoxGroup("配置", true, true)]
-        [OnValueChanged("OnValueChangedEPanelLayer")]
+        [OnValueChanged(nameof(OnValueChangedEPanelLayer))]
         [GUIColor(0, 1, 1)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public EPanelLayer PanelLayer = EPanelLayer.Panel;
@@ -238,8 +237,8 @@ namespace YIUIFramework
         private void OnValidate()
         {
             ComponentTable ??= GetComponent<UIBindComponentTable>();
-            DataTable      ??= GetComponent<UIBindDataTable>();
-            EventTable     ??= GetComponent<UIBindEventTable>();
+            DataTable ??= GetComponent<UIBindDataTable>();
+            EventTable ??= GetComponent<UIBindEventTable>();
         }
 
         private void AddComponentTable()

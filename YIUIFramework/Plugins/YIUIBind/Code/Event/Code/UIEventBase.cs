@@ -13,10 +13,10 @@ namespace YIUIBind
         [LabelText("事件名称")]
         [SerializeField]
         [ReadOnly]
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [InfoBox("此事件没有任何关联", InfoMessageType.Error, "ShowIfBindsTips")]
         [ShowIf("ShowIfBindsTips")]
-        #endif
+#endif
         private string m_EventName;
 
         public string EventName => m_EventName;
@@ -24,9 +24,9 @@ namespace YIUIBind
         [SerializeField]
         [ReadOnly]
         [LabelText("当前所有参数列表")]
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [ShowIf("ShowIfAllEventParamType")]
-        #endif
+#endif
         public List<EUIEventParamType> AllEventParamType = new List<EUIEventParamType>();
 
         public void RefreshAllEventParamType(List<EUIEventParamType> targetType)

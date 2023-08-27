@@ -1,6 +1,6 @@
 namespace YIUIBind
 {
-    public interface IUIDataValue<T>
+    public interface IUIDataValue<out T>
     {
         T GetValue();
     }

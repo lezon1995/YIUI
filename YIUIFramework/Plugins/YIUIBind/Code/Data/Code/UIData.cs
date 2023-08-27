@@ -28,9 +28,9 @@ namespace YIUIBind
         [LabelText("名称")]
         [SerializeField]
         [ReadOnly]
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [InfoBox("此数据没有任何关联", InfoMessageType.Error, "ShowIfBindsTips")]
-        #endif
+#endif
         private string m_Name;
 
         /// <summary>
@@ -57,9 +57,9 @@ namespace YIUIBind
 
         public UIData(string name, UIDataValue dataValue)
         {
-            m_Name      = name;
+            m_Name = name;
             m_DataValue = dataValue;
-            m_DataGuid  = Guid.NewGuid().GetHashCode();
+            m_DataGuid = Guid.NewGuid().GetHashCode();
         }
     }
 }

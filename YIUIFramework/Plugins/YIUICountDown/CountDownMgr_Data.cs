@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace YIUIFramework
+﻿namespace YIUIFramework
 {
     public partial class CountDownMgr
     {
@@ -61,27 +59,27 @@ namespace YIUIFramework
             public void Reset(double totalTime, double interval, TimerCallback timerCallback, bool forver = false)
             {
                 var time = GetTime();
-                TotalTime        = totalTime;
-                Interval         = interval;
-                ElapseTime       = 0;
-                StartTime        = time;
+                TotalTime = totalTime;
+                Interval = interval;
+                ElapseTime = 0;
+                StartTime = time;
                 LastCallBackTime = time;
-                EndTime          = time + totalTime;
-                Forver           = forver;
-                TimerCallback    = timerCallback;
+                EndTime = time + totalTime;
+                Forver = forver;
+                TimerCallback = timerCallback;
             }
 
             public void Recycle()
             {
-                Guid             = 0;
-                TotalTime        = 0;
-                Interval         = 0;
-                ElapseTime       = 0;
-                StartTime        = 0;
+                Guid = 0;
+                TotalTime = 0;
+                Interval = 0;
+                ElapseTime = 0;
+                StartTime = 0;
                 LastCallBackTime = 0;
-                EndTime          = 0;
-                Forver           = false;
-                TimerCallback    = null;
+                EndTime = 0;
+                Forver = false;
+                TimerCallback = null;
             }
         }
     }

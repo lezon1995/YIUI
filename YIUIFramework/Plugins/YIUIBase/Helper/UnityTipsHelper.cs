@@ -18,9 +18,9 @@ namespace YIUIFramework
         /// <param name="content"></param>
         public static void Show(string content)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             EditorUtility.DisplayDialog("提示", content, "确认");
-            #endif
+#endif
         }
 
         /// <summary>
@@ -28,10 +28,10 @@ namespace YIUIFramework
         /// </summary>
         public static void ShowError(string message)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             Show(message);
             Logger.LogError(message);
-            #endif
+#endif
         }
 
         /// <summary>
@@ -39,10 +39,10 @@ namespace YIUIFramework
         /// </summary>
         public static void ShowError(object message)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             Show(message.ToString());
             Logger.LogError(message);
-            #endif
+#endif
         }
 
         /// <summary>
@@ -50,10 +50,10 @@ namespace YIUIFramework
         /// </summary>
         public static void ShowErrorContext(Object context, string message)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             Show(message);
             Logger.LogErrorContext(context, message);
-            #endif
+#endif
         }
 
         /// <summary>
@@ -61,10 +61,10 @@ namespace YIUIFramework
         /// </summary>
         public static void ShowErrorContext(Object context, object message)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             Show(message.ToString());
             Logger.LogErrorContext(context, message);
-            #endif
+#endif
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace YIUIFramework
         /// </summary>
         public static void CallBack(string content, Action okCallBack, Action cancelCallBack = null)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             var selectIndex = EditorUtility.DisplayDialogComplex("提示", content, "确认", "取消", null);
             if (selectIndex == 0) //确定
             {
@@ -98,7 +98,7 @@ namespace YIUIFramework
                     throw;
                 }
             }
-            #endif
+#endif
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace YIUIFramework
         /// </summary>
         public static void CallBackOk(string content, Action okCallBack, Action cancelCallBack = null)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             var result = EditorUtility.DisplayDialog("提示", content, "确认");
             if (result) //确定
             {
@@ -132,7 +132,7 @@ namespace YIUIFramework
                     throw;
                 }
             }
-            #endif
+#endif
         }
     }
 }

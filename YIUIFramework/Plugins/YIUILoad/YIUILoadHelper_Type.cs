@@ -12,7 +12,7 @@ namespace YIUIFramework
     {
         internal static Object LoadAsset(string pkgName, string resName, Type assetType)
         {
-            var load    = LoadHelper.GetLoad(pkgName, resName);
+            var load = LoadHelper.GetLoad(pkgName, resName);
             var loadObj = load.Object;
             if (loadObj != null)
             {
@@ -39,7 +39,7 @@ namespace YIUIFramework
 
         internal static async UniTask<Object> LoadAssetAsync(string pkgName, string resName, Type assetType)
         {
-            var load    = LoadHelper.GetLoad(pkgName, resName);
+            var load = LoadHelper.GetLoad(pkgName, resName);
             var loadObj = load.Object;
             if (loadObj != null)
             {
@@ -76,7 +76,7 @@ namespace YIUIFramework
             {
                 return null;
             }
-            
+
             load.ResetHandle(obj, hashCode);
             load.AddRefCount();
             load.SetWaitAsync(false);
@@ -88,11 +88,7 @@ namespace YIUIFramework
             LoadAssetAsyncAction(pkgName, resName, assetType, action).Forget();
         }
 
-        private static async UniTaskVoid LoadAssetAsyncAction(
-            string         pkgName,
-            string         resName,
-            Type           assetType,
-            Action<Object> action)
+        private static async UniTaskVoid LoadAssetAsyncAction(string pkgName, string resName, Type assetType, Action<Object> action)
         {
             var asset = await LoadAssetAsync(pkgName, resName, assetType);
             if (asset == null)

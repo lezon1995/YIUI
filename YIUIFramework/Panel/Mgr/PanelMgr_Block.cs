@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace YIUIFramework
@@ -75,7 +74,7 @@ namespace YIUIFramework
         {
             SetLayerBlockOption(false);
 
-            var currentTime              = Time.realtimeSinceStartup; //当前的时间不受暂停影响
+            var currentTime = Time.realtimeSinceStartup; //当前的时间不受暂停影响
             var currentRecoverOptionTime = currentTime + time;
 
             //假设A 先禁止100秒
@@ -138,14 +137,16 @@ namespace YIUIFramework
 
             m_AllForeverBlockCode.Remove(code);
 
-            if (!IsForeverBlock)
+            if (IsForeverBlock)
             {
-                //如果当前有其他倒计时 就等待倒计时恢复
-                //否则可直接恢复
-                if (m_LastCountDownGuid == 0)
-                {
-                    SetLayerBlockOption(true);
-                }
+                return;
+            }
+
+            //如果当前有其他倒计时 就等待倒计时恢复
+            //否则可直接恢复
+            if (m_LastCountDownGuid == 0)
+            {
+                SetLayerBlockOption(true);
             }
         }
 

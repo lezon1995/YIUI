@@ -1,10 +1,4 @@
-﻿//------------------------------------------------------------
-// Author: 亦亦
-// Mail: 379338943@qq.com
-// Data: 2023年2月12日
-//------------------------------------------------------------
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace YIUIFramework
 {
@@ -21,7 +15,10 @@ namespace YIUIFramework
         {
             var result = Remove(guid);
             if (result)
+            {
                 guid = 0;
+            }
+
             return result;
         }
 
@@ -36,11 +33,7 @@ namespace YIUIFramework
         /// <param name="timerCallback">回调</param>
         /// <param name="startCallback">开始的时候马上回调一次</param>
         /// <returns></returns>
-        public bool Add(ref int       guid,
-                        double        totalTime,
-                        double        interval,
-                        TimerCallback timerCallback,
-                        bool          startCallback = false)
+        public bool Add(ref int guid, double totalTime, double interval, TimerCallback timerCallback, bool startCallback = false)
         {
             if (!TryAdd())
             {
@@ -88,12 +81,7 @@ namespace YIUIFramework
         /// <summary>
         /// 有设置是否循环的
         /// </summary>
-        public bool Add(ref int       guid,
-                        double        totalTime,
-                        double        interval,
-                        TimerCallback timerCallback,
-                        bool          forever,
-                        bool          startCallback = false)
+        public bool Add(ref int guid, double totalTime, double interval, TimerCallback timerCallback, bool forever, bool startCallback = false)
         {
             if (!TryAdd())
             {
@@ -121,7 +109,7 @@ namespace YIUIFramework
             if (!exist)
                 return false;
 
-            data.ElapseTime       = elapseTime;
+            data.ElapseTime = elapseTime;
             data.LastCallBackTime = GetTime();
             return true;
         }

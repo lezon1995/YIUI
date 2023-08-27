@@ -1,10 +1,4 @@
-﻿//------------------------------------------------------------
-// Author: 亦亦
-// Mail: 379338943@qq.com
-// Data: 2023年2月12日
-//------------------------------------------------------------
-
-using UnityEngine;
+﻿using UnityEngine;
 using Cysharp.Threading.Tasks;
 
 namespace YIUIFramework
@@ -24,7 +18,7 @@ namespace YIUIFramework
         {
             var uiBase = await CreateAsync(vo);
             SetParent(uiBase.OwnerRectTransform, parent ? parent : PanelMgr.Inst.UICache);
-            return (T)uiBase;
+            return (T) uiBase;
         }
 
         public static async UniTask<UIBase> InstantiateAsync(UIBindVo vo, RectTransform parent = null)

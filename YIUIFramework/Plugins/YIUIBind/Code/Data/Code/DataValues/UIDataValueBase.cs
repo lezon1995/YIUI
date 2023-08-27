@@ -19,20 +19,20 @@ namespace YIUIBind
         [LabelText("值")]
         [HideReferenceObjectPicker]
         [Delayed]
-        #if UNITY_EDITOR
-        [OnValueChanged("OnValueChanged")]
-        #endif
+#if UNITY_EDITOR
+        [OnValueChanged(nameof(OnValueChanged))]
+#endif
         private T m_Value;
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         private void OnValueChanged()
         {
             InvokeValueChangeAction();
         }
-        #endif
+#endif
 
         //基类中的事件 双参数 1 新值 2 老值
-        private Action<T, T> m_OnValueChangeAction;
+        private event Action<T, T> m_OnValueChangeAction;
 
         public void AddValueChangeAction(Action<T, T> action)
         {
@@ -76,7 +76,7 @@ namespace YIUIBind
                 return false;
             }
 
-            if (!(dataValue is UIDataValueBase<T>))
+            if (dataValue is not UIDataValueBase<T>)
             {
                 Logger.LogError($"失败，类型不一致 当前类型 {typeof(T)} 传入类型 {dataValue.UIDataValueType}");
                 return false;
@@ -87,12 +87,19 @@ namespace YIUIBind
 
         public bool SetValue(T value, bool force = false, bool notify = true)
         {
-            if (!force && EqualsValue(value)) return false;
+            if (!force && EqualsValue(value))
+            {
+                return false;
+            }
 
             var oldValue = m_Value;
             SetValueFrom(value);
             InvokeValueChangeAction();
-            if (notify) InvokeValueChangeAction(value, oldValue);
+            if (notify)
+            {
+                InvokeValueChangeAction(value, oldValue);
+            }
+
             return true;
         }
 

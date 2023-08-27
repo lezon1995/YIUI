@@ -34,8 +34,7 @@ namespace YIUIBind
             {
                 if (m_CanvasGroup == null)
                 {
-                    m_CanvasGroup =
-                        gameObject.GetComponent<CanvasGroup>();
+                    m_CanvasGroup = gameObject.GetComponent<CanvasGroup>();
                 }
 
                 if (m_CanvasGroup != null)
@@ -46,13 +45,11 @@ namespace YIUIBind
                         StopAllCoroutines();
                         if (result)
                         {
-                            StartCoroutine(TransitionFade(
-                                m_CanvasGroup, 1.0f, true));
+                            StartCoroutine(TransitionFade(m_CanvasGroup, 1.0f, true));
                         }
                         else
                         {
-                            StartCoroutine(TransitionFade(
-                                m_CanvasGroup, 0.0f, false));
+                            StartCoroutine(TransitionFade(m_CanvasGroup, 0.0f, false));
                         }
                     }
                     else
@@ -67,8 +64,7 @@ namespace YIUIBind
             }
         }
 
-        private IEnumerator TransitionFade(
-            CanvasGroup group, float alphaTarget, bool activeTarget)
+        private IEnumerator TransitionFade(CanvasGroup group, float alphaTarget, bool activeTarget)
         {
             var leftTime   = m_TransitionTime;
             var alphaStart = group.alpha;
@@ -76,10 +72,7 @@ namespace YIUIBind
             {
                 yield return null;
                 leftTime -= Time.deltaTime;
-                var alpha = Mathf.Lerp(
-                    alphaStart,
-                    alphaTarget,
-                    1.0f - (leftTime / m_TransitionTime));
+                var alpha = Mathf.Lerp(alphaStart, alphaTarget, 1.0f - (leftTime / m_TransitionTime));
                 group.alpha = alpha;
             }
 

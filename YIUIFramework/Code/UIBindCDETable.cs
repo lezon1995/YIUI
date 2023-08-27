@@ -1,10 +1,4 @@
-﻿//------------------------------------------------------------
-// Author: 亦亦
-// Mail: 379338943@qq.com
-// Data: 2023年2月12日
-//------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
@@ -13,28 +7,27 @@ using UnityEngine;
 
 namespace YIUIFramework
 {
-    //[DetailedInfoBox("UI CDE总表 点击展开详细介绍", @"李胜扬")]
     [Serializable]
     [LabelText("UI CDE总表")]
     [AddComponentMenu("YIUIBind/★★★★★UI CDE Table 总表★★★★★")]
     public sealed partial class UIBindCDETable : SerializedMonoBehaviour
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [InlineButton("AddComponentTable", "Add")]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
-        #endif
+#endif
         public UIBindComponentTable ComponentTable;
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [InlineButton("AddDataTable", "Add")]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
-        #endif
+#endif
         public UIBindDataTable DataTable;
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [InlineButton("AddEventTable", "Add")]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
-        #endif
+#endif
         public UIBindEventTable EventTable;
 
         [LabelText("UI包名")]
@@ -54,9 +47,9 @@ namespace YIUIFramework
         [LabelText("编辑时所有公共组件")]
         [ReadOnly]
         [PropertyOrder(1000)] //生成UI类时使用
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
-        #endif
+#endif
         internal List<UIBindCDETable> AllChildCdeTable = new List<UIBindCDETable>();
 
         [OdinSerialize]
@@ -65,9 +58,9 @@ namespace YIUIFramework
         [ReadOnly]
         [PropertyOrder(1000)]
         [LabelText("运行时所有公共组件")] //动态生成后的子类(公共组件) 运行时使用
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [HideIf("@UIOperationHelper.CommonShowIf()")]
-        #endif
+#endif
         private Dictionary<string, UIBase> m_AllChildUIBase = new Dictionary<string, UIBase>();
 
         internal void AddUIBase(string uiName, UIBase uiBase)
@@ -94,7 +87,7 @@ namespace YIUIFramework
 
         public T FindUIBase<T>(string uiName) where T : UIBase
         {
-            return (T)FindUIBase(uiName);
+            return (T) FindUIBase(uiName);
         }
 
         #endregion

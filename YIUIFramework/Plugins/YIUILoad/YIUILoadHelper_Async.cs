@@ -71,8 +71,7 @@ namespace YIUIFramework
             LoadAssetAsyncAction(pkgName, resName, action).Forget();
         }
 
-        private static async UniTaskVoid LoadAssetAsyncAction<T>(string pkgName, string resName, Action<T> action)
-            where T : Object
+        private static async UniTaskVoid LoadAssetAsyncAction<T>(string pkgName, string resName, Action<T> action) where T : Object
         {
             var asset = await LoadAssetAsync<T>(pkgName, resName);
             if (asset == null)

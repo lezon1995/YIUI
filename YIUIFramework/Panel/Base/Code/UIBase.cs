@@ -14,16 +14,16 @@ namespace YIUIFramework
     {
         #region 所有table表禁止public 不允许任何外界获取
 
-        internal  UIBindCDETable m_CDETable;
+        internal UIBindCDETable m_CDETable;
         protected UIBindCDETable CDETable => m_CDETable;
 
-        internal  UIBindComponentTable m_ComponentTable;
+        internal UIBindComponentTable m_ComponentTable;
         protected UIBindComponentTable ComponentTable => m_ComponentTable;
 
-        internal  UIBindDataTable m_DataTable;
+        internal UIBindDataTable m_DataTable;
         protected UIBindDataTable DataTable => m_DataTable;
 
-        internal  UIBindEventTable m_EventTable;
+        internal UIBindEventTable m_EventTable;
         protected UIBindEventTable EventTable => m_EventTable;
 
         #endregion
@@ -39,7 +39,7 @@ namespace YIUIFramework
         /// </summary>
         [HideInInspector]
         public RectTransform OwnerRectTransform;
-        
+
         [HideInInspector]
         public CanvasGroup OwnerCanvasGroup;
 
@@ -96,10 +96,10 @@ namespace YIUIFramework
                 return false;
             }
 
-            OwnerGameObject    = ownerGameObject;
-            OwnerCanvasGroup    = ownerGameObject.GetOrAddComponent<CanvasGroup>();
+            OwnerGameObject = ownerGameObject;
+            OwnerCanvasGroup = ownerGameObject.GetOrAddComponent<CanvasGroup>();
             OwnerRectTransform = ownerGameObject.GetComponent<RectTransform>();
-            m_CDETable         = OwnerGameObject.GetComponent<UIBindCDETable>();
+            m_CDETable = OwnerGameObject.GetComponent<UIBindCDETable>();
             if (CDETable == null)
             {
                 Debug.LogError($"{OwnerGameObject.name} 没有UIBindCDETable组件 这是必须的");
@@ -107,12 +107,12 @@ namespace YIUIFramework
             }
 
             m_ComponentTable = CDETable.ComponentTable;
-            m_DataTable      = CDETable.DataTable;
-            m_EventTable     = CDETable.EventTable;
+            m_DataTable = CDETable.DataTable;
+            m_EventTable = CDETable.EventTable;
 
             m_UIBaseInit = true;
-            m_UIBindVo   = uiBindVo;
-            m_PanelMgr   = PanelMgr.Inst;
+            m_UIBindVo = uiBindVo;
+            m_PanelMgr = PanelMgr.Inst;
             CDETable.BindUIBase(this);
             UIBaseInitialize();
             return true;
@@ -125,8 +125,10 @@ namespace YIUIFramework
         /// </summary>
         public void SetActive(bool value)
         {
-            if (OwnerGameObject == null) return;
-            OwnerGameObject.SetActive(value);
+            if (OwnerGameObject)
+            {
+                OwnerGameObject.SetActive(value);
+            }
         }
 
         //其他的关于 RectTransform 相关的 不建议包一层
@@ -136,7 +138,7 @@ namespace YIUIFramework
         #endregion
 
         #region 生命周期
-        
+
         //UIBase 生命周期顺序 2
         protected virtual void UIBind()
         {
@@ -149,7 +151,7 @@ namespace YIUIFramework
 
         private void UIBaseInitialize()
         {
-            CDETable.UIBaseStart     = UIBaseStart;
+            CDETable.UIBaseStart = UIBaseStart;
             CDETable.UIBaseOnDestroy = UIBaseOnDestroy;
             SealedInitialize();
             UIBind();
@@ -173,7 +175,7 @@ namespace YIUIFramework
         {
             SealedStart();
             Start();
-            CDETable.UIBaseOnEnable  = UIBaseOnEnable;
+            CDETable.UIBaseOnEnable = UIBaseOnEnable;
             CDETable.UIBaseOnDisable = UIBaseOnDisable;
         }
 

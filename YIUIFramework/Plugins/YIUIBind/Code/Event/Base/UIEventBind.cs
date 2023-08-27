@@ -22,11 +22,11 @@ namespace YIUIBind
 
         [OdinSerialize]
         [LabelText("事件名称")]
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [ValueDropdown("GetEventNameKeys")]
         [OnValueChanged("OnEventNameSelected")]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
-        #endif
+#endif
         [PropertyOrder(-99)]
         protected string m_EventName = null;
 
@@ -87,15 +87,15 @@ namespace YIUIBind
         private void OnRefreshEvent()
         {
             RefreshEventTable();
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             UnbindEvent();
-            #endif
+#endif
             RefreshEventName();
             m_UIEvent = GetEvent(m_EventName);
             RefreshEventName();
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             BindEvent();
-            #endif
+#endif
             RefreshBind();
         }
 

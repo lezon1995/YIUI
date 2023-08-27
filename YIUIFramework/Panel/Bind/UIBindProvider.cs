@@ -10,15 +10,15 @@ namespace YIUIFramework
     {
         //业务代码相关程序集的名字
         //默认有Unity默认程序集 可以根据需求修改
-        internal static string[] LogicAssemblyNames = { "Assembly-CSharp" };
+        internal static readonly string[] LogicAssemblyNames = {"Assembly-CSharp"};
 
         private static Type[] GetLogicTypes()
         {
             return AppDomain.CurrentDomain.GetTypesByAssemblyName(LogicAssemblyNames);
         }
 
-        private Type m_BasePanelType     = typeof(BasePanel);
-        private Type m_BaseViewType      = typeof(BaseView);
+        private Type m_BasePanelType = typeof(BasePanel);
+        private Type m_BaseViewType = typeof(BaseView);
         private Type m_BaseComponentType = typeof(BaseComponent);
 
         public UIBindVo[] Get()
@@ -29,10 +29,10 @@ namespace YIUIFramework
                 return Array.Empty<UIBindVo>();
             }
 
-            var panelTypes     = new List<Type>(); //继承panel的
-            var viewTypes      = new List<Type>(); //继承View的
+            var panelTypes = new List<Type>(); //继承panel的
+            var viewTypes = new List<Type>(); //继承View的
             var componentTypes = new List<Type>(); //继承Component的
-            var binds          = new List<UIBindVo>();
+            var binds = new List<UIBindVo>();
 
             foreach (var gameType in gameTypes)
             {
@@ -105,8 +105,8 @@ namespace YIUIFramework
                 return false;
             }
 
-            bindVo.CodeType    = uiBaseType.BaseType;
-            bindVo.BaseType    = uiBaseType;
+            bindVo.CodeType = uiBaseType.BaseType;
+            bindVo.BaseType = uiBaseType;
             bindVo.CreatorType = creatorType;
             return true;
         }
@@ -128,19 +128,19 @@ namespace YIUIFramework
             {
                 return UIStaticHelper.UIBasePanelName;
             }
-            else if (uiBaseType == m_BaseViewType)
+
+            if (uiBaseType == m_BaseViewType)
             {
                 return UIStaticHelper.UIBaseViewName;
             }
-            else if (uiBaseType == m_BaseComponentType)
+
+            if (uiBaseType == m_BaseComponentType)
             {
                 return UIStaticHelper.UIBaseComponentName;
             }
-            else
-            {
-                Debug.LogError($"当前类型错误 是否新增了类型 {uiBaseType}");
-                return UIStaticHelper.UIBaseName;
-            }
+
+            Debug.LogError($"当前类型错误 是否新增了类型 {uiBaseType}");
+            return UIStaticHelper.UIBaseName;
         }
 
         public void NewCode(UIBindVo info, StringBuilder sb)

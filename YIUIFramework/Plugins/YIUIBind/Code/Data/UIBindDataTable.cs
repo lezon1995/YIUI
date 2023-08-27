@@ -1,10 +1,4 @@
-﻿//------------------------------------------------------------
-// Author: 亦亦
-// Mail: 379338943@qq.com
-// Data: 2023年2月12日
-//------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
@@ -24,8 +18,7 @@ namespace YIUIBind
         [HideLabel]
         [ShowInInspector]
         [Title("所有数据", TitleAlignment = TitleAlignments.Centered)]
-        [DictionaryDrawerSettings(KeyLabel = "数据名称", ValueLabel = "数据内容", IsReadOnly = true,
-            DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
+        [DictionaryDrawerSettings(KeyLabel = "数据名称", ValueLabel = "数据内容", IsReadOnly = true, DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
         private Dictionary<string, UIData> m_DataDic = new Dictionary<string, UIData>();
 
         public IReadOnlyDictionary<string, UIData> DataDic => m_DataDic;
@@ -57,7 +50,7 @@ namespace YIUIBind
                 return default;
             }
 
-            return (T)uiData.DataValue;
+            return (T) uiData.DataValue;
         }
 
         #region 递归初始化所有绑定数据
@@ -69,9 +62,9 @@ namespace YIUIBind
 
         private static void InitializeBinds(Transform transform)
         {
-            #if YIUIMACRO_BIND_INITIALIZE
+#if YIUIMACRO_BIND_INITIALIZE
             Logger.LogErrorContext(transform,$"{transform.name} 初始化调用所有子类 UIDataBind 绑定");
-            #endif
+#endif
             var binds = ListPool<UIDataBind>.Get();
             transform.GetComponents(binds);
             foreach (var bind in binds)

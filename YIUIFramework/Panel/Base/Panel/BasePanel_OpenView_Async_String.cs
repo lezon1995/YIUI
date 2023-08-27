@@ -35,7 +35,7 @@ namespace YIUIFramework
 
             AddOpening(viewName);
             var view = (BaseView)await YIUIFactory.InstantiateAsync(bindVo, parent);
-            RemovOpening(viewName);
+            RemoveOpening(viewName);
 
             m_ExistView.Add(viewName, view);
 

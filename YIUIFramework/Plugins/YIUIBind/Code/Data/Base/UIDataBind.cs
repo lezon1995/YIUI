@@ -1,10 +1,4 @@
-﻿//------------------------------------------------------------
-// Author: 亦亦
-// Mail: 379338943@qq.com
-// Data: 2023年2月12日
-//------------------------------------------------------------
-
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 using YIUIFramework;
 using Logger = YIUIFramework.Logger;
@@ -39,15 +33,15 @@ namespace YIUIBind
                 return null;
             }
 
-            var data = m_DataTable?.FindData(dataName);
+            if (m_DataTable == null)
+            {
+                Logger.LogErrorContext(this, $"{name} 未设置变量表 所以无法找到变量 {dataName} 请检查配置");
+                return null;
+            }
+
+            var data = m_DataTable.FindData(dataName);
             if (data == null)
             {
-                if (m_DataTable == null)
-                {
-                    Logger.LogErrorContext(this, $"{name} 未设置变量表 所以无法找到变量 {dataName} 请检查配置");
-                    return null;
-                }
-
                 Logger.LogErrorContext(this, $"{name} 没有找到这个变量 {dataName} 请检查配置");
                 return null;
             }
@@ -59,7 +53,10 @@ namespace YIUIBind
         //也可以被自己初始化 根据顺序
         internal void Initialize(bool refresh = false)
         {
-            if (!refresh && m_Binded) return;
+            if (!refresh && m_Binded)
+            {
+                return;
+            }
 
             m_Binded = true;
             RefreshDataTable();
@@ -100,7 +97,7 @@ namespace YIUIBind
             }
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
 
         /// <summary>
         /// 因为UIData被删除了
@@ -121,6 +118,6 @@ namespace YIUIBind
             BindData();
             OnRefreshData();
         }
-        #endif
+#endif
     }
 }

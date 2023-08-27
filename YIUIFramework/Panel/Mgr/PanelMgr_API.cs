@@ -5,13 +5,13 @@
         public bool ActiveSelf(string panelName)
         {
             var info = GetPanelInfo(panelName);
-            return info?.ActiveSelf ?? false;
+            return info is {ActiveSelf: true};
         }
 
         public bool ActiveSelf<T>() where T : BasePanel
         {
             var info = GetPanelInfo<T>();
-            return info?.ActiveSelf ?? false;
+            return info is {ActiveSelf: true};
         }
     }
 }

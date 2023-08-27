@@ -35,8 +35,7 @@ namespace YIUIFramework
 
         //K1 = 层级枚举 V1 = 层级对应的rect
         //List = 当前层级中的当前所有UI 前面的代表这个UI在前面以此类推
-        private Dictionary<EPanelLayer, Dictionary<RectTransform, List<PanelInfo>>> m_AllPanelLayer =
-            new Dictionary<EPanelLayer, Dictionary<RectTransform, List<PanelInfo>>>();
+        private readonly Dictionary<EPanelLayer, Dictionary<RectTransform, List<PanelInfo>>> m_AllPanelLayer = new Dictionary<EPanelLayer, Dictionary<RectTransform, List<PanelInfo>>>();
 
         private async UniTask<bool> InitRoot()
         {
@@ -124,13 +123,11 @@ namespace YIUIFramework
 
             InitAddUIBlock(); //所有层级初始化后添加一个终极屏蔽层 可根据API 定时屏蔽UI操作
             
-            UICamera.transform.localPosition =
-                new Vector3(UILayerRoot.localPosition.x, UILayerRoot.localPosition.y, -LayerDistance);
+            UICamera.transform.localPosition = new Vector3(UILayerRoot.localPosition.x, UILayerRoot.localPosition.y, -LayerDistance);
 
             UICamera.clearFlags   = CameraClearFlags.Depth;
             UICamera.orthographic = true;
-            UICamera.farClipPlane =
-                ((len + 1) * LayerDistance) * UICanvasRoot.transform.localScale.x; //没必要设置的很大 不需要可以注释
+            UICamera.farClipPlane = ((len + 1) * LayerDistance) * UICanvasRoot.transform.localScale.x; //没必要设置的很大 不需要可以注释
 
             return true;
         }

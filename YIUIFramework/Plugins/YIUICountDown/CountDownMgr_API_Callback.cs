@@ -1,10 +1,4 @@
-﻿//------------------------------------------------------------
-// Author: 亦亦
-// Mail: 379338943@qq.com
-// Data: 2023年2月12日
-//------------------------------------------------------------
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace YIUIFramework
 {
@@ -25,7 +19,7 @@ namespace YIUIFramework
 
             return true;
         }
-        
+
         /// <summary>
         /// 移除一个回调
         /// </summary>
@@ -60,9 +54,9 @@ namespace YIUIFramework
             {
                 return false;
             }
-            
+
             var callbackGuid = 0;
-            var result       = Add(ref callbackGuid, totalTime, interval, timerCallback, startCallback);
+            var result = Add(ref callbackGuid, totalTime, interval, timerCallback, startCallback);
             if (result)
             {
                 m_CallbackGuidDic.Add(timerCallback, callbackGuid);
@@ -81,14 +75,14 @@ namespace YIUIFramework
                 Logger.LogError($"<color=red> 必须有callback </color>");
                 return false;
             }
-            
+
             if (!TryAddCallback(timerCallback))
             {
                 return false;
             }
-            
+
             var callbackGuid = 0;
-            var result       = Add(ref callbackGuid, totalTime, timerCallback, startCallback);
+            var result = Add(ref callbackGuid, totalTime, timerCallback, startCallback);
             if (result)
             {
                 m_CallbackGuidDic.Add(timerCallback, callbackGuid);
@@ -100,11 +94,7 @@ namespace YIUIFramework
         /// <summary>
         /// 有设置是否循环的
         /// </summary>
-        public bool Add(TimerCallback timerCallback,
-                        double        totalTime,
-                        double        interval,
-                        bool          forever,
-                        bool          startCallback = false)
+        public bool Add(TimerCallback timerCallback, double totalTime, double interval, bool forever, bool startCallback = false)
         {
             if (timerCallback == null)
             {
@@ -116,9 +106,9 @@ namespace YIUIFramework
             {
                 return false;
             }
-            
+
             var callbackGuid = 0;
-            var result       = Add(ref callbackGuid, totalTime, interval, timerCallback, forever, startCallback);
+            var result = Add(ref callbackGuid, totalTime, interval, timerCallback, forever, startCallback);
             if (result)
             {
                 m_CallbackGuidDic.Add(timerCallback, callbackGuid);
@@ -132,10 +122,12 @@ namespace YIUIFramework
         /// </summary>
         public bool SetElapseTime(TimerCallback timerCallback, double elapseTime)
         {
-            if (!m_CallbackGuidDic.TryGetValue(timerCallback, out int guid))
-                return false;
+            if (m_CallbackGuidDic.TryGetValue(timerCallback, out int guid))
+            {
+                return SetElapseTime(guid, elapseTime);
+            }
 
-            return SetElapseTime(guid, elapseTime);
+            return false;
         }
 
         /// <summary>
@@ -143,10 +135,12 @@ namespace YIUIFramework
         /// </summary>
         public double GetRemainTime(TimerCallback timerCallback)
         {
-            if (!m_CallbackGuidDic.TryGetValue(timerCallback, out int guid))
-                return 0;
+            if (m_CallbackGuidDic.TryGetValue(timerCallback, out int guid))
+            {
+                return GetRemainTime(guid);
+            }
 
-            return GetRemainTime(guid);
+            return 0;
         }
 
         /// <summary>
@@ -154,10 +148,12 @@ namespace YIUIFramework
         /// </summary>
         public bool ForceToEndTime(TimerCallback timerCallback)
         {
-            if (!m_CallbackGuidDic.TryGetValue(timerCallback, out int guid))
-                return false;
+            if (m_CallbackGuidDic.TryGetValue(timerCallback, out int guid))
+            {
+                return ForceToEndTime(guid);
+            }
 
-            return ForceToEndTime(guid);
+            return false;
         }
 
         /// <summary>
@@ -165,10 +161,12 @@ namespace YIUIFramework
         /// </summary>
         public bool Restart(TimerCallback timerCallback)
         {
-            if (!m_CallbackGuidDic.TryGetValue(timerCallback, out int guid))
-                return false;
+            if (m_CallbackGuidDic.TryGetValue(timerCallback, out int guid))
+            {
+                return Restart(guid);
+            }
 
-            return Restart(guid);
+            return false;
         }
     }
 }

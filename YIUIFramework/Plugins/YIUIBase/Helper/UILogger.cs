@@ -58,17 +58,17 @@ namespace YIUIFramework
 
         public static void LogError(Object obj, object message)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             SelectObj(obj);
-            #endif
+#endif
             Debug.LogError(message);
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         public static void SelectObj(Object obj)
         {
             Selection.activeObject = obj;
         }
-        #endif
+#endif
     }
 }

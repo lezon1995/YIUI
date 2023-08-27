@@ -19,8 +19,7 @@ namespace YIUIFramework
         /// <summary>
         /// 根据 pkg + res 双字典获取
         /// </summary>
-        private static Dictionary<string, Dictionary<string, UIBindVo>> g_UIPathToPkgInfo =
-            new Dictionary<string, Dictionary<string, UIBindVo>>();
+        private static Dictionary<string, Dictionary<string, UIBindVo>> g_UIPathToPkgInfo = new Dictionary<string, Dictionary<string, UIBindVo>>();
 
         /// <summary>
         /// 只有panel 的信息
@@ -50,16 +49,16 @@ namespace YIUIFramework
                 return false;
             }
 
-            #if !UNITY_EDITOR || YIUIMACRO_SIMULATE_NONEEDITOR
+#if !UNITY_EDITOR || YIUIMACRO_SIMULATE_NONEEDITOR
             if (InternalGameGetUIBindVoFunc == null)
             {
                 Debug.LogError($"使用非反射注册绑定 但是方法未实现 请检查");
                 return false;
             }
             var binds = InternalGameGetUIBindVoFunc?.Invoke();
-            #else
+#else
             var binds = new UIBindProvider().Get();
-            #endif
+#endif
 
             if (binds == null || binds.Length <= 0)
             {
@@ -67,8 +66,8 @@ namespace YIUIFramework
                 return false;
             }
 
-            g_UITypeToPkgInfo      = new Dictionary<Type, UIBindVo>(binds.Length);
-            g_UIPathToPkgInfo      = new Dictionary<string, Dictionary<string, UIBindVo>>();
+            g_UITypeToPkgInfo = new Dictionary<Type, UIBindVo>(binds.Length);
+            g_UIPathToPkgInfo = new Dictionary<string, Dictionary<string, UIBindVo>>();
             g_UIPanelNameToPkgInfo = new Dictionary<string, UIBindVo>(binds.Length);
 
             for (var i = 0; i < binds.Length; i++)
@@ -77,7 +76,9 @@ namespace YIUIFramework
                 g_UITypeToPkgInfo[vo.CreatorType] = vo;
                 AddPkgInfoToPathDic(vo);
                 if (vo.CodeType == BasePanelType)
+                {
                     g_UIPanelNameToPkgInfo[vo.ResName] = vo;
+                }
             }
 
             IsInit = true;

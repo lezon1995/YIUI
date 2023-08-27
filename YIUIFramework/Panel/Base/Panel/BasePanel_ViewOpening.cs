@@ -4,14 +4,14 @@ namespace YIUIFramework
 {
     public abstract partial class BasePanel
     {
-        private HashSet<string> m_ViewOpening = new HashSet<string>();
+        private readonly HashSet<string> m_ViewOpening = new HashSet<string>();
 
         private void AddOpening(string name)
         {
             m_ViewOpening.Add(name);
         }
 
-        private void RemovOpening(string name)
+        private void RemoveOpening(string name)
         {
             m_ViewOpening.Remove(name);
         }

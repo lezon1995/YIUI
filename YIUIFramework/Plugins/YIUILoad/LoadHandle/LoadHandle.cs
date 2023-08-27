@@ -48,7 +48,10 @@ namespace YIUIFramework
         private void Release()
         {
             if (Handle != 0)
+            {
                 YIUILoadDI.ReleaseAction?.Invoke(Handle);
+            }
+
             LoadHelper.PutLoad(PkgName, ResName);
         }
 

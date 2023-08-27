@@ -93,7 +93,9 @@ namespace YIUIBind
                 m_LastSprite   = sprite;
                 m_Image.sprite = sprite;
                 if (m_SetNativeSize)
+                {
                     m_Image.SetNativeSize();
+                }
             }
 
             SetEnabled(true);

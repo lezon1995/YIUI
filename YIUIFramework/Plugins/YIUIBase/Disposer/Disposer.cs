@@ -7,10 +7,7 @@
     /// </summary>
     public abstract class Disposer : IDisposer
     {
-        public bool Disposed
-        {
-            get { return m_disposed; }
-        }
+        public bool Disposed => m_disposed;
 
         public bool Dispose()
         {

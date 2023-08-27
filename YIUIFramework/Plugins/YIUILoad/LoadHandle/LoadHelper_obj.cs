@@ -5,7 +5,7 @@ namespace YIUIFramework
 {
     internal static partial class LoadHelper
     {
-        private static Dictionary<Object, LoadHandle> m_ObjLoadHandle = new Dictionary<Object, LoadHandle>();
+        private static readonly Dictionary<Object, LoadHandle> m_ObjLoadHandle = new Dictionary<Object, LoadHandle>();
 
         internal static bool AddLoadHandle(Object obj, LoadHandle handle)
         {

@@ -62,7 +62,7 @@ namespace YIUIBind
         }
 
         private bool ShowIfBindsTips => m_Binds.Count <= 0;
-        private bool ShowIfBinds     => m_Binds.Count >= 1;
+        private bool ShowIfBinds => m_Binds.Count >= 1;
 
         [SerializeField]
         [HideReferenceObjectPicker]

@@ -135,18 +135,18 @@ namespace YIUIFramework.Editor
                 case EUICodeType.Component:
                     return;
                 case EUICodeType.Panel:
-                    sb.AppendFormat("        public override EWindowOption WindowOption => EWindowOption.{0};\r\n", self.WindowOption.ToString().Replace(", ", "|EWindowOption."));
-                    sb.AppendFormat("        public override EPanelLayer Layer => EPanelLayer.{0};\r\n", self.PanelLayer);
-                    sb.AppendFormat("        public override EPanelOption PanelOption => EPanelOption.{0};\r\n", self.PanelOption.ToString().Replace(", ", "|EPanelOption."));
-                    sb.AppendFormat("        public override EPanelStackOption StackOption => EPanelStackOption.{0};\r\n", self.PanelStackOption);
-                    sb.AppendFormat("        public override int Priority => {0};\r\n", self.Priority);
+                    sb.AppendFormat("        public override EWindowOption            WindowOption       =>           EWindowOption.{0};\r\n", self.WindowOption.ToString().Replace(", ", "|EWindowOption."));
+                    sb.AppendFormat("        public override EPanelLayer                    Layer                        =>           EPanelLayer.{0};\r\n", self.PanelLayer);
+                    sb.AppendFormat("        public override EPanelOption                 PanelOption            =>           EPanelOption.{0};\r\n", self.PanelOption.ToString().Replace(", ", "|EPanelOption."));
+                    sb.AppendFormat("        public override EPanelStackOption        StackOption            =>           EPanelStackOption.{0};\r\n", self.PanelStackOption);
+                    sb.AppendFormat("        public override int                                    Priority                     =>           {0};\r\n", self.Priority);
                     if (self.PanelOption.Has(EPanelOption.TimeCache))
-                        sb.AppendFormat("        protected override float CachePanelTime => {0};\r\n\r\n", self.CachePanelTime);
+                        sb.AppendFormat("        protected override float                           CachePanelTime     => {0};\r\n\r\n", self.CachePanelTime);
                     break;
                 case EUICodeType.View:
-                    sb.AppendFormat("        public override EWindowOption WindowOption => EWindowOption.{0};\r\n", self.WindowOption.ToString().Replace(", ", "|EWindowOption."));
-                    sb.AppendFormat("        public override EViewWindowType ViewWindowType => EViewWindowType.{0};\r\n", self.ViewWindowType);
-                    sb.AppendFormat("        public override EViewStackOption StackOption => EViewStackOption.{0};\r\n", self.ViewStackOption);
+                    sb.AppendFormat("        public override EWindowOption              WindowOption       =>           EWindowOption.{0};\r\n", self.WindowOption.ToString().Replace(", ", "|EWindowOption."));
+                    sb.AppendFormat("        public override EViewWindowType         ViewWindowType  =>           EViewWindowType.{0};\r\n", self.ViewWindowType);
+                    sb.AppendFormat("        public override EViewStackOption           StackOption            =>           EViewStackOption.{0};\r\n", self.ViewStackOption);
                     break;
                 default:
                     Debug.LogError($"新增类型未实现 {self.UICodeType}");

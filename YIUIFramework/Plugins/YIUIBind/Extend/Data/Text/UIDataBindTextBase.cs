@@ -43,8 +43,10 @@ namespace YIUIBind
 
         private void BaseSetEnabled(bool set)
         {
-            if (!m_ChangeEnabled) return;
-            SetEnabled(set);
+            if (m_ChangeEnabled)
+            {
+                SetEnabled(set);
+            }
         }
 
         private object[] m_ParamList;
@@ -57,7 +59,7 @@ namespace YIUIBind
         {
             if (!ExistText()) return;
 
-            if (DataSelectDic == null || DataSelectDic.Count <= 0)
+            if (DataSelectDic == null || DataSelectDic.Count == 0)
             {
                 BaseSetEnabled(false);
                 SetText("");
@@ -102,20 +104,26 @@ namespace YIUIBind
         private string GetDataToString(UIDataSelect dataSelect)
         {
             var dataValue = dataSelect?.Data?.DataValue;
-            if (dataValue == null) return "";
+            if (dataValue == null)
+            {
+                return "";
+            }
 
             //如果不想用现在数据重写的tostring 可以在本类自行额外解析法
-            if (!m_NumberPrecision) return dataValue.GetValueToString();
-
-            switch (dataValue.UIBindDataType)
+            if (m_NumberPrecision)
             {
-                case EUIBindDataType.Float:
-                    return dataValue.GetValue<float>().ToString(m_NumberPrecisionStr);
-                case EUIBindDataType.Double:
-                    return dataValue.GetValue<double>().ToString(m_NumberPrecisionStr);
-                default:
-                    return dataValue.GetValueToString();
+                switch (dataValue.UIBindDataType)
+                {
+                    case EUIBindDataType.Float:
+                        return dataValue.GetValue<float>().ToString(m_NumberPrecisionStr);
+                    case EUIBindDataType.Double:
+                        return dataValue.GetValue<double>().ToString(m_NumberPrecisionStr);
+                    default:
+                        return dataValue.GetValueToString();
+                }
             }
+
+            return dataValue.GetValueToString();
         }
 
         protected abstract void OnInit();

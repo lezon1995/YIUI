@@ -1,10 +1,4 @@
-﻿//------------------------------------------------------------
-// Author: 亦亦
-// Mail: 379338943@qq.com
-// Data: 2023年2月12日
-//------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
@@ -22,12 +16,11 @@ namespace YIUIBind
         [OdinSerialize]
         [LabelText("所有已绑定数据")]
         [ShowInInspector]
-        [DictionaryDrawerSettings(KeyLabel = "数据名称", ValueLabel = "数据内容", IsReadOnly = true,
-            DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
+        [DictionaryDrawerSettings(KeyLabel = "数据名称", ValueLabel = "数据内容", IsReadOnly = true, DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
         [ReadOnly]
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
-        #endif
+#endif
         private Dictionary<string, UIDataSelect> m_DataSelectDic = new Dictionary<string, UIDataSelect>();
 
         public IReadOnlyDictionary<string, UIDataSelect> DataSelectDic => m_DataSelectDic;
@@ -36,7 +29,7 @@ namespace YIUIBind
 
         protected T GetFirstValue<T>(T defaultValue = default)
         {
-            if (DataSelectDic.Count <= 0) return default;
+            if (DataSelectDic.Count == 0) return default;
 
             var data = DataSelectDic?.First().Value?.Data;
             return data == null ? default : data.GetValue<T>(defaultValue);
@@ -44,7 +37,7 @@ namespace YIUIBind
 
         protected void SetFirstValue<T>(T value, bool force = false)
         {
-            if (DataSelectDic.Count <= 0) return;
+            if (DataSelectDic.Count == 0) return;
 
             DataSelectDic?.First().Value?.Data?.Set<T>(value, force);
         }
@@ -55,10 +48,8 @@ namespace YIUIBind
 
         protected override void BindData()
         {
-            foreach (var dataSelect in m_DataSelectDic)
+            foreach (var (dataName, dataSelect) in m_DataSelectDic)
             {
-                var dataName = dataSelect.Key;
-
                 if (string.IsNullOrEmpty(dataName))
                 {
                     continue;
@@ -71,11 +62,11 @@ namespace YIUIBind
                 }
 
                 data.AddValueChangeAction(OnValueChanged);
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 data.OnDataChangAction += OnNameChanged;
                 data.AddBind(this);
-                #endif
-                dataSelect.Value.RefreshData(data);
+#endif
+                dataSelect.RefreshData(data);
             }
 
             OnValueChanged();
@@ -99,10 +90,10 @@ namespace YIUIBind
             }
 
             data.RemoveValueChangeAction(OnValueChanged);
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             data.OnDataChangAction -= OnNameChanged;
             data.RemoveBind(this);
-            #endif
+#endif
         }
 
         //解除所有绑定

@@ -1,9 +1,3 @@
-//------------------------------------------------------------
-// Author: 亦亦
-// Mail: 379338943@qq.com
-// Data: 2023年2月12日
-//------------------------------------------------------------
-
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
@@ -19,25 +13,26 @@ namespace YIUIBind
     {
         [SerializeField]
         [LabelText("所有结果逻辑")]
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
-        #endif
+#endif
         private UIBooleanLogic m_BooleanLogic = UIBooleanLogic.And;
 
         [OdinSerialize]
         [LabelText("所有计算结果的变量")]
         [ListDrawerSettings(IsReadOnly = true)]
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
-        #endif
+#endif
         private List<UIDataBoolRef> m_Datas = new List<UIDataBoolRef>();
 
         protected override int Mask()
         {
-            return 1 << (int)EUIBindDataType.Bool |
-                1 << (int)EUIBindDataType.Int |
-                1 << (int)EUIBindDataType.Float |
-                1 << (int)EUIBindDataType.String;
+            return
+                1 << (int) EUIBindDataType.Bool |
+                1 << (int) EUIBindDataType.Int |
+                1 << (int) EUIBindDataType.Float |
+                1 << (int) EUIBindDataType.String;
         }
 
         /// <summary>
@@ -45,7 +40,7 @@ namespace YIUIBind
         /// </summary>
         protected bool GetResult()
         {
-            if (m_Datas == null || m_Datas.Count <= 0)
+            if (m_Datas == null || m_Datas.Count == 0)
             {
                 return false;
             }
@@ -113,7 +108,7 @@ namespace YIUIBind
             //需要移除 所以从后往前
             for (var i = m_Datas.Count - 1; i >= 0; i--)
             {
-                var self  = m_Datas[i];
+                var self = m_Datas[i];
                 var exist = false;
                 foreach (var target in DataSelectDic.Values)
                 {

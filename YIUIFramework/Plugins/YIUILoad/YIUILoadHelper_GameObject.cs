@@ -12,7 +12,7 @@ namespace YIUIFramework
     /// </summary>
     internal static partial class YIUILoadHelper
     {
-        private static Dictionary<Object, Object> g_ObjectMap = new Dictionary<Object, Object>();
+        private static readonly Dictionary<Object, Object> g_ObjectMap = new Dictionary<Object, Object>();
 
         /// <summary>
         /// 同步加载 并实例化

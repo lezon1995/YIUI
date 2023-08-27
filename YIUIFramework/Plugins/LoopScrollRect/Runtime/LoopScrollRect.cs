@@ -12,12 +12,12 @@ namespace UnityEngine.UI
         [HideInInspector]
         [NonSerialized]
         public LoopScrollDataSource dataSource = null;
-        
+
         protected override void ProvideData(Transform transform, int index)
         {
             dataSource.ProvideData(transform, index);
         }
-        
+
         protected override RectTransform GetFromTempPool(int itemIdx)
         {
             RectTransform nextItem = null;
@@ -39,6 +39,7 @@ namespace UnityEngine.UI
                 nextItem.transform.SetParent(m_Content, false);
                 nextItem.gameObject.SetActive(true);
             }
+
             ProvideData(nextItem, itemIdx);
             return nextItem;
         }
@@ -60,8 +61,10 @@ namespace UnityEngine.UI
                 {
                     prefabSource.ReturnObject(m_Content.GetChild(i));
                 }
+
                 deletedItemTypeStart = 0;
             }
+
             if (deletedItemTypeEnd > 0)
             {
                 int t = m_Content.childCount - deletedItemTypeEnd;
@@ -69,6 +72,7 @@ namespace UnityEngine.UI
                 {
                     prefabSource.ReturnObject(m_Content.GetChild(i));
                 }
+
                 deletedItemTypeEnd = 0;
             }
         }

@@ -1,6 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-
-namespace YIUIFramework
+﻿namespace YIUIFramework
 {
     public abstract partial class BaseWindow : UIBase
     {

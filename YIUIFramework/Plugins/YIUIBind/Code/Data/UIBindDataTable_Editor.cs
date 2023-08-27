@@ -17,7 +17,10 @@ namespace YIUIBind
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
         public void AutoCheck()
         {
-            if (!UIOperationHelper.CheckUIOperation(this)) return;
+            if (!UIOperationHelper.CheckUIOperation(this))
+            {
+                return;
+            }
 
             var dicKey = m_DataDic.Keys.ToList();
             foreach (var oldName in dicKey)
@@ -36,12 +39,14 @@ namespace YIUIBind
 
                 newName = newName.ChangeToBigName(NameUtility.DataName);
 
-                if (oldName != newName)
+                if (oldName == newName)
                 {
-                    var uiData = m_DataDic[oldName];
-                    m_DataDic.Remove(oldName);
-                    m_DataDic.Add(newName, uiData);
+                    continue;
                 }
+
+                var uiData = m_DataDic[oldName];
+                m_DataDic.Remove(oldName);
+                m_DataDic.Add(newName, uiData);
             }
 
             OnValidate();

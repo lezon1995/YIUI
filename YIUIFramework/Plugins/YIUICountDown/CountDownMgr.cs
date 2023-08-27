@@ -1,10 +1,4 @@
-﻿//------------------------------------------------------------
-// Author: 亦亦
-// Mail: 379338943@qq.com
-// Data: 2023年2月12日
-//------------------------------------------------------------
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -13,11 +7,11 @@ namespace YIUIFramework
     /// <summary>
     /// 倒计时管理器
     /// 区别于Times
-    ///                            Times                   CountDown
+    ///                                     Times                                                               CountDown
     /// 回调频率                     不可改                     可改                        (虽然中途改频率这个事情很少)
-    /// 如果暂停                中间丢失的时间就没了      中途丢失的时间会快速倒计时             (万一有需求 中间的各种计算就丢掉了)
+    /// 如果暂停                     中间丢失的时间就没了      中途丢失的时间会快速倒计时             (万一有需求 中间的各种计算就丢掉了)
     /// 添加时可立即调用一次      否(还需要自己调一次)          可传参数控制                     (很多时候倒计时都需要第一时间刷新一次的)
-    /// 一对多                        否                         是                         (因为用Callback做K 就没办法在同一个Callback下 被别人倒计时)
+    /// 一对多                            否                         是                         (因为用Callback做K 就没办法在同一个Callback下 被别人倒计时)
     /// 可提前结束                     否                         是                         (针对于 比如 匿名函数 等特殊情况)
     /// 回调参数            obj 但是麻烦 而且不可变           已过去时间/总时间                   (更适合于UI上的一些数字倒计时)
     /// 可循环                        否                          是                         (虽然0 都可以无限 但是万一要的是不是0的情况下循环呢 就得递归调自己吗)
@@ -39,25 +33,25 @@ namespace YIUIFramework
         /// 所有需要被倒计时的目标
         /// 这个可以一对多
         /// </summary>
-        private Dictionary<int, CountDownData> m_AllCountDown = new Dictionary<int, CountDownData>();
+        private readonly Dictionary<int, CountDownData> m_AllCountDown = new Dictionary<int, CountDownData>();
 
         /// <summary>
         /// 临时存储
         /// 下一帧添加的倒计时
         /// </summary>
-        private Dictionary<int, CountDownData> m_ToAddCountDown = new Dictionary<int, CountDownData>();
+        private readonly Dictionary<int, CountDownData> m_ToAddCountDown = new Dictionary<int, CountDownData>();
 
         /// <summary>
         /// 所有需要被倒计时的目标
         /// 这个只能一对一
         /// </summary>
-        private Dictionary<TimerCallback, int> m_CallbackGuidDic = new Dictionary<TimerCallback, int>();
+        private readonly Dictionary<TimerCallback, int> m_CallbackGuidDic = new Dictionary<TimerCallback, int>();
 
         /// <summary>
         /// 临时存储
         /// 下一帧移除的倒计时
         /// </summary>
-        private List<int> m_RemoveGuid = new List<int>();
+        private readonly List<int> m_RemoveGuid = new List<int>();
 
         /// <summary>
         /// 可容纳的最大倒计时
@@ -89,7 +83,7 @@ namespace YIUIFramework
         protected override void OnDispose()
         {
         }
-        
+
         //统一所有取时间都用这个 且方便修改
         private static float GetTime()
         {
@@ -98,7 +92,7 @@ namespace YIUIFramework
         }
 
         //更新频率毫秒
-        private int m_UpdataAsyncDelay = (int)(1000f / 30f);
+        private int m_UpdataAsyncDelay = (int) (1000f / 30f);
 
         //使用异步控制频率更新 并没有使用调度器
         //调度器是mono update 不需要这么高的频率
@@ -231,7 +225,7 @@ namespace YIUIFramework
             RemoveByData(data);
             RefPool.Put(data);
             m_AtCount--;
-            
+
             return true;
         }
 
@@ -272,9 +266,9 @@ namespace YIUIFramework
         /// </summary>
         private bool Restart(CountDownData data)
         {
-            data.ElapseTime       = 0;
+            data.ElapseTime = 0;
             data.LastCallBackTime = GetTime();
-            data.EndTime          = data.LastCallBackTime + data.TotalTime;
+            data.EndTime = data.LastCallBackTime + data.TotalTime;
             return true;
         }
 

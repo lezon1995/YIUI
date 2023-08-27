@@ -12,11 +12,11 @@ namespace YIUIFramework
         /// </summary>
         public PanelInfo GetTopPanel(EPanelLayer layer = EPanelLayer.Any, EPanelOption ignoreOption = EPanelOption.Container)
         {
-            var layerCount = (int)EPanelLayer.Count;
+            var layerCount = (int) EPanelLayer.Count;
 
             for (var i = 0; i < layerCount; i++)
             {
-                var currentLayer = (EPanelLayer)i;
+                var currentLayer = (EPanelLayer) i;
 
                 //如果是任意层级则 从上到下找
                 //否则只会在目标层级上找
@@ -36,8 +36,7 @@ namespace YIUIFramework
                     }
 
                     //有忽略操作 且满足调节 则这个界面无法获取到
-                    if (ignoreOption != EPanelOption.None &&
-                        (info.UIBasePanel.PanelOption & ignoreOption) != 0)
+                    if (ignoreOption != EPanelOption.None && (info.UIBasePanel.PanelOption & ignoreOption) != 0)
                     {
                         continue;
                     }
@@ -133,7 +132,9 @@ namespace YIUIFramework
             info.UIBasePanel.OnClose();
 
             if (!ignoreElse)
+            {
                 await RemoveUIAddElse(info);
+            }
 
             RemoveUI(info);
         }
