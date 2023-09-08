@@ -12,24 +12,24 @@ namespace YIUIFramework
     /// </summary>
     public partial class PanelMgr
     {
-        public       GameObject    UIRoot;
-        public       GameObject    UICanvasRoot;
-        public       RectTransform UILayerRoot;
-        public       Camera        UICamera;
-        public       Canvas        UICanvas;
-        public const int           DesignScreenWidth    = 1920;
-        public const int           DesignScreenHeight   = 1080;
-        public const float         DesignScreenWidth_F  = 1920f;
-        public const float         DesignScreenHeight_F = 1080f;
+        public GameObject UIRoot;
+        public GameObject UICanvasRoot;
+        public RectTransform UILayerRoot;
+        public Camera UICamera;
+        public Canvas UICanvas;
+        public const int DesignScreenWidth = 1080;
+        public const int DesignScreenHeight = 1920;
+        public const float DesignScreenWidth_F = 1080f;
+        public const float DesignScreenHeight_F = 1920f;
 
         private const int RootPosOffset = 1000;
         private const int LayerDistance = 1000;
 
         #region 以下名称 禁止修改
 
-        public const string UIRootName      = "YIUIRoot";
+        public const string UIRootName = "YIUIRoot";
         public const string UILayerRootName = "YIUILayerRoot";
-        public const string UIRootPkgName   = "Common";
+        public const string UIRootPkgName = "Common";
 
         #endregion
 
@@ -87,7 +87,7 @@ namespace YIUIFramework
                 return false;
             }
 
-            canvas.renderMode  = RenderMode.ScreenSpaceCamera;
+            canvas.renderMode = RenderMode.ScreenSpaceCamera;
             canvas.worldCamera = UICamera;
 
             var canvasScaler = UICanvasRoot.GetComponent<CanvasScaler>();
@@ -97,7 +97,7 @@ namespace YIUIFramework
                 return false;
             }
 
-            canvasScaler.uiScaleMode         = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             canvasScaler.referenceResolution = new Vector2(DesignScreenWidth, DesignScreenHeight);
 
             #endregion
@@ -108,13 +108,13 @@ namespace YIUIFramework
             for (var i = len - 1; i >= 0; i--)
             {
                 var layer = new GameObject($"Layer{i}-{(EPanelLayer)i}");
-                var rect  = layer.AddComponent<RectTransform>();
+                var rect = layer.AddComponent<RectTransform>();
                 rect.SetParent(UILayerRoot);
-                rect.localScale    = Vector3.one;
-                rect.pivot         = new Vector2(0.5f, 0.5f);
-                rect.anchorMax     = Vector2.one;
-                rect.anchorMin     = Vector2.zero;
-                rect.sizeDelta     = Vector2.zero;
+                rect.localScale = Vector3.one;
+                rect.pivot = new Vector2(0.5f, 0.5f);
+                rect.anchorMax = Vector2.one;
+                rect.anchorMin = Vector2.zero;
+                rect.sizeDelta = Vector2.zero;
                 rect.localRotation = Quaternion.identity;
                 rect.localPosition = new Vector3(0, 0, i * LayerDistance); //这个是为了3D模型时穿插的问题
                 var rectDic = new Dictionary<RectTransform, List<PanelInfo>> { { rect, new List<PanelInfo>() } };
@@ -122,10 +122,10 @@ namespace YIUIFramework
             }
 
             InitAddUIBlock(); //所有层级初始化后添加一个终极屏蔽层 可根据API 定时屏蔽UI操作
-            
+
             UICamera.transform.localPosition = new Vector3(UILayerRoot.localPosition.x, UILayerRoot.localPosition.y, -LayerDistance);
 
-            UICamera.clearFlags   = CameraClearFlags.Depth;
+            UICamera.clearFlags = CameraClearFlags.Depth;
             UICamera.orthographic = true;
             UICamera.farClipPlane = ((len + 1) * LayerDistance) * UICanvasRoot.transform.localScale.x; //没必要设置的很大 不需要可以注释
 
