@@ -42,9 +42,9 @@ namespace YIUIFramework.Editor
 
             EditorHelper.CreateExistsDirectory(prefabsPath);
             EditorHelper.CreateExistsDirectory(spritesPath);
-            EditorHelper.CreateExistsDirectory(spritesAtlas1Path);
-            EditorHelper.CreateExistsDirectory(atlasIgnorePath);
-            EditorHelper.CreateExistsDirectory(atlasPath);
+            // EditorHelper.CreateExistsDirectory(spritesAtlas1Path);
+            // EditorHelper.CreateExistsDirectory(atlasIgnorePath);
+            // EditorHelper.CreateExistsDirectory(atlasPath);
             EditorHelper.CreateExistsDirectory(sourcePath);
 
             MenuItemYIUIPanel.CreateYIUIPanelByPath(sourcePath, createName);
