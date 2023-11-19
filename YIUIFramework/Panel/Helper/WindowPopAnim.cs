@@ -15,7 +15,7 @@ namespace YIUIFramework
             var rectTransform = uiBase.OwnerRectTransform;
             if (rectTransform == null) return;
 
-            uiBase.SetActive(true);
+            // uiBase.SetActive(true);
             var vector2 = rectTransform.anchoredPosition;
             vector2.y = from;
             rectTransform.anchoredPosition = vector2;
@@ -32,8 +32,7 @@ namespace YIUIFramework
             vector2.y = from;
             rectTransform.anchoredPosition = vector2;
             await rectTransform.DOAnchorPosY(to, time);
-
-            uiBase.SetActive(false);
+            // uiBase.SetActive(false);
         }
     }
 }
