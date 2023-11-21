@@ -1,16 +1,16 @@
-﻿using System.Text.RegularExpressions;
-using Logger = YIUIFramework.Logger;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace YIUIFramework
 {
     public static class NameUtility
     {
         //统一命名
-        public const string FirstName     = "u_"; //不使用m_ 这个是给具体逻辑用的 u_ 就知道这个是自动创建的 也避免命名冲突
+        public const string FirstName = "u_"; //不使用m_ 这个是给具体逻辑用的 u_ 就知道这个是自动创建的 也避免命名冲突
         public const string ComponentName = "Com";
-        public const string DataName      = "Data";
-        public const string EventName     = "Event";
-        public const string UIName        = "UI";
+        public const string DataName = "Data";
+        public const string EventName = "Event";
+        public const string UIName = "UI";
 
         //名字只允许以下的正则表达式
         public const string NameRegex = "[^a-z0-9A-Z_]";
@@ -80,7 +80,7 @@ namespace YIUIFramework
 
         public static string GetQualifiedName(string name)
         {
-            if (name.IndexOf("(Clone)") > -1)
+            if (name.IndexOf("(Clone)", StringComparison.Ordinal) > -1)
             {
                 name = name.Replace("(Clone)", string.Empty);
             }

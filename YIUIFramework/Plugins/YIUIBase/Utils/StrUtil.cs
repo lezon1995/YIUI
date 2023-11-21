@@ -52,8 +52,8 @@ namespace YIUIFramework
                 return "";
             }
 
-            StringWriter sw      = new StringWriter();
-            bool         isFirst = true;
+            StringWriter sw = new StringWriter();
+            bool isFirst = true;
             for (int index = 0; index < name.Length; index++)
             {
                 char c = name[index];
@@ -111,7 +111,7 @@ namespace YIUIFramework
         /// <returns></returns>
         public static string ReplaceKeyToValue(string template, string keyName, params string[] values)
         {
-            var sb     = SbPool.Get();
+            var sb = SbPool.Get();
             var chunks = GetStrChunk(template);
             for (int i = 0; i < chunks.Length; i++)
             {
@@ -126,9 +126,9 @@ namespace YIUIFramework
                     chunk.KeyIndex > values.Length)
                 {
                     sb.Append('{')
-                      .Append(chunk.TextOrKey)
-                      .Append(chunk.KeyIndex)
-                      .Append('}');
+                        .Append(chunk.TextOrKey)
+                        .Append(chunk.KeyIndex)
+                        .Append('}');
                     continue;
                 }
 
@@ -163,9 +163,9 @@ namespace YIUIFramework
                 return "";
             }
 
-            var  length    = s.Length;
+            var length = s.Length;
             bool hasChange = false;
-            var  sb        = SbPool.Get();
+            var sb = SbPool.Get();
             for (int i = 0; i < length; i++)
             {
                 char c = s[i];

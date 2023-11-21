@@ -4,20 +4,17 @@ namespace YIUIFramework
 {
     public static class TransformExtensions
     {
-        public static void SetPosition(
-            this Transform transform, float x, float y, float z)
+        public static void SetPosition(this Transform transform, float x, float y, float z)
         {
             transform.position = new Vector3(x, y, z);
         }
 
-        public static void SetLocalPosition(
-            this Transform transform, float x, float y, float z)
+        public static void SetLocalPosition(this Transform transform, float x, float y, float z)
         {
             transform.localPosition = new Vector3(x, y, z);
         }
 
-        public static void SetLocalScale(
-            this Transform transform, float x, float y, float z)
+        public static void SetLocalScale(this Transform transform, float x, float y, float z)
         {
             transform.localScale = new Vector3(x, y, z);
         }
@@ -40,7 +37,7 @@ namespace YIUIFramework
                     if (child.name == name)
                     {
                         target = child;
-                        find   = true;
+                        find = true;
                         break;
                     }
                 }
@@ -55,8 +52,7 @@ namespace YIUIFramework
             return target;
         }
 
-        public static Transform FindByName(
-            this Transform trans, string name1, string name2)
+        public static Transform FindByName(this Transform trans, string name1, string name2)
         {
             if (trans.name.Equals(name1) || trans.name.Equals(name2))
             {
@@ -65,7 +61,7 @@ namespace YIUIFramework
 
             for (int i = 0; i < trans.childCount; ++i)
             {
-                var child  = trans.GetChild(i);
+                var child = trans.GetChild(i);
                 var result = FindByName(child, name1, name2);
                 if (result != null)
                 {
@@ -76,11 +72,7 @@ namespace YIUIFramework
             return null;
         }
 
-        public static Transform FindByName(
-            this Transform trans,
-            string         name1,
-            string         name2,
-            string         name3)
+        public static Transform FindByName(this Transform trans, string name1, string name2, string name3)
         {
             if (trans.name.Equals(name1) ||
                 trans.name.Equals(name2) ||
@@ -91,7 +83,7 @@ namespace YIUIFramework
 
             for (int i = 0; i < trans.childCount; ++i)
             {
-                var child  = trans.GetChild(i);
+                var child = trans.GetChild(i);
                 var result = FindByName(child, name1, name2, name3);
                 if (result != null)
                 {
@@ -111,7 +103,7 @@ namespace YIUIFramework
 
             for (int i = 0; i < trans.childCount; ++i)
             {
-                var child  = trans.GetChild(i);
+                var child = trans.GetChild(i);
                 var result = FindByName(child, name);
                 if (result != null)
                 {

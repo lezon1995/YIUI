@@ -2,7 +2,6 @@
 using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
-using UnityEngine;
 #endif
 
 namespace YIUIFramework

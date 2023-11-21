@@ -8,8 +8,8 @@ namespace YIUIFramework
     /// </summary>
     public class ObjCache<T>
     {
-        private   Stack<T> m_pool;
-        protected Func<T>  m_createCallback;
+        private Stack<T> m_pool;
+        protected Func<T> m_createCallback;
 
         public ObjCache(Func<T> createCallback, int capacity = 0)
         {
@@ -36,13 +36,14 @@ namespace YIUIFramework
             {
                 foreach (var item in m_pool)
                 {
-                    if (item is IDisposer disposer)
+                    switch (item)
                     {
-                        disposer.Dispose();
-                    }
-                    else if (item is IDisposable disposer2)
-                    {
-                        disposer2.Dispose();
+                        case IDisposer disposer:
+                            disposer.Dispose();
+                            break;
+                        case IDisposable disposer2:
+                            disposer2.Dispose();
+                            break;
                     }
                 }
             }

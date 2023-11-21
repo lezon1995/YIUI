@@ -1,6 +1,4 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
 namespace YIUIFramework
@@ -24,6 +22,7 @@ namespace YIUIFramework
             {
                 m_FailInited.Enqueue(manager);
             }
+
             return result;
         }
 
@@ -43,7 +42,7 @@ namespace YIUIFramework
         //获取当前剩余的所有
         public List<IManager> GetFailInitedMgrList()
         {
-            var list  = new List<IManager>();
+            var list = new List<IManager>();
             var count = GetFailInitedCount();
             for (int i = 0; i < count; i++)
             {

@@ -7,16 +7,16 @@
     /// </summary>
     public abstract class Disposer : IDisposer
     {
-        public bool Disposed => m_disposed;
+        public bool Disposed => m_Disposed;
 
         public bool Dispose()
         {
-            if (m_disposed)
+            if (m_Disposed)
             {
                 return false;
             }
 
-            m_disposed = true;
+            m_Disposed = true;
             OnDispose();
             return true;
         }
@@ -26,6 +26,6 @@
         /// </summary>
         protected abstract void OnDispose();
 
-        private bool m_disposed;
+        private bool m_Disposed;
     }
 }

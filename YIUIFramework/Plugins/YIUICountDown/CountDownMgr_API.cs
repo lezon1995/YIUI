@@ -95,7 +95,9 @@ namespace YIUIFramework
             guid = AddCountDownTimer(newCountDownData);
 
             if (startCallback)
+            {
                 Callback(newCountDownData);
+            }
 
             return true;
         }

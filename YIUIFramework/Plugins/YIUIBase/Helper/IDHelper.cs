@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace YIUIFramework
-{   
+{
     /// <summary>
     /// ID 助手 生成唯一ID
     /// </summary>

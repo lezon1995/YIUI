@@ -1,8 +1,9 @@
-﻿#if UNITY_EDITOR
-using UnityEditor;
-#endif
+﻿
 using UnityEngine;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace YIUIFramework
 {
@@ -13,56 +14,56 @@ namespace YIUIFramework
     [ExecuteInEditMode]
     public class ResolutionAdapter : MonoBehaviour
     {
-        private Canvas       canvas;
+        private Canvas canvas;
         private CanvasScaler scaler;
 
         private void Awake()
         {
-            this.canvas = this.GetComponent<Canvas>();
-            if (null == this.canvas || !this.canvas.isRootCanvas)
+            canvas = GetComponent<Canvas>();
+            if (null == canvas || !canvas.isRootCanvas)
             {
                 return;
             }
 
-            this.AdaptResolution();
+            AdaptResolution();
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         private void Update()
         {
-            this.AdaptResolution();
+            AdaptResolution();
         }
 
         private void OnValidate()
         {
-            this.AdaptResolution();
+            AdaptResolution();
         }
-        #endif
+#endif
 
         private void AdaptResolution()
         {
-            #if UNITY_EDITOR
-            var prefabType = PrefabUtility.GetPrefabAssetType(this.gameObject);
+#if UNITY_EDITOR
+            var prefabType = PrefabUtility.GetPrefabAssetType(gameObject);
             if (prefabType == PrefabAssetType.Regular)
             {
                 return;
             }
-            #endif
+#endif
 
-            if (null == this.scaler)
+            if (null == scaler)
             {
-                this.scaler = this.GetComponent<CanvasScaler>();
+                scaler = GetComponent<CanvasScaler>();
             }
 
-            var radio    = (float)Screen.width / Screen.height;
-            var refRadio = this.scaler.referenceResolution.x / this.scaler.referenceResolution.y;
+            var radio = (float)Screen.width / Screen.height;
+            var refRadio = scaler.referenceResolution.x / scaler.referenceResolution.y;
             if (radio >= refRadio)
             {
-                this.scaler.matchWidthOrHeight = 1.0f;
+                scaler.matchWidthOrHeight = 1.0f;
             }
             else
             {
-                this.scaler.matchWidthOrHeight = 0.0f;
+                scaler.matchWidthOrHeight = 0.0f;
             }
         }
     }

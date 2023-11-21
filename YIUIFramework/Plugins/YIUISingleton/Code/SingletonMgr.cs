@@ -14,8 +14,8 @@ namespace YIUIFramework
 
         public static bool Disposing { get; private set; }
 
-        public static int  Count      => g_Singles.Count;
-        
+        public static int Count => g_Singles.Count;
+
         public static bool IsQuitting { get; private set; }
 
         static SingletonMgr()
@@ -41,7 +41,7 @@ namespace YIUIFramework
                 //Debug.Log("正在退出游戏 不必清理");
                 return;
             }
-            
+
             Disposing = true;
 
             //Debug.Log($"SingletonMgr.清除所有单例");

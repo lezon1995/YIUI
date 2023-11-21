@@ -10,19 +10,19 @@ namespace YIUIFramework
     public sealed class RepeatedTimer : IDisposable
     {
         private LinkedListNode<Action> updateHandle;
-        private float                  leftTime;
-        private float                  repeatTime;
-        private bool                   unscaled;
-        private float                  speed = 1.0f;
-        private Action                 task;
+        private float leftTime;
+        private float repeatTime;
+        private bool unscaled;
+        private float speed = 1.0f;
+        private Action task;
 
         /// <summary>
         /// 获取或设置此计时器的速度
         /// </summary>
         public float Speed
         {
-            get { return this.speed; }
-            set { this.speed = value; }
+            get { return speed; }
+            set { speed = value; }
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace YIUIFramework
         /// </summary>
         public float LeftTime
         {
-            get { return this.leftTime; }
+            get { return leftTime; }
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace YIUIFramework
         /// </summary>
         public float RepeatTime
         {
-            get { return this.repeatTime; }
+            get { return repeatTime; }
         }
 
         /// <summary>
@@ -48,10 +48,10 @@ namespace YIUIFramework
             float interval, Action task)
         {
             var timer = new RepeatedTimer();
-            timer.leftTime   = interval;
+            timer.leftTime = interval;
             timer.repeatTime = interval;
-            timer.unscaled   = false;
-            timer.task       = task;
+            timer.unscaled = false;
+            timer.task = task;
             timer.Start();
             return timer;
         }
@@ -63,42 +63,42 @@ namespace YIUIFramework
             float delay, float interval, Action task)
         {
             var timer = new RepeatedTimer();
-            timer.leftTime   = delay;
+            timer.leftTime = delay;
             timer.repeatTime = interval;
-            timer.unscaled   = false;
-            timer.task       = task;
+            timer.unscaled = false;
+            timer.task = task;
             timer.Start();
 
             return timer;
         }
-        
+
         public void Dispose()
         {
-            SchedulerMgr.RemoveFrameListener(this.updateHandle);
-            this.updateHandle = null;
+            SchedulerMgr.RemoveFrameListener(updateHandle);
+            updateHandle = null;
         }
 
         private void Start()
         {
-            this.updateHandle = SchedulerMgr.AddFrameListener(this.Update);
+            updateHandle = SchedulerMgr.AddFrameListener(Update);
         }
 
         private void Update()
         {
-            if (this.unscaled)
+            if (unscaled)
             {
-                this.leftTime -= Time.unscaledDeltaTime * this.speed;
+                leftTime -= Time.unscaledDeltaTime * speed;
             }
             else
             {
-                this.leftTime -= Time.deltaTime * this.speed;
+                leftTime -= Time.deltaTime * speed;
             }
 
-            if (this.leftTime <= 0.0f)
+            if (leftTime <= 0.0f)
             {
                 try
                 {
-                    this.task();
+                    task();
                 }
                 catch (Exception e)
                 {
@@ -106,7 +106,7 @@ namespace YIUIFramework
                 }
                 finally
                 {
-                    this.leftTime = this.repeatTime;
+                    leftTime = repeatTime;
                 }
             }
         }

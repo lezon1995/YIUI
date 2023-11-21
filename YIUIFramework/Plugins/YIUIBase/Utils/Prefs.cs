@@ -8,27 +8,27 @@ namespace YIUIFramework
     ///         另外集成了以groupKey(比如userid)来分组数据
     public struct Prefs<T>
     {
-        private T      m_value;
+        private T m_value;
         private string m_key;
         private string m_valueKey;
         private RwFlag m_rwFlag;
 
-        private int            m_groupKeyVer;
-        private IGroupKey      m_groupKey;
+        private int m_groupKeyVer;
+        private IGroupKey m_groupKey;
         private IPrefsAccessor m_accessor;
 
         private T m_defValue;
 
         public Prefs(string key, IGroupKey groupKey, T defValue, IPrefsAccessor accessor)
         {
-            m_defValue    = defValue;
-            m_value       = defValue;
-            m_groupKey    = groupKey;
-            m_accessor    = accessor;
+            m_defValue = defValue;
+            m_value = defValue;
+            m_groupKey = groupKey;
+            m_accessor = accessor;
             m_groupKeyVer = int.MinValue;
-            m_rwFlag      = RwFlag.None;
-            m_valueKey    = key;
-            m_key         = key;
+            m_rwFlag = RwFlag.None;
+            m_valueKey = key;
+            m_key = key;
             UpdateKey();
         }
 
@@ -100,7 +100,7 @@ namespace YIUIFramework
                     return;
                 }
 
-                m_value  =  value;
+                m_value = value;
                 m_rwFlag |= RwFlag.Write;
                 m_accessor.Set(m_key, value);
             }
@@ -110,7 +110,7 @@ namespace YIUIFramework
         {
             UpdateKey(true);
             m_groupKeyVer = int.MinValue;
-            m_value       = default;
+            m_value = default;
             m_rwFlag.MarkSelf(RwFlag.Write);
             PlayerPrefs.DeleteKey(m_key);
         }
@@ -118,8 +118,8 @@ namespace YIUIFramework
         public interface IPrefsAccessor
         {
             bool HasKey(string key);
-            T    Get(string    key);
-            void Set(string    key, T value);
+            T Get(string key);
+            void Set(string key, T value);
         }
     }
 
@@ -362,17 +362,17 @@ namespace YIUIFramework
     /// </summary>
     public interface IGroupKey
     {
-        int    Version { get; }
-        string Key     { get; }
+        int Version { get; }
+        string Key { get; }
     }
 
     [Flags]
     public enum RwFlag
     {
-        None  = 0,
+        None = 0,
         Write = 1,
-        Read  = 1 << 1,
-        Full  = Write | Read
+        Read = 1 << 1,
+        Full = Write | Read
     }
 
     public static class RwFlagExt

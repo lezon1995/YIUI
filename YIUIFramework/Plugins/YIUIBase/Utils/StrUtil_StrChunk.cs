@@ -39,17 +39,17 @@ namespace YIUIFramework
                 return Array.Empty<StrChunk>();
             }
 
-            var chunks  = g_cacheStrChunkList;
-            var sb      = SbPool.Get();
-            var keySb   = SbPool.Get();
+            var chunks = g_cacheStrChunkList;
+            var sb = SbPool.Get();
+            var keySb = SbPool.Get();
             var indexSb = SbPool.Get();
 
-            int            throwErrId = -1;
-            char           lastChar   = char.MaxValue;
-            ReadChunkState state      = ReadChunkState.ReadText;
+            int throwErrId = -1;
+            char lastChar = char.MaxValue;
+            ReadChunkState state = ReadChunkState.ReadText;
 
             const char beginChar = '{';
-            const char endChar   = '}';
+            const char endChar = '}';
 
             int chrCount = value.Length;
             for (int i = 0; i < chrCount; i++)
@@ -131,7 +131,7 @@ namespace YIUIFramework
                             chunks.Add(new StrChunk() { TextOrKey = sb.ToString() });
                             chunks.Add(new StrChunk()
                             {
-                                KeyIndex  = byte.Parse(indexSb.ToString()),
+                                KeyIndex = byte.Parse(indexSb.ToString()),
                                 TextOrKey = keySb.ToString()
                             });
                             sb.Clear();
@@ -140,9 +140,9 @@ namespace YIUIFramework
                         {
                             throwErrId = 3;
                             sb.Append(beginChar)
-                              .Append(keySb.ToString())
-                              .Append(indexSb.ToString())
-                              .Append(c);
+                                .Append(keySb.ToString())
+                                .Append(indexSb.ToString())
+                                .Append(c);
                         }
 
                         keySb.Clear();

@@ -10,8 +10,8 @@ namespace YIUIFramework
     public sealed class PriorityQueue<T> : IEnumerable<T>
     {
         private IComparer<T> comparer;
-        private T[]          heap;
-        private HashSet<T>   fastFinder = new HashSet<T>();
+        private T[] heap;
+        private HashSet<T> fastFinder = new HashSet<T>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PriorityQueue{T}"/> 
@@ -44,10 +44,10 @@ namespace YIUIFramework
         /// Initializes a new instance of the <see cref="PriorityQueue{T}"/> 
         /// class, with specify capacity and comparer.
         /// </summary>
-        public PriorityQueue(int capacity, IComparer<T> comparer)
+        public PriorityQueue(int capacity, IComparer<T> _comparer)
         {
-            this.comparer = (comparer == null) ? Comparer<T>.Default : comparer;
-            this.heap     = new T[capacity];
+            comparer = _comparer == null ? Comparer<T>.Default : _comparer;
+            heap = new T[capacity];
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace YIUIFramework
         /// </summary>
         public T this[int index]
         {
-            get { return this.heap[index]; }
+            get { return heap[index]; }
         }
 
         public bool Contains(T v)
@@ -73,7 +73,7 @@ namespace YIUIFramework
         /// </summary>
         public IEnumerator<T> GetEnumerator()
         {
-            return new Enumerator(this.heap, this.Count);
+            return new Enumerator(heap, Count);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace YIUIFramework
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         /// <summary>
@@ -89,8 +89,8 @@ namespace YIUIFramework
         /// </summary>
         public void Clear()
         {
-            this.Count = 0;
-            this.fastFinder.Clear();
+            Count = 0;
+            fastFinder.Clear();
         }
 
         /// <summary>
@@ -98,13 +98,13 @@ namespace YIUIFramework
         /// </summary>
         public void Push(T v)
         {
-            if (this.Count >= this.heap.Length)
+            if (Count >= heap.Length)
             {
-                Array.Resize(ref this.heap, this.Count * 2);
+                Array.Resize(ref heap, Count * 2);
             }
 
-            this.heap[this.Count] = v;
-            this.SiftUp(this.Count++);
+            heap[Count] = v;
+            SiftUp(Count++);
             fastFinder.Add(v);
         }
 
@@ -113,11 +113,11 @@ namespace YIUIFramework
         /// </summary>
         public T Pop()
         {
-            var v = this.Top();
-            this.heap[0] = this.heap[--this.Count];
-            if (this.Count > 0)
+            var v = Top();
+            heap[0] = heap[--Count];
+            if (Count > 0)
             {
-                this.SiftDown(0);
+                SiftDown(0);
             }
 
             fastFinder.Remove(v);
@@ -129,9 +129,9 @@ namespace YIUIFramework
         /// </summary>
         public T Top()
         {
-            if (this.Count > 0)
+            if (Count > 0)
             {
-                return this.heap[0];
+                return heap[0];
             }
 
             throw new InvalidOperationException("The PriorityQueue is empty.");
@@ -139,37 +139,37 @@ namespace YIUIFramework
 
         private void SiftUp(int n)
         {
-            var v = this.heap[n];
+            var v = heap[n];
             for (var n2 = n / 2;
-                 n > 0 && this.comparer.Compare(v, this.heap[n2]) > 0;
+                 n > 0 && comparer.Compare(v, heap[n2]) > 0;
                  n = n2, n2 /= 2)
             {
-                this.heap[n] = this.heap[n2];
+                heap[n] = heap[n2];
             }
 
-            this.heap[n] = v;
+            heap[n] = v;
         }
 
         private void SiftDown(int n)
         {
-            var v = this.heap[n];
-            for (var n2 = n * 2; n2 < this.Count; n = n2, n2 *= 2)
+            var v = heap[n];
+            for (var n2 = n * 2; n2 < Count; n = n2, n2 *= 2)
             {
-                if (n2 + 1 < this.Count &&
-                    this.comparer.Compare(this.heap[n2 + 1], this.heap[n2]) > 0)
+                if (n2 + 1 < Count &&
+                    comparer.Compare(heap[n2 + 1], heap[n2]) > 0)
                 {
                     ++n2;
                 }
 
-                if (this.comparer.Compare(v, this.heap[n2]) >= 0)
+                if (comparer.Compare(v, heap[n2]) >= 0)
                 {
                     break;
                 }
 
-                this.heap[n] = this.heap[n2];
+                heap[n] = heap[n2];
             }
 
-            this.heap[n] = v;
+            heap[n] = v;
         }
 
         /// <summary>
@@ -179,47 +179,41 @@ namespace YIUIFramework
         {
             private readonly T[] heap;
             private readonly int count;
-            private          int index;
+            private int index;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="Enumerator"/> 
             /// struct.
             /// </summary>
-            internal Enumerator(T[] heap, int count)
+            internal Enumerator(T[] _heap, int _count)
             {
-                this.heap  = heap;
-                this.count = count;
-                this.index = -1;
+                heap = _heap;
+                count = _count;
+                index = -1;
             }
 
-            /// <inheritdoc/>
             public T Current
             {
-                get { return this.heap[this.index]; }
+                get { return heap[index]; }
             }
 
-            /// <inheritdoc/>
             object IEnumerator.Current
             {
-                get { return this.Current; }
+                get { return Current; }
             }
 
-            /// <inheritdoc/>
             public void Dispose()
             {
             }
 
-            /// <inheritdoc/>
             public void Reset()
             {
-                this.index = -1;
+                index = -1;
             }
 
-            /// <inheritdoc/>
             public bool MoveNext()
             {
-                return (this.index <= this.count) &&
-                    (++this.index < this.count);
+                return (index <= count) && (++index < count);
             }
         }
     }

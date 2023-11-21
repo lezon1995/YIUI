@@ -16,11 +16,11 @@ namespace YIUIFramework
 
         internal static Material Get(UIEffectMaterialKey key)
         {
-            MaterialRef matref;
-            if (materials.TryGetValue(key, out matref))
+            MaterialRef matRef;
+            if (materials.TryGetValue(key, out matRef))
             {
-                ++matref.RefCount;
-                return matref.Material;
+                ++matRef.RefCount;
+                return matRef.Material;
             }
 
             var material = key.CreateMaterial();
@@ -44,29 +44,29 @@ namespace YIUIFramework
                 return;
             }
 
-            MaterialRef matref;
-            if (!materials.TryGetValue(key, out matref))
+            MaterialRef matRef;
+            if (!materials.TryGetValue(key, out matRef))
             {
                 Debug.LogError("Can not find the material reference.");
                 return;
             }
 
-            if (--matref.RefCount <= 0)
+            if (--matRef.RefCount <= 0)
             {
-                matref.Material.SafeDestroySelf();
+                matRef.Material.SafeDestroySelf();
                 materials.Remove(key);
                 lookup.Remove(material);
             }
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         private static void ClearCache()
         {
             materials.Clear();
             lookup.Clear();
             SceneView.RepaintAll();
         }
-        #endif
+#endif
 
         private class MaterialKeyComparer : IEqualityComparer<UIEffectMaterialKey>
         {
@@ -84,23 +84,23 @@ namespace YIUIFramework
         private class MaterialRef
         {
             private Material material;
-            private int      refcount;
+            private int refCount;
 
-            public MaterialRef(Material material)
+            public MaterialRef(Material _material)
             {
-                this.material = material;
-                this.refcount = 1;
+                material = _material;
+                refCount = 1;
             }
 
             public Material Material
             {
-                get { return this.material; }
+                get { return material; }
             }
 
             public int RefCount
             {
-                get { return this.refcount; }
-                set { this.refcount = value; }
+                get { return refCount; }
+                set { refCount = value; }
             }
         }
     }

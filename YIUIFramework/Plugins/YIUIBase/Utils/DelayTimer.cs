@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Logger = YIUIFramework.Logger;
 
 namespace YIUIFramework
 {
@@ -11,9 +10,9 @@ namespace YIUIFramework
     public sealed class DelayTimer : IDisposable
     {
         private LinkedListNode<Action> updateHandle;
-        private float                  delayTime;
-        private float                  leftTime;
-        private Action                 task;
+        private float delayTime;
+        private float leftTime;
+        private Action task;
 
         /// <summary>
         /// 在指定秒后调用任务
@@ -24,31 +23,31 @@ namespace YIUIFramework
         {
             var timer = new DelayTimer();
             timer.delayTime = delay;
-            timer.task      = task;
+            timer.task = task;
             timer.Start();
             return timer;
         }
 
         public void Dispose()
         {
-            SchedulerMgr.RemoveFrameListener(this.updateHandle);
-            this.updateHandle = null;
+            SchedulerMgr.RemoveFrameListener(updateHandle);
+            updateHandle = null;
         }
 
         private void Start()
         {
-            this.leftTime     = this.delayTime;
-            this.updateHandle = SchedulerMgr.AddFrameListener(this.Update);
+            leftTime = delayTime;
+            updateHandle = SchedulerMgr.AddFrameListener(Update);
         }
 
         private void Update()
         {
-            this.leftTime -= Time.deltaTime;
-            if (this.leftTime <= 0.0f)
+            leftTime -= Time.deltaTime;
+            if (leftTime <= 0.0f)
             {
                 try
                 {
-                    this.task?.Invoke();
+                    task?.Invoke();
                 }
                 catch (Exception e)
                 {
@@ -56,7 +55,7 @@ namespace YIUIFramework
                 }
                 finally
                 {
-                    this.Dispose();
+                    Dispose();
                 }
             }
         }

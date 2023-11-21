@@ -2,7 +2,6 @@
 
 namespace YIUIFramework
 {
-
     /// <summary>
     /// <see cref="RectTransform"/>.
     /// </summary>

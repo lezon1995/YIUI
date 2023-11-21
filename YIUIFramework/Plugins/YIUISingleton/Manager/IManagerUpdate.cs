@@ -6,7 +6,7 @@ namespace YIUIFramework
     {
         UniTask<bool> ManagerAsyncInit();
     }
-    
+
     public interface IManagerUpdate : IManager
     {
         void ManagerUpdate();

@@ -41,18 +41,18 @@ namespace YIUIFramework
                     }
 
                     GameObject go = new GameObject();
-                    g_Inst  = go.AddComponent<T>();
+                    g_Inst = go.AddComponent<T>();
                     go.name = g_Inst.GetCreateName();
                     if (g_Inst.GetDontDestroyOnLoad())
                     {
                         DontDestroyOnLoad(go);
                     }
-                    
+
                     if (g_Inst.GetHideAndDontSave())
                     {
                         go.hideFlags = HideFlags.HideAndDontSave;
                     }
-                    
+
                     SingletonMgr.Add(g_Inst);
                     g_Inst.OnInitSingleton();
                 }

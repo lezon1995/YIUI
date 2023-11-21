@@ -11,12 +11,12 @@ namespace YIUIFramework
         [Range(0.0f, 0.9f)]
         public float blurAmount = 0.5f; // 模糊值, 值越大拖尾效果越明显
 
-        private RenderTexture historyTexture;  // 历史屏幕纹理
-        private Material      material = null; // 材质
+        private RenderTexture historyTexture; // 历史屏幕纹理
+        private Material material; // 材质
 
         private void Start()
         {
-            material           = new Material(Shader.Find("YIUIShader/YIUICameraMotionBlur"));
+            material = new Material(Shader.Find("YIUIShader/YIUICameraMotionBlur"));
             material.hideFlags = HideFlags.DontSave;
         }
 
@@ -34,7 +34,7 @@ namespace YIUIFramework
                 if (historyTexture == null || historyTexture.width != src.width || historyTexture.height != src.height)
                 {
                     DestroyImmediate(historyTexture);
-                    historyTexture           = new RenderTexture(src.width, src.height, 0);
+                    historyTexture = new RenderTexture(src.width, src.height, 0);
                     historyTexture.hideFlags = HideFlags.HideAndDontSave;
                     Graphics.Blit(src, historyTexture);
                 }

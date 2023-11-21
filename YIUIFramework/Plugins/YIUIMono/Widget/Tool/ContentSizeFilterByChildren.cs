@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -68,9 +69,9 @@ namespace YIUIFramework
         }
 
         [SerializeField]
-        protected float m_Space = 0;
+        protected float m_Space;
 
-        [System.NonSerialized]
+        [NonSerialized]
         private RectTransform m_Rect;
 
         private RectTransform rectTransform
@@ -83,16 +84,19 @@ namespace YIUIFramework
             }
         }
 
-        private HorizontalOrVerticalLayoutGroup m_LayoutGroup = null;
+        private HorizontalOrVerticalLayoutGroup m_LayoutGroup;
 
         public void AutoSize()
         {
             if (m_Fit == FitMode.Width || m_Fit == FitMode.Both)
-                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,
-                    ((ILayoutElement)this).preferredWidth);
+            {
+                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ((ILayoutElement)this).preferredWidth);
+            }
+
             if (m_Fit == FitMode.Height || m_Fit == FitMode.Both)
-                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,
-                    ((ILayoutElement)this).preferredHeight);
+            {
+                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ((ILayoutElement)this).preferredHeight);
+            }
         }
 
         void ILayoutController.SetLayoutHorizontal()
@@ -115,37 +119,45 @@ namespace YIUIFramework
             get
             {
                 float size = -1;
-                float max  = -2;
                 if (m_Fit == FitMode.Width || m_Fit == FitMode.Both)
                 {
-                    max  = 0;
+                    float max = 0;
                     size = 0;
                     float spacing = m_Space;
-                    if (m_LayoutGroup != null)
+                    if (m_LayoutGroup)
                     {
                         size = size + m_LayoutGroup.padding.left + m_LayoutGroup.padding.right;
                         if (m_LayoutGroup is HorizontalLayoutGroup)
+                        {
                             spacing = m_LayoutGroup.spacing;
+                        }
                     }
 
                     int One = 1;
                     for (int i = 0; i < rectTransform.childCount; ++i)
                     {
-                        var child = rectTransform.GetChild(i) as RectTransform;
+                        var child = (RectTransform)rectTransform.GetChild(i);
                         if (child.gameObject.activeSelf)
                         {
                             var ignore = child.GetComponent<ILayoutIgnorer>();
-                            if (ignore != null && ignore.ignoreLayout)
+                            if (ignore is { ignoreLayout: true })
+                            {
                                 continue;
+                            }
 
                             if (m_Size == SizeMode.Add)
                             {
                                 size += Mathf.Max(0, LayoutUtility.GetPreferredWidth(child));
 
-                                if (One == 0)
-                                    size += spacing;
-                                if (One == 1)
-                                    One = 0;
+                                switch (One)
+                                {
+                                    case 0:
+                                        size += spacing;
+                                        break;
+                                    case 1:
+                                        One = 0;
+                                        break;
+                                }
                             }
 
                             //else if (m_Size == SizeMode.Max)
@@ -161,7 +173,9 @@ namespace YIUIFramework
                     }
 
                     if (m_Size == SizeMode.Max)
+                    {
                         size = max;
+                    }
 
                     size = Mathf.Min(maxSize, size);
                 }
@@ -185,37 +199,46 @@ namespace YIUIFramework
             get
             {
                 float size = -1;
-                float max  = 0;
+                float max = 0;
                 if (m_Fit == FitMode.Height || m_Fit == FitMode.Both)
                 {
                     size = 0;
                     float spacing = m_Space;
-                    if (m_LayoutGroup != null)
+                    if (m_LayoutGroup)
                     {
                         size = size + m_LayoutGroup.padding.top + m_LayoutGroup.padding.bottom;
                         if (m_LayoutGroup is VerticalLayoutGroup)
+                        {
                             spacing = m_LayoutGroup.spacing;
+                        }
                     }
 
                     int One = 1;
 
                     for (int i = 0; i < rectTransform.childCount; ++i)
                     {
-                        var child = rectTransform.GetChild(i) as RectTransform;
+                        var child = (RectTransform)rectTransform.GetChild(i);
                         if (child.gameObject.activeSelf)
                         {
                             var ignore = child.GetComponent<ILayoutIgnorer>();
-                            if (ignore != null && ignore.ignoreLayout)
+                            if (ignore is { ignoreLayout: true })
+                            {
                                 continue;
+                            }
 
                             if (m_Size == SizeMode.Add)
                             {
                                 size += Mathf.Max(0, LayoutUtility.GetPreferredHeight(child));
 
-                                if (One == 0)
-                                    size += spacing;
-                                if (One == 1)
-                                    One = 0;
+                                switch (One)
+                                {
+                                    case 0:
+                                        size += spacing;
+                                        break;
+                                    case 1:
+                                        One = 0;
+                                        break;
+                                }
                             }
                             else if (m_Size == SizeMode.Max)
                             {
@@ -225,7 +248,10 @@ namespace YIUIFramework
                     }
 
                     if (m_Size == SizeMode.Max)
+                    {
                         size = max;
+                    }
+
                     size = Mathf.Min(maxSize, size);
                 }
 
@@ -269,13 +295,13 @@ namespace YIUIFramework
         {
             m_LayoutGroup = GetComponent<HorizontalOrVerticalLayoutGroup>();
         }
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         protected override void OnValidate()
         {
             OnEnable();
             m_LayoutGroup = GetComponent<HorizontalOrVerticalLayoutGroup>();
             LayoutRebuilder.MarkLayoutForRebuild(rectTransform);
         }
-        #endif
+#endif
     }
 }

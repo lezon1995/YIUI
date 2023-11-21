@@ -16,8 +16,7 @@ namespace YIUIFramework
             Vector3 value;
             if (!TryParse(text, out value))
             {
-                var msg = string.Format(
-                    "The string {0} can not convert to Rect.", text);
+                var msg = $"The string {text} can not convert to Rect.";
                 throw new FormatException(msg);
             }
 
@@ -29,9 +28,7 @@ namespace YIUIFramework
         /// </summary>
         public static bool TryParse(string text, out Vector3 v)
         {
-            if (text.Length < 2 ||
-                text[0] != '(' ||
-                text[text.Length - 1] != ')')
+            if (text.Length < 2 || text[0] != '(' || text[text.Length - 1] != ')')
             {
                 v = Vector3.zero;
                 return false;

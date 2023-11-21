@@ -27,7 +27,7 @@ namespace YIUIFramework
                 nameMap[assemblyName] = true;
             }
 
-            List<Type> allType     = new List<Type>();
+            List<Type> allType = new List<Type>();
             Assembly[] assemblyArr = owner.GetAssemblies();
             foreach (Assembly assembly in assemblyArr)
             {
@@ -52,9 +52,7 @@ namespace YIUIFramework
         {
             return AppDomain.CurrentDomain.GetAssemblies().SelectMany(a =>
             {
-                return a.GetTypes()
-                        .Where(t => t.GetInterfaces()
-                                     .Contains(interfaceType));
+                return a.GetTypes().Where(t => t.GetInterfaces().Contains(interfaceType));
             }).ToArray();
         }
     }

@@ -11,7 +11,7 @@ namespace YIUIFramework
     /// </summary>
     public static class StreamingAssets
     {
-        #if !UNITY_EDITOR && UNITY_ANDROID
+#if !UNITY_EDITOR && UNITY_ANDROID
         private static AndroidJavaObject assetManager;
         private static Dictionary<string, HashSet<string>> folderLookup =
             new Dictionary<string, HashSet<string>>();
@@ -43,7 +43,7 @@ namespace YIUIFramework
                 return;
             }
         }
-        #endif
+#endif
 
         /// <summary>
         /// Read all text from a file by specify file name in streaming asset
@@ -51,7 +51,7 @@ namespace YIUIFramework
         /// </summary>
         public static string ReadAllText(string filePath)
         {
-            #if !UNITY_EDITOR && UNITY_ANDROID
+#if !UNITY_EDITOR && UNITY_ANDROID
             var inputStream = assetManager.Call<AndroidJavaObject>(
                 "open", filePath);
 
@@ -69,17 +69,16 @@ namespace YIUIFramework
             inputStream.Call("close");
             inputStream.Dispose();
             return System.Text.Encoding.ASCII.GetString(bytes, 0, length);
-            #else
-            var path = Path.Combine(
-                Application.streamingAssetsPath, filePath);
+#else
+            var path = Path.Combine(Application.streamingAssetsPath, filePath);
             if (File.Exists(path))
             {
                 return File.ReadAllText(path);
             }
 
-            Debug.LogError(string.Format("<color=red>  没有读取到 :{0}</color>", path));
+            Debug.LogError($"<color=red>  没有读取到 :{path}</color>");
             return string.Empty;
-            #endif
+#endif
         }
 
         /// <summary>
@@ -87,19 +86,18 @@ namespace YIUIFramework
         /// </summary>
         public static bool Existed(string filePath)
         {
-            #if !UNITY_EDITOR && UNITY_ANDROID
+#if !UNITY_EDITOR && UNITY_ANDROID
             var fileDir = Path.GetDirectoryName(filePath);
             var fileName = Path.GetFileName(filePath);
             var fileTable = GetFilesInDir(fileDir);
             return fileTable.Contains(fileName);
-            #else
-            var path = Path.Combine(
-                Application.streamingAssetsPath, filePath);
+#else
+            var path = Path.Combine(Application.streamingAssetsPath, filePath);
             return File.Exists(path);
-            #endif
+#endif
         }
 
-        #if !UNITY_EDITOR && UNITY_ANDROID
+#if !UNITY_EDITOR && UNITY_ANDROID
         private static HashSet<string> GetFilesInDir(string dir)
         {
             HashSet<string> fileTable;
@@ -117,6 +115,6 @@ namespace YIUIFramework
 
             return fileTable;
         }
-        #endif
+#endif
     }
 }

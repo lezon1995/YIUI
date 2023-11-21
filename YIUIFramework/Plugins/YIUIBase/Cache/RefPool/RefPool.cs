@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace YIUIFramework
@@ -9,8 +9,7 @@ namespace YIUIFramework
     /// </summary>
     public static partial class RefPool
     {
-        private static readonly Dictionary<Type, RefCollection>
-            s_RefCollections = new Dictionary<Type, RefCollection>();
+        private static readonly Dictionary<Type, RefCollection> s_RefCollections = new Dictionary<Type, RefCollection>();
 
         public static int Count
         {
@@ -30,9 +29,9 @@ namespace YIUIFramework
         {
             lock (s_RefCollections)
             {
-                foreach (KeyValuePair<Type, RefCollection> refCollection in s_RefCollections)
+                foreach (var (type, refCollection) in s_RefCollections)
                 {
-                    refCollection.Value.RemoveAll();
+                    refCollection.RemoveAll();
                 }
 
                 s_RefCollections.Clear();
@@ -46,17 +45,17 @@ namespace YIUIFramework
         /// <returns>引用</returns>
         public static T Get<T>() where T : class, IRefPool, new()
         {
-            return GetRefCollection(typeof(T))?.Get<T>();
+            return GetRefCollection(typeof(T))?._Get<T>();
         }
 
         /// <summary>
         /// 从引用池获取引用
         /// </summary>
-        /// <param name="refreceType">引用类型</param>
+        /// <param name="type">引用类型</param>
         /// <returns>引用</returns>
-        public static IRefPool Get(Type refreceType)
+        public static IRefPool Get(Type type)
         {
-            return GetRefCollection(refreceType)?.Get();
+            return GetRefCollection(type)?.Get();
         }
 
         /// <summary>
@@ -70,8 +69,8 @@ namespace YIUIFramework
                 return false;
             }
 
-            var  collection = GetRefCollection(iRef.GetType());
-            return collection != null && collection.Put(iRef);
+            var collection = GetRefCollection(iRef.GetType());
+            return collection != null && collection._Put(iRef);
         }
 
         /// <summary>
@@ -81,7 +80,7 @@ namespace YIUIFramework
         /// <param name="count">追加数量</param>
         public static void Add<T>(int count) where T : class, IRefPool, new()
         {
-            GetRefCollection(typeof(T))?.Add<T>(count);
+            GetRefCollection(typeof(T))?._Add<T>(count);
         }
 
         /// <summary>
@@ -101,7 +100,7 @@ namespace YIUIFramework
         /// <param name="count">移除数量</param>
         public static void Remove<T>(int count) where T : class, IRefPool, new()
         {
-            GetRefCollection(typeof(T),true)?.Remove(count);
+            GetRefCollection(typeof(T), true)?.Remove(count);
         }
 
         /// <summary>
@@ -111,7 +110,7 @@ namespace YIUIFramework
         /// <param name="count">移除数量</param>
         public static void Remove(Type refType, int count)
         {
-            GetRefCollection(refType,true)?.Remove(count);
+            GetRefCollection(refType, true)?.Remove(count);
         }
 
         /// <summary>
@@ -120,7 +119,7 @@ namespace YIUIFramework
         /// <typeparam name="T">引用类型</typeparam>
         public static void RemoveAll<T>() where T : class, IRefPool, new()
         {
-            GetRefCollection(typeof(T),true)?.RemoveAll();
+            GetRefCollection(typeof(T), true)?.RemoveAll();
         }
 
         /// <summary>
@@ -129,7 +128,7 @@ namespace YIUIFramework
         /// <param name="refType">引用类型</param>
         public static void RemoveAll(Type refType)
         {
-            GetRefCollection(refType,true)?.RemoveAll();
+            GetRefCollection(refType, true)?.RemoveAll();
         }
 
         private static bool InternalCheckRefType(Type refType)
@@ -163,7 +162,7 @@ namespace YIUIFramework
                 return null;
             }
 
-            RefCollection refCollection = null;
+            RefCollection refCollection;
 
             lock (s_RefCollections)
             {
@@ -173,7 +172,7 @@ namespace YIUIFramework
                     {
                         return null;
                     }
-                    
+
                     if (!InternalCheckRefType(refType))
                     {
                         return null;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Diagnostics.CodeAnalysis;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace YIUIFramework
@@ -15,21 +16,15 @@ namespace YIUIFramework
             set { }
         }
 
-        private PolygonCollider2D polygon = null;
+        private PolygonCollider2D polygon;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
-            "StyleCop.CSharp.NamingRules",
-            "SA1300:ElementMustBeginWithUpperCaseLetter",
-            Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Reviewed. Suppression is OK here.")]
         public override Texture mainTexture
         {
             get { return null; }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
-            "StyleCop.CSharp.NamingRules",
-            "SA1300:ElementMustBeginWithUpperCaseLetter",
-            Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Reviewed. Suppression is OK here.")]
         public override Material materialForRendering
         {
             get { return null; }
@@ -39,37 +34,30 @@ namespace YIUIFramework
         {
             get
             {
-                if (this.polygon == null)
+                if (polygon == null)
                 {
-                    this.polygon = this.GetComponent<PolygonCollider2D>();
+                    polygon = GetComponent<PolygonCollider2D>();
                     Physics2D.Simulate(0);
                 }
 
-                return this.polygon;
+                return polygon;
             }
         }
 
-        public bool IsRaycastLocationValid(
-            Vector2 screenPoint, Camera eventCamera)
+        public bool IsRaycastLocationValid(Vector2 screenPoint, Camera eventCamera)
         {
-            if (eventCamera != null)
+            if (eventCamera)
             {
                 Vector3 worldPoint;
-                if (RectTransformUtility.ScreenPointToWorldPointInRectangle(
-                        this.rectTransform,
-                        screenPoint,
-                        eventCamera,
-                        out worldPoint))
+                if (RectTransformUtility.ScreenPointToWorldPointInRectangle(rectTransform, screenPoint, eventCamera, out worldPoint))
                 {
-                    return this.Polygon.OverlapPoint(worldPoint);
+                    return Polygon.OverlapPoint(worldPoint);
                 }
 
                 return false;
             }
-            else
-            {
-                return this.Polygon.OverlapPoint(screenPoint);
-            }
+
+            return Polygon.OverlapPoint(screenPoint);
         }
 
         protected override void OnPopulateMesh(VertexHelper vh)
@@ -93,14 +81,14 @@ namespace YIUIFramework
         {
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         protected override void Reset()
         {
             base.Reset();
-            this.transform.localPosition = Vector3.zero;
-            float w = (this.rectTransform.sizeDelta.x * 0.5f) + 0.1f;
-            float h = (this.rectTransform.sizeDelta.y * 0.5f) + 0.1f;
-            this.Polygon.points = new Vector2[]
+            transform.localPosition = Vector3.zero;
+            float w = (rectTransform.sizeDelta.x * 0.5f) + 0.1f;
+            float h = (rectTransform.sizeDelta.y * 0.5f) + 0.1f;
+            Polygon.points = new[]
             {
                 new Vector2(-w, -h),
                 new Vector2(w, -h),
@@ -108,6 +96,6 @@ namespace YIUIFramework
                 new Vector2(-w, h)
             };
         }
-        #endif
+#endif
     }
 }

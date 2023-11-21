@@ -9,7 +9,7 @@ namespace YIUIFramework
     /// </summary>
     public class ObjAsyncCache<T>
     {
-        private   Stack<T>         m_pool;
+        private Stack<T> m_pool;
         protected Func<UniTask<T>> m_createCallback;
 
         public ObjAsyncCache(Func<UniTask<T>> createCallback, int capacity = 0)
@@ -37,13 +37,14 @@ namespace YIUIFramework
             {
                 foreach (var item in m_pool)
                 {
-                    if (item is IDisposer disposer)
+                    switch (item)
                     {
-                        disposer.Dispose();
-                    }
-                    else if (item is IDisposable disposer2)
-                    {
-                        disposer2.Dispose();
+                        case IDisposer disposer:
+                            disposer.Dispose();
+                            break;
+                        case IDisposable disposer2:
+                            disposer2.Dispose();
+                            break;
                     }
                 }
             }

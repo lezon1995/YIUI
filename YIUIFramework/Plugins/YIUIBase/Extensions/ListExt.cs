@@ -15,8 +15,7 @@ namespace YIUIFramework
         /// <param name="list"></param>
         /// <param name="getKeyHandler"></param>
         /// <returns></returns>
-        public static Dictionary<TKey, TItem> ToDictionary<TKey, TItem>(
-            this IList<TItem> list, Func<TItem, TKey> getKeyHandler)
+        public static Dictionary<TKey, TItem> ToDictionary<TKey, TItem>(this IList<TItem> list, Func<TItem, TKey> getKeyHandler)
         {
             if (list == null)
             {
@@ -40,8 +39,7 @@ namespace YIUIFramework
         /// <param name="source"></param>
         /// <param name="keySelector"></param>
         /// <param name="isDescending"></param>
-        public static void OrderSelf<TSource, TKey>(this IList<TSource> source, Func<TSource, TKey> keySelector,
-                                                    bool                isDescending = false)
+        public static void OrderSelf<TSource, TKey>(this IList<TSource> source, Func<TSource, TKey> keySelector, bool isDescending = false)
         {
             IOrderedEnumerable<TSource> result;
             if (isDescending)
@@ -75,7 +73,7 @@ namespace YIUIFramework
             }
 
             var lastIndex = list.Count - 1;
-            var lastItem  = list[lastIndex];
+            var lastItem = list[lastIndex];
             list.RemoveAt(lastIndex);
             return lastItem;
         }
@@ -108,7 +106,7 @@ namespace YIUIFramework
         public static T[] Unshift<T>(this IList<T> inst, params T[] items)
         {
             var addCount = items.Length;
-            var newArr   = new T[addCount + inst.Count];
+            var newArr = new T[addCount + inst.Count];
             for (int i = 0; i < addCount; i++)
             {
                 newArr[i] = items[i];
@@ -133,8 +131,7 @@ namespace YIUIFramework
             return a == b;
         }
 
-        public static int IndexOf<T>(this IList<T> list,      T   value,
-                                     int           start = 0, int count = 0, Func<T, T, bool> equalsFun = null)
+        public static int IndexOf<T>(this IList<T> list, T value, int start = 0, int count = 0, Func<T, T, bool> equalsFun = null)
         {
             count = count < 1
                 ? list.Count
@@ -193,12 +190,12 @@ namespace YIUIFramework
                 return false;
             }
 
-            int    lastIndex = len - 1;
-            object lastItem  = list[lastIndex];
+            int lastIndex = len - 1;
+            object lastItem = list[lastIndex];
             list.RemoveAt(lastIndex);
             if (index != lastIndex)
             {
-                list[index]      = lastItem;
+                list[index] = lastItem;
                 curMoveItemIndex = index;
             }
             else
@@ -224,8 +221,8 @@ namespace YIUIFramework
         {
             int len = list.Count;
             if (len < 1
-             || index >= len
-             || index < 0)
+                || index >= len
+                || index < 0)
             {
                 return false;
             }
@@ -236,8 +233,8 @@ namespace YIUIFramework
         public static bool SafeSetValue<T>(this IList<T> list, int index, T value)
         {
             if (null == list
-             || index < 0
-             || index >= list.Count)
+                || index < 0
+                || index >= list.Count)
             {
                 return false;
             }

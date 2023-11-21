@@ -5,7 +5,7 @@ namespace YIUIFramework
     /// <summary>
     /// 高斯模糊特效
     /// </summary>
-    [ExecuteInEditMode]                // 编辑态可以查看脚本运行效果
+    [ExecuteInEditMode] // 编辑态可以查看脚本运行效果
     [RequireComponent(typeof(Camera))] // 需要相机组件
     public class YIUICameraGaussianBlur : MonoBehaviour
     {
@@ -22,7 +22,7 @@ namespace YIUIFramework
 
         private void Start()
         {
-            material           = new Material(Shader.Find("YIUIShader/YIUICameraGaussianBlur"));
+            material = new Material(Shader.Find("YIUIShader/YIUICameraGaussianBlur"));
             material.hideFlags = HideFlags.DontSave;
         }
 
@@ -30,8 +30,8 @@ namespace YIUIFramework
         {
             if (material != null)
             {
-                int           rtW     = src.width / downSample;  // 降采样的纹理宽度
-                int           rtH     = src.height / downSample; // 降采样的纹理高度
+                int rtW = src.width / downSample; // 降采样的纹理宽度
+                int rtH = src.height / downSample; // 降采样的纹理高度
                 RenderTexture buffer0 = RenderTexture.GetTemporary(rtW, rtH, 0);
                 buffer0.filterMode = FilterMode.Bilinear; // 滤波模式设置为双线性
                 Graphics.Blit(src, buffer0);

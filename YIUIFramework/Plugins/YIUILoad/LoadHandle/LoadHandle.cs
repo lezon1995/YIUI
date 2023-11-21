@@ -1,14 +1,14 @@
-﻿using Object = UnityEngine.Object;
+﻿using UnityEngine;
 
 namespace YIUIFramework
 {
     internal class LoadHandle : IRefPool
     {
-        internal string PkgName  { get; private set; }
-        internal string ResName  { get; private set; }
-        internal int    Handle   { get; private set; }
-        internal int    RefCount { get; private set; }
-        internal Object Object   { get; private set; }
+        internal string PkgName { get; private set; }
+        internal string ResName { get; private set; }
+        internal int Handle { get; private set; }
+        internal int RefCount { get; private set; }
+        internal Object Object { get; private set; }
 
         internal void SetGroupHandle(string pkgName, string resName)
         {
@@ -18,11 +18,11 @@ namespace YIUIFramework
 
         public void Recycle()
         {
-            PkgName  = string.Empty;
-            ResName  = string.Empty;
-            Handle   = 0;
+            PkgName = string.Empty;
+            ResName = string.Empty;
+            Handle = 0;
             RefCount = 0;
-            Object   = null;
+            Object = null;
         }
 
         internal void ResetHandle(Object obj, int handle)

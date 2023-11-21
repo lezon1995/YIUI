@@ -20,8 +20,7 @@ namespace YIUIFramework
         /// <summary>
         /// Gets <see cref="FieldInfo"/> including base classes.
         /// </summary>
-        public static FieldInfo[] GetFieldInfosIncludingBaseClasses(
-            this Type type, BindingFlags bindingFlags)
+        public static FieldInfo[] GetFieldInfosIncludingBaseClasses(this Type type, BindingFlags bindingFlags)
         {
             var fieldInfos = type.GetFields(bindingFlags);
             if (type.BaseType == typeof(object))
@@ -32,7 +31,7 @@ namespace YIUIFramework
             var fieldInfoList = new List<FieldInfo>(fieldInfos);
             while (type.BaseType != typeof(object))
             {
-                type       = type.BaseType;
+                type = type.BaseType;
                 fieldInfos = type.GetFields(bindingFlags);
 
                 // Look for fields we do not have listed yet and merge them

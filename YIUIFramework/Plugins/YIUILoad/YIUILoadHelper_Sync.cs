@@ -1,4 +1,4 @@
-﻿using Object = UnityEngine.Object;
+﻿using UnityEngine;
 
 namespace YIUIFramework
 {
@@ -15,7 +15,7 @@ namespace YIUIFramework
          */
         internal static T LoadAsset<T>(string pkgName, string resName) where T : Object
         {
-            var load    = LoadHelper.GetLoad(pkgName, resName);
+            var load = LoadHelper.GetLoad(pkgName, resName);
             var loadObj = load.Object;
             if (loadObj != null)
             {
@@ -34,7 +34,7 @@ namespace YIUIFramework
             {
                 return null;
             }
-            
+
             load.ResetHandle(obj, hashCode);
             load.AddRefCount();
             return (T)obj;

@@ -29,14 +29,11 @@ namespace YIUIFramework
             var lookup = new HashSet<T>();
             foreach (var i in array)
             {
-                if (!lookup.Contains(i))
-                {
-                    lookup.Add(i);
-                }
+                lookup.Add(i);
             }
 
             var newArray = new T[lookup.Count];
-            int index    = 0;
+            int index = 0;
             foreach (var i in lookup)
             {
                 newArray[index++] = i;

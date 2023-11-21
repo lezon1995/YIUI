@@ -9,21 +9,14 @@ namespace YIUIFramework
     /// </summary>
     public static class GeometryUtilityHelper
     {
-        private static readonly Action<Plane[], Matrix4x4>
-            ExtractPlanesDelegate;
+        private static readonly Action<Plane[], Matrix4x4> ExtractPlanesDelegate;
 
         static GeometryUtilityHelper()
         {
-            var methodInfo = typeof(GeometryUtility).GetMethod(
-                "Internal_ExtractPlanes",
-                BindingFlags.NonPublic | BindingFlags.Static);
+            var methodInfo = typeof(GeometryUtility).GetMethod("Internal_ExtractPlanes", BindingFlags.NonPublic | BindingFlags.Static);
             if (methodInfo != null)
             {
-                ExtractPlanesDelegate = (Action<Plane[], Matrix4x4>)
-                    Delegate.CreateDelegate(
-                        typeof(Action<Plane[], Matrix4x4>),
-                        methodInfo,
-                        false);
+                ExtractPlanesDelegate = (Action<Plane[], Matrix4x4>)Delegate.CreateDelegate(typeof(Action<Plane[], Matrix4x4>), methodInfo, false);
             }
         }
 
@@ -39,8 +32,7 @@ namespace YIUIFramework
         /// <summary>
         /// Extract the planes.
         /// </summary>
-        public static void ExtractPlanes(
-            Plane[] planes, Matrix4x4 worldToProjectionMatrix)
+        public static void ExtractPlanes(Plane[] planes, Matrix4x4 worldToProjectionMatrix)
         {
             if (ExtractPlanesDelegate != null)
             {
@@ -48,8 +40,7 @@ namespace YIUIFramework
             }
             else
             {
-                GeometryUtility.CalculateFrustumPlanes(
-                    worldToProjectionMatrix, planes);
+                GeometryUtility.CalculateFrustumPlanes(worldToProjectionMatrix, planes);
             }
         }
     }

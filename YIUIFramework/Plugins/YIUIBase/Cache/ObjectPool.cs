@@ -6,12 +6,12 @@ namespace YIUIFramework
 {
     public class ObjectPool<T> where T : new()
     {
-        #if UNITY_EDITOR
-        public static    bool       isRunning = false;
-        private readonly HashSet<T> Trace     = new HashSet<T>();
-        #endif
+#if UNITY_EDITOR
+        public static bool isRunning = false;
+        private readonly HashSet<T> Trace = new HashSet<T>();
+#endif
 
-        private readonly Stack<T>       m_Stack = new Stack<T>();
+        private readonly Stack<T> m_Stack = new Stack<T>();
         private readonly UnityAction<T> m_ActionOnGet;
         private readonly UnityAction<T> m_ActionOnRelease;
 
@@ -29,7 +29,7 @@ namespace YIUIFramework
 
         public ObjectPool(UnityAction<T> actionOnGet, UnityAction<T> actionOnRelease)
         {
-            m_ActionOnGet     = actionOnGet;
+            m_ActionOnGet = actionOnGet;
             m_ActionOnRelease = actionOnRelease;
         }
 
@@ -40,25 +40,27 @@ namespace YIUIFramework
             {
                 element = new T();
                 countAll++;
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 Trace.Add(element);
-                #endif
+#endif
             }
             else
             {
                 element = m_Stack.Pop();
             }
 
-            if (m_ActionOnGet != null)
-                m_ActionOnGet(element);
+            m_ActionOnGet?.Invoke(element);
             return element;
         }
 
         public void Release(T element)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             if (m_Stack.Count > 0 && ReferenceEquals(m_Stack.Peek(), element))
+            {
                 Debug.LogError("Internal error. Trying to destroy object that is already released to pool.");
+            }
+
             if (element == null)
             {
                 Debug.LogError("Internal error. Release element is null.");
@@ -67,8 +69,7 @@ namespace YIUIFramework
 
             if (ObjectPool<bool>.isRunning == false)
             {
-                if (m_ActionOnRelease != null)
-                    m_ActionOnRelease(element);
+                m_ActionOnRelease?.Invoke(element);
                 return;
             }
 
@@ -76,10 +77,9 @@ namespace YIUIFramework
             {
                 Debug.LogError("Internal error. Release element is not from pool ");
             }
-            #endif
+#endif
 
-            if (m_ActionOnRelease != null)
-                m_ActionOnRelease(element);
+            m_ActionOnRelease?.Invoke(element);
             m_Stack.Push(element);
         }
     }

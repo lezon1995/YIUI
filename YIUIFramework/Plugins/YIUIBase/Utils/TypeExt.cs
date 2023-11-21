@@ -10,19 +10,21 @@ namespace YIUIFramework
 
         static TypeExt()
         {
-            var numTypeMap = new Dictionary<Type, NumericType>(11);
-            numTypeMap[typeof(byte)]    = NumericType.Byte;
-            numTypeMap[typeof(sbyte)]   = NumericType.SByte;
-            numTypeMap[typeof(short)]   = NumericType.Int16;
-            numTypeMap[typeof(int)]     = NumericType.Int32;
-            numTypeMap[typeof(long)]    = NumericType.Int64;
-            numTypeMap[typeof(ushort)]  = NumericType.UInt16;
-            numTypeMap[typeof(uint)]    = NumericType.UInt32;
-            numTypeMap[typeof(ulong)]   = NumericType.UInt64;
-            numTypeMap[typeof(float)]   = NumericType.Float;
-            numTypeMap[typeof(double)]  = NumericType.Double;
-            numTypeMap[typeof(decimal)] = NumericType.Decimal;
-            g_numTypeMap                = numTypeMap;
+            var numTypeMap = new Dictionary<Type, NumericType>(11)
+            {
+                [typeof(byte)] = NumericType.Byte,
+                [typeof(sbyte)] = NumericType.SByte,
+                [typeof(short)] = NumericType.Int16,
+                [typeof(int)] = NumericType.Int32,
+                [typeof(long)] = NumericType.Int64,
+                [typeof(ushort)] = NumericType.UInt16,
+                [typeof(uint)] = NumericType.UInt32,
+                [typeof(ulong)] = NumericType.UInt64,
+                [typeof(float)] = NumericType.Float,
+                [typeof(double)] = NumericType.Double,
+                [typeof(decimal)] = NumericType.Decimal
+            };
+            g_numTypeMap = numTypeMap;
         }
 
         public static NumericType GetNumericType(this Type type)
@@ -75,9 +77,8 @@ namespace YIUIFramework
             return true;
         }
 
-        public static bool SetFieldValue(this Type type,        string name, object value,
-                                         object    inst = null, BindingFlags bindingArray =
-                                             BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public)
+        public static bool SetFieldValue(this Type type, string name, object value,
+            object inst = null, BindingFlags bindingArray = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public)
         {
             var field = type.GetField(name, bindingArray);
             if (field == null)
@@ -90,8 +91,7 @@ namespace YIUIFramework
         }
 
         public static object GetPropertyValue(this Type type, string name, object inst = null,
-                                              BindingFlags bindingArray =
-                                                  BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public)
+            BindingFlags bindingArray = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public)
         {
             var instProp = type.GetProperty(name, bindingArray);
             if (instProp == null)
@@ -103,12 +103,12 @@ namespace YIUIFramework
         }
 
         public static TReturn StaticCall<TReturn>(this Type type, string methodName, object[] param = null,
-                                                  TReturn   defReturn = default)
+            TReturn defReturn = default)
         {
             var info = type.GetMethod(methodName, BindingFlags.Static |
-                BindingFlags.Public |
-                BindingFlags.NonPublic |
-                BindingFlags.FlattenHierarchy);
+                                                  BindingFlags.Public |
+                                                  BindingFlags.NonPublic |
+                                                  BindingFlags.FlattenHierarchy);
             if (info == null)
             {
                 return defReturn;

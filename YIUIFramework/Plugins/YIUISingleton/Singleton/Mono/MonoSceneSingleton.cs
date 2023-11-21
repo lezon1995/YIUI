@@ -17,7 +17,7 @@ namespace YIUIFramework
         /// 是否存在
         /// </summary>
         public static bool Exist => g_Inst != null;
-        
+
         /// <summary>
         /// 得到单例
         /// </summary>
@@ -56,18 +56,18 @@ namespace YIUIFramework
                 return;
             }
 
-            g_Inst          = (T)this;
+            g_Inst = (T)this;
             gameObject.name = g_Inst.GetCreateName();
             if (g_Inst.GetDontDestroyOnLoad())
             {
                 DontDestroyOnLoad(g_Inst);
             }
-                 
+
             if (g_Inst.GetHideAndDontSave())
             {
                 gameObject.hideFlags = HideFlags.HideAndDontSave;
             }
-            
+
             SingletonMgr.Add(g_Inst);
             g_Inst.OnInitSingleton();
         }

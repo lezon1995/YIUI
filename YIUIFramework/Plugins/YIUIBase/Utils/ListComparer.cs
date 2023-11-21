@@ -26,13 +26,11 @@ namespace YIUIFramework
             }
         }
 
-        /// <inheritdoc />
         public bool Equals(List<T> x, List<T> y)
         {
             return x.SequenceEqual(y);
         }
 
-        /// <inheritdoc />
         public int GetHashCode(List<T> obj)
         {
             int hashcode = 0;

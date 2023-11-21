@@ -12,8 +12,8 @@ namespace YIUIFramework
         /// </summary>
         public SphereBounds(Vector3 center, float radius)
         {
-            this.Center = center;
-            this.Radius = radius;
+            Center = center;
+            Radius = radius;
         }
 
         /// <summary>
@@ -31,8 +31,8 @@ namespace YIUIFramework
         /// </summary>
         public bool Intersects(SphereBounds bounds)
         {
-            var sqrDistance = (this.Center - bounds.Center).sqrMagnitude;
-            var minDistance = this.Radius + bounds.Radius;
+            var sqrDistance = (Center - bounds.Center).sqrMagnitude;
+            var minDistance = Radius + bounds.Radius;
             return sqrDistance <= minDistance * minDistance;
         }
 
@@ -42,7 +42,7 @@ namespace YIUIFramework
         public bool Intersects(Bounds bounds)
         {
             // Check if the sphere is inside the AABB
-            if (bounds.Contains(this.Center))
+            if (bounds.Contains(Center))
             {
                 return true;
             }
@@ -53,40 +53,40 @@ namespace YIUIFramework
 
             float s = 0.0f;
             float d = 0.0f;
-            if (this.Center.x < boundsMin.x)
+            if (Center.x < boundsMin.x)
             {
-                s =  this.Center.x - boundsMin.x;
+                s = Center.x - boundsMin.x;
                 d += s * s;
             }
-            else if (this.Center.x > boundsMax.x)
+            else if (Center.x > boundsMax.x)
             {
-                s =  this.Center.x - boundsMax.x;
-                d += s * s;
-            }
-
-            if (this.Center.y < boundsMin.y)
-            {
-                s =  this.Center.y - boundsMin.y;
-                d += s * s;
-            }
-            else if (this.Center.y > boundsMax.y)
-            {
-                s =  this.Center.y - boundsMax.y;
+                s = Center.x - boundsMax.x;
                 d += s * s;
             }
 
-            if (this.Center.z < boundsMin.z)
+            if (Center.y < boundsMin.y)
             {
-                s =  this.Center.z - boundsMin.z;
+                s = Center.y - boundsMin.y;
                 d += s * s;
             }
-            else if (this.Center.z > boundsMax.z)
+            else if (Center.y > boundsMax.y)
             {
-                s =  this.Center.z - boundsMax.z;
+                s = Center.y - boundsMax.y;
                 d += s * s;
             }
 
-            return d <= this.Radius * this.Radius;
+            if (Center.z < boundsMin.z)
+            {
+                s = Center.z - boundsMin.z;
+                d += s * s;
+            }
+            else if (Center.z > boundsMax.z)
+            {
+                s = Center.z - boundsMax.z;
+                d += s * s;
+            }
+
+            return d <= Radius * Radius;
         }
     }
 }

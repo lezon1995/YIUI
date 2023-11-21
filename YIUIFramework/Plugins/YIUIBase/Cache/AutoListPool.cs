@@ -19,15 +19,15 @@ namespace YIUIFramework
 
         public static List<T> Get()
         {
-            return g_pool.Get();
+            return g_pool._Get();
         }
 
         private class ListPool : Recycler
         {
             private List<List<T>> m_pool = new List<List<T>>(5);
-            private int           m_index;
+            private int m_index;
 
-            public List<T> Get()
+            internal List<T> _Get()
             {
                 List<T> item;
                 if (m_index == m_pool.Count)
@@ -41,7 +41,7 @@ namespace YIUIFramework
                 }
 
                 m_index++;
-                Dirty                = true;
+                Dirty = true;
                 AutoListPool.g_dirty = true;
 
                 //虽然回收时已经清了，但这样双保险，不香么？
@@ -62,14 +62,14 @@ namespace YIUIFramework
                 }
 
                 m_index = 0;
-                Dirty   = false;
+                Dirty = false;
             }
         }
     }
 
     internal abstract class Recycler
     {
-        public          bool Dirty;
+        public bool Dirty;
         public abstract void Recycle();
     }
 
@@ -77,7 +77,7 @@ namespace YIUIFramework
     internal class AutoListPool : MonoBehaviour
     {
         internal static readonly List<Recycler> g_recyclers = new List<Recycler>();
-        internal static          bool           g_dirty;
+        internal static bool g_dirty;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void OnLoad()
@@ -86,7 +86,7 @@ namespace YIUIFramework
             SceneManager.sceneLoaded += OnSceneLoadedHandler;
         }
 
-        private static void OnSceneLoadedHandler(UnityEngine.SceneManagement.Scene arg0, LoadSceneMode arg1)
+        private static void OnSceneLoadedHandler(Scene arg0, LoadSceneMode arg1)
         {
             var autoListPoolGo = new GameObject("AutoListPool");
             autoListPoolGo.hideFlags = HideFlags.HideInHierarchy;

@@ -11,12 +11,11 @@ namespace YIUIFramework
         /// <summary>
         /// 删除过滤器检查的所有值
         /// </summary>
-        public static void RemoveAll<K, V>(
-            this Dictionary<K, V> dic, Func<K, V, bool> filter)
+        public static void RemoveAll<K, V>(this Dictionary<K, V> dic, Func<K, V, bool> filter)
         {
             var sweep = RemoveList<K>.SweepList;
 
-            var itr = dic.GetEnumerator();
+            using var itr = dic.GetEnumerator();
             while (itr.MoveNext())
             {
                 var kv = itr.Current;

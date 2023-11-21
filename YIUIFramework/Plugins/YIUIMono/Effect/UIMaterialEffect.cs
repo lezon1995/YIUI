@@ -8,23 +8,23 @@ namespace YIUIFramework
     [RequireComponent(typeof(Graphic))]
     public sealed class UIMaterialEffect : MonoBehaviour, IMaterialModifier
     {
-        private Graphic             graphic;
+        private Graphic graphic;
         private UIEffectMaterialKey materialKey;
-        private Material            material;
+        private Material material;
 
         internal UIEffectMaterialKey MaterialKey
         {
-            get { return this.materialKey; }
+            get { return materialKey; }
 
             set
             {
-                if (!this.materialKey.Equals(value))
+                if (!materialKey.Equals(value))
                 {
-                    this.materialKey = value;
-                    if (this.material != null)
+                    materialKey = value;
+                    if (material)
                     {
-                        UIEffectMaterials.Free(this.material);
-                        this.material = null;
+                        UIEffectMaterials.Free(material);
+                        material = null;
                     }
                 }
             }
@@ -33,21 +33,21 @@ namespace YIUIFramework
         public Material GetModifiedMaterial(Material baseMaterial)
         {
             Material usedMaterial = baseMaterial;
-            if (this.enabled)
+            if (enabled)
             {
-                if (this.material == null)
+                if (material == null)
                 {
-                    this.material = UIEffectMaterials.Get(this.materialKey);
+                    material = UIEffectMaterials.Get(materialKey);
                 }
 
-                if (this.material)
+                if (material)
                 {
-                    usedMaterial = this.material;
+                    usedMaterial = material;
                 }
             }
 
-            var maskable = this.graphic as MaskableGraphic;
-            if (maskable != null)
+            var maskable = graphic as MaskableGraphic;
+            if (maskable)
             {
                 return maskable.GetModifiedMaterial(usedMaterial);
             }
@@ -57,30 +57,30 @@ namespace YIUIFramework
 
         internal void MarkDirty()
         {
-            if (this.graphic != null)
+            if (graphic)
             {
-                this.graphic.SetMaterialDirty();
+                graphic.SetMaterialDirty();
             }
         }
 
         private void Awake()
         {
-            this.graphic = this.GetComponent<Graphic>();
+            graphic = GetComponent<Graphic>();
         }
 
         private void OnEnable()
         {
-            if (this.graphic != null)
+            if (graphic)
             {
-                this.graphic.SetMaterialDirty();
+                graphic.SetMaterialDirty();
             }
         }
 
         private void OnDisable()
         {
-            if (this.graphic != null)
+            if (graphic)
             {
-                this.graphic.SetMaterialDirty();
+                graphic.SetMaterialDirty();
             }
         }
     }

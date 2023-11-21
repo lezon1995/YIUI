@@ -1,7 +1,7 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using Cysharp.Threading.Tasks;
 
 namespace YIUIFramework
 {
@@ -16,7 +16,7 @@ namespace YIUIFramework
         /// </summary>
         internal static async UniTask<T> LoadAssetAsync<T>(string pkgName, string resName) where T : Object
         {
-            var load    = LoadHelper.GetLoad(pkgName, resName);
+            var load = LoadHelper.GetLoad(pkgName, resName);
             var loadObj = load.Object;
             if (loadObj != null)
             {
@@ -34,11 +34,9 @@ namespace YIUIFramework
                     load.AddRefCount();
                     return (T)loadObj;
                 }
-                else
-                {
-                    Debug.LogError($"错误这个时候不应该是null");
-                    return null;
-                }
+
+                Debug.LogError($"错误这个时候不应该是null");
+                return null;
             }
 
             load.SetWaitAsync(true);

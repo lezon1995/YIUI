@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -22,7 +23,7 @@ namespace YIUIFramework
             set { m_Fit = value; }
         }
 
-        [System.NonSerialized]
+        [NonSerialized]
         private RectTransform m_Rect;
 
         private RectTransform rectTransform
@@ -30,7 +31,10 @@ namespace YIUIFramework
             get
             {
                 if (m_Rect == null)
+                {
                     m_Rect = GetComponent<RectTransform>();
+                }
+
                 return m_Rect;
             }
         }
@@ -45,9 +49,11 @@ namespace YIUIFramework
             get
             {
                 if (m_Fit == FitMode.Both || m_Fit == FitMode.Width)
+                {
                     return rectTransform.rect.width;
-                else
-                    return -1;
+                }
+
+                return -1;
             }
         }
 
@@ -66,9 +72,11 @@ namespace YIUIFramework
             get
             {
                 if (m_Fit == FitMode.Both || m_Fit == FitMode.Height)
+                {
                     return rectTransform.rect.height;
-                else
-                    return -1;
+                }
+
+                return -1;
             }
         }
 

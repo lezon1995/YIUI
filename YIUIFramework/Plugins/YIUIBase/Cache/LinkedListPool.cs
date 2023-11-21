@@ -19,8 +19,7 @@ namespace YIUIFramework
 
     public static class LinkedListPool<T>
     {
-        private static readonly ObjectPool<LinkedList<T>> s_ListPool =
-            new ObjectPool<LinkedList<T>>(null, l => l.Clear());
+        private static readonly ObjectPool<LinkedList<T>> s_ListPool = new ObjectPool<LinkedList<T>>(null, l => l.Clear());
 
         public static LinkedList<T> Get()
         {

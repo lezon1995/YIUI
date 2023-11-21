@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Profiling;
@@ -37,7 +36,7 @@ namespace YIUIFramework
         private static List<IntervalTime> intervalTasks = new List<IntervalTime>();
 
         //当前时间
-        private static float now = 0;
+        private static float now;
 
         private SchedulerMgr()
         {
@@ -52,7 +51,7 @@ namespace YIUIFramework
         /// <summary>
         /// 清空所有任务队列。
         /// </summary>
-        private void ClearAll()
+        private static void ClearAll()
         {
             frameTasks.Clear();
             executing.Clear();
@@ -61,11 +60,17 @@ namespace YIUIFramework
             intervalTasks.Clear();
 
             foreach (var task in delayTasks)
+            {
                 DelayTimePool.Release(task);
+            }
+
             delayTasks.Clear();
 
             foreach (var task in delayTasksWithScale)
+            {
                 DelayTimePool.Release(task);
+            }
+
             delayTasksWithScale.Clear();
         }
 
@@ -76,7 +81,7 @@ namespace YIUIFramework
         [RuntimeInitializeOnLoadMethod]
         private static void CreateInstance()
         {
-            var inst = Inst;
+            _ = Inst;
         }
 
         //每帧更新时调用的方法，用于执行各个任务队列中的任务。
@@ -85,11 +90,11 @@ namespace YIUIFramework
             Profiler.BeginSample("Scheduler");
             now = Time.realtimeSinceStartup;
             Profiler.BeginSample("Scheduler Frame Tasks");
-            
+
             var itr = frameTasks.First;
             while (itr != null)
             {
-                var next  = itr.Next;
+                var next = itr.Next;
                 var value = itr.Value;
 
                 try
@@ -163,13 +168,13 @@ namespace YIUIFramework
             }
 
             Profiler.BeginSample("Scheduler Executing");
-            this.Executing();
+            Executing();
             Profiler.EndSample();
             Profiler.EndSample();
         }
 
         //检查延迟任务是否可以执行。
-        private bool TestDelayTasks(DelayTime task)
+        private static bool TestDelayTasks(DelayTime task)
         {
             if (now >= task.Time)
             {
@@ -181,7 +186,7 @@ namespace YIUIFramework
         }
 
         //检查带有时间缩放的延迟任务是否可以执行。
-        private bool TestDelayTasksWithScale(DelayTime task)
+        private static bool TestDelayTasksWithScale(DelayTime task)
         {
             task.Time -= Time.deltaTime;
             if (task.Time < 0)
@@ -194,7 +199,7 @@ namespace YIUIFramework
         }
 
         //执行正在执行的任务。
-        private void Executing()
+        private static void Executing()
         {
             for (int i = 0; i < executing.Count; ++i)
             {

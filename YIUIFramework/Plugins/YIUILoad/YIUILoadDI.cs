@@ -1,8 +1,6 @@
-﻿
-
-using System;
-using Object = UnityEngine.Object;
+﻿using System;
 using Cysharp.Threading.Tasks;
+using Object = UnityEngine.Object;
 
 namespace YIUIFramework
 {

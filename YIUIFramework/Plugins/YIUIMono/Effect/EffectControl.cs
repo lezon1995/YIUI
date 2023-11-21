@@ -13,11 +13,11 @@ namespace YIUIFramework
     {
         [SerializeField]
         [LabelText("循环中")]
-        private bool looping = false;
+        private bool looping;
 
         [SerializeField]
         [LabelText("延迟时间")]
-        private float delay = 0.0f;
+        private float delay;
 
         [SerializeField]
         [LabelText("效果持续时间")]
@@ -27,14 +27,14 @@ namespace YIUIFramework
         [LabelText("随着时间的推移而逐渐消失")]
         private float fadeout = 1.0f;
 
-        private PlayState            state = PlayState.Stopping;
-        private float                timer;
+        private PlayState state = PlayState.Stopping;
+        private float timer;
         private List<ParticleSystem> particleSystems;
-        private List<Animator>       animators;
-        private List<Animation>      animations;
-        private float                playbackSpeed = 1.0f;
+        private List<Animator> animators;
+        private List<Animation> animations;
+        private float playbackSpeed = 1.0f;
 
-        private bool releaseAfterFinish = false;
+        private bool releaseAfterFinish;
 
         public bool ReleaseAfterFinish
         {
@@ -61,7 +61,7 @@ namespace YIUIFramework
             Pending,
             Playing,
             Pausing,
-            Fadeouting,
+            FadeOuting,
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace YIUIFramework
         /// </summary>
         public bool IsLooping
         {
-            get { return this.looping; }
+            get { return looping; }
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace YIUIFramework
         /// </summary>
         public bool IsPaused
         {
-            get { return PlayState.Pausing == this.state; }
+            get { return PlayState.Pausing == state; }
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace YIUIFramework
         /// </summary>
         public bool IsStopped
         {
-            get { return PlayState.Stopping == this.state; }
+            get { return PlayState.Stopping == state; }
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace YIUIFramework
         /// </summary>
         public float Duration
         {
-            get { return this.duration; }
+            get { return duration; }
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace YIUIFramework
         /// </summary>
         public float Fadeout
         {
-            get { return this.fadeout; }
+            get { return fadeout; }
         }
 
         /// <summary>
@@ -109,29 +109,29 @@ namespace YIUIFramework
         /// </summary>
         public float PlaybackSpeed
         {
-            get { return this.playbackSpeed; }
+            get { return playbackSpeed; }
 
             set
             {
-                this.playbackSpeed = value;
+                playbackSpeed = value;
 
-                foreach (var particleSystem in this.ParticleSystems)
+                foreach (var particleSystem in ParticleSystems)
                 {
                     var main = particleSystem.main;
-                    main.simulationSpeed = this.playbackSpeed;
+                    main.simulationSpeed = playbackSpeed;
                 }
 
-                foreach (var animator in this.Animators)
+                foreach (var animator in Animators)
                 {
-                    animator.speed = this.playbackSpeed;
+                    animator.speed = playbackSpeed;
                 }
 
-                foreach (var animation in this.Animations)
+                foreach (var animation in Animations)
                 {
                     var clip = animation.clip;
                     if (clip != null)
                     {
-                        animation[clip.name].speed = this.playbackSpeed;
+                        animation[clip.name].speed = playbackSpeed;
                     }
                 }
             }
@@ -144,18 +144,18 @@ namespace YIUIFramework
         {
             get
             {
-                if (this.particleSystems == null)
+                if (particleSystems == null)
                 {
-                    this.particleSystems = ListPool<ParticleSystem>.Get();
-                    this.GetComponentsInChildren(true, particleSystems);
-                    foreach (var particleSystem in this.ParticleSystems)
+                    particleSystems = ListPool<ParticleSystem>.Get();
+                    GetComponentsInChildren(true, particleSystems);
+                    foreach (var particleSystem in ParticleSystems)
                     {
                         var main = particleSystem.main;
-                        main.simulationSpeed = this.playbackSpeed;
+                        main.simulationSpeed = playbackSpeed;
                     }
                 }
 
-                return this.particleSystems;
+                return particleSystems;
             }
         }
 
@@ -166,17 +166,17 @@ namespace YIUIFramework
         {
             get
             {
-                if (this.animators == null)
+                if (animators == null)
                 {
-                    this.animators = ListPool<Animator>.Get();
-                    this.GetComponentsInChildren(true, this.animators);
-                    foreach (var animator in this.animators)
+                    animators = ListPool<Animator>.Get();
+                    GetComponentsInChildren(true, animators);
+                    foreach (var animator in animators)
                     {
-                        animator.speed = this.playbackSpeed;
+                        animator.speed = playbackSpeed;
                     }
                 }
 
-                return this.animators;
+                return animators;
             }
         }
 
@@ -187,35 +187,35 @@ namespace YIUIFramework
         {
             get
             {
-                if (this.animations == null)
+                if (animations == null)
                 {
-                    this.animations = ListPool<Animation>.Get();
-                    this.GetComponentsInChildren(true, this.animations);
-                    foreach (var animation in this.animations)
+                    animations = ListPool<Animation>.Get();
+                    GetComponentsInChildren(true, animations);
+                    foreach (var animation in animations)
                     {
                         var clip = animation.clip;
                         if (clip != null)
                         {
-                            animation[clip.name].speed = this.playbackSpeed;
+                            animation[clip.name].speed = playbackSpeed;
                         }
                     }
                 }
 
-                return this.animations;
+                return animations;
             }
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         /// <summary>
         /// 估计持续时间。
         /// </summary>
         public void EstimateDuration()
         {
-            this.looping  = false;
-            this.duration = 0.0f;
-            this.fadeout  = 0.0f;
+            looping = false;
+            duration = 0.0f;
+            fadeout = 0.0f;
 
-            foreach (var particleSystem in this.ParticleSystems)
+            foreach (var particleSystem in ParticleSystems)
             {
                 if (particleSystem == null)
                 {
@@ -224,21 +224,21 @@ namespace YIUIFramework
 
                 if (particleSystem.main.loop)
                 {
-                    this.looping = true;
+                    looping = true;
                 }
 
-                if (this.duration < particleSystem.main.duration)
+                if (duration < particleSystem.main.duration)
                 {
-                    this.duration = particleSystem.main.duration;
+                    duration = particleSystem.main.duration;
                 }
 
-                if (this.fadeout < particleSystem.main.startLifetimeMultiplier)
+                if (fadeout < particleSystem.main.startLifetimeMultiplier)
                 {
-                    this.fadeout = particleSystem.main.startLifetimeMultiplier;
+                    fadeout = particleSystem.main.startLifetimeMultiplier;
                 }
             }
 
-            foreach (var animation in this.Animations)
+            foreach (var animation in Animations)
             {
                 if (animation == null)
                 {
@@ -253,16 +253,16 @@ namespace YIUIFramework
 
                 if (clip.isLooping)
                 {
-                    this.looping = true;
+                    looping = true;
                 }
 
-                if (this.duration < clip.length)
+                if (duration < clip.length)
                 {
-                    this.duration = clip.length;
+                    duration = clip.length;
                 }
             }
 
-            foreach (var animator in this.Animators)
+            foreach (var animator in Animators)
             {
                 if (animator == null)
                 {
@@ -272,12 +272,12 @@ namespace YIUIFramework
                 var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.loop)
                 {
-                    this.looping = true;
+                    looping = true;
                 }
 
-                if (this.duration < stateInfo.length)
+                if (duration < stateInfo.length)
                 {
-                    this.duration = stateInfo.length;
+                    duration = stateInfo.length;
                 }
             }
         }
@@ -287,22 +287,22 @@ namespace YIUIFramework
         /// </summary>
         public void Refresh()
         {
-            if (this.particleSystems != null)
+            if (particleSystems != null)
             {
-                ListPool<ParticleSystem>.Put(this.particleSystems);
-                this.particleSystems = null;
+                ListPool<ParticleSystem>.Put(particleSystems);
+                particleSystems = null;
             }
 
-            if (this.animations != null)
+            if (animations != null)
             {
-                ListPool<Animation>.Put(this.animations);
-                this.animations = null;
+                ListPool<Animation>.Put(animations);
+                animations = null;
             }
 
-            if (this.animators != null)
+            if (animators != null)
             {
-                ListPool<Animator>.Put(this.animators);
-                this.animators = null;
+                ListPool<Animator>.Put(animators);
+                animators = null;
             }
         }
 
@@ -317,7 +317,7 @@ namespace YIUIFramework
         public void SimulateInit()
         {
             // 烘焙所有动画师。
-            var animators = this.Animators;
+            var animators = Animators;
             foreach (var animator in animators)
             {
                 if (animator == null)
@@ -330,9 +330,9 @@ namespace YIUIFramework
                     continue;
                 }
 
-                const float FrameRate  = 30f;
-                var         stateInfo  = animator.GetCurrentAnimatorStateInfo(0);
-                int         frameCount = (int)((stateInfo.length * FrameRate) + 2);
+                const float FrameRate = 30f;
+                var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+                int frameCount = (int)((stateInfo.length * FrameRate) + 2);
 
                 animator.Rebind();
                 animator.StopPlayback();
@@ -354,7 +354,7 @@ namespace YIUIFramework
         /// </summary>
         public void SimulateStart()
         {
-            var particleSystems = this.ParticleSystems;
+            var particleSystems = ParticleSystems;
             foreach (var ps in particleSystems)
             {
                 if (ps == null)
@@ -367,7 +367,7 @@ namespace YIUIFramework
                 ps.Play();
             }
 
-            var animators = this.Animators;
+            var animators = Animators;
             foreach (var animator in animators)
             {
                 if (animator == null)
@@ -384,7 +384,7 @@ namespace YIUIFramework
                 animator.Update(0.0f);
             }
 
-            var animations = this.Animations;
+            var animations = Animations;
             foreach (var animation in animations)
             {
                 if (animation == null)
@@ -407,7 +407,7 @@ namespace YIUIFramework
         /// </summary>
         public void SimulateDelta(float time, float deltaTime)
         {
-            var particleSystems = this.ParticleSystems;
+            var particleSystems = ParticleSystems;
             foreach (var ps in particleSystems)
             {
                 if (ps == null)
@@ -418,7 +418,7 @@ namespace YIUIFramework
                 ps.Simulate(deltaTime, false, false);
             }
 
-            var animators = this.Animators;
+            var animators = Animators;
             foreach (var animator in animators)
             {
                 if (animator == null)
@@ -435,7 +435,7 @@ namespace YIUIFramework
                 animator.Update(0.0f);
             }
 
-            var animations = this.Animations;
+            var animations = Animations;
             foreach (var animation in animations)
             {
                 if (animation == null)
@@ -458,8 +458,8 @@ namespace YIUIFramework
         /// </summary>
         public void Simulate(float time)
         {
-            var randomKeeper    = new Dictionary<ParticleSystem, KeyValuePair<bool, uint>>();
-            var particleSystems = this.ParticleSystems;
+            var randomKeeper = new Dictionary<ParticleSystem, KeyValuePair<bool, uint>>();
+            var particleSystems = ParticleSystems;
             foreach (var ps in particleSystems)
             {
                 if (ps == null)
@@ -474,7 +474,7 @@ namespace YIUIFramework
                 if (!ps.isPlaying)
                 {
                     ps.useAutoRandomSeed = false;
-                    ps.randomSeed        = 0;
+                    ps.randomSeed = 0;
                 }
 
                 ps.Simulate(0, false, true);
@@ -504,11 +504,11 @@ namespace YIUIFramework
 
                 ps.Stop(false);
                 var pair = randomKeeper[ps];
-                ps.randomSeed        = pair.Value;
+                ps.randomSeed = pair.Value;
                 ps.useAutoRandomSeed = pair.Key;
             }
 
-            var animators = this.Animators;
+            var animators = Animators;
             foreach (var animator in animators)
             {
                 if (animator == null)
@@ -525,7 +525,7 @@ namespace YIUIFramework
                 animator.Update(0.0f);
             }
 
-            var animations = this.Animations;
+            var animations = Animations;
             foreach (var animation in animations)
             {
                 if (animation == null)
@@ -542,19 +542,19 @@ namespace YIUIFramework
                 clip.SampleAnimation(animation.gameObject, time);
             }
         }
-        #endif
+#endif
 
         /// <summary>
         /// 开始
         /// </summary>
         public void Play()
         {
-            if (PlayState.Playing == this.state)
+            if (PlayState.Playing == state)
             {
-                this.Stop();
+                Stop();
             }
 
-            this.state = PlayState.Pending;
+            state = PlayState.Pending;
         }
 
         /// <summary>
@@ -562,19 +562,19 @@ namespace YIUIFramework
         /// </summary>
         public void Pause()
         {
-            if (PlayState.Playing == this.state)
+            if (PlayState.Playing == state)
             {
-                foreach (var particleSystem in this.ParticleSystems)
+                foreach (var particleSystem in ParticleSystems)
                 {
                     particleSystem.Pause(false);
                 }
 
-                foreach (var animator in this.Animators)
+                foreach (var animator in Animators)
                 {
                     animator.speed = 0.0f;
                 }
 
-                foreach (var animation in this.Animations)
+                foreach (var animation in Animations)
                 {
                     var clip = animation.clip;
                     if (clip != null)
@@ -583,7 +583,7 @@ namespace YIUIFramework
                     }
                 }
 
-                this.state = PlayState.Pausing;
+                state = PlayState.Pausing;
             }
         }
 
@@ -592,43 +592,40 @@ namespace YIUIFramework
         /// </summary>
         public void Resume()
         {
-            if (PlayState.Pausing == this.state)
+            if (PlayState.Pausing == state)
             {
-                foreach (var particleSystem in this.ParticleSystems)
+                foreach (var particleSystem in ParticleSystems)
                 {
                     particleSystem.Play(false);
                 }
 
-                foreach (var animator in this.Animators)
+                foreach (var animator in Animators)
                 {
-                    animator.speed = this.playbackSpeed;
+                    animator.speed = playbackSpeed;
                 }
 
-                foreach (var animation in this.Animations)
+                foreach (var animation in Animations)
                 {
                     var clip = animation.clip;
                     if (clip != null)
                     {
-                        animation[clip.name].speed = this.playbackSpeed;
+                        animation[clip.name].speed = playbackSpeed;
                     }
                 }
 
-                this.state = PlayState.Playing;
+                state = PlayState.Playing;
             }
         }
 
         public void ForceCallFinishEvent()
         {
-            if (this.FinishEvent != null)
-            {
-                this.FinishEvent();
-            }
+            FinishEvent?.Invoke();
         }
 
         public void ClearFinishEvent()
         {
-            this.FinishEvent        = null;
-            this.ReleaseAfterFinish = false;
+            FinishEvent = null;
+            ReleaseAfterFinish = false;
         }
 
         /// <summary>
@@ -636,20 +633,20 @@ namespace YIUIFramework
         /// </summary>
         public void Stop()
         {
-            if (this.state != PlayState.Stopping)
+            if (state != PlayState.Stopping)
             {
-                this.state = PlayState.Fadeouting;
-                foreach (var particleSystem in this.ParticleSystems)
+                state = PlayState.FadeOuting;
+                foreach (var particleSystem in ParticleSystems)
                 {
                     particleSystem.Stop(false);
                 }
 
-                foreach (var animator in this.Animators)
+                foreach (var animator in Animators)
                 {
                     animator.gameObject.SetActive(false);
                 }
 
-                foreach (var animation in this.Animations)
+                foreach (var animation in Animations)
                 {
                     if (animation.playAutomatically)
                     {
@@ -661,10 +658,10 @@ namespace YIUIFramework
                     }
                 }
 
-                if (this.FadeoutEvent != null)
+                if (FadeoutEvent != null)
                 {
-                    this.FadeoutEvent();
-                    this.FadeoutEvent = null;
+                    FadeoutEvent();
+                    FadeoutEvent = null;
                 }
             }
         }
@@ -674,44 +671,44 @@ namespace YIUIFramework
         /// </summary>
         public void Reset()
         {
-            this.timer = 0.0f;
-            this.state = PlayState.Stopping;
+            timer = 0.0f;
+            state = PlayState.Stopping;
         }
 
         private void Awake()
         {
-            if (this.particleSystems == null)
+            if (particleSystems == null)
             {
-                this.particleSystems = ListPool<ParticleSystem>.Get();
-                this.GetComponentsInChildren(true, this.particleSystems);
+                particleSystems = ListPool<ParticleSystem>.Get();
+                GetComponentsInChildren(true, particleSystems);
             }
 
-            this.Reset();
+            Reset();
         }
 
         private void LateUpdate()
         {
-            if (PlayState.Stopping == this.state ||
-                PlayState.Pausing == this.state)
+            if (PlayState.Stopping == state ||
+                PlayState.Pausing == state)
             {
                 return;
             }
 
-            this.timer += Time.deltaTime * this.playbackSpeed;
-            if (PlayState.Pending == this.state && this.timer >= this.delay)
+            timer += Time.deltaTime * playbackSpeed;
+            if (PlayState.Pending == state && timer >= delay)
             {
-                foreach (var particleSystem in this.ParticleSystems)
+                foreach (var particleSystem in ParticleSystems)
                 {
                     particleSystem.Play(false);
                 }
 
-                foreach (var animator in this.Animators)
+                foreach (var animator in Animators)
                 {
                     animator.gameObject.SetActive(false);
                     animator.gameObject.SetActive(true);
                 }
 
-                foreach (var animation in this.Animations)
+                foreach (var animation in Animations)
                 {
                     if (animation.playAutomatically)
                     {
@@ -725,26 +722,26 @@ namespace YIUIFramework
                     }
                 }
 
-                this.state = PlayState.Playing;
+                state = PlayState.Playing;
             }
 
-            if (!this.looping)
+            if (!looping)
             {
-                if (PlayState.Playing == this.state &&
-                    this.timer >= this.duration)
+                if (PlayState.Playing == state &&
+                    timer >= duration)
                 {
-                    this.Stop();
+                    Stop();
                 }
             }
 
-            if (PlayState.Fadeouting == this.state &&
-                this.timer >= this.duration + this.fadeout)
+            if (PlayState.FadeOuting == state &&
+                timer >= duration + fadeout)
             {
-                this.state = PlayState.Stopping;
-                if (this.FinishEvent != null)
+                state = PlayState.Stopping;
+                if (FinishEvent != null)
                 {
-                    this.FinishEvent();
-                    this.FinishEvent = null;
+                    FinishEvent();
+                    FinishEvent = null;
                     if (ReleaseAfterFinish)
                     {
                         ReleaseAfterFinish = false;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace YIUIFramework
@@ -11,7 +12,7 @@ namespace YIUIFramework
         /// <summary>
         /// 从目标组件中获取一个组件，如果是组件类型不存在，则添加
         /// </summary>
-        public static Component GetOrAddComponent(this Component obj, System.Type type)
+        public static Component GetOrAddComponent(this Component obj, Type type)
         {
             var component = obj.GetComponent(type);
             if (component == null)
@@ -45,7 +46,7 @@ namespace YIUIFramework
             var component = obj.GetComponent<T>();
             if (component == null)
             {
-                component           = obj.gameObject.AddComponent<T>();
+                component = obj.gameObject.AddComponent<T>();
                 component.hideFlags = HideFlags.DontSave;
             }
 
@@ -55,7 +56,7 @@ namespace YIUIFramework
         /// <summary>
         /// 检查目标组件的GameObject上是否有一个或多个指定类型的组件
         /// </summary>
-        public static bool HasComponent(this Component obj, System.Type type)
+        public static bool HasComponent(this Component obj, Type type)
         {
             return obj.GetComponent(type) != null;
         }
@@ -75,10 +76,10 @@ namespace YIUIFramework
         {
             Assert.IsNotNull(obj);
             var transform = obj.transform;
-            while (transform != null)
+            while (transform)
             {
                 var component = transform.GetComponent<T>();
-                if (component != null)
+                if (component)
                 {
                     return component;
                 }

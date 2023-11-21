@@ -1,7 +1,8 @@
+
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using UnityEngine;
 
 namespace YIUIFramework
 {
@@ -12,67 +13,66 @@ namespace YIUIFramework
     {
         [SerializeField]
         [Range(0, 255)]
-        private int grayscale = 0;
+        private int grayscale;
 
         private UIMaterialEffect materialEffect;
 
         public int GrayScale
         {
-            get { return this.grayscale; }
+            get { return grayscale; }
 
             set
             {
-                if (this.grayscale != value)
+                if (grayscale != value)
                 {
-                    this.grayscale = value;
-                    this.Refresh();
+                    grayscale = value;
+                    Refresh();
                 }
             }
         }
 
         private void Awake()
         {
-            this.Refresh();
+            Refresh();
         }
 
         private void OnDestroy()
         {
-            if (this.materialEffect != null)
+            if (materialEffect != null)
             {
-                var key = this.materialEffect.MaterialKey;
-                key.GrayScale                   = 0;
-                this.materialEffect.MaterialKey = key;
-                this.materialEffect.MarkDirty();
+                var key = materialEffect.MaterialKey;
+                key.GrayScale = 0;
+                materialEffect.MaterialKey = key;
+                materialEffect.MarkDirty();
             }
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         private void OnValidate()
         {
-            this.Refresh();
+            Refresh();
         }
-        #endif
+#endif
 
         private void Refresh()
         {
-            #if UNITY_EDITOR
-            var prefabType = PrefabUtility.GetPrefabType(this.gameObject);
+#if UNITY_EDITOR
+            var prefabType = PrefabUtility.GetPrefabType(gameObject);
             if (prefabType == PrefabType.Prefab)
             {
                 return;
             }
-            #endif
+#endif
 
-            if (this.materialEffect == null)
+            if (materialEffect == null)
             {
-                this.materialEffect =
-                    this.GetOrAddComponent<UIMaterialEffect>();
+                materialEffect = this.GetOrAddComponent<UIMaterialEffect>();
             }
 
-            var key = this.materialEffect.MaterialKey;
-            key.GrayScale                   = (byte)this.grayscale;
-            this.materialEffect.MaterialKey = key;
-            this.materialEffect.MarkDirty();
+            var key = materialEffect.MaterialKey;
+            key.GrayScale = (byte)grayscale;
+            materialEffect.MaterialKey = key;
+            materialEffect.MarkDirty();
         }
     }
 }

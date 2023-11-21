@@ -63,8 +63,8 @@ namespace YIUIBind
 
             for (var i = 0; i < m_AllBindPair.Count; i++)
             {
-                var bindPair  = m_AllBindPair[i];
-                var oldName   = bindPair.Name;
+                var bindPair = m_AllBindPair[i];
+                var oldName = bindPair.Name;
                 var component = bindPair.Component;
                 if (component == null)
                 {
@@ -141,7 +141,7 @@ namespace YIUIBind
             }
         }
     }
-    
+
     /// <summary>
     /// 绑定数据对应关系
     /// </summary>
@@ -151,7 +151,7 @@ namespace YIUIBind
     internal class UIBindPairData
     {
         [LabelText("名称")]
-        public string Name ;
+        public string Name;
 
         [LabelText("对象")]
         public Component Component;

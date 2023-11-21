@@ -10,18 +10,18 @@ namespace YIUIFramework
             private readonly Queue<IRefPool> m_Refs;
             private readonly Type m_RefType;
 
-            public RefCollection(Type refType)
+            internal RefCollection(Type refType)
             {
                 m_Refs = new Queue<IRefPool>();
                 m_RefType = refType;
             }
 
-            public Type RefType
+            internal Type RefType
             {
                 get { return m_RefType; }
             }
 
-            public T Get<T>() where T : class, IRefPool, new()
+            internal T _Get<T>() where T : class, IRefPool, new()
             {
                 if (typeof(T) != m_RefType)
                 {
@@ -39,7 +39,7 @@ namespace YIUIFramework
                 return new T();
             }
 
-            public IRefPool Get()
+            internal IRefPool Get()
             {
                 lock (m_Refs)
                 {
@@ -52,7 +52,7 @@ namespace YIUIFramework
                 return (IRefPool)Activator.CreateInstance(m_RefType);
             }
 
-            public bool Put(IRefPool iRef)
+            internal bool _Put(IRefPool iRef)
             {
                 iRef.Recycle();
                 lock (m_Refs)
@@ -67,7 +67,7 @@ namespace YIUIFramework
                 return false;
             }
 
-            public void Add<T>(int count) where T : class, IRefPool, new()
+            internal void _Add<T>(int count) where T : class, IRefPool, new()
             {
                 if (typeof(T) != m_RefType)
                 {
@@ -83,7 +83,7 @@ namespace YIUIFramework
                 }
             }
 
-            public void Add(int count)
+            internal void Add(int count)
             {
                 lock (m_Refs)
                 {
@@ -94,7 +94,7 @@ namespace YIUIFramework
                 }
             }
 
-            public void Remove(int count)
+            internal void Remove(int count)
             {
                 lock (m_Refs)
                 {
@@ -110,7 +110,7 @@ namespace YIUIFramework
                 }
             }
 
-            public void RemoveAll()
+            internal void RemoveAll()
             {
                 lock (m_Refs)
                 {

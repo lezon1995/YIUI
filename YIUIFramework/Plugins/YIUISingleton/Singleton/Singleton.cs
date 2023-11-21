@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 namespace YIUIFramework
 {
@@ -23,9 +22,9 @@ namespace YIUIFramework
         {
             if (g_Inst != null)
             {
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 throw new Exception(this + "是单例类，不能实例化两次");
-                #endif
+#endif
             }
         }
 
@@ -39,7 +38,7 @@ namespace YIUIFramework
                     {
                         throw new ObjectDisposedException(typeof(T).Name, "正在释放中, 不能再创建");
                     }
-                    
+
                     g_Inst = new T();
                     g_Inst.OnInitSingleton();
                     SingletonMgr.Add(g_Inst);
@@ -70,7 +69,7 @@ namespace YIUIFramework
             }
 
             SingletonMgr.Remove(g_Inst);
-            g_Inst     = default;
+            g_Inst = default;
             m_Disposed = true;
             OnDispose();
             return true;

@@ -8,8 +8,7 @@ namespace YIUIFramework
     /// This is a serializable dictionary.
     /// </summary>
     [Serializable]
-    public sealed class SerializableDictionary<TKey, TValue> :
-        Dictionary<TKey, TValue>, ISerializationCallbackReceiver
+    public sealed class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
     {
         [SerializeField]
         private KeyValuePair[] data;
@@ -17,24 +16,24 @@ namespace YIUIFramework
         /// <inheritdoc/>
         public void OnBeforeSerialize()
         {
-            this.data = new KeyValuePair[this.Count];
+            data = new KeyValuePair[Count];
             int index = 0;
             foreach (var kv in this)
             {
-                this.data[index++] = new KeyValuePair(kv.Key, kv.Value);
+                data[index++] = new KeyValuePair(kv.Key, kv.Value);
             }
         }
 
         /// <inheritdoc/>
         public void OnAfterDeserialize()
         {
-            this.Clear();
-            foreach (var kv in this.data)
+            Clear();
+            foreach (var kv in data)
             {
-                this.Add(kv.Key, kv.Value);
+                Add(kv.Key, kv.Value);
             }
 
-            this.data = null;
+            data = null;
         }
 
         [Serializable]
@@ -48,8 +47,8 @@ namespace YIUIFramework
 
             public KeyValuePair(TKey k, TValue v)
             {
-                this.Key   = k;
-                this.Value = v;
+                Key = k;
+                Value = v;
             }
         }
     }

@@ -7,11 +7,8 @@ namespace YIUIFramework
     public abstract class MgrSingleton<T> : Singleton<T>, IManagerAsyncInit where T : MgrSingleton<T>, new()
     {
         private bool m_Enabled;
-
         public bool Enabled => m_Enabled;
-
         private bool m_InitedSucceed;
-
         public bool InitedSucceed => m_InitedSucceed;
 
         public async UniTask<bool> ManagerAsyncInit()

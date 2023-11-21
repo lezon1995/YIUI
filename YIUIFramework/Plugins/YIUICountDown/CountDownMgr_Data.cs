@@ -10,42 +10,42 @@
             /// <summary>
             /// 在倒计时管理器中的GUID
             /// </summary>
-            public int Guid = 0;
+            public int Guid;
 
             /// <summary>
             /// 总时间  0 = 无限回调  也可以有时间 forver = true 也可以无限回调
             /// </summary>
-            public double TotalTime = 0;
+            public double TotalTime;
 
             /// <summary>
             /// 间隔时间
             /// </summary>
-            public double Interval = 0;
+            public double Interval;
 
             /// <summary>
             /// 已经过去的时间
             /// </summary>
-            public double ElapseTime = 0;
+            public double ElapseTime;
 
             /// <summary>
             /// 开始时间
             /// </summary>
-            public double StartTime = 0;
+            public double StartTime;
 
             /// <summary>
             /// 最后一次回调时间
             /// </summary>
-            public double LastCallBackTime = 0;
+            public double LastCallBackTime;
 
             /// <summary>
             /// 结束时间
             /// </summary>
-            public double EndTime = 0;
+            public double EndTime;
 
             /// <summary>
             /// 永久执行  总时间到过后会重置
             /// </summary>
-            public bool Forver = false;
+            public bool Forever;
 
             /// <summary>
             /// 回调方法
@@ -65,7 +65,7 @@
                 StartTime = time;
                 LastCallBackTime = time;
                 EndTime = time + totalTime;
-                Forver = forver;
+                Forever = forver;
                 TimerCallback = timerCallback;
             }
 
@@ -78,7 +78,7 @@
                 StartTime = 0;
                 LastCallBackTime = 0;
                 EndTime = 0;
-                Forver = false;
+                Forever = false;
                 TimerCallback = null;
             }
         }

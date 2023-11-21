@@ -7,16 +7,16 @@ namespace YIUIFramework
     /// <summary>
     /// 倒计时管理器
     /// 区别于Times
-    ///                                     Times                                                               CountDown
-    /// 回调频率                     不可改                     可改                        (虽然中途改频率这个事情很少)
-    /// 如果暂停                     中间丢失的时间就没了      中途丢失的时间会快速倒计时             (万一有需求 中间的各种计算就丢掉了)
-    /// 添加时可立即调用一次      否(还需要自己调一次)          可传参数控制                     (很多时候倒计时都需要第一时间刷新一次的)
-    /// 一对多                            否                         是                         (因为用Callback做K 就没办法在同一个Callback下 被别人倒计时)
-    /// 可提前结束                     否                         是                         (针对于 比如 匿名函数 等特殊情况)
-    /// 回调参数            obj 但是麻烦 而且不可变           已过去时间/总时间                   (更适合于UI上的一些数字倒计时)
-    /// 可循环                        否                          是                         (虽然0 都可以无限 但是万一要的是不是0的情况下循环呢 就得递归调自己吗)
-    /// 多重载                        否                          是 (满足各种需求)
-    /// 匿名函数                      否                          是                          (匿名函数也可以被暂停 移除等操作)
+    ///                                             Times                                                               CountDown
+    /// 回调频率                             不可改                                                               可改                                                           (虽然中途改频率这个事情很少)
+    /// 如果暂停                             中间丢失的时间就没了                                      中途丢失的时间会快速倒计时                  (万一有需求 中间的各种计算就丢掉了)
+    /// 添加时可立即调用一次       否(还需要自己调一次)                                       可传参数控制                                            (很多时候倒计时都需要第一时间刷新一次的)
+    /// 一对多                                 否                                                                       是                                                               (因为用Callback做K 就没办法在同一个Callback下 被别人倒计时)
+    /// 可提前结束                          否                                                                       是                                                               (针对于 比如 匿名函数 等特殊情况)
+    /// 回调参数                              obj 但是麻烦 而且不可变                                  已过去时间/总时间                                    (更适合于UI上的一些数字倒计时)
+    /// 可循环                                  否                                                                       是                                                               (虽然0 都可以无限 但是万一要的是不是0的情况下循环呢 就得递归调自己吗)
+    /// 多重载                                  否                                                                       是                                                               (满足各种需求)
+    /// 匿名函数                              否                                                                        是                                                              (匿名函数也可以被暂停 移除等操作)
     /// ......
     /// </summary>
     public partial class CountDownMgr : MgrSingleton<CountDownMgr>
@@ -92,7 +92,7 @@ namespace YIUIFramework
         }
 
         //更新频率毫秒
-        private int m_UpdataAsyncDelay = (int) (1000f / 30f);
+        private int m_UpdateAsyncDelay = (int)(1000f / 30f);
 
         //使用异步控制频率更新 并没有使用调度器
         //调度器是mono update 不需要这么高的频率
@@ -102,7 +102,7 @@ namespace YIUIFramework
             {
                 if (Disposed) return;
                 ManagerUpdate();
-                await UniTask.Delay(m_UpdataAsyncDelay);
+                await UniTask.Delay(m_UpdateAsyncDelay);
             }
         }
 
@@ -145,7 +145,7 @@ namespace YIUIFramework
 
                     Callback(data);
 
-                    if (data.Forver)
+                    if (data.Forever)
                     {
                         Restart(data);
                     }

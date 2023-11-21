@@ -21,7 +21,7 @@ namespace YIUIFramework
 
         // Matches standard .NET formatting dp's
         private static readonly uint DefaultDecimalPlaces = 5;
-        private static readonly char DefaultPadChar       = '0';
+        private static readonly char DefaultPadChar = '0';
 
         /// <summary>
         /// Convert a given unsigned integer value to a string and concatenate 
@@ -29,16 +29,15 @@ namespace YIUIFramework
         /// </summary>
         public static StringBuilder Concat(
             this StringBuilder builder,
-            uint               uintVal,
-            uint               padAmount,
-            char               padChar,
-            uint               baseVal)
+            uint uintVal,
+            uint padAmount,
+            char padChar,
+            uint baseVal)
         {
-            Assert.IsTrue(padAmount >= 0);
             Assert.IsTrue(baseVal > 0 && baseVal <= 16);
 
             // Calculate length of integer when written out
-            uint length     = 0;
+            uint length = 0;
             uint lengthCalc = uintVal;
 
             do
@@ -50,15 +49,15 @@ namespace YIUIFramework
             // Pad out space for writing.
             builder.Append(padChar, (int)Mathf.Max(padAmount, length));
 
-            int strpos = builder.Length;
+            int strPos = builder.Length;
 
             // We're writing backwards, one character at a time.
             while (length > 0)
             {
-                --strpos;
+                --strPos;
 
                 // Lookup from static char array, to cover hex values too
-                builder[strpos] = Digits[uintVal % baseVal];
+                builder[strPos] = Digits[uintVal % baseVal];
 
                 uintVal /= baseVal;
                 --length;
@@ -71,8 +70,7 @@ namespace YIUIFramework
         /// Convert a given unsigned integer value to a string and concatenate 
         /// onto the StringBuilder. Assume no padding and base ten.
         /// </summary>
-        public static StringBuilder Concat(
-            this StringBuilder builder, uint uintVal)
+        public static StringBuilder Concat(this StringBuilder builder, uint uintVal)
         {
             builder.Concat(uintVal, 0, DefaultPadChar, 10);
             return builder;
@@ -82,8 +80,7 @@ namespace YIUIFramework
         /// Convert a given unsigned integer value to a string and concatenate 
         /// onto the StringBuilder. Assume base ten.
         /// </summary>
-        public static StringBuilder Concat(
-            this StringBuilder builder, uint uintVal, uint padAmount)
+        public static StringBuilder Concat(this StringBuilder builder, uint uintVal, uint padAmount)
         {
             builder.Concat(uintVal, padAmount, DefaultPadChar, 10);
             return builder;
@@ -93,11 +90,7 @@ namespace YIUIFramework
         /// Convert a given unsigned integer value to a string and concatenate 
         /// onto the StringBuilder. Assume base ten.
         /// </summary>
-        public static StringBuilder Concat(
-            this StringBuilder builder,
-            uint               uintVal,
-            uint               padAmount,
-            char               padChar)
+        public static StringBuilder Concat(this StringBuilder builder, uint uintVal, uint padAmount, char padChar)
         {
             builder.Concat(uintVal, padAmount, padChar, 10);
             return builder;
@@ -107,14 +100,8 @@ namespace YIUIFramework
         /// Convert a given signed integer value to a string and concatenate 
         /// onto the StringBuilder. Any base value allowed.
         /// </summary>
-        public static StringBuilder Concat(
-            this StringBuilder builder,
-            int                intVal,
-            uint               padAmount,
-            char               padChar,
-            uint               baseVal)
+        public static StringBuilder Concat(this StringBuilder builder, int intVal, uint padAmount, char padChar, uint baseVal)
         {
-            Assert.IsTrue(padAmount >= 0);
             Assert.IsTrue(baseVal > 0 && baseVal <= 16);
 
             // Deal with negative numbers
@@ -123,7 +110,7 @@ namespace YIUIFramework
                 builder.Append('-');
 
                 // This is to deal with Int32.MinValue
-                uint uintVal = uint.MaxValue - ((uint)intVal) + 1;
+                uint uintVal = uint.MaxValue - (uint)intVal + 1;
                 builder.Concat(uintVal, padAmount, padChar, baseVal);
             }
             else
@@ -138,8 +125,7 @@ namespace YIUIFramework
         /// Convert a given signed integer value to a string and concatenate 
         /// onto the StringBuilder. Assume no padding and base ten.
         /// </summary>
-        public static StringBuilder Concat(
-            this StringBuilder builder, int intVal)
+        public static StringBuilder Concat(this StringBuilder builder, int intVal)
         {
             builder.Concat(intVal, 0, DefaultPadChar, 10);
             return builder;
@@ -149,8 +135,7 @@ namespace YIUIFramework
         /// Convert a given signed integer value to a string and concatenate 
         /// onto the StringBuilder. Assume base ten.
         /// </summary>
-        public static StringBuilder Concat(
-            this StringBuilder builder, int intVal, uint padAmount)
+        public static StringBuilder Concat(this StringBuilder builder, int intVal, uint padAmount)
         {
             builder.Concat(intVal, padAmount, DefaultPadChar, 10);
             return builder;
@@ -160,11 +145,7 @@ namespace YIUIFramework
         /// Convert a given signed integer value to a string and concatenate 
         /// onto the StringBuilder. Assume base ten.
         /// </summary>
-        public static StringBuilder Concat(
-            this StringBuilder builder,
-            int                intVal,
-            uint               padAmount,
-            char               padChar)
+        public static StringBuilder Concat(this StringBuilder builder, int intVal, uint padAmount, char padChar)
         {
             builder.Concat(intVal, padAmount, padChar, 10);
             return builder;
@@ -174,15 +155,8 @@ namespace YIUIFramework
         /// Convert a given float value to a string and concatenate onto the 
         /// StringBuilder
         /// </summary>
-        public static StringBuilder Concat(
-            this StringBuilder builder,
-            float              floatVal,
-            uint               decimalPlaces,
-            uint               padAmount,
-            char               padChar)
+        public static StringBuilder Concat(this StringBuilder builder, float floatVal, uint decimalPlaces, uint padAmount, char padChar)
         {
-            Assert.IsTrue(padAmount >= 0);
-
             if (decimalPlaces == 0)
             {
                 // No decimal places, just round up and print it as an int
@@ -238,11 +212,9 @@ namespace YIUIFramework
         /// Convert a given float value to a string and concatenate onto the 
         /// StringBuilder. Assumes five decimal places, and no padding.
         /// </summary>
-        public static StringBuilder Concat(
-            this StringBuilder builder, float floatVal)
+        public static StringBuilder Concat(this StringBuilder builder, float floatVal)
         {
-            builder.Concat(
-                floatVal, DefaultDecimalPlaces, 0, DefaultPadChar);
+            builder.Concat(floatVal, DefaultDecimalPlaces, 0, DefaultPadChar);
             return builder;
         }
 
@@ -250,10 +222,7 @@ namespace YIUIFramework
         /// Convert a given float value to a string and concatenate onto the 
         /// StringBuilder. Assumes no padding.
         /// </summary>
-        public static StringBuilder Concat(
-            this StringBuilder builder,
-            float              floatVal,
-            uint               decimalPlaces)
+        public static StringBuilder Concat(this StringBuilder builder, float floatVal, uint decimalPlaces)
         {
             builder.Concat(floatVal, decimalPlaces, 0, DefaultPadChar);
             return builder;
@@ -263,11 +232,7 @@ namespace YIUIFramework
         /// Convert a given float value to a string and concatenate onto the 
         /// StringBuilder.
         /// </summary>
-        public static StringBuilder Concat(
-            this StringBuilder builder,
-            float              floatVal,
-            uint               decimalPlaces,
-            uint               padAmount)
+        public static StringBuilder Concat(this StringBuilder builder, float floatVal, uint decimalPlaces, uint padAmount)
         {
             builder.Concat(floatVal, decimalPlaces, padAmount, DefaultPadChar);
             return builder;

@@ -2,7 +2,7 @@
 
 namespace YIUIFramework
 {
-    public class MathUtil
+    public static class MathUtil
     {
         private static double PrecisionIntercept(double input)
         {
@@ -89,7 +89,7 @@ namespace YIUIFramework
             return (int)Math.Sqrt(dx * dx + dy * dy);
         }
 
-        public static int CalcuIndexByXY(int x, int y, int width)
+        public static int CalculateIndexByXY(int x, int y, int width)
         {
             return y * width + x;
         }
@@ -118,7 +118,8 @@ namespace YIUIFramework
                 value = min;
                 return true;
             }
-            else if (value > max)
+
+            if (value > max)
             {
                 value = max;
                 return true;
@@ -134,7 +135,8 @@ namespace YIUIFramework
                 value = min;
                 return true;
             }
-            else if (value > max)
+
+            if (value > max)
             {
                 value = max;
                 return true;
@@ -150,7 +152,8 @@ namespace YIUIFramework
                 value = min;
                 return true;
             }
-            else if (value > max)
+
+            if (value > max)
             {
                 value = max;
                 return true;

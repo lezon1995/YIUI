@@ -87,10 +87,10 @@ namespace YIUIFramework
         /// <returns>循环ID 停止时需要</returns>
         public static int Loop(Action task, float interval)
         {
-            var intervalTime                              = new IntervalTime();
+            var intervalTime = new IntervalTime();
             intervalTime.Interval = intervalTime.LeftTime = interval;
-            intervalTime.Id       = task.GetHashCode();
-            intervalTime.Task     = task;
+            intervalTime.Id = task.GetHashCode();
+            intervalTime.Task = task;
             intervalTasks.Add(intervalTime);
             return intervalTime.Id;
         }

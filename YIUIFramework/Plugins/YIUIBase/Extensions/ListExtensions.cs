@@ -29,8 +29,7 @@ namespace YIUIFramework
             var lookup = new Dictionary<T, int>();
             foreach (var i in list)
             {
-                int value = 0;
-                if (!lookup.TryGetValue(i, out value))
+                if (!lookup.TryGetValue(i, out _))
                 {
                     lookup.Add(i, 0);
                 }

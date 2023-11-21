@@ -28,10 +28,11 @@ namespace YIUIFramework
         /// </summary>
         public static Texture2D Monochromatic(Color color)
         {
-            var texture = new Texture2D(
-                1, 1, TextureFormat.ARGB32, false);
-            texture.filterMode = FilterMode.Point;
-            texture.wrapMode   = TextureWrapMode.Clamp;
+            var texture = new Texture2D(1, 1, TextureFormat.ARGB32, false)
+            {
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp
+            };
             texture.SetPixel(0, 0, color);
             texture.Apply();
 
@@ -43,10 +44,11 @@ namespace YIUIFramework
         /// </summary>
         public static Texture2D Monochromatic(int size, Color color)
         {
-            var texture = new Texture2D(
-                size, size, TextureFormat.ARGB32, false);
-            texture.filterMode = FilterMode.Bilinear;
-            texture.wrapMode   = TextureWrapMode.Clamp;
+            var texture = new Texture2D(size, size, TextureFormat.ARGB32, false)
+            {
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp
+            };
 
             for (int i = 0; i < size; ++i)
             {
@@ -66,12 +68,13 @@ namespace YIUIFramework
         /// </summary>
         public static Texture2D Dot(int size, Color fg, Color bg)
         {
-            var texture = new Texture2D(
-                size, size, TextureFormat.ARGB32, false);
-            texture.filterMode = FilterMode.Bilinear;
-            texture.wrapMode   = TextureWrapMode.Clamp;
+            var texture = new Texture2D(size, size, TextureFormat.ARGB32, false)
+            {
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp
+            };
 
-            var radius       = size / 2;
+            var radius = size / 2;
             var squareRadius = (size / 2) * (size / 2);
             for (int i = 0; i < size; ++i)
             {
@@ -100,17 +103,18 @@ namespace YIUIFramework
         /// </summary>
         public static Texture2D CornerTopLeft(int size, Color fg, Color bg)
         {
-            var texture = new Texture2D(
-                size, size, TextureFormat.ARGB32, false);
-            texture.filterMode = FilterMode.Bilinear;
-            texture.wrapMode   = TextureWrapMode.Clamp;
+            var texture = new Texture2D(size, size, TextureFormat.ARGB32, false)
+            {
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp
+            };
 
-            var halfsize = size / 2;
+            var halfSize = size / 2;
             for (int i = 0; i < size; ++i)
             {
                 for (int j = 0; j < size; ++j)
                 {
-                    if (i < halfsize && j > halfsize)
+                    if (i < halfSize && j > halfSize)
                     {
                         texture.SetPixel(i, j, fg);
                     }
@@ -131,17 +135,18 @@ namespace YIUIFramework
         /// </summary>
         public static Texture2D CornerTopRight(int size, Color fg, Color bg)
         {
-            var texture = new Texture2D(
-                size, size, TextureFormat.ARGB32, false);
-            texture.filterMode = FilterMode.Bilinear;
-            texture.wrapMode   = TextureWrapMode.Clamp;
+            var texture = new Texture2D(size, size, TextureFormat.ARGB32, false)
+            {
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp
+            };
 
-            var halfsize = size / 2;
+            var halfSize = size / 2;
             for (int i = 0; i < size; ++i)
             {
                 for (int j = 0; j < size; ++j)
                 {
-                    if (i > halfsize && j > halfsize)
+                    if (i > halfSize && j > halfSize)
                     {
                         texture.SetPixel(i, j, fg);
                     }
@@ -162,17 +167,18 @@ namespace YIUIFramework
         /// </summary>
         public static Texture2D CornerBottomLeft(int size, Color fg, Color bg)
         {
-            var texture = new Texture2D(
-                size, size, TextureFormat.ARGB32, false);
-            texture.filterMode = FilterMode.Bilinear;
-            texture.wrapMode   = TextureWrapMode.Clamp;
+            var texture = new Texture2D(size, size, TextureFormat.ARGB32, false)
+            {
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp
+            };
 
-            var halfsize = size / 2;
+            var halfSize = size / 2;
             for (int i = 0; i < size; ++i)
             {
                 for (int j = 0; j < size; ++j)
                 {
-                    if (i < halfsize && j < halfsize)
+                    if (i < halfSize && j < halfSize)
                     {
                         texture.SetPixel(i, j, fg);
                     }
@@ -193,17 +199,18 @@ namespace YIUIFramework
         /// </summary>
         public static Texture2D CornerBottomRight(int size, Color fg, Color bg)
         {
-            var texture = new Texture2D(
-                size, size, TextureFormat.ARGB32, false);
-            texture.filterMode = FilterMode.Bilinear;
-            texture.wrapMode   = TextureWrapMode.Clamp;
+            var texture = new Texture2D(size, size, TextureFormat.ARGB32, false)
+            {
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp
+            };
 
-            var halfsize = size / 2;
+            var halfSize = size / 2;
             for (int i = 0; i < size; ++i)
             {
                 for (int j = 0; j < size; ++j)
                 {
-                    if (i > halfsize && j < halfsize)
+                    if (i > halfSize && j < halfSize)
                     {
                         texture.SetPixel(i, j, fg);
                     }
@@ -222,13 +229,13 @@ namespace YIUIFramework
         /// <summary>
         /// Create a cross texture with specify size and color.
         /// </summary>
-        public static Texture2D Cross(
-            int size, int thickness, Color fg, Color bg)
+        public static Texture2D Cross(int size, int thickness, Color fg, Color bg)
         {
-            var texture = new Texture2D(
-                size, size, TextureFormat.ARGB32, false);
-            texture.filterMode = FilterMode.Bilinear;
-            texture.wrapMode   = TextureWrapMode.Clamp;
+            var texture = new Texture2D(size, size, TextureFormat.ARGB32, false)
+            {
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp
+            };
 
             for (int i = 0; i < size; ++i)
             {

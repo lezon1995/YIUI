@@ -1,5 +1,4 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -7,10 +6,10 @@ namespace YIUIFramework
 {
     //基类使用odin 方便做一些显示
     //没有的不需要的可以改为UnityEngine.MonoBehaviour
-    public abstract class DisposerMonoSingleton : SerializedMonoBehaviour,IManagerAsyncInit
+    public abstract class DisposerMonoSingleton : SerializedMonoBehaviour, IManagerAsyncInit
     {
         private bool m_Disposed;
-        public  bool Disposed => m_Disposed;
+        public bool Disposed => m_Disposed;
 
         //释放方法1: 对象释放
         public bool Dispose()
@@ -24,7 +23,7 @@ namespace YIUIFramework
             gameObject.SafeDestroySelf();
             return true;
         }
-        
+
         //如非必要 任何子类都不要重写unity的OnDestroy
         //重写请base
         //推荐使用OnDispose
@@ -59,7 +58,7 @@ namespace YIUIFramework
         {
             return false;
         }
-        
+
         /// <summary>
         /// 处理释放相关事情
         /// </summary>
@@ -76,7 +75,7 @@ namespace YIUIFramework
         protected virtual void OnUseSingleton()
         {
         }
-        
+
 
         public bool Enabled => true; //在mono中无效
 
@@ -105,7 +104,7 @@ namespace YIUIFramework
 
             return result;
         }
-        
+
         protected virtual async UniTask<bool> MgrAsyncInit()
         {
             await UniTask.CompletedTask;

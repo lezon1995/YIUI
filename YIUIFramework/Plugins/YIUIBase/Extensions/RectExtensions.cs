@@ -10,26 +10,24 @@ namespace YIUIFramework
     public static class RectExtensions
     {
         private static Regex parseRegex;
-        
+
         public static Rect Parse(string text)
         {
             Rect value;
             if (!TryParse(text, out value))
             {
-                var msg = string.Format(
-                    "The string {0} can not convert to Rect.", text);
+                var msg = string.Format("The string {0} can not convert to Rect.", text);
                 throw new FormatException(msg);
             }
 
             return value;
         }
-        
+
         public static bool TryParse(string text, out Rect rect)
         {
             if (parseRegex == null)
             {
-                parseRegex = new Regex(
-                    @"^\(x:(.*), y:(.*), width:(.*), height:(.*)\)$");
+                parseRegex = new Regex(@"^\(x:(.*), y:(.*), width:(.*), height:(.*)\)$");
             }
 
             var match = parseRegex.Match(text);

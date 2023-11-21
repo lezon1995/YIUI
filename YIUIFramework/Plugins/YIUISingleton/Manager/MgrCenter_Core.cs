@@ -11,11 +11,11 @@ namespace YIUIFramework
         //内部类 核心管理
         private class MgrCore
         {
-            private List<IManager>            m_MgrList            = new List<IManager>();
-            private List<IManagerUpdate>      m_MgrUpdateList      = new List<IManagerUpdate>();
-            private List<IManagerLateUpdate>  m_MgrLateUpdateList  = new List<IManagerLateUpdate>();
+            private List<IManager> m_MgrList = new List<IManager>();
+            private List<IManagerUpdate> m_MgrUpdateList = new List<IManagerUpdate>();
+            private List<IManagerLateUpdate> m_MgrLateUpdateList = new List<IManagerLateUpdate>();
             private List<IManagerFixedUpdate> m_MgrFixedUpdateList = new List<IManagerFixedUpdate>();
-            private HashSet<IManager>         m_CacheInitMgr       = new HashSet<IManager>();
+            private HashSet<IManager> m_CacheInitMgr = new HashSet<IManager>();
 
             public async UniTask<bool> Add(IManager manager)
             {
@@ -32,7 +32,7 @@ namespace YIUIFramework
                 }
 
                 m_CacheInitMgr.Add(manager);
-                
+
                 if (manager is IManagerAsyncInit initialize)
                 {
                     var result = await initialize.ManagerAsyncInit();
@@ -44,9 +44,9 @@ namespace YIUIFramework
 
                 m_CacheInitMgr.Remove(manager);
 
-                #if YIUIMACRO_SINGLETON_LOG
+#if YIUIMACRO_SINGLETON_LOG
                 Debug.Log($"<color=navy>MgrCenter: 管理器[<color=Brown>{manager.GetType().Name}</color>]启动</color>");
-                #endif
+#endif
 
                 m_MgrList.Add(manager);
 
@@ -56,7 +56,7 @@ namespace YIUIFramework
                     //MonoUP自行管理
                     return true;
                 }
-                
+
                 if (manager is IManagerUpdate update)
                 {
                     m_MgrUpdateList.Add(update);
@@ -156,9 +156,9 @@ namespace YIUIFramework
                     return;
                 }
 
-                #if YIUIMACRO_SINGLETON_LOG
+#if YIUIMACRO_SINGLETON_LOG
                 Debug.Log($"<color=navy>MgrCenter: 管理器[<color=Brown>{manager.GetType().Name}</color>]移除</color>");
-                #endif
+#endif
 
                 m_MgrList.Remove(manager);
 
@@ -180,9 +180,9 @@ namespace YIUIFramework
 
             public void Dispose()
             {
-                #if YIUIMACRO_SINGLETON_LOG
+#if YIUIMACRO_SINGLETON_LOG
                 Debug.Log("<color=navy>MgrCenter: 关闭MgrCenter</color>");
-                #endif
+#endif
 
                 //倒过来dispose
                 for (int i = m_MgrList.Count - 1; i >= 0; i--)

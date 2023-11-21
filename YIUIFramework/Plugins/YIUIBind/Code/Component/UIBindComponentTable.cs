@@ -32,7 +32,7 @@ namespace YIUIBind
 
         public T FindComponent<T>(string comName) where T : Component
         {
-            return (T) FindComponent(comName);
+            return (T)FindComponent(comName);
         }
     }
 }

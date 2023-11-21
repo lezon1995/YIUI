@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 using UnityEngine.EventSystems;
-using DG.Tweening;
 using UnityEngine.UI;
 
 namespace YIUIFramework
@@ -17,15 +17,15 @@ namespace YIUIFramework
         public float scaleValue = 0.9f;
 
         [Tooltip("变小时间")]
-        public float scaleTime = 0;
+        public float scaleTime;
 
         [Tooltip("变大时间")]
-        public float popTime = 0;
+        public float popTime;
 
         private Button m_button;
 
         private Vector3 targetScale; //目标大小
-        private Vector3 atScale;     //当前大小
+        private Vector3 atScale; //当前大小
 
         /// <summary>
         /// 可调整动画状态
@@ -35,12 +35,12 @@ namespace YIUIFramework
         private void Awake()
         {
             m_button = GetComponent<Button>(); //需要先挂button 否则无效
-            if (targetTsf == null)             //如果没有目标则默认自己为目标
+            if (targetTsf == null) //如果没有目标则默认自己为目标
             {
                 targetTsf = transform.gameObject.GetComponent<RectTransform>();
             }
 
-            atScale     = targetTsf.localScale;
+            atScale = targetTsf.localScale;
             targetScale = atScale * scaleValue;
         }
 
@@ -72,7 +72,7 @@ namespace YIUIFramework
             targetTsf.DOScale(atScale, popTime).SetEase(ease); //回到本来大小
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         private void OnValidate()
         {
             if (targetTsf == null) //如果没有目标则默认自己为目标
@@ -80,6 +80,6 @@ namespace YIUIFramework
                 targetTsf = transform.gameObject.GetComponent<RectTransform>();
             }
         }
-        #endif
+#endif
     }
 }

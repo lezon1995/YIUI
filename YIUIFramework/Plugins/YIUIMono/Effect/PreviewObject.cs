@@ -11,17 +11,17 @@ namespace YIUIFramework
     public sealed class PreviewObject : MonoBehaviour
     {
         private GameObject preview;
-        private bool       simulateInEditMode = true; //记录播放时间
-        private float      playingTime        = 0.0f;
-        private double     lastTime           = -1.0;
+        private bool simulateInEditMode = true; //记录播放时间
+        private float playingTime = 0.0f;
+        private double lastTime = -1.0;
 
         /// <summary>
         /// 获取或设置一个值，该值指示是否在编辑模式下模拟。
         /// </summary>
         public bool SimulateInEditMode
         {
-            get { return this.simulateInEditMode; }
-            set { this.simulateInEditMode = value; }
+            get { return simulateInEditMode; }
+            set { simulateInEditMode = value; }
         }
 
         /// <summary>
@@ -29,11 +29,11 @@ namespace YIUIFramework
         /// </summary>
         public void ClearPreview()
         {
-            if (this.preview != null)
+            if (preview != null)
             {
-                var deletePreview = this.preview;
-                this.preview                =  null;
-                EditorApplication.delayCall += () => { GameObject.DestroyImmediate(deletePreview); };
+                var deletePreview = preview;
+                preview = null;
+                EditorApplication.delayCall += () => { DestroyImmediate(deletePreview); };
             }
         }
 
@@ -43,22 +43,22 @@ namespace YIUIFramework
         public void SetPreview(GameObject previewObj)
         {
             // Destroy the pre-preview.
-            if (this.preview != null)
+            if (preview != null)
             {
-                var deletePreview = this.preview;
-                this.preview                =  null;
-                EditorApplication.delayCall += () => { GameObject.DestroyImmediate(deletePreview); };
+                var deletePreview = preview;
+                preview = null;
+                EditorApplication.delayCall += () => { DestroyImmediate(deletePreview); };
             }
 
             // Attach the preview object.
-            this.preview     = previewObj;
-            this.preview.tag = "EditorOnly";
-            this.preview.transform.SetParent(this.transform, false);
+            preview = previewObj;
+            preview.tag = "EditorOnly";
+            preview.transform.SetParent(transform, false);
 
             // Start the animation.
-            if (this.simulateInEditMode)
+            if (simulateInEditMode)
             {
-                var effectControl = this.preview.GetComponent<EffectControl>();
+                var effectControl = preview.GetComponent<EffectControl>();
                 if (effectControl != null)
                 {
                     effectControl.SimulateInit();
@@ -66,8 +66,8 @@ namespace YIUIFramework
                 }
                 else
                 {
-                    var particelSystems = this.preview.GetComponentsInChildren<ParticleSystem>();
-                    foreach (var ps in particelSystems)
+                    var particleSystems = preview.GetComponentsInChildren<ParticleSystem>();
+                    foreach (var ps in particleSystems)
                     {
                         ps.Simulate(0.0f, false, true);
                     }
@@ -75,22 +75,22 @@ namespace YIUIFramework
             }
 
             // Hide this preview.
-            this.SetHideFlags(this.preview, HideFlags.DontSave);
+            SetHideFlags(preview, HideFlags.DontSave);
         }
 
         private void Awake()
         {
-            this.hideFlags = HideFlags.DontSave;
+            hideFlags = HideFlags.DontSave;
             EditorApplication.playModeStateChanged += (PlayModeStateChange state) =>
             {
                 if (EditorApplication.isPlaying ||
                     EditorApplication.isPlayingOrWillChangePlaymode ||
                     EditorApplication.isCompiling)
                 {
-                    if (this.preview != null)
+                    if (preview != null)
                     {
-                        GameObject.DestroyImmediate(this.preview);
-                        this.preview = null;
+                        DestroyImmediate(preview);
+                        preview = null;
                     }
                 }
             };
@@ -98,10 +98,10 @@ namespace YIUIFramework
 
         private void OnDestroy()
         {
-            if (this.preview != null)
+            if (preview != null)
             {
-                GameObject.DestroyImmediate(this.preview);
-                this.preview = null;
+                DestroyImmediate(preview);
+                preview = null;
             }
         }
 
@@ -112,11 +112,11 @@ namespace YIUIFramework
                 return;
             }
 
-            EditorApplication.update += this.UpdatePreview;
-            this.lastTime            =  EditorApplication.timeSinceStartup;
-            if (this.preview != null)
+            EditorApplication.update += UpdatePreview;
+            lastTime = EditorApplication.timeSinceStartup;
+            if (preview != null)
             {
-                this.preview.SetActive(true);
+                preview.SetActive(true);
             }
         }
 
@@ -127,42 +127,41 @@ namespace YIUIFramework
                 return;
             }
 
-            EditorApplication.update -= this.UpdatePreview;
-            if (this.preview != null)
+            EditorApplication.update -= UpdatePreview;
+            if (preview != null)
             {
-                this.preview.SetActive(false);
+                preview.SetActive(false);
             }
         }
 
         private void UpdatePreview()
         {
-            if (!this.simulateInEditMode)
+            if (!simulateInEditMode)
             {
                 return;
             }
 
             var timeSinceStartup = EditorApplication.timeSinceStartup;
-            var deltaTime        = (float)(timeSinceStartup - this.lastTime);
-            this.lastTime    =  timeSinceStartup;
-            this.playingTime += deltaTime;
+            var deltaTime = (float)(timeSinceStartup - lastTime);
+            lastTime = timeSinceStartup;
+            playingTime += deltaTime;
 
-            if (this.preview == null)
+            if (preview == null)
             {
                 return;
             }
 
             // Start the animation.
-            var effectControl = this.preview.GetComponent<EffectControl>();
+            var effectControl = preview.GetComponent<EffectControl>();
             if (effectControl != null)
             {
-                effectControl.SimulateDelta(this.playingTime, deltaTime);
+                effectControl.SimulateDelta(playingTime, deltaTime);
             }
             else
             {
                 float playTime = 0.0f;
-                var particelSystems =
-                    this.preview.GetComponentsInChildren<ParticleSystem>();
-                foreach (var ps in particelSystems)
+                var particleSystems = preview.GetComponentsInChildren<ParticleSystem>();
+                foreach (var ps in particleSystems)
                 {
                     if (playTime < ps.main.duration)
                     {
@@ -170,7 +169,7 @@ namespace YIUIFramework
                     }
                 }
 
-                foreach (var ps in particelSystems)
+                foreach (var ps in particleSystems)
                 {
                     ps.Simulate(deltaTime, false, false);
                 }
@@ -183,7 +182,7 @@ namespace YIUIFramework
             for (int i = 0; i < obj.transform.childCount; ++i)
             {
                 var child = obj.transform.GetChild(i);
-                this.SetHideFlags(child.gameObject, flags);
+                SetHideFlags(child.gameObject, flags);
             }
         }
     }
