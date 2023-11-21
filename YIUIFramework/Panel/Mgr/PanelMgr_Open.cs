@@ -3,9 +3,6 @@ using Cysharp.Threading.Tasks;
 
 namespace YIUIFramework
 {
-    /// <summary>
-    ///   打开相关
-    /// </summary>
     public partial class PanelMgr
     {
         /// <summary>
@@ -14,6 +11,9 @@ namespace YIUIFramework
         /// 主要是作为缓存PanelInfo
         /// </summary>
         private readonly Dictionary<string, PanelInfo> m_PanelCfgMap = new Dictionary<string, PanelInfo>();
+
+        private readonly HashSet<string> m_PanelOpening = new HashSet<string>();
+
 
         /// <summary>
         /// 获取PanelInfo
@@ -28,14 +28,14 @@ namespace YIUIFramework
             var type = typeof(T);
             var data = UIBindHelper.GetBindVoByType(type);
             if (data == null) return null;
-            var vo   = data.Value;
+            var vo = data.Value;
             var name = type.Name;
 
             if (!m_PanelCfgMap.ContainsKey(name))
             {
                 var info = new PanelInfo()
                 {
-                    Name    = name,
+                    Name = name,
                     PkgName = vo.PkgName,
                     ResName = vo.ResName,
                 };
@@ -87,6 +87,21 @@ namespace YIUIFramework
             }
 
             return info.UIBasePanel;
+        }
+
+        private void AddOpening(string name)
+        {
+            m_PanelOpening.Add(name);
+        }
+
+        private void RemoveOpening(string name)
+        {
+            m_PanelOpening.Remove(name);
+        }
+
+        public bool PanelIsOpening(string name)
+        {
+            return m_PanelOpening.Contains(name);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using YIUIBind;
 
 namespace YIUIFramework
 {
@@ -15,6 +14,18 @@ namespace YIUIFramework
         private readonly Dictionary<string, BaseView> m_ExistView = new Dictionary<string, BaseView>();
 
         private readonly Dictionary<string, RectTransform> m_ViewParent = new Dictionary<string, RectTransform>();
+
+        /// <summary>
+        /// 当前已打开的UI 不包含弹窗
+        /// </summary>
+        protected BaseView u_CurrentOpenView;
+
+        /// <summary>
+        /// 外界可判断的当前打开的view名字
+        /// </summary>
+        public string CurrentOpenViewName => u_CurrentOpenView?.UIResName ?? "";
+
+        private readonly HashSet<string> m_ViewOpening = new HashSet<string>();
 
         private void InitPanelViewData()
         {
@@ -78,7 +89,7 @@ namespace YIUIFramework
         private async UniTask<T> GetView<T>() where T : BaseView, new()
         {
             var viewName = typeof(T).Name;
-            var parent   = GetViewParent(viewName);
+            var parent = GetViewParent(viewName);
             if (parent == null)
             {
                 Debug.LogError($"不存在这个View  请检查 {viewName}");
@@ -173,6 +184,21 @@ namespace YIUIFramework
             }
 
             u_CurrentOpenView = view;
+        }
+
+        private void AddOpening(string name)
+        {
+            m_ViewOpening.Add(name);
+        }
+
+        private void RemoveOpening(string name)
+        {
+            m_ViewOpening.Remove(name);
+        }
+
+        public bool ViewIsOpening(string name)
+        {
+            return m_ViewOpening.Contains(name);
         }
     }
 }
