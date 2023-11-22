@@ -4,14 +4,22 @@
     {
         public bool ActiveSelf(string panelName)
         {
-            var info = GetPanelInfo(panelName);
-            return info is {ActiveSelf: true};
+            if (TryGetPanelInfo(panelName, out var panelInfo))
+            {
+                return panelInfo.ActiveSelf;
+            }
+
+            return false;
         }
 
         public bool ActiveSelf<T>() where T : BasePanel
         {
-            var info = GetPanelInfo<T>();
-            return info is {ActiveSelf: true};
+            if (TryGetPanelInfo<T>(out var panelInfo))
+            {
+                return panelInfo.ActiveSelf;
+            }
+
+            return false;
         }
     }
 }

@@ -9,23 +9,29 @@ namespace YIUIFramework
     /// </summary>
     public static partial class YIUILoadDI
     {
+        public delegate (Object, int) LoadAssetFunc(string pkgName, string resName, Type type);
+
+        public delegate UniTask<(Object, int)> LoadAssetAsyncFunc(string pkgName, string resName, Type type);
+
+        public delegate bool VerifyAssetFunc(string pkgName, string resName);
+
+        public delegate void ReleaseAssetFunc(int identifier);
+
+        public delegate void ReleaseAllAssetFunc();
+
         //同步加载方法
-        //参数1: pkgName 包名
-        //参数2: resName 资源名
-        //参数3: type 需要加载的资源类型
-        //返回值: obj对象
-        public static Func<string, string, Type, (Object, int)> LoadAssetFunc { internal get; set; }
+        public static LoadAssetFunc LoadAsset { internal get; set; }
 
         //异步加载方法
-        public static Func<string, string, Type, UniTask<(Object, int)>> LoadAssetAsyncFunc { internal get; set; }
+        public static LoadAssetAsyncFunc LoadAssetAsync { internal get; set; }
 
         //验证是否有效
-        public static Func<string, string, bool> VerifyAssetValidityFunc { internal get; set; }
+        public static VerifyAssetFunc VerifyAsset { internal get; set; }
 
         //释放方法
-        public static Action<int> ReleaseAction { internal get; set; }
+        public static ReleaseAssetFunc ReleaseAsset { internal get; set; }
 
         //释放所有方法
-        public static Action ReleaseAllAction { internal get; set; }
+        public static ReleaseAllAssetFunc ReleaseAllAsset { internal get; set; }
     }
 }

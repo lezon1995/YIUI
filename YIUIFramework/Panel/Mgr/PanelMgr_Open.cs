@@ -11,9 +11,7 @@ namespace YIUIFramework
         /// 主要是作为缓存PanelInfo
         /// </summary>
         private readonly Dictionary<string, PanelInfo> m_PanelCfgMap = new Dictionary<string, PanelInfo>();
-
         private readonly HashSet<string> m_PanelOpening = new HashSet<string>();
-
 
         /// <summary>
         /// 获取PanelInfo
@@ -23,27 +21,24 @@ namespace YIUIFramework
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        private PanelInfo GetPanelInfo<T>() where T : BasePanel
+        private bool TryGetPanelInfo<T>(out PanelInfo panelInfo) where T : BasePanel
         {
             var type = typeof(T);
-            var data = UIBindHelper.GetBindVoByType(type);
-            if (data == null) return null;
-            var vo = data.Value;
-            var name = type.Name;
-
-            if (!m_PanelCfgMap.ContainsKey(name))
+            if (UIBindHelper.TryGetBindVo(type, out var vo))
             {
-                var info = new PanelInfo()
+                var name = type.Name;
+                if (m_PanelCfgMap.TryGetValue(name, out panelInfo))
                 {
-                    Name = name,
-                    PkgName = vo.PkgName,
-                    ResName = vo.ResName,
-                };
+                    return true;
+                }
 
-                m_PanelCfgMap.Add(name, info);
+                panelInfo = new PanelInfo(name, vo.PkgName, vo.ResName);
+                m_PanelCfgMap.Add(name, panelInfo);
+                return true;
             }
 
-            return m_PanelCfgMap[name];
+            panelInfo = null;
+            return false;
         }
 
         /// <summary>
@@ -54,8 +49,12 @@ namespace YIUIFramework
         /// <returns></returns>
         private string GetPanelName<T>() where T : BasePanel
         {
-            var panelInfo = GetPanelInfo<T>();
-            return panelInfo?.Name;
+            if (TryGetPanelInfo<T>(out var panelInfo))
+            {
+                return panelInfo.Name;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -63,7 +62,7 @@ namespace YIUIFramework
         /// </summary>
         private async UniTask OpenPanelBefore(PanelInfo info)
         {
-            if (!info.UIBasePanel.WindowFitstOpen)
+            if (!info.Panel.WindowFitstOpen)
             {
                 await AddUICloseElse(info);
             }
@@ -76,17 +75,17 @@ namespace YIUIFramework
         {
             if (success)
             {
-                if (info.UIBasePanel.WindowFitstOpen)
+                if (info.Panel.WindowFitstOpen)
                 {
                     await AddUICloseElse(info);
                 }
             }
             else
             {
-                info.UIBasePanel.Close();
+                info.Panel.Close();
             }
 
-            return info.UIBasePanel;
+            return info.Panel;
         }
 
         private void AddOpening(string name)

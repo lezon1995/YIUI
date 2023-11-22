@@ -14,18 +14,18 @@ namespace YIUIFramework
         /// </summary>
         private async UniTask AddUICloseElse(PanelInfo info)
         {
-            if (info.UIBasePanel is not { Layer: EPanelLayer.Panel })
+            if (info.Panel is not { Layer: EPanelLayer.Panel })
             {
                 return;
             }
 
-            if (info.UIBasePanel.PanelIgnoreBack)
+            if (info.Panel.PanelIgnoreBack)
             {
                 return;
             }
 
             var layerList = GetLayerPanelInfoList(EPanelLayer.Panel);
-            var skipTween = info.UIBasePanel.WindowSkipOtherCloseTween;
+            var skipTween = info.Panel.WindowSkipOtherCloseTween;
 
             for (var i = layerList.Count - 1; i >= 0; i--)
             {
@@ -36,40 +36,40 @@ namespace YIUIFramework
                     continue;
                 }
 
-                if (child.UIBasePanel is IYIUIBack back)
+                if (child.Panel is IYIUIBack back)
                 {
                     back.DoBackClose(info);
                 }
 
-                switch (child.UIBasePanel.StackOption)
+                switch (child.Panel.StackOption)
                 {
                     case EPanelStackOption.Omit:
                         if (skipTween)
                         {
-                            child.UIBasePanel.Close(true, true);
+                            child.Panel.Close(true, true);
                         }
                         else
                         {
-                            await child.UIBasePanel.CloseAsync(true, true);
+                            await child.Panel.CloseAsync(true, true);
                         }
 
                         break;
                     case EPanelStackOption.None:
                         break;
                     case EPanelStackOption.Visible:
-                        child.UIBasePanel.SetActive(false);
+                        child.Panel.SetActive(false);
                         break;
                     case EPanelStackOption.VisibleTween:
                         if (!skipTween)
                         {
-                            await child.UIBasePanel.InternalOnWindowCloseTween();
+                            await child.Panel.InternalOnWindowCloseTween();
                         }
 
-                        child.UIBasePanel.SetActive(false);
+                        child.Panel.SetActive(false);
                         break;
                     default:
-                        Debug.LogError($"新增类型未实现 {child.UIBasePanel.StackOption}");
-                        child.UIBasePanel.SetActive(false);
+                        Debug.LogError($"新增类型未实现 {child.Panel.StackOption}");
+                        child.Panel.SetActive(false);
                         break;
                 }
             }
@@ -77,18 +77,18 @@ namespace YIUIFramework
 
         private async UniTask RemoveUIAddElse(PanelInfo info)
         {
-            if (info.UIBasePanel is not { Layer: EPanelLayer.Panel })
+            if (info.Panel is not { Layer: EPanelLayer.Panel })
             {
                 return;
             }
 
-            if (info.UIBasePanel.PanelIgnoreBack)
+            if (info.Panel.PanelIgnoreBack)
             {
                 return;
             }
 
             var layerList = GetLayerPanelInfoList(EPanelLayer.Panel);
-            var skipTween = info.UIBasePanel.WindowSkipOtherOpenTween;
+            var skipTween = info.Panel.WindowSkipOtherOpenTween;
 
             for (var i = layerList.Count - 1; i >= 0; i--)
             {
@@ -99,13 +99,13 @@ namespace YIUIFramework
                     continue;
                 }
 
-                if (child.UIBasePanel is IYIUIBack back)
+                if (child.Panel is IYIUIBack back)
                 {
                     back.DoBackAdd(info);
                 }
 
                 var isBreak = true;
-                switch (child.UIBasePanel.StackOption)
+                switch (child.Panel.StackOption)
                 {
                     case EPanelStackOption.Omit: //不可能进入这里因为他已经被关闭了 如果进入则跳过这个界面
                         isBreak = false;
@@ -113,19 +113,19 @@ namespace YIUIFramework
                     case EPanelStackOption.None:
                         break;
                     case EPanelStackOption.Visible:
-                        child.UIBasePanel.SetActive(true);
+                        child.Panel.SetActive(true);
                         break;
                     case EPanelStackOption.VisibleTween:
-                        child.UIBasePanel.SetActive(true);
+                        child.Panel.SetActive(true);
                         if (!skipTween)
                         {
-                            await child.UIBasePanel.InternalOnWindowOpenTween();
+                            await child.Panel.InternalOnWindowOpenTween();
                         }
 
                         break;
                     default:
-                        Debug.LogError($"新增类型未实现 {child.UIBasePanel.StackOption}");
-                        child.UIBasePanel.SetActive(true);
+                        Debug.LogError($"新增类型未实现 {child.Panel.StackOption}");
+                        child.Panel.SetActive(true);
                         break;
                 }
 
@@ -138,14 +138,14 @@ namespace YIUIFramework
 
         private async UniTask RemoveUIToHome(PanelInfo home, bool tween = true)
         {
-            if (home.UIBasePanel is not { Layer: EPanelLayer.Panel })
+            if (home.Panel is not { Layer: EPanelLayer.Panel })
             {
                 return;
             }
 
-            var layerList           = GetLayerPanelInfoList(EPanelLayer.Panel);
-            var skipOtherCloseTween = home.UIBasePanel.WindowSkipOtherCloseTween;
-            var skipHomeOpenTween   = home.UIBasePanel.WindowSkipHomeOpenTween;
+            var layerList = GetLayerPanelInfoList(EPanelLayer.Panel);
+            var skipOtherCloseTween = home.Panel.WindowSkipOtherCloseTween;
+            var skipHomeOpenTween = home.Panel.WindowSkipHomeOpenTween;
 
             for (var i = layerList.Count - 1; i >= 0; i--)
             {
@@ -153,7 +153,7 @@ namespace YIUIFramework
 
                 if (child != home)
                 {
-                    if (child.UIBasePanel is IYIUIBack back)
+                    if (child.Panel is IYIUIBack back)
                     {
                         back.DoBackHome(home);
                     }
@@ -170,24 +170,24 @@ namespace YIUIFramework
                     continue;
                 }
 
-                switch (child.UIBasePanel.StackOption)
+                switch (child.Panel.StackOption)
                 {
                     case EPanelStackOption.Omit:
                     case EPanelStackOption.None:
                     case EPanelStackOption.Visible:
-                        child.UIBasePanel.SetActive(true);
+                        child.Panel.SetActive(true);
                         break;
                     case EPanelStackOption.VisibleTween:
-                        child.UIBasePanel.SetActive(true);
+                        child.Panel.SetActive(true);
                         if (tween && !skipHomeOpenTween)
                         {
-                            await child.UIBasePanel.InternalOnWindowOpenTween();
+                            await child.Panel.InternalOnWindowOpenTween();
                         }
 
                         break;
                     default:
-                        Debug.LogError($"新增类型未实现 {child.UIBasePanel.StackOption}");
-                        child.UIBasePanel.SetActive(true);
+                        Debug.LogError($"新增类型未实现 {child.Panel.StackOption}");
+                        child.Panel.SetActive(true);
                         break;
                 }
             }

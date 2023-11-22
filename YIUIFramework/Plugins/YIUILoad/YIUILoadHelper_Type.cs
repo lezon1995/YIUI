@@ -20,7 +20,7 @@ namespace YIUIFramework
                 return loadObj;
             }
 
-            var (obj, hashCode) = YIUILoadDI.LoadAssetFunc(pkgName, resName, assetType);
+            (Object obj, int hash) = YIUILoadDI.LoadAsset(pkgName, resName, assetType);
             if (obj == null)
             {
                 load.RemoveRefCount();
@@ -32,7 +32,7 @@ namespace YIUIFramework
                 return null;
             }
 
-            load.ResetHandle(obj, hashCode);
+            load.ResetHandle(obj, hash);
             load.AddRefCount();
             return obj;
         }
@@ -65,7 +65,7 @@ namespace YIUIFramework
 
             load.SetWaitAsync(true);
 
-            var (obj, hashCode) = await YIUILoadDI.LoadAssetAsyncFunc(pkgName, resName, assetType);
+            (Object obj, int hash) = await YIUILoadDI.LoadAssetAsync(pkgName, resName, assetType);
             if (obj == null)
             {
                 load.RemoveRefCount();
@@ -77,7 +77,7 @@ namespace YIUIFramework
                 return null;
             }
 
-            load.ResetHandle(obj, hashCode);
+            load.ResetHandle(obj, hash);
             load.AddRefCount();
             load.SetWaitAsync(false);
             return obj;

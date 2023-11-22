@@ -1,6 +1,4 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using YIUIBind;
@@ -19,30 +17,31 @@ namespace YIUIFramework
         /// <param name="select">是否被选中</param>
         public delegate void ListItemRenderer(int index, TData data, TItemRenderer item, bool select);
 
-        private ListItemRenderer                     m_ItemRenderer;
-        private UIBindVo                             m_BindVo;
-        private IList<TData>                         m_Data;
-        private LoopScrollRect                       m_Owner;
-        private ObjCache<TItemRenderer>              m_UIBasePool;
+        private ListItemRenderer m_ItemRenderer;
+        private UIBindVo m_BindVo;
+        private IList<TData> m_Data;
+        private LoopScrollRect m_Owner;
+        private ObjCache<TItemRenderer> m_UIBasePool;
         private Dictionary<Transform, TItemRenderer> m_ItemTransformDic = new Dictionary<Transform, TItemRenderer>();
-        private Dictionary<Transform, int>           m_ItemTransformIndexDic = new Dictionary<Transform, int>();
+        private Dictionary<Transform, int> m_ItemTransformIndexDic = new Dictionary<Transform, int>();
 
         public YIUILoopScroll(
-            LoopScrollRect   owner,
+            LoopScrollRect owner,
             ListItemRenderer itemRenderer)
         {
-            var data = UIBindHelper.GetBindVoByType<TItemRenderer>();
-            if (data == null) return;
-            m_ItemTransformDic.Clear();
-            m_ItemTransformIndexDic.Clear();
-            m_BindVo             = data.Value;
-            m_ItemRenderer       = itemRenderer;
-            m_UIBasePool         = new ObjCache<TItemRenderer>(OnCreateItemRenderer);
-            m_Owner              = owner;
-            m_Owner.prefabSource = this;
-            m_Owner.dataSource   = this;
-            InitCacheParent();
-            InitClearContent();
+            if (UIBindHelper.TryGetBindVo<TItemRenderer>(out var vo))
+            {
+                m_ItemTransformDic.Clear();
+                m_ItemTransformIndexDic.Clear();
+                m_BindVo = vo;
+                m_ItemRenderer = itemRenderer;
+                m_UIBasePool = new ObjCache<TItemRenderer>(OnCreateItemRenderer);
+                m_Owner = owner;
+                m_Owner.prefabSource = this;
+                m_Owner.dataSource = this;
+                InitCacheParent();
+                InitClearContent();
+            }
         }
 
         #region Private
@@ -55,7 +54,7 @@ namespace YIUIFramework
             }
             else
             {
-                var cacheObj  = new GameObject("Cache");
+                var cacheObj = new GameObject("Cache");
                 var cacheRect = cacheObj.GetOrAddComponent<RectTransform>();
                 m_Owner.u_CacheRect = cacheRect;
                 cacheRect.SetParent(m_Owner.transform, false);

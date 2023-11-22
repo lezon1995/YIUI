@@ -36,15 +36,14 @@ namespace YIUIFramework
             var safeAreaX = Math.Max(Screen.safeArea.x, Screen.width - Screen.safeArea.xMax);
             var safeAreaY = Math.Max(Screen.safeArea.y, Screen.height - Screen.safeArea.yMax);
 
-            #if UNITY_EDITOR
-
+#if UNITY_EDITOR
             //safeAreaX = 100;
             //safeAreaY = 100;
-            #endif
+#endif
 
-            g_SafeArea = new Rect(safeAreaX, safeAreaY,
-                DesignScreenWidth_F - GetSafeValue(safeAreaX),
-                DesignScreenHeight_F - GetSafeValue(safeAreaY));
+            var width = DesignScreenWidth_F - GetSafeValue(safeAreaX);
+            var height = DesignScreenHeight_F - GetSafeValue(safeAreaY);
+            g_SafeArea = new Rect(safeAreaX, safeAreaY, width, height);
 
             InitUISafeArea();
         }

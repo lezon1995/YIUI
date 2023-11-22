@@ -49,7 +49,7 @@ namespace YIUIFramework
         {
             if (Handle != 0)
             {
-                YIUILoadDI.ReleaseAction?.Invoke(Handle);
+                YIUILoadDI.ReleaseAsset?.Invoke(Handle);
             }
 
             LoadHelper.PutLoad(PkgName, ResName);

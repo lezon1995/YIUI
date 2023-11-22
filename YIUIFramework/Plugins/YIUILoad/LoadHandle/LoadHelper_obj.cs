@@ -32,24 +32,24 @@ namespace YIUIFramework
 
         private static bool RemoveLoadHandle(Object obj)
         {
-            if (!m_ObjLoadHandle.ContainsKey(obj))
+            if (m_ObjLoadHandle.ContainsKey(obj))
             {
-                Debug.LogError($"此obj {obj.name} Handle 不存在 请检查 请先创建设置");
-                return false;
+                return m_ObjLoadHandle.Remove(obj);
             }
 
-            return m_ObjLoadHandle.Remove(obj);
+            Debug.LogError($"此obj {obj.name} Handle 不存在 请检查 请先创建设置");
+            return false;
         }
 
         internal static LoadHandle GetLoadHandle(Object obj)
         {
-            if (!m_ObjLoadHandle.ContainsKey(obj))
+            if (m_ObjLoadHandle.TryGetValue(obj, out var handle))
             {
-                Debug.LogError($"此obj {obj.name} Handle 不存在 请检查 请先创建设置");
-                return null;
+                return handle;
             }
 
-            return m_ObjLoadHandle[obj];
+            Debug.LogError($"此obj {obj.name} Handle 不存在 请检查 请先创建设置");
+            return null;
         }
     }
 }

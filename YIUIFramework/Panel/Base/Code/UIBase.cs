@@ -79,8 +79,7 @@ namespace YIUIFramework
         {
             get
             {
-                if (OwnerGameObject == null) return false;
-                return OwnerGameObject.activeSelf;
+                return OwnerGameObject && OwnerGameObject.activeSelf;
             }
         }
 
@@ -88,17 +87,17 @@ namespace YIUIFramework
         /// 初始化UIBase 由PanelMgr创建对象后调用
         /// 外部禁止
         /// </summary>
-        internal bool InitUIBase(UIBindVo uiBindVo, GameObject ownerGameObject)
+        internal bool InitUIBase(UIBindVo uiBindVo, GameObject gameObject)
         {
-            if (ownerGameObject == null)
+            if (gameObject == null)
             {
                 Debug.LogError($"null对象无法初始化");
                 return false;
             }
 
-            OwnerGameObject = ownerGameObject;
-            OwnerCanvasGroup = ownerGameObject.GetOrAddComponent<CanvasGroup>();
-            OwnerRectTransform = ownerGameObject.GetComponent<RectTransform>();
+            OwnerGameObject = gameObject;
+            OwnerCanvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
+            OwnerRectTransform = gameObject.GetComponent<RectTransform>();
             m_CDETable = OwnerGameObject.GetComponent<UIBindCDETable>();
             if (CDETable == null)
             {

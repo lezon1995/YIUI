@@ -19,10 +19,13 @@ namespace YIUIFramework
         {
             BindInit = UIBindHelper.InitAllBind();
 
-            if (!await InitRoot()) return false;
+            if (await InitRoot())
+            {
+                InitSafeArea();
+                return true;
+            }
 
-            InitSafeArea();
-            return true;
+            return false;
         }
 
         protected override void OnDispose()

@@ -22,14 +22,16 @@ namespace YIUIFramework
 
             var pkgDic = m_AllLoadDic[pkgName];
 
-            if (!pkgDic.ContainsKey(resName))
+            if (pkgDic.TryGetValue(resName, out var load))
             {
-                var group = RefPool.Get<LoadHandle>();
-                group.SetGroupHandle(pkgName, resName);
-                pkgDic.Add(resName, group);
+                return load;
             }
 
-            return pkgDic[resName];
+            var group = RefPool.Get<LoadHandle>();
+            group.SetGroupHandle(pkgName, resName);
+            pkgDic.Add(resName, group);
+
+            return group;
         }
 
         internal static bool PutLoad(string pkgName, string resName)

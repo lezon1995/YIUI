@@ -12,7 +12,7 @@ namespace YIUIFramework
         /// </summary>
         internal static bool VerifyAssetValidity(string pkgName, string resName)
         {
-            return YIUILoadDI.VerifyAssetValidityFunc(pkgName, resName);
+            return YIUILoadDI.VerifyAsset(pkgName, resName);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace YIUIFramework
         internal static void ReleaseAll()
         {
             LoadHelper.PutAll();
-            YIUILoadDI.ReleaseAllAction?.Invoke();
+            YIUILoadDI.ReleaseAllAsset?.Invoke();
         }
     }
 }

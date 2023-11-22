@@ -29,7 +29,7 @@ namespace YIUIFramework
                 return null;
             }
 
-            if (info.UIBasePanel == null)
+            if (info.Panel == null)
             {
                 if (PanelIsOpening(panelName))
                 {
@@ -51,7 +51,6 @@ namespace YIUIFramework
             }
 
             AddUI(info);
-
             return info;
         }
 
@@ -66,7 +65,7 @@ namespace YIUIFramework
 
             try
             {
-                success = await info.UIBasePanel.Open();
+                success = await info.Panel.Open();
             }
             catch (Exception e)
             {
@@ -87,7 +86,7 @@ namespace YIUIFramework
 
             try
             {
-                success = await info.UIBasePanel.Open(p1);
+                success = await info.Panel.Open(p1);
             }
             catch (Exception e)
             {
@@ -108,7 +107,7 @@ namespace YIUIFramework
 
             try
             {
-                success = await info.UIBasePanel.Open(p1, p2);
+                success = await info.Panel.Open(p1, p2);
             }
             catch (Exception e)
             {
@@ -129,7 +128,7 @@ namespace YIUIFramework
 
             try
             {
-                success = await info.UIBasePanel.Open(p1, p2, p3);
+                success = await info.Panel.Open(p1, p2, p3);
             }
             catch (Exception e)
             {
@@ -150,7 +149,7 @@ namespace YIUIFramework
 
             try
             {
-                success = await info.UIBasePanel.Open(p1, p2, p3, p4);
+                success = await info.Panel.Open(p1, p2, p3, p4);
             }
             catch (Exception e)
             {
@@ -171,7 +170,7 @@ namespace YIUIFramework
 
             try
             {
-                success = await info.UIBasePanel.Open(p1, p2, p3, p4, p5);
+                success = await info.Panel.Open(p1, p2, p3, p4, p5);
             }
             catch (Exception e)
             {
@@ -191,25 +190,22 @@ namespace YIUIFramework
         /// 这个根据BindVo创建  为什么没有直接用VO  因为里面有Panel 实例对象
         /// 这个k 根据resName
         /// </summary>
-        private PanelInfo GetPanelInfo(string panelName)
+        private bool TryGetPanelInfo(string panelName, out PanelInfo panelInfo)
         {
-            var data = UIBindHelper.GetBindVoByPanelName(panelName);
-            if (data == null) return null;
-            var vo = data.Value;
-
-            if (!m_PanelCfgMap.ContainsKey(panelName))
+            if (UIBindHelper.TryGetBindVoByPanelName(panelName, out var vo))
             {
-                var info = new PanelInfo()
+                if (m_PanelCfgMap.TryGetValue(panelName, out panelInfo))
                 {
-                    Name = panelName,
-                    PkgName = vo.PkgName,
-                    ResName = vo.ResName,
-                };
+                    return true;
+                }
 
-                m_PanelCfgMap.Add(panelName, info);
+                panelInfo = new PanelInfo(panelName, vo.PkgName, vo.ResName);
+                m_PanelCfgMap.Add(panelName, panelInfo);
+                return true;
             }
 
-            return m_PanelCfgMap[panelName];
+            panelInfo = null;
+            return false;
         }
 
         /// <summary>
@@ -218,28 +214,33 @@ namespace YIUIFramework
         /// </summary>
         public async UniTask<BasePanel> OpenPanelAsync(string panelName, object param = null)
         {
-            var info = GetPanelInfo(panelName);
-            if (info == null) return default;
-
-            var panel = await OpenPanelStartAsync(panelName);
-            if (panel == null) return default;
-
-            var success = false;
-
-            await OpenPanelBefore(info);
-
-            try
+            if (TryGetPanelInfo(panelName, out var info))
             {
-                var p = ParamVo.Get(param);
-                success = await info.UIBasePanel.Open(p);
-                ParamVo.Put(p);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"panel={info.ResName}, err={e.Message}{e.StackTrace}");
+                var panel = await OpenPanelStartAsync(panelName);
+                if (panel == null)
+                {
+                    return default;
+                }
+
+                var success = false;
+
+                await OpenPanelBefore(info);
+
+                try
+                {
+                    var p = ParamVo.Get(param);
+                    success = await info.Panel.Open(p);
+                    ParamVo.Put(p);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"panel={info.ResName}, err={e.Message}{e.StackTrace}");
+                }
+
+                return await OpenPanelAfter(info, success);
             }
 
-            return await OpenPanelAfter(info, success);
+            return default;
         }
 
         public async UniTask<BasePanel> OpenPanelAsync(string panelName, object param1, object param2)

@@ -117,12 +117,18 @@ namespace YIUIFramework
         public static Transform FindChildByName(this Transform trans, string childName)
         {
             var childT = trans.Find(childName);
-            if (childT != null) return childT;
+            if (childT)
+            {
+                return childT;
+            }
 
             for (int i = 0; i < trans.childCount; i++)
             {
                 childT = FindChildByName(trans.GetChild(i), childName);
-                if (childT != null) return childT;
+                if (childT)
+                {
+                    return childT;
+                }
             }
 
             return null;

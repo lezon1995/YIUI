@@ -18,10 +18,14 @@ namespace YIUIFramework
         internal static GameObject LoadAssetInstantiate(string pkgName, string resName)
         {
             var asset = LoadAsset<GameObject>(pkgName, resName);
-            if (asset == null) return null;
-            var obj = Object.Instantiate(asset);
-            g_ObjectMap.Add(obj, asset);
-            return obj;
+            if (asset)
+            {
+                var obj = Object.Instantiate(asset);
+                g_ObjectMap.Add(obj, asset);
+                return obj;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -30,10 +34,14 @@ namespace YIUIFramework
         internal static async UniTask<GameObject> LoadAssetAsyncInstantiate(string pkgName, string resName)
         {
             var asset = await LoadAssetAsync<GameObject>(pkgName, resName);
-            if (asset == null) return null;
-            var obj = Object.Instantiate(asset);
-            g_ObjectMap.Add(obj, asset);
-            return obj;
+            if (asset)
+            {
+                var obj = Object.Instantiate(asset);
+                g_ObjectMap.Add(obj, asset);
+                return obj;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -57,9 +65,11 @@ namespace YIUIFramework
         /// </summary>
         internal static void ReleaseInstantiate(Object gameObject)
         {
-            if (!g_ObjectMap.TryGetValue(gameObject, out var asset)) return;
-            g_ObjectMap.Remove(gameObject);
-            Release(asset);
+            if (g_ObjectMap.TryGetValue(gameObject, out var asset))
+            {
+                g_ObjectMap.Remove(gameObject);
+                Release(asset);
+            }
         }
     }
 }

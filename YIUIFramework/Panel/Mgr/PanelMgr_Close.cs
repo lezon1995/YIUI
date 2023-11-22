@@ -12,11 +12,11 @@ namespace YIUIFramework
         /// </summary>
         public PanelInfo GetTopPanel(EPanelLayer layer = EPanelLayer.Any, EPanelOption ignoreOption = EPanelOption.Container)
         {
-            var layerCount = (int) EPanelLayer.Count;
+            const int layerCount = (int)EPanelLayer.Count;
 
             for (var i = 0; i < layerCount; i++)
             {
-                var currentLayer = (EPanelLayer) i;
+                var currentLayer = (EPanelLayer)i;
 
                 //如果是任意层级则 从上到下找
                 //否则只会在目标层级上找
@@ -30,18 +30,18 @@ namespace YIUIFramework
                 foreach (var info in list)
                 {
                     //禁止关闭的界面无法获取到
-                    if (info.UIBasePanel.PanelDisClose)
+                    if (info.Panel.PanelDisClose)
                     {
                         continue;
                     }
 
                     //有忽略操作 且满足调节 则这个界面无法获取到
-                    if (ignoreOption != EPanelOption.None && (info.UIBasePanel.PanelOption & ignoreOption) != 0)
+                    if (ignoreOption != EPanelOption.None && (info.Panel.PanelOption & ignoreOption) != 0)
                     {
                         continue;
                     }
 
-                    if (layer == EPanelLayer.Any || info.UIBasePanel.Layer == layer)
+                    if (layer == EPanelLayer.Any || info.Panel.Layer == layer)
                     {
                         return info;
                     }
@@ -109,14 +109,17 @@ namespace YIUIFramework
 
             m_PanelCfgMap.TryGetValue(panelName, out var info);
 
-            if (info?.UIBasePanel == null) return;
+            if (info is not { Panel: not null })
+            {
+                return;
+            }
 
-            if (info.UIBasePanel.PanelOption.Has(EPanelOption.DisClose))
+            if (info.Panel.PanelOption.Has(EPanelOption.DisClose))
             {
                 bool allowClose = false; //是否允许关闭
 
                 //如果继承禁止关闭接口 可返回是否允许关闭自行处理
-                if (info.UIBasePanel is IYIUIBanClose disClose)
+                if (info.Panel is IYIUIBanClose disClose)
                 {
                     allowClose = disClose.DoBanClose();
                 }
@@ -128,8 +131,8 @@ namespace YIUIFramework
                 }
             }
 
-            await info.UIBasePanel.InternalOnWindowCloseTween(tween);
-            info.UIBasePanel.OnClose();
+            await info.Panel.InternalOnWindowCloseTween(tween);
+            info.Panel.OnClose();
 
             if (!ignoreElse)
             {
@@ -174,7 +177,7 @@ namespace YIUIFramework
 #endif
 
             m_PanelCfgMap.TryGetValue(homeName, out var homeInfo);
-            if (homeInfo?.UIBasePanel != null)
+            if (homeInfo is { Panel: not null })
             {
                 await RemoveUIToHome(homeInfo, tween);
             }

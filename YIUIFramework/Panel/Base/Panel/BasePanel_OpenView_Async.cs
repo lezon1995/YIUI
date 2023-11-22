@@ -166,9 +166,11 @@ namespace YIUIFramework
                 return view;
             }
 
-            var value = UIBindHelper.GetBindVoByPath(UIPkgName, viewName);
-            if (value == null) return null;
-            var bindVo = value.Value;
+            var success = UIBindHelper.TryGetBindVoByPath(UIPkgName, viewName, out var vo);
+            if (success == false)
+            {
+                return null;
+            }
 
             if (ViewIsOpening(viewName))
             {
@@ -177,7 +179,7 @@ namespace YIUIFramework
             }
 
             AddOpening(viewName);
-            view = (BaseView)await YIUIFactory.InstantiateAsync(bindVo, parent);
+            view = (BaseView)await YIUIFactory.InstantiateAsync(vo, parent);
             RemoveOpening(viewName);
 
             m_ExistView.Add(viewName, view);

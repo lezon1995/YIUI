@@ -110,21 +110,23 @@ namespace YIUIFramework
         /// </summary>
         /// <param name="uiType"></param>
         /// <returns></returns>
-        public static UIBindVo? GetBindVoByType(Type uiType)
+        public static bool TryGetBindVo(Type uiType, out UIBindVo uiBindVo)
         {
+            uiBindVo = default;
             if (uiType == null)
             {
                 Debug.LogError($"空 无法取到这个包信息 请检查");
-                return null;
+                return false;
             }
 
             if (g_UITypeToPkgInfo.TryGetValue(uiType, out var vo))
             {
-                return vo;
+                uiBindVo = vo;
+                return true;
             }
 
             Debug.LogError($"未获取到这个UI包信息 请检查  {uiType.Name}");
-            return null;
+            return false;
         }
 
         /// <summary>
@@ -132,37 +134,39 @@ namespace YIUIFramework
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static UIBindVo? GetBindVoByType<T>()
+        public static bool TryGetBindVo<T>(out UIBindVo uiBindVo)
         {
-            return GetBindVoByType(typeof(T));
+            return TryGetBindVo(typeof(T), out uiBindVo);
         }
 
         /// <summary>
         /// 根据唯一ID获取
         /// 由pkg+res 拼接的唯一ID
         /// </summary>
-        public static UIBindVo? GetBindVoByPath(string pkgName, string resName)
+        public static bool TryGetBindVoByPath(string pkgName, string resName, out UIBindVo uiBindVo)
         {
+            uiBindVo = default;
+
             if (string.IsNullOrEmpty(pkgName) || string.IsNullOrEmpty(resName))
             {
                 Debug.LogError($"空名称 无法取到这个包信息 请检查");
-                return null;
+                return false;
             }
 
-            if (!g_UIPathToPkgInfo.ContainsKey(pkgName))
+            if (g_UIPathToPkgInfo.TryGetValue(pkgName, out var subDict))
             {
-                Debug.LogError($"不存在这个包信息 请检查 {pkgName}");
-                return null;
+                if (subDict.TryGetValue(resName, out var vo))
+                {
+                    uiBindVo = vo;
+                    return true;
+                }
+
+                Debug.LogError($"未获取到这个包信息 请检查  {pkgName} {resName}");
+                return false;
             }
 
-            if (g_UIPathToPkgInfo[pkgName].TryGetValue(resName, out var vo))
-            {
-                return vo;
-            }
-
-            Debug.LogError($"未获取到这个包信息 请检查  {pkgName} {resName}");
-
-            return null;
+            Debug.LogError($"不存在这个包信息 请检查 {pkgName}");
+            return false;
         }
 
         /// <summary>
@@ -170,22 +174,24 @@ namespace YIUIFramework
         /// 只有是panel才会存在的信息
         /// 非Panel请使用其他
         /// </summary>
-        internal static UIBindVo? GetBindVoByPanelName(string panelName)
+        internal static bool TryGetBindVoByPanelName(string panelName, out UIBindVo uiBindVo)
         {
+            uiBindVo = default;
+
             if (string.IsNullOrEmpty(panelName))
             {
                 Debug.LogError($"空名称 无法取到这个包信息 请检查");
-                return null;
+                return false;
             }
 
             if (g_UIPanelNameToPkgInfo.TryGetValue(panelName, out var vo))
             {
-                return vo;
+                uiBindVo = vo;
+                return true;
             }
 
             Debug.LogError($"未获取到这个包信息 请检查  {panelName}");
-
-            return null;
+            return false;
         }
 
         /// <summary>

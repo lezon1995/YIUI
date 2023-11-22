@@ -130,27 +130,58 @@ namespace YIUIFramework
 
         internal bool AutoCheck()
         {
-            if (!UIOperationHelper.CheckUIOperation(this)) return false;
-            if (!UICreateModule.InitVoName(this)) return false;
+            if (!UIOperationHelper.CheckUIOperation(this))
+            {
+                return false;
+            }
+
+            if (!UICreateModule.InitVoName(this))
+            {
+                return false;
+            }
+
             OnValueChangedEUICodeType();
             OnValueChangedEPanelLayer();
             if (UICodeType == EUICodeType.Panel && IsSplitData)
             {
                 PanelSplitData.Panel = gameObject;
-                if (!PanelSplitData.AutoCheck()) return false;
+                if (!PanelSplitData.AutoCheck())
+                {
+                    return false;
+                }
             }
 
             UICreateModule.RefreshChildCdeTable(this);
-            ComponentTable?.AutoCheck();
-            DataTable?.AutoCheck();
-            EventTable?.AutoCheck();
+            if (ComponentTable)
+            {
+                ComponentTable.AutoCheck();
+            }
+
+            if (DataTable)
+            {
+                DataTable.AutoCheck();
+            }
+
+            if (EventTable)
+            {
+                EventTable.AutoCheck();
+            }
+
             return true;
         }
 
         private bool ShowCreateBtnByHierarchy()
         {
-            if (string.IsNullOrEmpty(PkgName) || string.IsNullOrEmpty(ResName)) return false;
-            if (!UIOperationHelper.CheckUIOperation(this, false)) return false;
+            if (string.IsNullOrEmpty(PkgName) || string.IsNullOrEmpty(ResName))
+            {
+                return false;
+            }
+
+            if (!UIOperationHelper.CheckUIOperation(this, false))
+            {
+                return false;
+            }
+
             return !PrefabUtility.IsPartOfPrefabAsset(this);
         }
 
@@ -159,7 +190,10 @@ namespace YIUIFramework
         [ShowIf("ShowCreateBtnByHierarchy")]
         internal void CreateUICodeByHierarchy()
         {
-            if (!ShowCreateBtnByHierarchy()) return;
+            if (!ShowCreateBtnByHierarchy())
+            {
+                return;
+            }
 
             var prefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
             if (prefabStage == null)
@@ -180,7 +214,11 @@ namespace YIUIFramework
             prefabStage.ClearDirtiness();
 
             var cdeTable = AssetDatabase.LoadAssetAtPath<UIBindCDETable>(path);
-            if (cdeTable == null) return;
+            if (cdeTable == null)
+            {
+                return;
+            }
+
             cdeTable.CreateUICode();
 
             AssetDatabase.OpenAsset(cdeTable);
@@ -188,8 +226,16 @@ namespace YIUIFramework
 
         private bool ShowCreateBtn()
         {
-            if (IsSplitData) return false;
-            if (!UIOperationHelper.CheckUIOperationAll(this, false)) return false;
+            if (IsSplitData)
+            {
+                return false;
+            }
+
+            if (!UIOperationHelper.CheckUIOperationAll(this, false))
+            {
+                return false;
+            }
+
             return true;
         }
 
@@ -205,8 +251,7 @@ namespace YIUIFramework
 
         private bool ShowPanelSourceSplit()
         {
-            if (!UIOperationHelper.CheckUIOperationAll(this, false)) return false;
-            return IsSplitData;
+            return UIOperationHelper.CheckUIOperationAll(this, false) && IsSplitData;
         }
 
         [GUIColor(0f, 0.4f, 0.8f)]
@@ -214,7 +259,10 @@ namespace YIUIFramework
         [ShowIf("ShowPanelSourceSplit")]
         internal void PanelSourceSplit()
         {
-            if (!UIOperationHelper.CheckUIOperation(this)) return;
+            if (!UIOperationHelper.CheckUIOperation(this))
+            {
+                return;
+            }
 
             if (IsSplitData)
             {
@@ -236,28 +284,48 @@ namespace YIUIFramework
 
         private void OnValidate()
         {
-            ComponentTable ??= GetComponent<UIBindComponentTable>();
-            DataTable ??= GetComponent<UIBindDataTable>();
-            EventTable ??= GetComponent<UIBindEventTable>();
+            if (ComponentTable == null)
+            {
+                ComponentTable = GetComponent<UIBindComponentTable>();
+            }
+
+            if (DataTable == null)
+            {
+                DataTable = GetComponent<UIBindDataTable>();
+            }
+
+            if (EventTable == null)
+            {
+                EventTable = GetComponent<UIBindEventTable>();
+            }
         }
 
         private void AddComponentTable()
         {
-            if (!UIOperationHelper.CheckUIOperation()) return;
+            if (!UIOperationHelper.CheckUIOperation())
+            {
+                return;
+            }
 
             ComponentTable = gameObject.GetOrAddComponent<UIBindComponentTable>();
         }
 
         private void AddDataTable()
         {
-            if (!UIOperationHelper.CheckUIOperation()) return;
+            if (!UIOperationHelper.CheckUIOperation())
+            {
+                return;
+            }
 
             DataTable = gameObject.GetOrAddComponent<UIBindDataTable>();
         }
 
         private void AddEventTable()
         {
-            if (!UIOperationHelper.CheckUIOperation()) return;
+            if (!UIOperationHelper.CheckUIOperation())
+            {
+                return;
+            }
 
             EventTable = gameObject.GetOrAddComponent<UIBindEventTable>();
         }

@@ -41,7 +41,7 @@ namespace YIUIFramework
 
             load.SetWaitAsync(true);
 
-            var (obj, hashCode) = await YIUILoadDI.LoadAssetAsyncFunc(pkgName, resName, typeof(T));
+            (Object obj, int hash) = await YIUILoadDI.LoadAssetAsync(pkgName, resName, typeof(T));
 
             if (obj == null)
             {
@@ -54,7 +54,7 @@ namespace YIUIFramework
                 return null;
             }
 
-            load.ResetHandle(obj, hashCode);
+            load.ResetHandle(obj, hash);
             load.AddRefCount();
             load.SetWaitAsync(false);
             return (T)obj;

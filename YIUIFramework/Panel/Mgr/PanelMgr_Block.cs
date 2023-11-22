@@ -87,9 +87,9 @@ namespace YIUIFramework
             }
         }
 
-        private void OnCountDownLayerOption(double residuetime, double elapsetime, double totaltime)
+        private void OnCountDownLayerOption(double residue, double elapsed, double total)
         {
-            if (residuetime <= 0)
+            if (residue <= 0)
             {
                 m_LastCountDownGuid = 0;
 

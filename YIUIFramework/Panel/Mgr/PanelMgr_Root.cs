@@ -66,7 +66,12 @@ namespace YIUIFramework
 
             UICanvasRoot = UICanvas.gameObject;
 
-            UILayerRoot = UICanvasRoot.transform.FindChildByName(UILayerRootName)?.GetComponent<RectTransform>();
+            Transform transform = UICanvasRoot.transform.FindChildByName(UILayerRootName);
+            if (transform)
+            {
+                UILayerRoot = transform.GetComponent<RectTransform>();
+            }
+
             if (UILayerRoot == null)
             {
                 Debug.LogError($"初始化错误 没有找到UILayerRoot");
@@ -121,13 +126,15 @@ namespace YIUIFramework
                 m_AllPanelLayer.Add((EPanelLayer)i, rectDic);
             }
 
-            InitAddUIBlock(); //所有层级初始化后添加一个终极屏蔽层 可根据API 定时屏蔽UI操作
+            //所有层级初始化后添加一个终极屏蔽层 可根据API 定时屏蔽UI操作
+            InitAddUIBlock();
 
             UICamera.transform.localPosition = new Vector3(UILayerRoot.localPosition.x, UILayerRoot.localPosition.y, -LayerDistance);
 
             UICamera.clearFlags = CameraClearFlags.Depth;
             UICamera.orthographic = true;
-            UICamera.farClipPlane = ((len + 1) * LayerDistance) * UICanvasRoot.transform.localScale.x; //没必要设置的很大 不需要可以注释
+            //没必要设置的很大 不需要可以注释
+            UICamera.farClipPlane = ((len + 1) * LayerDistance) * UICanvasRoot.transform.localScale.x;
 
             return true;
         }

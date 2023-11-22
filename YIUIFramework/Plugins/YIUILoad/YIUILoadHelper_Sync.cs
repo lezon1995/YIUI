@@ -23,7 +23,7 @@ namespace YIUIFramework
                 return (T)loadObj;
             }
 
-            var (obj, hashCode) = YIUILoadDI.LoadAssetFunc(pkgName, resName, typeof(T));
+            (Object obj, int hash) = YIUILoadDI.LoadAsset(pkgName, resName, typeof(T));
             if (obj == null)
             {
                 load.RemoveRefCount();
@@ -35,7 +35,7 @@ namespace YIUIFramework
                 return null;
             }
 
-            load.ResetHandle(obj, hashCode);
+            load.ResetHandle(obj, hash);
             load.AddRefCount();
             return (T)obj;
         }

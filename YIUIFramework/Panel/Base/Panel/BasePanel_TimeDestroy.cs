@@ -21,7 +21,10 @@ namespace YIUIFramework
 
         internal void StopCountDownDestroyPanel()
         {
-            if (m_Cts == null) return;
+            if (m_Cts == null)
+            {
+                return;
+            }
 
             m_Cts.Cancel();
             m_Cts.Dispose();
@@ -34,7 +37,7 @@ namespace YIUIFramework
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(CachePanelTime), cancellationToken: token);
             }
-            catch (OperationCanceledException e)
+            catch (OperationCanceledException)
             {
                 //取消倒计时 正常操作不需要日志
                 return;

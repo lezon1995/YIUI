@@ -12,7 +12,6 @@ namespace YIUIFramework
         private UIPanelSplitData m_PanelSplitData;
 
         private readonly Dictionary<string, BaseView> m_ExistView = new Dictionary<string, BaseView>();
-
         private readonly Dictionary<string, RectTransform> m_ViewParent = new Dictionary<string, RectTransform>();
 
         /// <summary>
@@ -23,7 +22,23 @@ namespace YIUIFramework
         /// <summary>
         /// 外界可判断的当前打开的view名字
         /// </summary>
-        public string CurrentOpenViewName => u_CurrentOpenView?.UIResName ?? "";
+        public string CurrentOpenViewName
+        {
+            get
+            {
+                if (u_CurrentOpenView != null)
+                {
+                    if (u_CurrentOpenView.UIResName != null)
+                    {
+                        return u_CurrentOpenView.UIResName;
+                    }
+
+                    return "";
+                }
+
+                return "";
+            }
+        }
 
         private readonly HashSet<string> m_ViewOpening = new HashSet<string>();
 
@@ -65,7 +80,11 @@ namespace YIUIFramework
                 var viewBase = CDETable.FindUIBase<UIBase>(viewName);
 
                 //如果没有则通用重新创建
-                viewBase ??= YIUIFactory.CreateCommon(UIPkgName, viewName, viewTsf.gameObject);
+                if (viewBase == null)
+                {
+                    viewBase = YIUIFactory.CreateCommon(UIPkgName, viewName, viewTsf.gameObject);
+                }
+
                 switch (viewBase)
                 {
                     case null:

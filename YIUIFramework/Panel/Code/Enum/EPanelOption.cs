@@ -37,7 +37,7 @@ namespace YIUIFramework
 
         public static void Unset(ref this EPanelOption owner, EPanelOption option)
         {
-            owner &= (~option);
+            owner &= ~option;
         }
 
         public static bool Has(this EPanelOption owner, EPanelOption option)

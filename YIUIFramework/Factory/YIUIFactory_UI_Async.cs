@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace YIUIFramework
 {
@@ -7,18 +7,19 @@ namespace YIUIFramework
     {
         public static async UniTask<T> InstantiateAsync<T>(RectTransform parent = null) where T : UIBase
         {
-            var data = UIBindHelper.GetBindVoByType<T>();
-            if (data == null) return null;
-            var vo = data.Value;
+            if (UIBindHelper.TryGetBindVo<T>(out var vo))
+            {
+                return await InstantiateAsync<T>(vo, parent);
+            }
 
-            return await InstantiateAsync<T>(vo, parent);
+            return null;
         }
 
         public static async UniTask<T> InstantiateAsync<T>(UIBindVo vo, RectTransform parent = null) where T : UIBase
         {
             var uiBase = await CreateAsync(vo);
             SetParent(uiBase.OwnerRectTransform, parent ? parent : PanelMgr.Inst.UICache);
-            return (T) uiBase;
+            return (T)uiBase;
         }
 
         public static async UniTask<UIBase> InstantiateAsync(UIBindVo vo, RectTransform parent = null)
@@ -30,10 +31,12 @@ namespace YIUIFramework
 
         internal static async UniTask<UIBase> CreatePanelAsync(PanelInfo panelInfo)
         {
-            var bingVo = UIBindHelper.GetBindVoByPath(panelInfo.PkgName, panelInfo.ResName);
-            if (bingVo == null) return null;
-            var uiBase = await CreateAsync(bingVo.Value);
-            return uiBase;
+            if (UIBindHelper.TryGetBindVoByPath(panelInfo.PkgName, panelInfo.ResName, out var vo))
+            {
+                return await CreateAsync(vo);
+            }
+
+            return null;
         }
 
         private static async UniTask<UIBase> CreateAsync(UIBindVo vo)

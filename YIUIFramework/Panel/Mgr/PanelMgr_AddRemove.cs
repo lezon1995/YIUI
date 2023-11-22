@@ -10,10 +10,10 @@
         /// </summary>
         private void AddUI(PanelInfo panelInfo)
         {
-            var uiBasePanel = panelInfo.UIBasePanel;
-            var panelLayer = uiBasePanel.Layer;
-            var priority = uiBasePanel.Priority;
-            var uiRect = uiBasePanel.OwnerRectTransform;
+            var panel = panelInfo.Panel;
+            var panelLayer = panel.Layer;
+            var priority = panel.Priority;
+            var uiRect = panel.OwnerRectTransform;
 
             var layerRect = GetLayerRect(panelLayer);
             if (layerRect == null)
@@ -42,7 +42,7 @@
             for (var i = infoList.Count - 1; i >= 0;)
             {
                 var info = infoList[i];
-                var infoPriority = info.UIBasePanel?.Priority ?? 0;
+                var infoPriority = info.Panel != null ? info.Panel.Priority : 0;
 
                 //当前优先级比最大的都还大 那么直接放到最前面
                 if (priority >= infoPriority)
@@ -68,9 +68,9 @@
             uiRect.ResetToFullScreen();
             uiRect.ResetLocalPosAndRot();
 
-            if (uiBasePanel.PanelTimeCache)
+            if (panel.PanelTimeCache)
             {
-                uiBasePanel.StopCountDownDestroyPanel();
+                panel.StopCountDownDestroyPanel();
             }
         }
 
@@ -79,16 +79,16 @@
         /// </summary>
         private void RemoveUI(PanelInfo panelInfo)
         {
-            if (panelInfo.UIBasePanel == null)
+            if (panelInfo.Panel == null)
             {
                 UnityEngine.Debug.LogError($"无法移除一个null panelInfo 数据 {panelInfo.ResName}");
                 return;
             }
 
-            var uiBasePanel = panelInfo.UIBasePanel;
-            var foreverCache = uiBasePanel.PanelForeverCache;
-            var timeCache = uiBasePanel.PanelTimeCache;
-            var panelLayer = uiBasePanel.Layer;
+            var panel = panelInfo.Panel;
+            var foreverCache = panel.PanelForeverCache;
+            var timeCache = panel.PanelTimeCache;
+            var panelLayer = panel.Layer;
             RemoveLayerPanelInfo(panelLayer, panelInfo);
 
             if (foreverCache || timeCache)
@@ -96,20 +96,20 @@
                 //缓存界面只是单纯的吧界面隐藏
                 //再次被打开 如何重构界面需要自行设置
                 var layerRect = GetLayerRect(EPanelLayer.Cache);
-                var uiRect = uiBasePanel.OwnerRectTransform;
+                var uiRect = panel.OwnerRectTransform;
                 uiRect.SetParent(layerRect, false);
-                uiBasePanel.SetActive(false);
+                panel.SetActive(false);
 
                 if (timeCache && !foreverCache)
                 {
                     //根据配置时间X秒后自动摧毁
                     //如果X秒内又被打开则可复用
-                    uiBasePanel.CacheTimeCountDownDestroyPanel();
+                    panel.CacheTimeCountDownDestroyPanel();
                 }
             }
             else
             {
-                var uiObj = uiBasePanel.OwnerGameObject;
+                var uiObj = panel.OwnerGameObject;
                 UnityEngine.Object.Destroy(uiObj);
                 panelInfo.Reset(null);
             }
@@ -117,8 +117,10 @@
 
         internal void RemoveUIReset(string panelName)
         {
-            var panelInfo = GetPanelInfo(panelName);
-            panelInfo?.Reset(null);
+            if (TryGetPanelInfo(panelName, out var panelInfo))
+            {
+                panelInfo.Reset(null);
+            }
         }
     }
 }
