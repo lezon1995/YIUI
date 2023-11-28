@@ -27,15 +27,26 @@ namespace YIUIFramework.Editor
         {
             var tab = self.ComponentTable;
             var count = tab.AllBindDic.Count;
-            if (tab == null || count == 0) return;
+            if (tab == null || count == 0)
+            {
+                return;
+            }
 
             sb.AppendLine();
             sb.AppendFormat("        #region Component");
             sb.AppendLine();
             foreach (var (name, component) in tab.AllBindDic)
             {
-                if (string.IsNullOrEmpty(name)) continue;
-                if (component == null) continue;
+                if (string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+
+                if (component == null)
+                {
+                    continue;
+                }
+
                 sb.AppendFormat("        public {0} {1} {{ get; private set; }}\r\n", component.GetType(), name);
             }
 
@@ -48,16 +59,27 @@ namespace YIUIFramework.Editor
         {
             var tab = self.DataTable;
             var count = tab.DataDic.Count;
-            if (tab == null || count == 0) return;
+            if (tab == null || count == 0)
+            {
+                return;
+            }
 
             sb.AppendLine();
             sb.AppendFormat("        #region Data");
             sb.AppendLine();
-            foreach (var (name, data) in tab.DataDic)
+            foreach (var (name, uiData) in tab.DataDic)
             {
-                if (string.IsNullOrEmpty(name)) continue;
-                var dataValue = data?.DataValue;
-                if (dataValue == null) continue;
+                if (string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+
+                var dataValue = uiData?.DataValue;
+                if (dataValue == null)
+                {
+                    continue;
+                }
+
                 sb.AppendFormat("        public {0} {1} {{ get; private set; }}\r\n", dataValue.GetType(), name);
             }
 
@@ -70,18 +92,29 @@ namespace YIUIFramework.Editor
         {
             var tab = self.EventTable;
             var count = tab.EventDic.Count;
-            if (tab == null || count == 0) return;
+            if (tab == null || count == 0)
+            {
+                return;
+            }
 
             sb.AppendLine();
             sb.AppendFormat("        #region Event");
             sb.AppendLine();
 
-            foreach (var (name, eventBase) in tab.EventDic)
+            foreach (var (name, uiEvent) in tab.EventDic)
             {
-                if (string.IsNullOrEmpty(name)) continue;
-                if (eventBase == null) continue;
-                sb.AppendFormat("        protected {0} {1} {{ get; private set; }}\r\n", eventBase.GetEventType(), name);
-                sb.AppendFormat("        protected {0} {1} {{ get; private set; }}\r\n", eventBase.GetEventHandleType(), $"{name}Handle");
+                if (string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+
+                if (uiEvent == null)
+                {
+                    continue;
+                }
+
+                sb.AppendFormat("        protected {0} {1} {{ get; private set; }}\r\n", uiEvent.GetEventType(), name);
+                sb.AppendFormat("        protected {0} {1} {{ get; private set; }}\r\n", uiEvent.GetEventHandleType(), $"{name}Handle");
             }
 
             sb.AppendLine();
@@ -92,16 +125,28 @@ namespace YIUIFramework.Editor
         private static void GetCDETable(this UIBindCDETable self, StringBuilder sb)
         {
             var tab = self.AllChildCdeTable;
-            if (tab == null) return;
+            if (tab == null)
+            {
+                return;
+            }
+
             var existName = new HashSet<string>();
 
-            foreach (var value in tab)
+            foreach (var table in tab)
             {
-                var name = value.name;
-                if (string.IsNullOrEmpty(name)) continue;
-                var pkgName = value.PkgName;
-                var resName = value.ResName;
-                if (string.IsNullOrEmpty(pkgName) || string.IsNullOrEmpty(resName)) continue;
+                var name = table.name;
+                if (string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+
+                var pkgName = table.PkgName;
+                var resName = table.ResName;
+                if (string.IsNullOrEmpty(pkgName) || string.IsNullOrEmpty(resName))
+                {
+                    continue;
+                }
+
                 var newName = GetCDEUIName(name);
                 if (existName.Contains(newName))
                 {
@@ -141,7 +186,10 @@ namespace YIUIFramework.Editor
                     sb.AppendFormat("        public override EPanelStackOption        StackOption            =>           EPanelStackOption.{0};\r\n", self.PanelStackOption);
                     sb.AppendFormat("        public override int                                    Priority                     =>           {0};\r\n", self.Priority);
                     if (self.PanelOption.Has(EPanelOption.TimeCache))
+                    {
                         sb.AppendFormat("        protected override float                           CachePanelTime     => {0};\r\n\r\n", self.CachePanelTime);
+                    }
+
                     break;
                 case EUICodeType.View:
                     sb.AppendFormat("        public override EWindowOption              WindowOption       =>           EWindowOption.{0};\r\n", self.WindowOption.ToString().Replace(", ", "|EWindowOption."));

@@ -1,9 +1,7 @@
 #if UNITY_EDITOR
-using System.IO;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
-using YIUIBind;
 
 namespace YIUIFramework.Editor
 {
@@ -53,18 +51,20 @@ namespace YIUIFramework.Editor
         [Button("初始化项目")]
         private void CreateProject()
         {
-            if (!UIOperationHelper.CheckUIOperation()) return;
-
-            UIPublishModule.CreateUIBindProvider();
-            EditorHelper.CreateExistsDirectory(UIGenerationPath);
-            EditorHelper.CreateExistsDirectory(UIProjectResPath);
-            EditorHelper.CreateExistsDirectory(UICodeScriptsPath);
-            UICreateResModule.Create(m_CommonPkg); //默认初始化一个common模块
-            CopyUIRoot();
-            YIUIAutoTool.CloseWindowRefresh();
+            if (UIOperationHelper.CheckUIOperation())
+            {
+                UIPublishModule.CreateUIBindProvider();
+                EditorHelper.CreateExistsDirectory(UIGenerationPath);
+                EditorHelper.CreateExistsDirectory(UIProjectResPath);
+                EditorHelper.CreateExistsDirectory(UICodeScriptsPath);
+                //默认初始化一个common模块
+                UICreateResModule.Create(m_CommonPkg);
+                CopyUIRoot();
+                YIUIAutoTool.CloseWindowRefresh();
+            }
         }
 
-        private void CopyUIRoot()
+        private static void CopyUIRoot()
         {
             var loadRoot = (GameObject)AssetDatabase.LoadAssetAtPath(UIStaticHelper.UIRootPrefabPath, typeof(Object));
             if (loadRoot == null)
@@ -74,8 +74,7 @@ namespace YIUIFramework.Editor
             }
 
             var newGameObj = Object.Instantiate(loadRoot);
-            var commonPath =
-                $"{UIProjectResPath}/{m_CommonPkg}/{UIStaticHelper.UIPrefabs}/{PanelMgr.UIRootName}.prefab";
+            var commonPath = $"{UIProjectResPath}/{m_CommonPkg}/{UIStaticHelper.UIPrefabs}/{PanelMgr.UIRootName}.prefab";
             PrefabUtility.SaveAsPrefabAsset(newGameObj, commonPath);
             Object.DestroyImmediate(newGameObj);
         }

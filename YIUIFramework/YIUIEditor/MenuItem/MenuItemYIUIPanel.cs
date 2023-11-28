@@ -13,18 +13,15 @@ namespace YIUIFramework.Editor
             var activeObject = Selection.activeObject as DefaultAsset;
             if (activeObject == null)
             {
-                UnityTipsHelper.ShowError(
-                    $"请在路径 {UIStaticHelper.UIProjectResPath}/xxx/{UIStaticHelper.UISource} 下右键创建");
+                UnityTipsHelper.ShowError($"请在路径 {UIStaticHelper.UIProjectResPath}/xxx/{UIStaticHelper.UISource} 下右键创建");
                 return;
             }
 
             var path = AssetDatabase.GetAssetPath(Selection.activeObject);
 
-            if (activeObject.name != UIStaticHelper.UISource ||
-                !path.Contains(UIStaticHelper.UIProjectResPath))
+            if (activeObject.name != UIStaticHelper.UISource || !path.Contains(UIStaticHelper.UIProjectResPath))
             {
-                UnityTipsHelper.ShowError(
-                    $"请在路径 {UIStaticHelper.UIProjectResPath}/xxx/{UIStaticHelper.UISource} 下右键创建");
+                UnityTipsHelper.ShowError($"请在路径 {UIStaticHelper.UIProjectResPath}/xxx/{UIStaticHelper.UISource} 下右键创建");
                 return;
             }
 
@@ -35,8 +32,7 @@ namespace YIUIFramework.Editor
         {
             if (!path.Contains(UIStaticHelper.UIProjectResPath))
             {
-                UnityTipsHelper.ShowError(
-                    $"请在路径 {UIStaticHelper.UIProjectResPath}/xxx/{UIStaticHelper.UISource} 下右键创建");
+                UnityTipsHelper.ShowError($"请在路径 {UIStaticHelper.UIProjectResPath}/xxx/{UIStaticHelper.UISource} 下右键创建");
                 return;
             }
 
@@ -80,23 +76,26 @@ namespace YIUIFramework.Editor
         {
             //panel
             var panelObject = new GameObject();
-            var panelRect   = panelObject.GetOrAddComponent<RectTransform>();
+            var panelRect = panelObject.GetOrAddComponent<RectTransform>();
             panelObject.GetOrAddComponent<CanvasRenderer>();
             var cdeTable = panelObject.GetOrAddComponent<UIBindCDETable>();
-            cdeTable.UICodeType  = EUICodeType.Panel;
+            cdeTable.UICodeType = EUICodeType.Panel;
             cdeTable.IsSplitData = true;
 
             //cdeTable.PanelOption |= EPanelOption.DisReset; //如果想要都是默认缓存界面可开启
             var panelEditorData = cdeTable.PanelSplitData;
             panelEditorData.Panel = panelObject;
-            panelObject.name      = UIStaticHelper.UIYIUIPanelSourceName;
-            if (activeObject != null)
+            panelObject.name = UIStaticHelper.UIYIUIPanelSourceName;
+            if (activeObject)
+            {
                 panelRect.SetParent(activeObject.transform, false);
+            }
+
             panelRect.ResetToFullScreen();
 
             //阻挡图
             var backgroundObject = new GameObject();
-            var backgroundRect   = backgroundObject.GetOrAddComponent<RectTransform>();
+            var backgroundRect = backgroundObject.GetOrAddComponent<RectTransform>();
             backgroundObject.GetOrAddComponent<CanvasRenderer>();
             backgroundObject.GetOrAddComponent<UIBlock>();
             backgroundObject.name = "UIBlockBG";
@@ -106,7 +105,7 @@ namespace YIUIFramework.Editor
 
             // 添加allView节点
             var allViewObject = new GameObject();
-            var allViewRect   = allViewObject.GetOrAddComponent<RectTransform>();
+            var allViewRect = allViewObject.GetOrAddComponent<RectTransform>();
             allViewObject.name = UIStaticHelper.UIAllViewParentName;
             allViewRect.SetParent(panelRect, false);
             allViewRect.ResetToFullScreen();
@@ -114,7 +113,7 @@ namespace YIUIFramework.Editor
 
             // 添加AllPopupView节点
             var allPopupViewObject = new GameObject();
-            var allPopupViewRect   = allPopupViewObject.GetOrAddComponent<RectTransform>();
+            var allPopupViewRect = allPopupViewObject.GetOrAddComponent<RectTransform>();
             allPopupViewObject.name = UIStaticHelper.UIAllPopupViewParentName;
             allPopupViewRect.SetParent(panelRect, false);
             allPopupViewRect.ResetToFullScreen();

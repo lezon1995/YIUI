@@ -22,7 +22,7 @@ namespace YIUIFramework.Editor
         public CreateVo(string templatePath, string savePath)
         {
             TemplatePath = templatePath;
-            SavePath     = savePath;
+            SavePath = savePath;
         }
     }
 
@@ -42,9 +42,11 @@ namespace YIUIFramework.Editor
         public BaseTemplate(string authorName)
         {
             var dt = DateTime.Now;
-            ValueDic               = new Dictionary<string, string>();
-            ValueDic["Author"]     = authorName;
-            ValueDic["CreateDate"] = $"{dt.Year}.{dt.Month}.{dt.Day}";
+            ValueDic = new Dictionary<string, string>
+            {
+                ["Author"] = authorName,
+                ["CreateDate"] = $"{dt.Year}.{dt.Month}.{dt.Day}"
+            };
         }
 
         /// <summary>
@@ -214,7 +216,7 @@ namespace YIUIFramework.Editor
     public class TestTemplate : BaseTemplate
     {
         public override string EventName => "测试案例一 创建新文件";
-        public override bool   Cover     => false;
+        public override bool Cover => false;
 
         public TestTemplate(string authorName, string moduleName, string pkgName, string resName) : base(authorName)
         {
@@ -223,8 +225,8 @@ namespace YIUIFramework.Editor
                 $"Assets/../{moduleName}/UI/{resName}.cs");
 
             ValueDic["moduleName"] = moduleName;
-            ValueDic["uiPkgName"]  = pkgName;
-            ValueDic["uiResName"]  = resName;
+            ValueDic["uiPkgName"] = pkgName;
+            ValueDic["uiResName"] = resName;
 
             CreateNewFile();
         }
@@ -247,9 +249,9 @@ namespace YIUIFramework.Editor
                 $"Assets/../{moduleName}/UI/{resName}.cs");
 
             ValueDic["moduleName"] = moduleName;
-            ValueDic["uiPkgName"]  = pkgName;
-            ValueDic["uiResName"]  = resName;
-            ValueDic["AA"]         = "//我替换的东西"; //的相当于 标记为AA 这个范围内的所有东西都会被清空 替换我指定的内容
+            ValueDic["uiPkgName"] = pkgName;
+            ValueDic["uiResName"] = resName;
+            ValueDic["AA"] = "//我替换的东西"; //的相当于 标记为AA 这个范围内的所有东西都会被清空 替换我指定的内容
 
             OverrideCodeFile();
         }

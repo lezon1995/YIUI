@@ -1,7 +1,6 @@
 ﻿#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using YIUIBind;
 
 namespace YIUIFramework.Editor
 {
@@ -42,7 +41,7 @@ namespace YIUIFramework.Editor
 
             //ViewParent
             var viewParentObject = new GameObject();
-            var viewParentRect   = viewParentObject.GetOrAddComponent<RectTransform>();
+            var viewParentRect = viewParentObject.GetOrAddComponent<RectTransform>();
             viewParentObject.name = UIStaticHelper.UIYIUIViewParentName;
             viewParentRect.SetParent(activeObject.transform, false);
             viewParentRect.ResetToFullScreen();
@@ -50,11 +49,11 @@ namespace YIUIFramework.Editor
 
             //View
             var viewObject = new GameObject();
-            var viewRect   = viewObject.GetOrAddComponent<RectTransform>();
+            var viewRect = viewObject.GetOrAddComponent<RectTransform>();
             viewObject.GetOrAddComponent<CanvasRenderer>();
             var cdeTable = viewObject.GetOrAddComponent<UIBindCDETable>();
             cdeTable.UICodeType = EUICodeType.View;
-            viewObject.name     = UIStaticHelper.UIYIUIViewName;
+            viewObject.name = UIStaticHelper.UIYIUIViewName;
             viewRect.SetParent(viewParentRect, false);
             viewRect.ResetToFullScreen();
 
@@ -69,7 +68,6 @@ namespace YIUIFramework.Editor
                 panelEditorData.AllPopupView.Add(viewParentRect);
                 cdeTable.ViewWindowType = EViewWindowType.Popup;
             }
-
 
             viewParentObject.SetLayerRecursively(LayerMask.NameToLayer("UI"));
             Selection.activeObject = viewParentObject;

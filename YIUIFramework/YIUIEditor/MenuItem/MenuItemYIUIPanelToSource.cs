@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using YIUIBind;
 
 namespace YIUIFramework.Editor
 {
@@ -25,8 +24,7 @@ namespace YIUIFramework.Editor
 
             if (!path.Contains(UIStaticHelper.UIProjectResPath))
             {
-                UnityTipsHelper.ShowError(
-                    $"请在路径 {UIStaticHelper.UIProjectResPath}/xxx/{UIStaticHelper.UIPanelName} 下右键选择一个Panel 进行转换");
+                UnityTipsHelper.ShowError($"请在路径 {UIStaticHelper.UIProjectResPath}/xxx/{UIStaticHelper.UIPanelName} 下右键选择一个Panel 进行转换");
                 return;
             }
 
@@ -61,8 +59,7 @@ namespace YIUIFramework.Editor
             }
 
             var newSourceName = $"{panelCdeTable.name}{UIStaticHelper.UISource}";
-            var savePath =
-                $"{UIStaticHelper.UIProjectResPath}/{panelCdeTable.PkgName}/{UIStaticHelper.UISource}/{newSourceName}.prefab";
+            var savePath = $"{UIStaticHelper.UIProjectResPath}/{panelCdeTable.PkgName}/{UIStaticHelper.UISource}/{newSourceName}.prefab";
 
             if (AssetDatabase.LoadAssetAtPath(savePath, typeof(Object)) != null)
             {
@@ -83,10 +80,10 @@ namespace YIUIFramework.Editor
                 return;
             }
 
-            var newSource   = UIMenuItemHelper.CopyGameObject(loadPanel);
+            var newSource = UIMenuItemHelper.CopyGameObject(loadPanel);
             var oldCdeTable = newSource.GetComponent<UIBindCDETable>();
             oldCdeTable.IsSplitData = true;
-            newSource.name          = $"{loadPanel.name}{UIStaticHelper.UISource}";
+            newSource.name = $"{loadPanel.name}{UIStaticHelper.UISource}";
 
             CorrelationView(oldCdeTable);
 
@@ -113,11 +110,10 @@ namespace YIUIFramework.Editor
 
                 var viewName = viewParent.name.Replace(UIStaticHelper.UIParentName, "");
 
-                var viewPath =
-                    $"{UIStaticHelper.UIProjectResPath}/{pkgName}/{UIStaticHelper.UIPrefabs}/{viewName}.prefab";
+                var viewPath = $"{UIStaticHelper.UIProjectResPath}/{pkgName}/{UIStaticHelper.UIPrefabs}/{viewName}.prefab";
 
                 var childView = viewParent.FindChildByName(viewName);
-                if (childView != null)
+                if (childView)
                 {
                     Object.DestroyImmediate(childView.gameObject);
                 }

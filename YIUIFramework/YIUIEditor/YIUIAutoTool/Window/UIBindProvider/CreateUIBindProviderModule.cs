@@ -1,9 +1,7 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections;
 using Sirenix.OdinInspector;
-using YIUIBind;
-using UnityEditor;
-#if UNITY_EDITOR
 using UnityEngine;
 
 namespace YIUIFramework.Editor
@@ -17,15 +15,20 @@ namespace YIUIFramework.Editor
         [Button("UI自动生成绑定替代反射代码", 50), GUIColor(0.4f, 0.8f, 1)]
         public void Create()
         {
-            if (!UIOperationHelper.CheckUIOperation()) return;
-
-            var codeData = GenCodeByType(typeof(UIBindProvider));
-            if (codeData == null) return;
-            new CreateUIBindProviderCode(out var result, YIUIAutoTool.Author, codeData);
-
-            if (result)
+            if (UIOperationHelper.CheckUIOperation())
             {
-                UnityTipsHelper.CallBackOk("UI自动生成绑定替代反射代码 生成完毕", YIUIAutoTool.CloseWindowRefresh);
+                var codeData = GenCodeByType(typeof(UIBindProvider));
+                if (codeData == null)
+                {
+                    return;
+                }
+
+                _ = new CreateUIBindProviderCode(out var result, YIUIAutoTool.Author, codeData);
+
+                if (result)
+                {
+                    UnityTipsHelper.CallBackOk("UI自动生成绑定替代反射代码 生成完毕", YIUIAutoTool.CloseWindowRefresh);
+                }
             }
         }
 
@@ -53,7 +56,7 @@ namespace YIUIFramework.Editor
                 return null;
             }
 
-            var sb   = SbPool.Get();
+            var sb = SbPool.Get();
             var list = (IList)getFunInfo.Invoke(codeGenObj, Array.Empty<object>());
 
             for (int i = 0; i < list.Count; i++)
@@ -74,10 +77,10 @@ namespace YIUIFramework.Editor
             return new UIBindProviderData
             {
                 Namespace = type.Namespace,
-                FullName  = type.FullName,
-                Name      = type.Name,
-                Count     = list.Count,
-                Content   = userCode,
+                FullName = type.FullName,
+                Name = type.Name,
+                Count = list.Count,
+                Content = userCode,
             };
         }
     }

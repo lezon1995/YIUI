@@ -23,7 +23,7 @@ namespace YIUIFramework.Editor
         public static string TemplateBasePath;
 
         private const string m_StartSignFormat = "#region {0}开始";
-        private const string m_EndSignFormat   = "#endregion {0}结束";
+        private const string m_EndSignFormat = "#endregion {0}结束";
 
         /// <summary>
         /// 处理模板
@@ -33,8 +33,8 @@ namespace YIUIFramework.Editor
         /// <param name="valueDic2"></param>
         /// <param name="readTemplateCache"></param>
         /// <returns></returns>
-        public static string Do(string                     templatePath, Dictionary<string, string> valueDic,
-                                Dictionary<string, string> valueDic2,    bool readTemplateCache = true)
+        public static string Do(string templatePath, Dictionary<string, string> valueDic,
+            Dictionary<string, string> valueDic2, bool readTemplateCache = true)
         {
             if (!string.IsNullOrEmpty(TemplateBasePath))
             {
@@ -97,20 +97,20 @@ namespace YIUIFramework.Editor
         /// <param name="afterProcessItem">后处理函数</param>
         /// <returns></returns>
         public static string DoList<TItemType>(string itemTemplateStr, TItemType[] list, string[] fieldOrPropNames,
-                                               Func<string, TItemType, string> afterProcessItem = null)
+            Func<string, TItemType, string> afterProcessItem = null)
         {
             Type itemType = typeof(TItemType);
-            int  len      = list.Length;
+            int len = list.Length;
 
             StringBuilder sb = new StringBuilder(len);
             for (int i = 0; i < len; i++)
             {
-                TItemType item     = list[i];
-                string    template = itemTemplateStr;
+                TItemType item = list[i];
+                string template = itemTemplateStr;
                 foreach (string name in fieldOrPropNames)
                 {
-                    string    tName = "${" + name + "}";
-                    FieldInfo fi    = itemType.GetField(name);
+                    string tName = "${" + name + "}";
+                    FieldInfo fi = itemType.GetField(name);
                     if (fi != null)
                     {
                         template = template.Replace(tName, fi.GetValue(item).ToString());
@@ -208,11 +208,11 @@ namespace YIUIFramework.Editor
             if (path != null)
             {
                 StringBuilder stringBuilder = new StringBuilder();
-                StreamReader  streamReader  = new StreamReader(path);
-                string        line          = streamReader.ReadLine();
-                bool          isWrite       = false; //标记中途是否检查到已经写入过这个字段 防止重复
-                string        startStr      = string.Format(m_StartSignFormat, pair.Key);
-                string        endStr        = string.Format(m_EndSignFormat, pair.Key);
+                StreamReader streamReader = new StreamReader(path);
+                string line = streamReader.ReadLine();
+                bool isWrite = false; //标记中途是否检查到已经写入过这个字段 防止重复
+                string startStr = string.Format(m_StartSignFormat, pair.Key);
+                string endStr = string.Format(m_EndSignFormat, pair.Key);
 
                 while (line != null)
                 {
@@ -296,18 +296,18 @@ namespace YIUIFramework.Editor
         /// 需要区域内不存在才写入
         /// </summary>
         private static bool RegionCheckReplace2(string path, string signKey, string checkContent, string valueContent,
-                                                bool   otherRetain = true)
+            bool otherRetain = true)
         {
             //获取文件 
             if (path != null)
             {
                 StringBuilder stringBuilder = new StringBuilder();
-                StreamReader  streamReader  = new StreamReader(path);
-                string        line          = streamReader.ReadLine();
-                bool          checkExist    = false; //检查是否已经存在 如果已经存在则不重写 否则需要重写
-                bool          isWrite       = false; //标记中途是否检查到已经写入过这个字段 防止重复
-                string        startStr      = string.Format(m_StartSignFormat, signKey);
-                string        endStr        = string.Format(m_EndSignFormat, signKey);
+                StreamReader streamReader = new StreamReader(path);
+                string line = streamReader.ReadLine();
+                bool checkExist = false; //检查是否已经存在 如果已经存在则不重写 否则需要重写
+                bool isWrite = false; //标记中途是否检查到已经写入过这个字段 防止重复
+                string startStr = string.Format(m_StartSignFormat, signKey);
+                string endStr = string.Format(m_EndSignFormat, signKey);
 
                 while (line != null)
                 {
@@ -371,8 +371,8 @@ namespace YIUIFramework.Editor
         /// 指定区域内进行检查写入
         /// 需要区域内不存在才写入
         /// </summary>
-        public static bool OverrideCheckCodeFile(string                                               path,
-                                                 Dictionary<string, List<Dictionary<string, string>>> replaceDic)
+        public static bool OverrideCheckCodeFile(string path,
+            Dictionary<string, List<Dictionary<string, string>>> replaceDic)
         {
             string clsStr = RegionCheckReplace(path, replaceDic);
             if (clsStr == null)
@@ -412,27 +412,27 @@ namespace YIUIFramework.Editor
         /// 指定区域内进行检查写入
         /// 需要区域内不存在才写入
         /// </summary>
-        private static string RegionCheckReplace(string                                               path,
-                                                 Dictionary<string, List<Dictionary<string, string>>> replaceDic)
+        private static string RegionCheckReplace(string path,
+            Dictionary<string, List<Dictionary<string, string>>> replaceDic)
         {
             var templateStr = File.ReadAllText(path);
 
             foreach (var item in replaceDic)
             {
-                var key       = item.Key;
+                var key = item.Key;
                 var valueList = item.Value;
                 foreach (var data in valueList)
                 {
                     foreach (var ovDic in data)
                     {
-                        var check   = ovDic.Key;
+                        var check = ovDic.Key;
                         var content = ovDic.Value;
 
                         string startStr = string.Format(m_StartSignFormat, key);
-                        string endStr   = string.Format(m_EndSignFormat, key);
+                        string endStr = string.Format(m_EndSignFormat, key);
 
                         var startIndex = templateStr.IndexOf(startStr);
-                        var endIndex   = templateStr.IndexOf(endStr);
+                        var endIndex = templateStr.IndexOf(endStr);
 
                         if (startIndex > -1 && endIndex > startIndex)
                         {

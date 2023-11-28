@@ -4,30 +4,29 @@ namespace YIUIFramework.Editor
 {
     public class UICreateComponentCode : BaseTemplate
     {
-        private         string m_EventName = "UI继承Component代码创建";
+        private string m_EventName = "UI继承Component代码创建";
         public override string EventName => m_EventName;
 
         public override bool Cover => false;
 
-        private         bool m_AutoRefresh = false;
+        private bool m_AutoRefresh;
         public override bool AutoRefresh => m_AutoRefresh;
 
-        private         bool m_ShowTips = false;
+        private bool m_ShowTips;
         public override bool ShowTips => m_ShowTips;
 
-        public UICreateComponentCode(out bool result, string authorName, UICreateComponentData codeData) : base(
-            authorName)
+        public UICreateComponentCode(out bool result, string authorName, UICreateComponentData codeData) : base(authorName)
         {
-            var path     = $"{UIStaticHelper.UICodeScriptsPath}/{codeData.PkgName}/{codeData.ResName}.cs";
+            var path = $"{UIStaticHelper.UICodeScriptsPath}/{codeData.PkgName}/{codeData.ResName}.cs";
             var template = $"{UIStaticHelper.UITemplatePath}/UICreateComponentTemplate.txt";
             CreateVo = new CreateVo(template, path);
 
-            m_EventName           = $"{codeData.ResName} 继承 {codeData.ResName}Base 创建";
-            m_AutoRefresh         = codeData.AutoRefresh;
-            m_ShowTips            = codeData.ShowTips;
+            m_EventName = $"{codeData.ResName} 继承 {codeData.ResName}Base 创建";
+            m_AutoRefresh = codeData.AutoRefresh;
+            m_ShowTips = codeData.ShowTips;
             ValueDic["Namespace"] = codeData.Namespace;
-            ValueDic["PkgName"]   = codeData.PkgName;
-            ValueDic["ResName"]   = codeData.ResName;
+            ValueDic["PkgName"] = codeData.PkgName;
+            ValueDic["ResName"] = codeData.ResName;
 
             if (!TemplateEngine.FileExists(CreateVo.SavePath))
             {

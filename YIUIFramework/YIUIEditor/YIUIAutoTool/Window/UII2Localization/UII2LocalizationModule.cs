@@ -6,7 +6,6 @@ using I2.Loc;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
-using YIUIBind;
 
 namespace YIUIFramework.Editor
 {
@@ -57,14 +56,17 @@ namespace YIUIFramework.Editor
         private string GetSourceResPath()
         {
             var projPath = EditorHelper.GetProjPath(UII2SourceResPath);
-            var path     = $"{projPath}/{I2LocalizeHelper.I2ResAssetNamePrefix}{UII2SourceResName}.csv";
+            var path = $"{projPath}/{I2LocalizeHelper.I2ResAssetNamePrefix}{UII2SourceResName}.csv";
             return path;
         }
 
         private void ExportAllCsv()
         {
             var editorAsset = LocalizationManager.GetEditorAsset(true);
-            m_LanguageSourceData = editorAsset?.SourceData;
+            if (editorAsset)
+            {
+                m_LanguageSourceData = editorAsset.SourceData;
+            }
 
             if (m_LanguageSourceData == null)
             {
@@ -93,9 +95,10 @@ namespace YIUIFramework.Editor
             {
                 Directory.CreateDirectory(projPath);
             }
+
             foreach (var languages in m_LanguageSourceData.mLanguages)
             {
-                var targetPath = "";
+                string targetPath;
 
                 try
                 {
@@ -121,12 +124,12 @@ namespace YIUIFramework.Editor
 
         private string Export_CSV(string selectLanguage)
         {
-            char Separator = ',';
-            var  Builder   = new StringBuilder();
+            const string separator = ",";
+            var Builder = new StringBuilder();
 
-            var languages      = m_LanguageSourceData.mLanguages;
+            var languages = m_LanguageSourceData.mLanguages;
             var languagesCount = languages.Count;
-            Builder.AppendFormat("Key{0}Type{0}Desc", Separator);
+            Builder.AppendFormat("Key{0}Type{0}Desc", separator);
             var currentLanguageIndex = -1;
 
             for (int i = 0; i < languagesCount; i++)
@@ -140,10 +143,13 @@ namespace YIUIFramework.Editor
                     continue;
                 }
 
-                Builder.Append(Separator);
+                Builder.Append(separator);
                 if (!langData.IsEnabled())
+                {
                     Builder.Append('$');
-                AppendString(Builder, currentLanguage, Separator);
+                }
+
+                AppendString(Builder, currentLanguage, separator);
                 currentLanguageIndex = i;
             }
 
@@ -166,51 +172,59 @@ namespace YIUIFramework.Editor
                 var term = termData.Term;
 
                 foreach (var specialization in termData.GetAllSpecializations())
-                    AppendTerm(Builder, currentLanguageIndex, term, termData, specialization, Separator);
+                {
+                    AppendTerm(Builder, currentLanguageIndex, term, termData, specialization, separator);
+                }
             }
 
             return Builder.ToString();
         }
 
-        private static void AppendTerm(StringBuilder Builder, int selectLanguageIndex, string Term, TermData termData,
-                                       string        specialization, char Separator)
+        private static void AppendTerm(StringBuilder Builder, int selectLanguageIndex, string Term, TermData termData, string specialization, string separator)
         {
             //--[ Key ] --------------				
-            AppendString(Builder, Term, Separator);
+            AppendString(Builder, Term, separator);
 
             if (!string.IsNullOrEmpty(specialization) && specialization != "Any")
+            {
                 Builder.AppendFormat("[{0}]", specialization);
+            }
 
             //--[ Type and Description ] --------------
-            Builder.Append(Separator);
+            Builder.Append(separator);
             Builder.Append(termData.TermType.ToString());
-            Builder.Append(Separator);
-            AppendString(Builder, selectLanguageIndex <= -1 ? termData.Description : "", Separator);
+            Builder.Append(separator);
+            AppendString(Builder, selectLanguageIndex <= -1 ? termData.Description : "", separator);
 
             var startIndex = selectLanguageIndex <= -1 ? 0 : selectLanguageIndex;
-            var maxIndex   = selectLanguageIndex <= -1 ? termData.Languages.Length : selectLanguageIndex + 1;
+            var maxIndex = selectLanguageIndex <= -1 ? termData.Languages.Length : selectLanguageIndex + 1;
 
             //--[ Languages ] --------------
             for (var i = startIndex; i < maxIndex; ++i)
             {
-                Builder.Append(Separator);
+                Builder.Append(separator);
 
                 var translation = termData.Languages[i];
                 if (!string.IsNullOrEmpty(specialization))
+                {
                     translation = termData.GetTranslation(i, specialization);
+                }
 
-                AppendTranslation(Builder, translation, Separator, null);
+                AppendTranslation(Builder, translation, separator, null);
             }
 
             Builder.Append("\n");
         }
 
-        private static void AppendString(StringBuilder Builder, string Text, char Separator)
+        private static void AppendString(StringBuilder Builder, string Text, string separator)
         {
             if (string.IsNullOrEmpty(Text))
+            {
                 return;
+            }
+
             Text = Text.Replace("\\n", "\n");
-            if (Text.IndexOfAny((Separator + "\n\"").ToCharArray()) >= 0)
+            if (Text.IndexOfAny((separator + "\n\"").ToCharArray()) >= 0)
             {
                 Text = Text.Replace("\"", "\"\"");
                 Builder.AppendFormat("\"{0}\"", Text);
@@ -221,12 +235,15 @@ namespace YIUIFramework.Editor
             }
         }
 
-        private static void AppendTranslation(StringBuilder Builder, string Text, char Separator, string tags)
+        private static void AppendTranslation(StringBuilder Builder, string Text, string separator, string tags)
         {
             if (string.IsNullOrEmpty(Text))
+            {
                 return;
+            }
+
             Text = Text.Replace("\\n", "\n");
-            if (Text.IndexOfAny((Separator + "\n\"").ToCharArray()) >= 0)
+            if (Text.IndexOfAny((separator + "\n\"").ToCharArray()) >= 0)
             {
                 Text = Text.Replace("\"", "\"\"");
                 Builder.AppendFormat("\"{0}{1}\"", tags, Text);
@@ -247,7 +264,10 @@ namespace YIUIFramework.Editor
         private void ImportAllCsv()
         {
             var editorAsset = LocalizationManager.GetEditorAsset(true);
-            m_LanguageSourceData = editorAsset?.SourceData;
+            if (editorAsset)
+            {
+                m_LanguageSourceData = editorAsset.SourceData;
+            }
 
             if (m_LanguageSourceData == null)
             {
@@ -260,10 +280,11 @@ namespace YIUIFramework.Editor
             try
             {
                 var content = LocalizationReader.ReadCSVfile(path, Encoding.UTF8);
-                var sError =
-                    m_LanguageSourceData.Import_CSV(string.Empty, content, eSpreadsheetUpdateMode.Replace, ',');
-                if (!string.IsNullOrEmpty(sError))
-                    UnityTipsHelper.ShowError($"导入全数据时发生错误 请检查 {sError} {path}");
+                var error = m_LanguageSourceData.Import_CSV(string.Empty, content);
+                if (!string.IsNullOrEmpty(error))
+                {
+                    UnityTipsHelper.ShowError($"导入全数据时发生错误 请检查 {error} {path}");
+                }
             }
             catch (Exception e)
             {

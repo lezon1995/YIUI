@@ -20,17 +20,26 @@ namespace YIUIFramework.Editor
         private static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
         {
             var tab = self.EventTable;
-            if (tab == null) return;
-
-            foreach (var value in tab.EventDic)
+            if (tab == null)
             {
-                var name = value.Key;
-                if (string.IsNullOrEmpty(name)) continue;
-                var uiEventBase = value.Value;
-                if (uiEventBase == null) continue;
+                return;
+            }
+
+            foreach (var (name, uiEvent) in tab.EventDic)
+            {
+                if (string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+
+                if (uiEvent == null)
+                {
+                    continue;
+                }
+
                 sb.AppendFormat("        protected virtual void {0}({1}){{}}\r\n",
                     $"OnEvent{name.Replace($"{NameUtility.FirstName}{NameUtility.EventName}", "")}Action",
-                    GetEventMethodParam(uiEventBase));
+                    GetEventMethodParam(uiEvent));
             }
         }
 
@@ -70,19 +79,28 @@ namespace YIUIFramework.Editor
             overrideDic.Add("Event", newList);
 
             var tab = cdeTable.EventTable;
-            if (tab == null) return null;
-
-            foreach (var value in tab.EventDic)
+            if (tab == null)
             {
-                var name = value.Key;
-                if (string.IsNullOrEmpty(name)) continue;
-                var uiEventBase = value.Value;
-                if (uiEventBase == null) continue;
-                var onEvent      = $"OnEvent{name.Replace($"{NameUtility.FirstName}{NameUtility.EventName}", "")}";
-                var methodParam  = $"Action({GetEventMethodParam(uiEventBase)})";
-                var check        = $"void {onEvent}{methodParam}";
+                return null;
+            }
+
+            foreach (var (name, uiEvent) in tab.EventDic)
+            {
+                if (string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+
+                if (uiEvent == null)
+                {
+                    continue;
+                }
+
+                var onEvent = $"OnEvent{name.Replace($"{NameUtility.FirstName}{NameUtility.EventName}", "")}";
+                var methodParam = $"Action({GetEventMethodParam(uiEvent)})";
+                var check = $"void {onEvent}{methodParam}";
                 var firstContent = $"\r\n        protected override void {onEvent}{methodParam}";
-                var content      = firstContent + "\r\n        {\r\n            \r\n        }\r\n       ";
+                var content = firstContent + "\r\n        {\r\n            \r\n        }\r\n       ";
                 newList.Add(new Dictionary<string, string> { { check, content } });
             }
 

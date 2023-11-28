@@ -99,10 +99,7 @@ namespace YIUIFramework.Editor
 
         public static Type[] GetTypesByInterface(string fullName)
         {
-            return AppDomain.CurrentDomain.GetAssemblies().SelectMany(a =>
-            {
-                return a.GetTypes().Where(t => GetInterfaceByName(t, fullName) != null);
-            }).ToArray();
+            return AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => { return a.GetTypes().Where(t => GetInterfaceByName(t, fullName) != null); }).ToArray();
         }
 
         public static Type GetInterfaceByName(Type type, string fullName)
@@ -128,7 +125,7 @@ namespace YIUIFramework.Editor
         {
             get
             {
-                string platformName = "";
+                string platformName;
                 switch (EditorUserBuildSettings.activeBuildTarget)
                 {
                     case BuildTarget.Android:
@@ -186,7 +183,10 @@ namespace YIUIFramework.Editor
 
                 File.WriteAllText(path, contents, Encoding.UTF8);
                 if (log)
+                {
                     Debug.Log(path + "创建成功");
+                }
+
                 return true;
             }
             catch (Exception e)
@@ -201,12 +201,12 @@ namespace YIUIFramework.Editor
             try
             {
                 path = GetProjPath(path);
-                if (!File.Exists(path))
+                if (File.Exists(path))
                 {
-                    return null;
+                    return File.ReadAllText(path);
                 }
 
-                return File.ReadAllText(path);
+                return null;
             }
             catch (Exception e)
             {
@@ -234,7 +234,10 @@ namespace YIUIFramework.Editor
 
                 File.WriteAllBytes(path, bytes);
                 if (log)
+                {
                     Debug.Log(path + "创建成功");
+                }
+
                 return true;
             }
             catch (Exception e)
@@ -249,12 +252,12 @@ namespace YIUIFramework.Editor
             try
             {
                 path = GetProjPath(path);
-                if (!File.Exists(path))
+                if (File.Exists(path))
                 {
-                    return null;
+                    return File.ReadAllBytes(path);
                 }
 
-                return File.ReadAllBytes(path);
+                return null;
             }
             catch (Exception e)
             {
@@ -270,9 +273,7 @@ namespace YIUIFramework.Editor
         /// <returns></returns>
         public static bool IsFileIgnore(string path)
         {
-            return path.EndsWith(".meta")
-             || path.EndsWith(".manifest")
-             || path.Contains(".DS_Store");
+            return path.EndsWith(".meta") || path.EndsWith(".manifest") || path.Contains(".DS_Store");
         }
 
         // ----------------------------------------------------------------------------------------
@@ -289,7 +290,7 @@ namespace YIUIFramework.Editor
             if (total != 0)
             {
                 progress = Mathf.InverseLerp(0, total, current);
-                message  = string.Format("{0} {1}/{2}", message, current + 1, total);
+                message = $"{message} {current + 1}/{total}";
             }
 
             EditorUtility.DisplayProgressBar(title, message, progress);
@@ -318,7 +319,7 @@ namespace YIUIFramework.Editor
                 path = Path.GetDirectoryName(path);
                 if (path == null)
                 {
-                    Debug.LogError($" {path} dir == null");
+                    Debug.LogError($"dir == null");
                     return;
                 }
             }

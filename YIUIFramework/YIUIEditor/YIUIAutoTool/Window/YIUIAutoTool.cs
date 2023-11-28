@@ -1,13 +1,10 @@
-﻿
-
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities.Editor;
 using UnityEditor;
-using UnityEngine;
 
 namespace YIUIFramework.Editor
 {
@@ -38,38 +35,27 @@ namespace YIUIFramework.Editor
             AssetDatabase.Refresh();
         }
 
-        private OdinMenuTree           m_OdinMenuTree;
+        private OdinMenuTree m_OdinMenuTree;
         private List<BaseTreeMenuItem> m_AllMenuItem = new List<BaseTreeMenuItem>();
 
         protected override OdinMenuTree BuildMenuTree()
         {
-            m_OdinMenuTree                            =  new OdinMenuTree();
+            m_OdinMenuTree = new OdinMenuTree();
             m_OdinMenuTree.Selection.SelectionChanged += OnSelectionChanged;
 
             m_AllMenuItem.Clear();
 
-            m_AllMenuItem.Add(
-                new TreeMenuItem<UIPublishModule>(this, m_OdinMenuTree,
-                    UIPublishModule.m_PublishName, EditorIcons.UnityFolderIcon));
-
-            m_AllMenuItem.Add(
-                new TreeMenuItem<UIRedDotModule>(this, m_OdinMenuTree,
-                    "红点", EditorIcons.AlertCircle));
-
-            m_AllMenuItem.Add(
-                new TreeMenuItem<UII2LocalizationModule>(this, m_OdinMenuTree,
-                    "多语言", EditorIcons.SpeechBubblesRound));
-
-            m_AllMenuItem.Add(
-                new TreeMenuItem<UIMacroModule>(this, m_OdinMenuTree,
-                    "宏设置", EditorIcons.SettingsCog));
+            m_AllMenuItem.Add(new TreeMenuItem<UIPublishModule>(this, m_OdinMenuTree, UIPublishModule.m_PublishName, EditorIcons.UnityFolderIcon));
+            m_AllMenuItem.Add(new TreeMenuItem<UIRedDotModule>(this, m_OdinMenuTree, "红点", EditorIcons.AlertCircle));
+            m_AllMenuItem.Add(new TreeMenuItem<UII2LocalizationModule>(this, m_OdinMenuTree, "多语言", EditorIcons.SpeechBubblesRound));
+            m_AllMenuItem.Add(new TreeMenuItem<UIMacroModule>(this, m_OdinMenuTree, "宏设置", EditorIcons.SettingsCog));
 
             m_OdinMenuTree.Add("全局设置", this, EditorIcons.SettingsCog);
 
             return m_OdinMenuTree;
         }
 
-        private bool        m_FirstInit           = true;
+        private bool m_FirstInit = true;
         private StringPrefs m_LastSelectMenuPrefs = new StringPrefs("YIUIAutoTool_LastSelectMenu", null, "全局设置");
 
         private void OnSelectionChanged(SelectionChangedType obj)
@@ -85,9 +71,11 @@ namespace YIUIFramework.Editor
 
                 foreach (var menu in m_OdinMenuTree.MenuItems)
                 {
-                    if (menu.Name != m_LastSelectMenuPrefs.Value) continue;
-                    menu.Select();
-                    return;
+                    if (menu.Name == m_LastSelectMenuPrefs.Value)
+                    {
+                        menu.Select();
+                        return;
+                    }
                 }
 
                 return;
@@ -100,9 +88,11 @@ namespace YIUIFramework.Editor
 
             foreach (var menu in m_OdinMenuTree.MenuItems)
             {
-                if (!menu.IsSelected) continue;
-                m_LastSelectMenuPrefs.Value = menu.Name;
-                break;
+                if (menu.IsSelected)
+                {
+                    m_LastSelectMenuPrefs.Value = menu.Name;
+                    break;
+                }
             }
         }
 
@@ -112,7 +102,7 @@ namespace YIUIFramework.Editor
         [Required("请填写用户名")]
         [ShowInInspector]
         private static string m_Author;
-        
+
         public static string Author
         {
             get
@@ -134,7 +124,7 @@ namespace YIUIFramework.Editor
         [BoxGroup("全局图集设置", centerLabel: true)]
         [ShowInInspector]
         internal UIAtlasModule AtlasModule = new UIAtlasModule();
-        
+
         protected override void Initialize()
         {
             base.Initialize();

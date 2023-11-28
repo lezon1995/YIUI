@@ -1,7 +1,6 @@
 ﻿#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using YIUIBind;
 
 namespace YIUIFramework.Editor
 {
@@ -19,12 +18,11 @@ namespace YIUIFramework.Editor
 
             //Component
             var componentObject = new GameObject();
-            var viewRect        = componentObject.GetOrAddComponent<RectTransform>();
+            var viewRect = componentObject.GetOrAddComponent<RectTransform>();
             componentObject.GetOrAddComponent<CanvasRenderer>();
             var cdeTable = componentObject.GetOrAddComponent<UIBindCDETable>();
             cdeTable.UICodeType = EUICodeType.Component;
             viewRect.SetParent(activeObject.transform, false);
-
 
             componentObject.SetLayerRecursively(LayerMask.NameToLayer("UI"));
             Selection.activeObject = componentObject;

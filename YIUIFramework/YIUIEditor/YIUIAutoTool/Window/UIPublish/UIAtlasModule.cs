@@ -1,7 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEditor;
 using UnityEditor.U2D;
 using UnityEngine;
@@ -46,43 +45,42 @@ namespace YIUIFramework.Editor
         public EPlatformType m_UIPublishPackageData = EPlatformType.Default;
 
         [HideInInspector]
-        public Dictionary<string, UIPlatformSettings> AllUIPlatformSettings =
-            new Dictionary<string, UIPlatformSettings>();
+        public Dictionary<string, UIPlatformSettings> AllUIPlatformSettings = new Dictionary<string, UIPlatformSettings>();
 
         [ShowIf("m_UIPublishPackageData", EPlatformType.Default)]
         [BoxGroup("平台设置", centerLabel: true)]
         public UIPlatformSettings Default = new UIPlatformSettings
         {
-            PlatformType    = EPlatformType.Default,
+            PlatformType = EPlatformType.Default,
             BuildTargetName = "DefaultTexturePlatform",
-            Format          = TextureImporterFormat.Automatic,
+            Format = TextureImporterFormat.Automatic,
         };
 
         [ShowIf("m_UIPublishPackageData", EPlatformType.PC)]
         [BoxGroup("平台设置", centerLabel: true)]
         public UIPlatformSettings PC = new UIPlatformSettings
         {
-            PlatformType    = EPlatformType.PC,
+            PlatformType = EPlatformType.PC,
             BuildTargetName = "Standalone",
-            Format          = TextureImporterFormat.DXT5Crunched,
+            Format = TextureImporterFormat.DXT5Crunched,
         };
 
         [ShowIf("m_UIPublishPackageData", EPlatformType.Android)]
         [BoxGroup("平台设置", centerLabel: true)]
         public UIPlatformSettings Android = new UIPlatformSettings
         {
-            PlatformType    = EPlatformType.Android,
+            PlatformType = EPlatformType.Android,
             BuildTargetName = "Android",
-            Format          = TextureImporterFormat.ASTC_6x6,
+            Format = TextureImporterFormat.ASTC_6x6,
         };
 
         [ShowIf("m_UIPublishPackageData", EPlatformType.iPhone)]
         [BoxGroup("平台设置", centerLabel: true)]
         public UIPlatformSettings iPhone = new UIPlatformSettings
         {
-            PlatformType    = EPlatformType.iPhone,
+            PlatformType = EPlatformType.iPhone,
             BuildTargetName = "iPhone",
-            Format          = TextureImporterFormat.ASTC_4x4,
+            Format = TextureImporterFormat.ASTC_4x4,
         };
 
         private GlobalSpriteAtlasSettings m_GlobalSpriteAtlasSettings = new GlobalSpriteAtlasSettings();
@@ -94,22 +92,21 @@ namespace YIUIFramework.Editor
             AllUIPlatformSettings.Add(Android.BuildTargetName, Android);
             AllUIPlatformSettings.Add(iPhone.BuildTargetName, iPhone);
             m_GlobalSpriteAtlasSettings.SpriteAtlasSettings = SpriteAtlasSettings;
-            m_GlobalSpriteAtlasSettings.Default             = Default;
-            m_GlobalSpriteAtlasSettings.PC                  = PC;
-            m_GlobalSpriteAtlasSettings.Android             = Android;
-            m_GlobalSpriteAtlasSettings.iPhone              = iPhone;
+            m_GlobalSpriteAtlasSettings.Default = Default;
+            m_GlobalSpriteAtlasSettings.PC = PC;
+            m_GlobalSpriteAtlasSettings.Android = Android;
+            m_GlobalSpriteAtlasSettings.iPhone = iPhone;
         }
 
-        private const string GlobalSaveSpriteAtlasSettingsPath =
-            UIStaticHelper.UIProjectResPath + "/GlobalSpriteAtlasSettings.bytes";
+        private const string GlobalSaveSpriteAtlasSettingsPath = UIStaticHelper.UIProjectResPath + "/GlobalSpriteAtlasSettings.bytes";
 
         private class GlobalSpriteAtlasSettings
         {
             public UISpriteAtlasSettings SpriteAtlasSettings;
-            public UIPlatformSettings    Default;
-            public UIPlatformSettings    PC;
-            public UIPlatformSettings    Android;
-            public UIPlatformSettings    iPhone;
+            public UIPlatformSettings Default;
+            public UIPlatformSettings PC;
+            public UIPlatformSettings Android;
+            public UIPlatformSettings iPhone;
         }
 
         internal override void Initialize()
@@ -118,10 +115,10 @@ namespace YIUIFramework.Editor
             if (data == null) return;
 
             SpriteAtlasSettings = data.SpriteAtlasSettings;
-            Default             = data.Default;
-            PC                  = data.PC;
-            Android             = data.Android;
-            iPhone              = data.iPhone;
+            Default = data.Default;
+            PC = data.PC;
+            Android = data.Android;
+            iPhone = data.iPhone;
         }
 
         internal override void OnDestroy()
@@ -133,33 +130,37 @@ namespace YIUIFramework.Editor
         {
             spriteAtlas.SetIncludeInBuild(SpriteAtlasSettings.IncludeInBuild);
 
-            var packingSettings = new SpriteAtlasPackingSettings()
+            var packingSettings = new SpriteAtlasPackingSettings
             {
-                blockOffset        = SpriteAtlasSettings.BlockOffset,
-                enableRotation     = SpriteAtlasSettings.EnableRotation,
+                blockOffset = SpriteAtlasSettings.BlockOffset,
+                enableRotation = SpriteAtlasSettings.EnableRotation,
                 enableTightPacking = SpriteAtlasSettings.EnableTightPacking,
-                padding            = SpriteAtlasSettings.Padding,
+                padding = SpriteAtlasSettings.Padding,
             };
             spriteAtlas.SetPackingSettings(packingSettings);
 
-            var textureSettings = new SpriteAtlasTextureSettings()
+            var textureSettings = new SpriteAtlasTextureSettings
             {
-                readable        = SpriteAtlasSettings.Readable,
+                readable = SpriteAtlasSettings.Readable,
                 generateMipMaps = SpriteAtlasSettings.GenerateMipMaps,
-                sRGB            = SpriteAtlasSettings.sRGB,
-                filterMode      = SpriteAtlasSettings.FilterMode,
+                sRGB = SpriteAtlasSettings.sRGB,
+                filterMode = SpriteAtlasSettings.FilterMode,
             };
             spriteAtlas.SetTextureSettings(textureSettings);
 
             foreach (var targetSetting in AllUIPlatformSettings.Values)
             {
-                var setting = spriteAtlas.GetPlatformSettings(targetSetting.BuildTargetName) ??
-                    new TextureImporterPlatformSettings();
-                setting.overridden          = targetSetting.Overridden;
-                setting.maxTextureSize      = targetSetting.MaxTextureSize;
+                var setting = spriteAtlas.GetPlatformSettings(targetSetting.BuildTargetName);
+                if (setting == null)
+                {
+                    setting = new TextureImporterPlatformSettings();
+                }
+
+                setting.overridden = targetSetting.Overridden;
+                setting.maxTextureSize = targetSetting.MaxTextureSize;
                 setting.crunchedCompression = targetSetting.CrunchedCompression;
-                setting.compressionQuality  = targetSetting.compressionQuality;
-                setting.format              = targetSetting.Format;
+                setting.compressionQuality = targetSetting.compressionQuality;
+                setting.format = targetSetting.Format;
                 spriteAtlas.SetPlatformSettings(setting);
             }
         }
@@ -174,17 +175,17 @@ namespace YIUIFramework.Editor
 
         public bool IncludeInBuild = true;
 
-        public int  BlockOffset        = 1;
-        public bool EnableRotation     = false;
+        public int BlockOffset = 1;
+        public bool EnableRotation = false;
         public bool EnableTightPacking = false;
 
         [ValueDropdown("PaddingListKey")]
         public int Padding = 4;
 
-        public bool                   GenerateMipMaps = false;
-        public bool                   Readable        = false;
-        public bool                   sRGB            = true;
-        public UnityEngine.FilterMode FilterMode      = FilterMode.Bilinear;
+        public bool GenerateMipMaps = false;
+        public bool Readable = false;
+        public bool sRGB = true;
+        public FilterMode FilterMode = FilterMode.Bilinear;
 
         private static List<int> PaddingListKey = new List<int> { 2, 4, 8 };
     }

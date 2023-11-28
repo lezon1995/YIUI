@@ -1,10 +1,9 @@
 ﻿#if UNITY_EDITOR
 
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEditor;
-using UnityEngine;
-using YIUIBind;
 
 namespace YIUIFramework.Editor
 {
@@ -71,19 +70,22 @@ namespace YIUIFramework.Editor
         {
             var buildTargetName = EditorUserBuildSettings.activeBuildTarget.ToString();
             buildTargetName = buildTargetName.ToLower();
-            if (buildTargetName.IndexOf("standalone") >= 0)
+            if (buildTargetName.IndexOf("standalone", StringComparison.Ordinal) >= 0)
             {
                 return BuildTargetGroup.Standalone;
             }
-            else if (buildTargetName.IndexOf("android") >= 0)
+
+            if (buildTargetName.IndexOf("android", StringComparison.Ordinal) >= 0)
             {
                 return BuildTargetGroup.Android;
             }
-            else if (buildTargetName.IndexOf("iphone") >= 0)
+
+            if (buildTargetName.IndexOf("iphone", StringComparison.Ordinal) >= 0)
             {
                 return BuildTargetGroup.iOS;
             }
-            else if (buildTargetName.IndexOf("ios") >= 0)
+
+            if (buildTargetName.IndexOf("ios", StringComparison.Ordinal) >= 0)
             {
                 return BuildTargetGroup.iOS;
             }

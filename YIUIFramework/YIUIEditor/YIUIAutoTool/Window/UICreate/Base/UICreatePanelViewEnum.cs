@@ -21,9 +21,21 @@ namespace YIUIFramework.Editor
         private static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
         {
             var splitData = self.PanelSplitData;
-            if (splitData == null) return;
-            if (!splitData.ShowCreatePanelViewEnum()) return;
-            if (!splitData.CreatePanelViewEnum) return;
+            if (splitData == null)
+            {
+                return;
+            }
+
+            if (!splitData.ShowCreatePanelViewEnum())
+            {
+                return;
+            }
+
+            if (!splitData.CreatePanelViewEnum)
+            {
+                return;
+            }
+
             var index = 1;
 
             sb.AppendFormat("    public enum E{0}ViewEnum\r\n    {{\r\n", self.name);

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using YIUIBind;
 
 namespace YIUIFramework.Editor
 {
@@ -35,18 +34,18 @@ namespace YIUIFramework.Editor
                 return;
             }
 
-            var oldSource    = UIMenuItemHelper.CopyGameObject(loadSource);
-            var oldCdeTable  = oldSource.GetComponent<UIBindCDETable>();
+            var oldSource = UIMenuItemHelper.CopyGameObject(loadSource);
+            var oldCdeTable = oldSource.GetComponent<UIBindCDETable>();
             var oldSplitData = oldCdeTable.PanelSplitData;
 
 
             var newSource = UIMenuItemHelper.CopyGameObject(loadSource);
-            var cdeTable  = newSource.GetComponent<UIBindCDETable>();
-            newSource.name                    = newSource.name.Replace(UIStaticHelper.UISource, "");
-            cdeTable.IsSplitData              = false;
+            var cdeTable = newSource.GetComponent<UIBindCDETable>();
+            newSource.name = newSource.name.Replace(UIStaticHelper.UISource, "");
+            cdeTable.IsSplitData = false;
             cdeTable.PanelSplitEditorShowData = cdeTable.PanelSplitData;
             var splitData = cdeTable.PanelSplitData;
-            var savePath  = $"{UIStaticHelper.UIProjectResPath}/{pkgName}/{UIStaticHelper.UIPrefabs}";
+            var savePath = $"{UIStaticHelper.UIProjectResPath}/{pkgName}/{UIStaticHelper.UIPrefabs}";
 
             AllViewSaveAsPrefabAsset(oldSplitData.AllCommonView, splitData.AllCommonView, savePath, true);
             AllViewSaveAsPrefabAsset(oldSplitData.AllCreateView, splitData.AllCreateView, savePath);
@@ -64,8 +63,7 @@ namespace YIUIFramework.Editor
             AssetDatabase.Refresh();
         }
 
-        private static void AllViewSaveAsPrefabAsset(List<RectTransform> oldList,  List<RectTransform> newList,
-                                                     string              savePath, bool                nest = false)
+        private static void AllViewSaveAsPrefabAsset(List<RectTransform> oldList, List<RectTransform> newList, string savePath, bool nest = false)
         {
             if (oldList.Count != newList.Count)
             {
@@ -75,14 +73,13 @@ namespace YIUIFramework.Editor
 
             for (var i = 0; i < newList.Count; i++)
             {
-                var viewParent    = newList[i];
+                var viewParent = newList[i];
                 var oldViewParent = oldList[i];
                 SaveAsPrefabAssetViewParent(oldViewParent, viewParent, savePath, nest);
             }
         }
 
-        private static bool SaveAsPrefabAssetViewParent(RectTransform oldViewParent, RectTransform viewParent,
-                                                        string        savePath,      bool          nest = false)
+        private static bool SaveAsPrefabAssetViewParent(RectTransform oldViewParent, RectTransform viewParent, string savePath, bool nest = false)
         {
             //View 查找
             var view = viewParent.FindChildByName(viewParent.name.Replace(UIStaticHelper.UIParentName, ""));

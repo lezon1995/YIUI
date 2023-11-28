@@ -17,8 +17,8 @@ namespace YIUIFramework.Editor
             return new List<string>(ori.Split(';'));
         }
 
-        public static void SetSymbols(List<string>     defineSymbols,
-                                      BuildTargetGroup targetGroup)
+        public static void SetSymbols(List<string> defineSymbols,
+            BuildTargetGroup targetGroup)
         {
             PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, string.Join(";", defineSymbols.ToArray()));
         }
@@ -194,7 +194,6 @@ namespace YIUIFramework.Editor
         public static List<string> GetEnumSelect<T>(T selectEnum) where T : struct
         {
             var selectValue = Convert.ToInt64(selectEnum);
-            ;
 
             var all = new List<string>();
 

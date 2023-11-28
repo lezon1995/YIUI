@@ -2,13 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities.Editor;
-using YIUIBind;
 using UnityEditor;
-using UnityEditor.U2D;
 using UnityEngine;
 using UnityEngine.U2D;
 
@@ -34,7 +31,7 @@ namespace YIUIFramework.Editor
         private void AddAllPkg()
         {
             EditorHelper.CreateExistsDirectory(m_AllPkgPath);
-            var folders = Array.Empty<string>();
+            string[] folders;
             try
             {
                 folders = Directory.GetDirectories(EditorHelper.GetProjPath(m_AllPkgPath));
@@ -47,7 +44,7 @@ namespace YIUIFramework.Editor
 
             foreach (var folder in folders)
             {
-                var pkgName   = Path.GetFileName(folder);
+                var pkgName = Path.GetFileName(folder);
                 var upperName = NameUtility.ToFirstUpper(pkgName);
                 if (upperName != pkgName)
                 {
@@ -58,24 +55,19 @@ namespace YIUIFramework.Editor
                 var newUIPublishPackageModule = new UIPublishPackageModule(this, pkgName);
 
                 //0 模块
-                Tree.AddMenuItemAtPath(m_PublishName,
-                    new OdinMenuItem(Tree, pkgName, newUIPublishPackageModule)).AddIcon(EditorIcons.Folder);
+                Tree.AddMenuItemAtPath(m_PublishName, new OdinMenuItem(Tree, pkgName, newUIPublishPackageModule)).AddIcon(EditorIcons.Folder);
 
                 //1 图集
-                Tree.AddAllAssetsAtPath($"{m_PublishName}/{pkgName}/{UIStaticHelper.UIAtlasCN}",
-                    $"{m_AllPkgPath}/{pkgName}/{UIStaticHelper.UIAtlas}", typeof(SpriteAtlas), true, false);
+                Tree.AddAllAssetsAtPath($"{m_PublishName}/{pkgName}/{UIStaticHelper.UIAtlasCN}", $"{m_AllPkgPath}/{pkgName}/{UIStaticHelper.UIAtlas}", typeof(SpriteAtlas), true, false);
 
                 //2 预制体
-                Tree.AddAllAssetsAtPath($"{m_PublishName}/{pkgName}/{UIStaticHelper.UIPrefabsCN}",
-                    $"{m_AllPkgPath}/{pkgName}/{UIStaticHelper.UIPrefabs}", typeof(UIBindCDETable), true, false);
+                Tree.AddAllAssetsAtPath($"{m_PublishName}/{pkgName}/{UIStaticHelper.UIPrefabsCN}", $"{m_AllPkgPath}/{pkgName}/{UIStaticHelper.UIPrefabs}", typeof(UIBindCDETable), true, false);
 
                 //3 源文件
-                Tree.AddAllAssetsAtPath($"{m_PublishName}/{pkgName}/{UIStaticHelper.UISourceCN}",
-                    $"{m_AllPkgPath}/{pkgName}/{UIStaticHelper.UISource}", typeof(UIBindCDETable), true, false);
+                Tree.AddAllAssetsAtPath($"{m_PublishName}/{pkgName}/{UIStaticHelper.UISourceCN}", $"{m_AllPkgPath}/{pkgName}/{UIStaticHelper.UISource}", typeof(UIBindCDETable), true, false);
 
                 //4 精灵
-                Tree.AddAllAssetImporterAtPath($"{m_PublishName}/{pkgName}/{UIStaticHelper.UISpritesCN}",
-                    $"{m_AllPkgPath}/{pkgName}/{UIStaticHelper.UISprites}", typeof(TextureImporter), true, false);
+                Tree.AddAllAssetImporterAtPath($"{m_PublishName}/{pkgName}/{UIStaticHelper.UISpritesCN}", $"{m_AllPkgPath}/{pkgName}/{UIStaticHelper.UISprites}", typeof(TextureImporter), true, false);
 
                 m_AllUIPublishPackageModule.Add(newUIPublishPackageModule);
             }
@@ -94,14 +86,15 @@ namespace YIUIFramework.Editor
         [PropertyOrder(-99)]
         public void PublishAll()
         {
-            if (!UIOperationHelper.CheckUIOperation()) return;
-
-            foreach (var module in m_AllUIPublishPackageModule)
+            if (UIOperationHelper.CheckUIOperation())
             {
-                module.PublishCurrent(false); //不要默认重置所有图集设置 有的图集真的会有独立设置
-            }
+                foreach (var module in m_AllUIPublishPackageModule)
+                {
+                    module.PublishCurrent(false); //不要默认重置所有图集设置 有的图集真的会有独立设置
+                }
 
-            UnityTipsHelper.CallBackOk("YIUI全部 发布完毕", YIUIAutoTool.CloseWindowRefresh);
+                UnityTipsHelper.CallBackOk("YIUI全部 发布完毕", YIUIAutoTool.CloseWindowRefresh);
+            }
         }
 
         internal override void Initialize()

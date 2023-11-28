@@ -1,7 +1,6 @@
 ﻿#if UNITY_EDITOR
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
-using Sirenix.Serialization;
 using Sirenix.Utilities.Editor;
 using UnityEngine;
 
@@ -15,7 +14,7 @@ namespace YIUIFramework.Editor
         protected BaseTreeMenuItem(YIUIAutoTool autoTool, OdinMenuTree tree)
         {
             AutoTool = autoTool;
-            Tree     = tree;
+            Tree = tree;
         }
 
         public override void SelectionMenu()
@@ -42,15 +41,13 @@ namespace YIUIFramework.Editor
         [HideReferenceObjectPicker]
         public T Instance { get; internal set; }
 
-        public TreeMenuItem(YIUIAutoTool autoTool, OdinMenuTree tree, string menuName, Texture icon) : base(autoTool,
-            tree)
+        public TreeMenuItem(YIUIAutoTool autoTool, OdinMenuTree tree, string menuName, Texture icon) : base(autoTool, tree)
         {
             Tree.Add(menuName, this, icon);
             ModuleName = menuName;
         }
 
-        public TreeMenuItem(YIUIAutoTool autoTool, OdinMenuTree tree, string menuName, EditorIcon icon) : base(autoTool,
-            tree)
+        public TreeMenuItem(YIUIAutoTool autoTool, OdinMenuTree tree, string menuName, EditorIcon icon) : base(autoTool, tree)
         {
             Tree.Add(menuName, this, icon);
             ModuleName = menuName;
@@ -60,8 +57,8 @@ namespace YIUIFramework.Editor
         {
             Instance = new T
             {
-                AutoTool   = AutoTool,
-                Tree       = Tree,
+                AutoTool = AutoTool,
+                Tree = Tree,
                 ModuleName = ModuleName,
             };
             Instance?.Initialize();

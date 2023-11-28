@@ -32,10 +32,10 @@ namespace YIUIFramework.Editor
 
         public MacroCurrentData(Action refreshAction)
         {
-            RefreshAction     = refreshAction;
-            RemoveMacro       = null;
-            AddMacro          = null;
-            AllMacro          = MacroHelper.GetSymbols(UIMacroModule.BuildTargetGroup);
+            RefreshAction = refreshAction;
+            RemoveMacro = null;
+            AddMacro = null;
+            AllMacro = MacroHelper.GetSymbols(UIMacroModule.BuildTargetGroup);
             CurrentMacroCount = AllMacro.Count;
         }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Sirenix.OdinInspector.Editor;
+using Sirenix.Utilities;
 using UnityEditor;
 
 namespace YIUIFramework.Editor
@@ -14,55 +15,64 @@ namespace YIUIFramework.Editor
     public static class OdinMenuTree_Extensions
     {
         //仿照源码扩展的 根据 AssetImporter 类型
-        public static IEnumerable<OdinMenuItem> AddAllAssetImporterAtPath(
-            this OdinMenuTree tree,
-            string            menuPath,
-            string            assetFolderPath,
-            System.Type       type,
-            bool              includeSubDirectories = false,
-            bool              flattenSubDirectories = false)
+        public static IEnumerable<OdinMenuItem> AddAllAssetImporterAtPath(this OdinMenuTree tree,
+            string menuPath, string assetFolderPath, Type type, bool includeSubDirectories = false, bool flattenSubDirectories = false)
         {
-            assetFolderPath = (assetFolderPath ?? "").TrimEnd('/') + "/";
+            var s = assetFolderPath;
+            if (s == null)
+            {
+                s = "";
+            }
+
+            assetFolderPath = s.TrimEnd('/') + "/";
             string lower = assetFolderPath.ToLower();
             if (!lower.StartsWith("assets/") && !lower.StartsWith("packages/"))
+            {
                 assetFolderPath = "Assets/" + assetFolderPath;
+            }
+
             assetFolderPath = assetFolderPath.TrimEnd('/') + "/";
-            IEnumerable<string> strings = ((IEnumerable<string>)AssetDatabase.GetAllAssetPaths()).Where<string>(
-                (Func<string, bool>)(x =>
+            IEnumerable<string> strings = AssetDatabase.GetAllAssetPaths().Where(
+                x =>
                 {
                     if (includeSubDirectories)
+                    {
                         return x.StartsWith(assetFolderPath, StringComparison.InvariantCultureIgnoreCase);
-                    return string.Compare(Sirenix.Utilities.PathUtilities.GetDirectoryName(x).Trim('/'),
-                        assetFolderPath.Trim('/'), true) == 0;
-                }));
-            menuPath = menuPath ?? "";
+                    }
+
+                    return string.Compare(PathUtilities.GetDirectoryName(x).Trim('/'), assetFolderPath.Trim('/'), StringComparison.OrdinalIgnoreCase) == 0;
+                });
+            if (menuPath == null)
+            {
+                menuPath = "";
+            }
+
             menuPath = menuPath.TrimStart('/');
-            HashSet<OdinMenuItem> result = new HashSet<OdinMenuItem>();
+            var result = new HashSet<OdinMenuItem>();
             foreach (string str1 in strings)
             {
                 var assetImporter = AssetImporter.GetAtPath(str1);
-                if (assetImporter != null && type.IsInstanceOfType(assetImporter))
+                if (assetImporter && type.IsInstanceOfType(assetImporter))
                 {
                     string withoutExtension = Path.GetFileNameWithoutExtension(str1);
-                    string path             = menuPath;
+                    string path = menuPath;
                     if (!flattenSubDirectories)
                     {
-                        string str2 =
-                            (Sirenix.Utilities.PathUtilities.GetDirectoryName(str1).TrimEnd('/') + "/").Substring(
-                                assetFolderPath.Length);
+                        string str2 = (PathUtilities.GetDirectoryName(str1).TrimEnd('/') + "/").Substring(assetFolderPath.Length);
                         if (str2.Length != 0)
+                        {
                             path = path.Trim('/') + "/" + str2;
+                        }
                     }
 
                     path = path.Trim('/') + "/" + withoutExtension;
                     string name;
                     SplitMenuPath(path, out path, out name);
-                    tree.AddMenuItemAtPath((ICollection<OdinMenuItem>)result, path,
-                        new OdinMenuItem(tree, name, (object)@assetImporter));
+                    tree.AddMenuItemAtPath(result, path, new OdinMenuItem(tree, name, assetImporter));
                 }
             }
 
-            return (IEnumerable<OdinMenuItem>)result;
+            return result;
         }
 
         private static void SplitMenuPath(string menuPath, out string path, out string name)

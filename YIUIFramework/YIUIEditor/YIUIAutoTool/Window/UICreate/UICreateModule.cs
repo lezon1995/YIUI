@@ -1,8 +1,7 @@
 ﻿#if UNITY_EDITOR
-using System;
-using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using YIUIBind;
+using System.IO;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -49,8 +48,7 @@ namespace YIUIFramework.Editor
             var checkAsset = PrefabUtility.IsPartOfPrefabAsset(cdeTable);
             if (!checkAsset)
             {
-                UnityTipsHelper.ShowErrorContext(cdeTable,
-                    $"1: 必须是预制体 2: 不能在Hierarchy面板中使用 必须在Project面板下的预制体原件才能使用使用 ");
+                UnityTipsHelper.ShowErrorContext(cdeTable, $"1: 必须是预制体 2: 不能在Hierarchy面板中使用 必须在Project面板下的预制体原件才能使用使用 ");
                 return;
             }
 
@@ -61,75 +59,82 @@ namespace YIUIFramework.Editor
 
             var createBaseData = new UICreateBaseData
             {
-                AutoRefresh   = refresh,
-                ShowTips      = tips,
-                Namespace     = UIStaticHelper.UINamespace,
-                PkgName       = cdeTable.PkgName,
-                ResName       = cdeTable.ResName,
-                BaseClass     = GetBaseClass(cdeTable),
-                Variables     = UICreateVariables.Get(cdeTable),
-                UIBind        = UICreateBind.GetBind(cdeTable),
-                UIUnBind      = UICreateBind.GetUnBind(cdeTable),
+                AutoRefresh = refresh,
+                ShowTips = tips,
+                Namespace = UIStaticHelper.UINamespace,
+                PkgName = cdeTable.PkgName,
+                ResName = cdeTable.ResName,
+                BaseClass = GetBaseClass(cdeTable),
+                Variables = UICreateVariables.Get(cdeTable),
+                UIBind = UICreateBind.GetBind(cdeTable),
+                UIUnBind = UICreateBind.GetUnBind(cdeTable),
                 VirtualMethod = UICreateMethod.Get(cdeTable),
                 PanelViewEnum = UICreatePanelViewEnum.Get(cdeTable),
             };
 
-            new UICreateBaseCode(out var resultBase, YIUIAutoTool.Author, createBaseData);
+            _ = new UICreateBaseCode(out var resultBase, YIUIAutoTool.Author, createBaseData);
 
-            if (!resultBase) return;
-
-
-            if (cdeTable.UICodeType == EUICodeType.Panel)
+            if (!resultBase)
             {
-                var createPanelData = new UICreatePanelData
-                {
-                    AutoRefresh = refresh,
-                    ShowTips    = tips,
-                    Namespace   = UIStaticHelper.UINamespace,
-                    PkgName     = cdeTable.PkgName,
-                    ResName     = cdeTable.ResName,
-                    OverrideDic = UICreateMethod.GetEventOverrideDic(cdeTable),
-                };
-
-                new UICreatePanelCode(out var result, YIUIAutoTool.Author, createPanelData);
-
-                if (!result) return;
+                return;
             }
-            else if (cdeTable.UICodeType == EUICodeType.View)
+
+            switch (cdeTable.UICodeType)
             {
-                var createViewData = new UICreateViewData
+                case EUICodeType.Panel:
                 {
-                    AutoRefresh = refresh,
-                    ShowTips    = tips,
-                    Namespace   = UIStaticHelper.UINamespace,
-                    PkgName     = cdeTable.PkgName,
-                    ResName     = cdeTable.ResName,
-                    OverrideDic = UICreateMethod.GetEventOverrideDic(cdeTable),
-                };
+                    var createPanelData = new UICreatePanelData
+                    {
+                        AutoRefresh = refresh,
+                        ShowTips = tips,
+                        Namespace = UIStaticHelper.UINamespace,
+                        PkgName = cdeTable.PkgName,
+                        ResName = cdeTable.ResName,
+                        OverrideDic = UICreateMethod.GetEventOverrideDic(cdeTable),
+                    };
 
-                new UICreateViewCode(out var result, YIUIAutoTool.Author, createViewData);
+                    _ = new UICreatePanelCode(out var result, YIUIAutoTool.Author, createPanelData);
 
-                if (!result) return;
-            }
-            else if (cdeTable.UICodeType == EUICodeType.Component)
-            {
-                var createComponentData = new UICreateComponentData //目前看上去3个DATA都一样 是特意设定的 以后可独立扩展
+                    if (!result) return;
+                    break;
+                }
+                case EUICodeType.View:
                 {
-                    AutoRefresh = refresh,
-                    ShowTips    = tips,
-                    Namespace   = UIStaticHelper.UINamespace,
-                    PkgName     = cdeTable.PkgName,
-                    ResName     = cdeTable.ResName,
-                    OverrideDic = UICreateMethod.GetEventOverrideDic(cdeTable),
-                };
+                    var createViewData = new UICreateViewData
+                    {
+                        AutoRefresh = refresh,
+                        ShowTips = tips,
+                        Namespace = UIStaticHelper.UINamespace,
+                        PkgName = cdeTable.PkgName,
+                        ResName = cdeTable.ResName,
+                        OverrideDic = UICreateMethod.GetEventOverrideDic(cdeTable),
+                    };
 
-                new UICreateComponentCode(out var result, YIUIAutoTool.Author, createComponentData);
+                    _ = new UICreateViewCode(out var result, YIUIAutoTool.Author, createViewData);
 
-                if (!result) return;
-            }
-            else
-            {
-                Debug.LogError($"是新增了 新类型嘛????? {cdeTable.UICodeType}");
+                    if (!result) return;
+                    break;
+                }
+                case EUICodeType.Component:
+                {
+                    var createComponentData = new UICreateComponentData //目前看上去3个DATA都一样 是特意设定的 以后可独立扩展
+                    {
+                        AutoRefresh = refresh,
+                        ShowTips = tips,
+                        Namespace = UIStaticHelper.UINamespace,
+                        PkgName = cdeTable.PkgName,
+                        ResName = cdeTable.ResName,
+                        OverrideDic = UICreateMethod.GetEventOverrideDic(cdeTable),
+                    };
+
+                    _ = new UICreateComponentCode(out var result, YIUIAutoTool.Author, createComponentData);
+
+                    if (!result) return;
+                    break;
+                }
+                default:
+                    Debug.LogError($"是新增了 新类型嘛????? {cdeTable.UICodeType}");
+                    break;
             }
 
             AssetDatabase.Refresh();
@@ -148,14 +153,16 @@ namespace YIUIFramework.Editor
                 default:
                     Debug.LogError($"是否新增了类型????");
                     return UIStaticHelper.UIBaseName;
-
             }
         }
 
         private static string GetRegionEvent(UIBindCDETable cdeTable)
         {
             if (cdeTable.EventTable == null || cdeTable.EventTable.EventDic == null)
+            {
                 return "";
+            }
+
             return cdeTable.EventTable.EventDic.Count <= 0
                 ? ""
                 : "        #region Event开始\r\n\r\n        #endregion Event结束";
@@ -163,12 +170,11 @@ namespace YIUIFramework.Editor
 
         internal static bool InitVoName(UIBindCDETable cdeTable)
         {
-            var path    = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(cdeTable);
+            var path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(cdeTable);
             var pkgName = GetPkgName(path);
             if (string.IsNullOrEmpty(pkgName))
             {
-                UnityTipsHelper.ShowErrorContext(cdeTable,
-                    $"没有找到模块名 请在预制体上使用 且 必须在指定的文件夹下才可使用 {UIStaticHelper.UIProjectResPath}");
+                UnityTipsHelper.ShowErrorContext(cdeTable, $"没有找到模块名 请在预制体上使用 且 必须在指定的文件夹下才可使用 {UIStaticHelper.UIProjectResPath}");
                 return false;
             }
 
@@ -190,7 +196,7 @@ namespace YIUIFramework.Editor
                 return null;
             }
 
-            var parentInfo = System.IO.Directory.GetParent(path);
+            var parentInfo = Directory.GetParent(path);
             if (parentInfo == null)
             {
                 return currentName;
@@ -214,11 +220,14 @@ namespace YIUIFramework.Editor
         private static void AddCdeTable(ref List<UIBindCDETable> cdeTable, Transform transform)
         {
             var childCount = transform.childCount;
-            if (childCount <= 0) return;
+            if (childCount <= 0)
+            {
+                return;
+            }
 
             for (var i = childCount - 1; i >= 0; i--)
             {
-                var child    = transform.GetChild(i);
+                var child = transform.GetChild(i);
                 var childCde = child.GetComponent<UIBindCDETable>();
 
                 if (childCde == null)
@@ -227,7 +236,11 @@ namespace YIUIFramework.Editor
                     continue;
                 }
 
-                if (string.IsNullOrEmpty(childCde.PkgName) || string.IsNullOrEmpty(childCde.ResName)) continue;
+                if (string.IsNullOrEmpty(childCde.PkgName) || string.IsNullOrEmpty(childCde.ResName))
+                {
+                    continue;
+                }
+
                 if (childCde.UICodeType == EUICodeType.Panel)
                 {
                     Debug.LogError($"{transform.name} 公共组件嵌套了 其他面板 这是不允许的 {childCde.ResName} 已跳过忽略");

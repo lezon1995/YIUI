@@ -1,8 +1,6 @@
 ﻿#if UNITY_EDITOR
 
 using Sirenix.OdinInspector;
-using UnityEditor;
-using YIUIBind;
 
 namespace YIUIFramework.Editor
 {
@@ -32,13 +30,13 @@ namespace YIUIFramework.Editor
 
             createName = NameUtility.ToFirstUpper(createName);
 
-            var basePath          = $"{UIStaticHelper.UIProjectResPath}/{createName}";
-            var prefabsPath       = $"{basePath}/{UIStaticHelper.UIPrefabs}";
-            var spritesPath       = $"{basePath}/{UIStaticHelper.UISprites}";
+            var basePath = $"{UIStaticHelper.UIProjectResPath}/{createName}";
+            var prefabsPath = $"{basePath}/{UIStaticHelper.UIPrefabs}";
+            var spritesPath = $"{basePath}/{UIStaticHelper.UISprites}";
             var spritesAtlas1Path = $"{basePath}/{UIStaticHelper.UISprites}/{UIStaticHelper.UISpritesAtlas1}";
-            var atlasIgnorePath   = $"{basePath}/{UIStaticHelper.UISprites}/{UIStaticHelper.UIAtlasIgnore}";
-            var atlasPath         = $"{basePath}/{UIStaticHelper.UIAtlas}";
-            var sourcePath        = $"{basePath}/{UIStaticHelper.UISource}";
+            var atlasIgnorePath = $"{basePath}/{UIStaticHelper.UISprites}/{UIStaticHelper.UIAtlasIgnore}";
+            var atlasPath = $"{basePath}/{UIStaticHelper.UIAtlas}";
+            var sourcePath = $"{basePath}/{UIStaticHelper.UISource}";
 
             EditorHelper.CreateExistsDirectory(prefabsPath);
             EditorHelper.CreateExistsDirectory(spritesPath);

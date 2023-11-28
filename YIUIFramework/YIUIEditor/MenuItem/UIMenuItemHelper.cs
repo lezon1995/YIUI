@@ -24,7 +24,9 @@ namespace YIUIFramework.Editor
 
             var newGameObj = Object.Instantiate(loadSource, parent, false);
             if (newGameObj.name.EndsWith("(Clone)"))
+            {
                 newGameObj.name = newGameObj.name.Replace("(Clone)", "");
+            }
 
             return newGameObj;
         }
@@ -34,7 +36,9 @@ namespace YIUIFramework.Editor
             var newGameObj = Object.Instantiate(obj);
 
             if (newGameObj.name.EndsWith("(Clone)"))
+            {
                 newGameObj.name = newGameObj.name.Replace("(Clone)", "");
+            }
 
             return newGameObj;
         }

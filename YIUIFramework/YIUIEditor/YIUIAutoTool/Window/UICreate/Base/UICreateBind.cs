@@ -1,7 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Text;
-using YIUIBind;
 using UnityEngine;
 
 namespace YIUIFramework.Editor
@@ -25,13 +24,24 @@ namespace YIUIFramework.Editor
         {
             var tab = self.ComponentTable;
             var count = tab.AllBindDic.Count;
-            if (tab == null || count == 0) return;
+            if (tab == null || count == 0)
+            {
+                return;
+            }
 
             sb.AppendFormat("            //--------------------------------------Component---------------------------------------------------------------------------------------------------\r\n");
             foreach (var (name, component) in tab.AllBindDic)
             {
-                if (string.IsNullOrEmpty(name)) continue;
-                if (component == null) continue;
+                if (string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+
+                if (component == null)
+                {
+                    continue;
+                }
+
                 sb.AppendFormat("            {1} = ComponentTable.FindComponent<{0}>(\"{1}\");\r\n", component.GetType(), name);
             }
         }
@@ -40,16 +50,25 @@ namespace YIUIFramework.Editor
         {
             var tab = self.DataTable;
             var count = tab.DataDic.Count;
-            if (tab == null || count == 0) return;
+            if (tab == null || count == 0)
+            {
+                return;
+            }
 
             sb.AppendFormat("            //--------------------------------------Data-----------------------------------------------------------------------------------------------------------\r\n");
-            foreach (var value in tab.DataDic)
+            foreach (var (name, uiData) in tab.DataDic)
             {
-                var name = value.Key;
-                if (string.IsNullOrEmpty(name)) continue;
-                var uiData = value.Value;
+                if (string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+
                 var dataValue = uiData?.DataValue;
-                if (dataValue == null) continue;
+                if (dataValue == null)
+                {
+                    continue;
+                }
+
                 sb.AppendFormat("            {1} = DataTable.FindDataValue<{0}>(\"{1}\");\r\n", dataValue.GetType(), name);
             }
         }
@@ -58,16 +77,25 @@ namespace YIUIFramework.Editor
         {
             var tab = self.EventTable;
             var count = tab.EventDic.Count;
-            if (tab == null || count == 0) return;
+            if (tab == null || count == 0)
+            {
+                return;
+            }
 
             sb.AppendFormat("            //--------------------------------------Event----------------------------------------------------------------------------------------------------------\r\n");
-            foreach (var value in tab.EventDic)
+            foreach (var (name, uiEvent) in tab.EventDic)
             {
-                var name = value.Key;
-                if (string.IsNullOrEmpty(name)) continue;
-                var uiEventBase = value.Value;
-                if (uiEventBase == null) continue;
-                sb.AppendFormat("            {1} = EventTable.FindEvent<{0}>(\"{1}\");\r\n", uiEventBase.GetEventType(), name);
+                if (string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+
+                if (uiEvent == null)
+                {
+                    continue;
+                }
+
+                sb.AppendFormat("            {1} = EventTable.FindEvent<{0}>(\"{1}\");\r\n", uiEvent.GetEventType(), name);
                 sb.AppendFormat("            {0} = {1}.Add({2});\r\n", $"{name}Handle", name, $"OnEvent{name.Replace($"{NameUtility.FirstName}{NameUtility.EventName}", "")}Action");
                 sb.AppendLine();
             }
@@ -76,15 +104,27 @@ namespace YIUIFramework.Editor
         private static void GetCDETable(this UIBindCDETable self, StringBuilder sb)
         {
             var tab = self.AllChildCdeTable;
-            if (tab == null) return;
-            var existName = new HashSet<string>();
-            foreach (var value in tab)
+            if (tab == null)
             {
-                var name = value.name;
-                if (string.IsNullOrEmpty(name)) continue;
-                var pkgName = value.PkgName;
-                var resName = value.ResName;
-                if (string.IsNullOrEmpty(resName)) continue;
+                return;
+            }
+
+            var existName = new HashSet<string>();
+            foreach (var table in tab)
+            {
+                var name = table.name;
+                if (string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+
+                var pkgName = table.PkgName;
+                var resName = table.ResName;
+                if (string.IsNullOrEmpty(resName))
+                {
+                    continue;
+                }
+
                 var newName = UICreateVariables.GetCDEUIName(name);
                 if (existName.Contains(newName))
                 {
@@ -107,14 +147,23 @@ namespace YIUIFramework.Editor
         private static void GetUnEventTable(this UIBindCDETable self, StringBuilder sb)
         {
             var tab = self.EventTable;
-            if (tab == null) return;
-
-            foreach (var value in tab.EventDic)
+            if (tab == null)
             {
-                var name = value.Key;
-                if (string.IsNullOrEmpty(name)) continue;
-                var uiEventBase = value.Value;
-                if (uiEventBase == null) continue;
+                return;
+            }
+
+            foreach (var (name, uiEvent) in tab.EventDic)
+            {
+                if (string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+
+                if (uiEvent == null)
+                {
+                    continue;
+                }
+
                 sb.AppendFormat("            {0}.Remove({1});\r\n", name, $"{name}Handle");
             }
         }

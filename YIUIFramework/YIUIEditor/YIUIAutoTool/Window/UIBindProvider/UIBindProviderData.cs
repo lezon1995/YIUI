@@ -7,7 +7,7 @@ namespace YIUIFramework.Editor
         public string Namespace;
         public string FullName;
         public string Name;
-        public int    Count;
+        public int Count;
         public string Content;
     }
 }
