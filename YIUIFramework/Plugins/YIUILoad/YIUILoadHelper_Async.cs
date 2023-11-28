@@ -16,22 +16,22 @@ namespace YIUIFramework
         /// </summary>
         internal static async UniTask<T> LoadAssetAsync<T>(string pkgName, string resName) where T : Object
         {
-            var load = LoadHelper.GetLoad(pkgName, resName);
-            var loadObj = load.Object;
-            if (loadObj != null)
+            var handle = LoadHelper.GetLoad(pkgName, resName);
+            var loadObj = handle.Object;
+            if (loadObj)
             {
-                load.AddRefCount();
+                handle.AddRefCount();
                 return (T)loadObj;
             }
 
-            if (load.WaitAsync)
+            if (handle.WaitAsync)
             {
-                await UniTask.WaitUntil(() => !load.WaitAsync);
+                await UniTask.WaitUntil(() => !handle.WaitAsync);
 
-                loadObj = load.Object;
-                if (loadObj != null)
+                loadObj = handle.Object;
+                if (loadObj)
                 {
-                    load.AddRefCount();
+                    handle.AddRefCount();
                     return (T)loadObj;
                 }
 
@@ -39,25 +39,25 @@ namespace YIUIFramework
                 return null;
             }
 
-            load.SetWaitAsync(true);
+            handle.SetWaitAsync(true);
 
             (Object obj, int hash) = await YIUILoadDI.LoadAssetAsync(pkgName, resName, typeof(T));
 
             if (obj == null)
             {
-                load.RemoveRefCount();
+                handle.RemoveRefCount();
                 return null;
             }
 
-            if (!LoadHelper.AddLoadHandle(obj, load))
+            if (LoadHelper.AddLoadHandle(obj, handle))
             {
-                return null;
+                handle.ResetHandle(obj, hash);
+                handle.AddRefCount();
+                handle.SetWaitAsync(false);
+                return (T)obj;
             }
 
-            load.ResetHandle(obj, hash);
-            load.AddRefCount();
-            load.SetWaitAsync(false);
-            return (T)obj;
+            return null;
         }
 
         /// <summary>
@@ -72,13 +72,14 @@ namespace YIUIFramework
         private static async UniTaskVoid LoadAssetAsyncAction<T>(string pkgName, string resName, Action<T> action) where T : Object
         {
             var asset = await LoadAssetAsync<T>(pkgName, resName);
-            if (asset == null)
+            if (asset)
+            {
+                action?.Invoke(asset);
+            }
+            else
             {
                 Debug.LogError($"异步加载对象失败 {pkgName} {resName}");
-                return;
             }
-
-            action?.Invoke(asset);
         }
     }
 }

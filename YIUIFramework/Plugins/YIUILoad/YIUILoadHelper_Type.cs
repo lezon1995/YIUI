@@ -14,7 +14,7 @@ namespace YIUIFramework
         {
             var load = LoadHelper.GetLoad(pkgName, resName);
             var loadObj = load.Object;
-            if (loadObj != null)
+            if (loadObj)
             {
                 load.AddRefCount();
                 return loadObj;
@@ -27,21 +27,21 @@ namespace YIUIFramework
                 return null;
             }
 
-            if (!LoadHelper.AddLoadHandle(obj, load))
+            if (LoadHelper.AddLoadHandle(obj, load))
             {
-                return null;
+                load.ResetHandle(obj, hash);
+                load.AddRefCount();
+                return obj;
             }
 
-            load.ResetHandle(obj, hash);
-            load.AddRefCount();
-            return obj;
+            return null;
         }
 
         internal static async UniTask<Object> LoadAssetAsync(string pkgName, string resName, Type assetType)
         {
             var load = LoadHelper.GetLoad(pkgName, resName);
             var loadObj = load.Object;
-            if (loadObj != null)
+            if (loadObj)
             {
                 load.AddRefCount();
                 return loadObj;
@@ -52,15 +52,13 @@ namespace YIUIFramework
                 await UniTask.WaitUntil(() => !load.WaitAsync);
 
                 loadObj = load.Object;
-                if (loadObj != null)
+                if (loadObj)
                 {
                     load.AddRefCount();
                     return loadObj;
                 }
-                else
-                {
-                    Debug.LogError($"错误这个时候不应该是null");
-                }
+
+                Debug.LogError($"错误这个时候不应该是null");
             }
 
             load.SetWaitAsync(true);
@@ -72,15 +70,15 @@ namespace YIUIFramework
                 return null;
             }
 
-            if (!LoadHelper.AddLoadHandle(obj, load))
+            if (LoadHelper.AddLoadHandle(obj, load))
             {
-                return null;
+                load.ResetHandle(obj, hash);
+                load.AddRefCount();
+                load.SetWaitAsync(false);
+                return obj;
             }
 
-            load.ResetHandle(obj, hash);
-            load.AddRefCount();
-            load.SetWaitAsync(false);
-            return obj;
+            return null;
         }
 
         internal static void LoadAssetAsync(string pkgName, string resName, Type assetType, Action<Object> action)

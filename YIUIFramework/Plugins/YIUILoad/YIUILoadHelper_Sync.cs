@@ -15,29 +15,29 @@ namespace YIUIFramework
          */
         internal static T LoadAsset<T>(string pkgName, string resName) where T : Object
         {
-            var load = LoadHelper.GetLoad(pkgName, resName);
-            var loadObj = load.Object;
-            if (loadObj != null)
+            var handle = LoadHelper.GetLoad(pkgName, resName);
+            var loadObj = handle.Object;
+            if (loadObj)
             {
-                load.AddRefCount();
+                handle.AddRefCount();
                 return (T)loadObj;
             }
 
             (Object obj, int hash) = YIUILoadDI.LoadAsset(pkgName, resName, typeof(T));
             if (obj == null)
             {
-                load.RemoveRefCount();
+                handle.RemoveRefCount();
                 return null;
             }
 
-            if (!LoadHelper.AddLoadHandle(obj, load))
+            if (LoadHelper.AddLoadHandle(obj, handle))
             {
-                return null;
+                handle.ResetHandle(obj, hash);
+                handle.AddRefCount();
+                return (T)obj;
             }
 
-            load.ResetHandle(obj, hash);
-            load.AddRefCount();
-            return (T)obj;
+            return null;
         }
     }
 }

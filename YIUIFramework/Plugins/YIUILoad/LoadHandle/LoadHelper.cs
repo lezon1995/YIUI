@@ -27,11 +27,11 @@ namespace YIUIFramework
                 return load;
             }
 
-            var group = RefPool.Get<LoadHandle>();
-            group.SetGroupHandle(pkgName, resName);
-            pkgDic.Add(resName, group);
+            var handle = RefPool.Get<LoadHandle>();
+            handle.SetGroupHandle(pkgName, resName);
+            pkgDic.Add(resName, handle);
 
-            return group;
+            return handle;
         }
 
         internal static bool PutLoad(string pkgName, string resName)
@@ -53,10 +53,10 @@ namespace YIUIFramework
                 return false;
             }
 
-            var load = pkgDic[resName];
+            var handle = pkgDic[resName];
             pkgDic.Remove(resName);
-            RemoveLoadHandle(load);
-            RefPool.Put(load);
+            RemoveLoadHandle(handle);
+            RefPool.Put(handle);
             return true;
         }
 

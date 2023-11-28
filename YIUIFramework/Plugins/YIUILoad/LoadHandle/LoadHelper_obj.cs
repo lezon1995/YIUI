@@ -22,12 +22,12 @@ namespace YIUIFramework
         private static bool RemoveLoadHandle(LoadHandle handle)
         {
             var obj = handle.Object;
-            if (obj == null)
+            if (obj)
             {
-                return false;
+                return RemoveLoadHandle(obj);
             }
 
-            return RemoveLoadHandle(obj);
+            return false;
         }
 
         private static bool RemoveLoadHandle(Object obj)
