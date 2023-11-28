@@ -13,7 +13,6 @@ namespace YIUIBind
     {
         //当前的变量
         [OdinSerialize]
-        [HideInInspector]
         private UIData m_Data;
 
         public UIData Data => m_Data;
@@ -38,13 +37,7 @@ namespace YIUIBind
 
         private bool ShowCompareMode()
         {
-            if (m_Data.DataValue.UIBindDataType == EUIBindDataType.Int ||
-                m_Data.DataValue.UIBindDataType == EUIBindDataType.Float)
-            {
-                return true;
-            }
-
-            return false;
+            return m_Data.DataValue.UIBindDataType is EUIBindDataType.Int or EUIBindDataType.Float;
         }
 
         [OdinSerialize]

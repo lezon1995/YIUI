@@ -44,9 +44,10 @@ namespace YIUIBind
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
         public void AutoCheck()
         {
-            if (!UIOperationHelper.CheckUIOperation(this)) return;
-
-            CheckAllBindName();
+            if (UIOperationHelper.CheckUIOperation(this))
+            {
+                CheckAllBindName();
+            }
         }
 
         /// <summary>
@@ -83,12 +84,11 @@ namespace YIUIBind
                             continue;
                         }
 
-                        if (component != null)
+                        if (component)
                         {
                             if (m_NullNameAddTypeName)
                             {
-                                newName =
-                                    $"{NameUtility.FirstName}{NameUtility.ComponentName}{component.name}{component.GetType().Name}";
+                                newName = $"{NameUtility.FirstName}{NameUtility.ComponentName}{component.name}{component.GetType().Name}";
                             }
                             else
                             {

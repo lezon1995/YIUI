@@ -15,16 +15,16 @@ namespace YIUIFramework
         /// </summary>
         public delegate void OnClickItemEvent(int index, TData data, TItemRenderer item, bool select);
 
-        private bool             m_OnClickInit;                             //是否已初始化
-        private string           m_ItemClickEventName;                      //ui中的点击UIEventP0
-        private OnClickItemEvent m_OnClickItemEvent;                        //点击回调
-        private Queue<int>       m_OnClickItemQueue   = new Queue<int>();   //当前所有已选择 遵循先进先出 有序
-        private HashSet<int>     m_OnClickItemHashSet = new HashSet<int>(); //当前所有已选择 无序 为了更快查找
-        private int              m_MaxClickCount      = 0;                  //可选最大数量 >=2 就是复选 最小1
-        private bool             m_RepetitionCancel;                        //重复选择 则取消选择
+        private bool m_OnClickInit; //是否已初始化
+        private string m_ItemClickEventName; //ui中的点击UIEventP0
+        private OnClickItemEvent m_OnClickItemEvent; //点击回调
+        private Queue<int> m_OnClickItemQueue = new Queue<int>(); //当前所有已选择 遵循先进先出 有序
+        private HashSet<int> m_OnClickItemHashSet = new HashSet<int>(); //当前所有已选择 无序 为了更快查找
+        private int m_MaxClickCount = 0; //可选最大数量 >=2 就是复选 最小1
+        private bool m_RepetitionCancel; //重复选择 则取消选择
 
         public YIUILoopScroll<TData, TItemRenderer> SetOnClickInfo(
-            string           itemClickEventName,
+            string itemClickEventName,
             OnClickItemEvent onClickItemEvent)
         {
             if (m_OnClickInit)
@@ -45,10 +45,10 @@ namespace YIUIFramework
                 return this;
             }
 
-            m_MaxClickCount      = Mathf.Max(1, m_Owner.u_MaxClickCount);
+            m_MaxClickCount = Mathf.Max(1, m_Owner.u_MaxClickCount);
             m_ItemClickEventName = itemClickEventName;
-            m_OnClickItemEvent   = onClickItemEvent;
-            m_RepetitionCancel   = m_Owner.u_RepetitionCancel;
+            m_OnClickItemEvent = onClickItemEvent;
+            m_RepetitionCancel = m_Owner.u_RepetitionCancel;
             m_OnClickItemQueue.Clear();
             m_OnClickItemHashSet.Clear();
             m_OnClickInit = true;
@@ -64,7 +64,7 @@ namespace YIUIFramework
         {
             if (!m_OnClickInit) return uiBase;
 
-            var uEventClickItem = uiBase.m_EventTable.FindEvent<UIEventP0>(m_ItemClickEventName);
+            var uEventClickItem = uiBase.FindEvent<UIEventP0>(m_ItemClickEventName);
             if (uEventClickItem == null)
             {
                 Debug.LogError($"当前监听的事件未找到 请检查 {typeof(TItemRenderer).Name} 中是否有这个事件 {m_ItemClickEventName}");
@@ -79,7 +79,7 @@ namespace YIUIFramework
 
         private void OnClickItem(TItemRenderer item)
         {
-            var index  = GetItemIndex(item);
+            var index = GetItemIndex(item);
             var select = OnClickItemQueueEnqueue(index);
             OnClickItem(index, item, select);
         }

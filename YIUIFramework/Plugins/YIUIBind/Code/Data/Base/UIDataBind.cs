@@ -20,8 +20,7 @@ namespace YIUIBind
         [ReadOnly]
         [PropertyOrder(-999)]
         private UIBindDataTable m_DataTable;
-
-        public UIBindDataTable DataTable => m_DataTable;
+        protected UIBindDataTable DataTable => m_DataTable;
 
         private bool m_Binded;
 

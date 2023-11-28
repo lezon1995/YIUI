@@ -26,12 +26,7 @@ namespace YIUIFramework
                 return false;
             }
 
-            if (!Panel.name.EndsWith(UIStaticHelper.UISource))
-            {
-                return false;
-            }
-
-            return true;
+            return Panel.name.EndsWith(UIStaticHelper.UISource);
         }
 
         [GUIColor(0, 1, 1)]
@@ -45,7 +40,6 @@ namespace YIUIFramework
         internal bool AutoCheck()
         {
             if (!ResetParent()) return false;
-
             if (!CheckPanelName()) return false;
 
             CheckViewName(AllCommonView);
@@ -74,8 +68,7 @@ namespace YIUIFramework
 
             if (AllViewParent == null || AllViewParent.name != UIStaticHelper.UIAllViewParentName)
             {
-                AllViewParent = Panel.transform.FindChildByName(UIStaticHelper.UIAllViewParentName)
-                                     .GetComponent<RectTransform>();
+                AllViewParent = Panel.transform.FindChildByName(UIStaticHelper.UIAllViewParentName).GetComponent<RectTransform>();
             }
 
             if (AllViewParent == null)
@@ -87,8 +80,7 @@ namespace YIUIFramework
 
             if (AllPopupViewParent == null || AllPopupViewParent.name != UIStaticHelper.UIAllPopupViewParentName)
             {
-                AllPopupViewParent = Panel.transform.FindChildByName(UIStaticHelper.UIAllPopupViewParentName)
-                                          .GetComponent<RectTransform>();
+                AllPopupViewParent = Panel.transform.FindChildByName(UIStaticHelper.UIAllPopupViewParentName).GetComponent<RectTransform>();
             }
 
             if (AllPopupViewParent == null)

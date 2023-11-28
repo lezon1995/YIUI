@@ -12,9 +12,9 @@ namespace YIUIFramework
     {
         #region 界面参数
 
+        [ReadOnly]
         [LabelText("组件类型")]
         [OnValueChanged(nameof(OnValueChangedEUICodeType))]
-        [ReadOnly]
         public EUICodeType UICodeType = EUICodeType.Component;
 
         [BoxGroup("配置", true, true)]
@@ -26,9 +26,9 @@ namespace YIUIFramework
 
         [ShowIf("UICodeType", EUICodeType.Panel)]
         [BoxGroup("配置", true, true)]
-        [OnValueChanged(nameof(OnValueChangedEPanelLayer))]
         [GUIColor(0, 1, 1)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
+        [OnValueChanged(nameof(OnValueChangedEPanelLayer))]
         public EPanelLayer PanelLayer = EPanelLayer.Panel;
 
         [ShowIf("UICodeType", EUICodeType.Panel)]
@@ -69,7 +69,7 @@ namespace YIUIFramework
         [BoxGroup("配置", true, true)]
         [GUIColor(0, 1, 1)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
-        public int Priority = 0;
+        public int Priority;
 
         private void OnValueChangedEUICodeType()
         {
@@ -115,8 +115,7 @@ namespace YIUIFramework
 
         private bool ShowAutoCheckBtn()
         {
-            if (!UIOperationHelper.CheckUIOperation(false)) return false;
-            return true;
+            return UIOperationHelper.CheckUIOperation(false);
         }
 
         [GUIColor(1, 1, 0)]
@@ -177,12 +176,12 @@ namespace YIUIFramework
                 return false;
             }
 
-            if (!UIOperationHelper.CheckUIOperation(this, false))
+            if (UIOperationHelper.CheckUIOperation(this, false))
             {
-                return false;
+                return !PrefabUtility.IsPartOfPrefabAsset(this);
             }
 
-            return !PrefabUtility.IsPartOfPrefabAsset(this);
+            return false;
         }
 
         [GUIColor(0f, 0.5f, 1f)]
@@ -231,12 +230,7 @@ namespace YIUIFramework
                 return false;
             }
 
-            if (!UIOperationHelper.CheckUIOperationAll(this, false))
-            {
-                return false;
-            }
-
-            return true;
+            return UIOperationHelper.CheckUIOperationAll(this, false);
         }
 
         [GUIColor(0.7f, 0.4f, 0.8f)]
@@ -244,9 +238,10 @@ namespace YIUIFramework
         [ShowIf("ShowCreateBtn")]
         internal void CreateUICode()
         {
-            if (!UIOperationHelper.CheckUIOperation(this)) return;
-
-            CreateUICode(true, true);
+            if (UIOperationHelper.CheckUIOperation(this))
+            {
+                CreateUICode(true, true);
+            }
         }
 
         private bool ShowPanelSourceSplit()
@@ -259,21 +254,19 @@ namespace YIUIFramework
         [ShowIf("ShowPanelSourceSplit")]
         internal void PanelSourceSplit()
         {
-            if (!UIOperationHelper.CheckUIOperation(this))
+            if (UIOperationHelper.CheckUIOperation(this))
             {
-                return;
-            }
-
-            if (IsSplitData)
-            {
-                if (AutoCheck())
+                if (IsSplitData)
                 {
-                    UIPanelSourceSplit.Do(this);
+                    if (AutoCheck())
+                    {
+                        UIPanelSourceSplit.Do(this);
+                    }
                 }
-            }
-            else
-            {
-                UnityTipsHelper.ShowError($"{name} 当前数据不是源数据 无法进行拆分 请检查数据");
+                else
+                {
+                    UnityTipsHelper.ShowError($"{name} 当前数据不是源数据 无法进行拆分 请检查数据");
+                }
             }
         }
 
@@ -302,32 +295,26 @@ namespace YIUIFramework
 
         private void AddComponentTable()
         {
-            if (!UIOperationHelper.CheckUIOperation())
+            if (UIOperationHelper.CheckUIOperation())
             {
-                return;
+                ComponentTable = gameObject.GetOrAddComponent<UIBindComponentTable>();
             }
-
-            ComponentTable = gameObject.GetOrAddComponent<UIBindComponentTable>();
         }
 
         private void AddDataTable()
         {
-            if (!UIOperationHelper.CheckUIOperation())
+            if (UIOperationHelper.CheckUIOperation())
             {
-                return;
+                DataTable = gameObject.GetOrAddComponent<UIBindDataTable>();
             }
-
-            DataTable = gameObject.GetOrAddComponent<UIBindDataTable>();
         }
 
         private void AddEventTable()
         {
-            if (!UIOperationHelper.CheckUIOperation())
+            if (UIOperationHelper.CheckUIOperation())
             {
-                return;
+                EventTable = gameObject.GetOrAddComponent<UIBindEventTable>();
             }
-
-            EventTable = gameObject.GetOrAddComponent<UIBindEventTable>();
         }
     }
 }

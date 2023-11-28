@@ -13,29 +13,29 @@ namespace YIUIFramework
     public sealed partial class UIBindCDETable : SerializedMonoBehaviour
     {
 #if UNITY_EDITOR
-        [InlineButton("AddComponentTable", "Add")]
+        [InlineButton(nameof(AddComponentTable), "Add")]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
 #endif
         public UIBindComponentTable ComponentTable;
 
 #if UNITY_EDITOR
-        [InlineButton("AddDataTable", "Add")]
+        [InlineButton(nameof(AddDataTable), "Add")]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
 #endif
         public UIBindDataTable DataTable;
 
 #if UNITY_EDITOR
-        [InlineButton("AddEventTable", "Add")]
+        [InlineButton(nameof(AddEventTable), "Add")]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
 #endif
         public UIBindEventTable EventTable;
 
-        [LabelText("UI包名")]
         [ReadOnly]
+        [LabelText("UI包名")]
         public string PkgName;
 
-        [LabelText("UI资源名")]
         [ReadOnly]
+        [LabelText("UI资源名")]
         public string ResName;
 
         #region 关联
@@ -76,18 +76,18 @@ namespace YIUIFramework
 
         internal UIBase FindUIBase(string uiName)
         {
-            if (!m_AllChildUIBase.ContainsKey(uiName))
+            if (m_AllChildUIBase.TryGetValue(uiName, out var uiBase))
             {
-                Debug.LogError($"{name} 不存在 {uiName} 请检查");
-                return null;
+                return uiBase;
             }
 
-            return m_AllChildUIBase[uiName];
+            Debug.LogError($"{name} 不存在 {uiName} 请检查");
+            return null;
         }
 
         public T FindUIBase<T>(string uiName) where T : UIBase
         {
-            return (T) FindUIBase(uiName);
+            return (T)FindUIBase(uiName);
         }
 
         #endregion

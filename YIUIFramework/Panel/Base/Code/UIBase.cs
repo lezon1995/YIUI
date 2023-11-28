@@ -14,17 +14,13 @@ namespace YIUIFramework
     {
         #region 所有table表禁止public 不允许任何外界获取
 
-        internal UIBindCDETable m_CDETable;
-        protected UIBindCDETable CDETable => m_CDETable;
+        protected UIBindCDETable CDETable { get; set; }
 
-        internal UIBindComponentTable m_ComponentTable;
-        protected UIBindComponentTable ComponentTable => m_ComponentTable;
+        protected UIBindComponentTable ComponentTable { get; set; }
 
-        internal UIBindDataTable m_DataTable;
-        protected UIBindDataTable DataTable => m_DataTable;
+        protected UIBindDataTable DataTable { get; set; }
 
-        internal UIBindEventTable m_EventTable;
-        protected UIBindEventTable EventTable => m_EventTable;
+        protected UIBindEventTable EventTable { get; set; }
 
         #endregion
 
@@ -77,10 +73,7 @@ namespace YIUIFramework
         /// </summary>
         public bool ActiveSelf
         {
-            get
-            {
-                return OwnerGameObject && OwnerGameObject.activeSelf;
-            }
+            get { return OwnerGameObject && OwnerGameObject.activeSelf; }
         }
 
         /// <summary>
@@ -98,16 +91,16 @@ namespace YIUIFramework
             OwnerGameObject = gameObject;
             OwnerCanvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
             OwnerRectTransform = gameObject.GetComponent<RectTransform>();
-            m_CDETable = OwnerGameObject.GetComponent<UIBindCDETable>();
+            CDETable = OwnerGameObject.GetComponent<UIBindCDETable>();
             if (CDETable == null)
             {
                 Debug.LogError($"{OwnerGameObject.name} 没有UIBindCDETable组件 这是必须的");
                 return false;
             }
 
-            m_ComponentTable = CDETable.ComponentTable;
-            m_DataTable = CDETable.DataTable;
-            m_EventTable = CDETable.EventTable;
+            ComponentTable = CDETable.ComponentTable;
+            DataTable = CDETable.DataTable;
+            EventTable = CDETable.EventTable;
 
             m_UIBaseInit = true;
             m_UIBindVo = uiBindVo;
@@ -134,6 +127,11 @@ namespace YIUIFramework
         //就直接 OwnerRectTransform. 使用Unity API 就可以了 没必要包一成
         //这么多方法 都有可能用到你都包一层嘛
 
+        public T FindEvent<T>(string eventName) where T : UIEventBase
+        {
+            return EventTable.FindEvent<T>(eventName);
+        }
+        
         #endregion
 
         #region 生命周期
