@@ -18,12 +18,13 @@ namespace YIUIFramework
         public async UniTask<bool> Register(IManager manager)
         {
             var result = await g_MgrCore.Add(manager);
-            if (!result)
+            if (result)
             {
-                m_FailInited.Enqueue(manager);
+                return true;
             }
 
-            return result;
+            m_FailInited.Enqueue(manager);
+            return false;
         }
 
         //获取失败的管理器

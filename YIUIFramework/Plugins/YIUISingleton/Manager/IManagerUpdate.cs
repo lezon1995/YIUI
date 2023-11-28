@@ -4,7 +4,7 @@ namespace YIUIFramework
 {
     public interface IManagerAsyncInit : IManager
     {
-        UniTask<bool> ManagerAsyncInit();
+        UniTask<bool> InitManagerAsync();
     }
 
     public interface IManagerUpdate : IManager

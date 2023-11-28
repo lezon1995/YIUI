@@ -47,7 +47,9 @@ namespace YIUIFramework
             guid = AddCountDownTimer(newCountDownData);
 
             if (startCallback)
+            {
                 Callback(newCountDownData);
+            }
 
             return true;
         }
@@ -108,12 +110,14 @@ namespace YIUIFramework
         public bool SetElapseTime(int guid, double elapseTime)
         {
             var exist = m_AllCountDown.TryGetValue(guid, out CountDownData data);
-            if (!exist)
-                return false;
+            if (exist)
+            {
+                data.ElapseTime = elapseTime;
+                data.LastCallBackTime = GetTime();
+                return true;
+            }
 
-            data.ElapseTime = elapseTime;
-            data.LastCallBackTime = GetTime();
-            return true;
+            return false;
         }
 
         /// <summary>
@@ -122,10 +126,12 @@ namespace YIUIFramework
         public double GetRemainTime(int guid)
         {
             var exist = m_AllCountDown.TryGetValue(guid, out CountDownData data);
-            if (!exist)
-                return 0;
+            if (exist)
+            {
+                return data.TotalTime - data.ElapseTime;
+            }
 
-            return data.TotalTime - data.ElapseTime;
+            return 0;
         }
 
         /// <summary>
@@ -134,13 +140,15 @@ namespace YIUIFramework
         public bool ForceToEndTime(int guid)
         {
             var exist = m_AllCountDown.TryGetValue(guid, out CountDownData data);
-            if (!exist)
-                return false;
+            if (exist)
+            {
+                data.ElapseTime = data.TotalTime;
+                Callback(data);
 
-            data.ElapseTime = data.TotalTime;
-            Callback(data);
+                return Remove(guid);
+            }
 
-            return Remove(guid);
+            return false;
         }
 
         /// <summary>
@@ -149,10 +157,12 @@ namespace YIUIFramework
         public bool Restart(int guid)
         {
             var exist = m_AllCountDown.TryGetValue(guid, out CountDownData data);
-            if (!exist)
-                return false;
+            if (exist)
+            {
+                return Restart(data);
+            }
 
-            return Restart(data);
+            return false;
         }
     }
 }

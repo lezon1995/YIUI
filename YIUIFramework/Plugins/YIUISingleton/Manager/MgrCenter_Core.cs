@@ -33,12 +33,13 @@ namespace YIUIFramework
 
                 m_CacheInitMgr.Add(manager);
 
-                if (manager is IManagerAsyncInit initialize)
+                if (manager is IManagerAsyncInit init)
                 {
-                    var result = await initialize.ManagerAsyncInit();
+                    var result = await init.InitManagerAsync();
                     if (!result)
                     {
-                        return false; //初始化失败的管理器 不添加
+                        //初始化失败的管理器 不添加
+                        return false;
                     }
                 }
 
@@ -81,16 +82,21 @@ namespace YIUIFramework
                 {
                     IManagerUpdate manager = m_MgrUpdateList[i];
 
-                    if (manager.Disposed) continue;
-                    if (!manager.Enabled) continue;
-
-                    try
+                    if (manager.Disposed)
                     {
-                        manager.ManagerUpdate();
+                        continue;
                     }
-                    catch (Exception e)
+
+                    if (manager.Enabled)
                     {
-                        Debug.LogError($"manager={manager.GetType().Name}, err={e.Message}{e.StackTrace}");
+                        try
+                        {
+                            manager.ManagerUpdate();
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogError($"manager={manager.GetType().Name}, err={e.Message}{e.StackTrace}");
+                        }
                     }
                 }
 
@@ -103,8 +109,15 @@ namespace YIUIFramework
                 {
                     IManagerLateUpdate manager = m_MgrLateUpdateList[i];
 
-                    if (manager.Disposed) continue;
-                    if (!manager.Enabled) continue;
+                    if (manager.Disposed)
+                    {
+                        continue;
+                    }
+
+                    if (!manager.Enabled)
+                    {
+                        continue;
+                    }
 
                     try
                     {
@@ -123,8 +136,15 @@ namespace YIUIFramework
                 {
                     IManagerFixedUpdate manager = m_MgrFixedUpdateList[i];
 
-                    if (manager.Disposed) continue;
-                    if (!manager.Enabled) continue;
+                    if (manager.Disposed)
+                    {
+                        continue;
+                    }
+
+                    if (!manager.Enabled)
+                    {
+                        continue;
+                    }
 
                     try
                     {

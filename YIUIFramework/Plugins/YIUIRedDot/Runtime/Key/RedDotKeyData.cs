@@ -34,7 +34,7 @@ namespace YIUIFramework
 
         public RedDotKeyData(int id, string des)
         {
-            Id  = id;
+            Id = id;
             Des = des;
         }
 

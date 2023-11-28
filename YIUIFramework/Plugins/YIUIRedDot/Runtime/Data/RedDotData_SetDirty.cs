@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 namespace YIUIFramework
 {
@@ -33,7 +32,7 @@ namespace YIUIFramework
                 }
 
                 m_ChangeDirty = true;
-                m_DirtyCount  = count;
+                m_DirtyCount = count;
                 SetDirtyOS(count);
                 return true;
             }
@@ -58,37 +57,37 @@ namespace YIUIFramework
 
         private void SetDirtyOS(int count)
         {
-            #if UNITY_EDITOR || YIUIMACRO_REDDOT_STACK
+#if UNITY_EDITOR || YIUIMACRO_REDDOT_STACK
 
             m_DirtyFirstRedDotChangeData ??= new FirstRedDotChangeData();
             {
-                m_DirtyFirstRedDotChangeData.ChangeData    = this;
+                m_DirtyFirstRedDotChangeData.ChangeData = this;
                 m_DirtyFirstRedDotChangeData.OriginalCount = RealCount;
-                m_DirtyFirstRedDotChangeData.ChangeCount   = count;
-                m_DirtyFirstRedDotChangeData.ChangeTips    = Tips;
+                m_DirtyFirstRedDotChangeData.ChangeCount = count;
+                m_DirtyFirstRedDotChangeData.ChangeTips = Tips;
             }
 
             m_DirtyStack ??= new RedDotStack();
             {
-                m_DirtyStack.Id            = StackList.Count + 1;
-                m_DirtyStack.DataTime      = DateTime.Now;
-                m_DirtyStack.StackTrace    = new System.Diagnostics.StackTrace(true);
-                m_DirtyStack.RedDotOSType  = ERedDotOSType.Count;
+                m_DirtyStack.Id = StackList.Count + 1;
+                m_DirtyStack.DataTime = DateTime.Now;
+                m_DirtyStack.StackTrace = new StackTrace(true);
+                m_DirtyStack.RedDotOSType = ERedDotOSType.Count;
                 m_DirtyStack.OriginalCount = RealCount;
-                m_DirtyStack.ChangeCount   = count;
-                m_DirtyStack.ChangeTips    = Tips;
-                m_DirtyStack.FirstData     = m_DirtyFirstRedDotChangeData;
+                m_DirtyStack.ChangeCount = count;
+                m_DirtyStack.ChangeTips = Tips;
+                m_DirtyStack.FirstData = m_DirtyFirstRedDotChangeData;
             }
 
-            #endif
+#endif
         }
 
         //初始化脏标数据
         private void ResetDirty()
         {
-            m_ChangeDirty                = false;
-            m_DirtyCount                 = -1;
-            m_DirtyStack                 = null;
+            m_ChangeDirty = false;
+            m_DirtyCount = -1;
+            m_DirtyStack = null;
             m_DirtyFirstRedDotChangeData = null;
         }
     }

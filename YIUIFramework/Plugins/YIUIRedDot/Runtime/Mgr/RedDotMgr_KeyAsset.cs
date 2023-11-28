@@ -7,10 +7,7 @@ namespace YIUIFramework
     public partial class RedDotMgr
     {
         private const string RedDotKeyAssetName = "RedDotKeyAsset";
-
-        private Dictionary<ERedDotKeyType, RedDotKeyData> m_AllRedDotKeyData =
-            new Dictionary<ERedDotKeyType, RedDotKeyData>();
-
+        private Dictionary<ERedDotKeyType, RedDotKeyData> m_AllRedDotKeyData = new Dictionary<ERedDotKeyType, RedDotKeyData>();
         public IReadOnlyDictionary<ERedDotKeyType, RedDotKeyData> AllRedDotKeyData => m_AllRedDotKeyData;
 
         private RedDotKeyAsset m_RedDotKeyAsset;
@@ -51,14 +48,13 @@ namespace YIUIFramework
         /// </summary>
         public string GetKeyDes(ERedDotKeyType keyType)
         {
-            if (!m_AllRedDotKeyData.ContainsKey(keyType))
+            if (m_AllRedDotKeyData.TryGetValue(keyType, out var keyData))
             {
-                Debug.LogError($"不存在这个key {keyType}");
-                return "";
+                return keyData.Des;
             }
 
-            var keyData = m_AllRedDotKeyData[keyType];
-            return keyData.Des;
+            Debug.LogError($"不存在这个key {keyType}");
+            return "";
         }
     }
 }

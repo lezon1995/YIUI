@@ -8,10 +8,10 @@ namespace YIUIFramework
     {
         #region 操作
 
-        static readonly string m_OsCountFormat      = "自己改变数量 {0}  >>  {1}";
-        static readonly string m_OsTipsFormat       = "自己改变提示 {0}  >>  {1}  >>  {2}";
+        static readonly string m_OsCountFormat = "自己改变数量 {0}  >>  {1}";
+        static readonly string m_OsTipsFormat = "自己改变提示 {0}  >>  {1}  >>  {2}";
         static readonly string m_OsChildCountFormat = "有子类改变数量 {0}  >>  {1}";
-        static readonly string m_OsChildTipsFormat  = "有子类改变提示 {0}  >>  {1}  >>  {2}";
+        static readonly string m_OsChildTipsFormat = "有子类改变提示 {0}  >>  {1}  >>  {2}";
 
         /// <summary>
         /// 获取操作拼接
@@ -51,7 +51,7 @@ namespace YIUIFramework
         public static string GetTime(this RedDotStack self)
         {
             var time = self.DataTime;
-            var sb   = SbPool.Get();
+            var sb = SbPool.Get();
             sb.AppendFormat(m_TimeFormat, time.Year, time.Month, time.Day, time.Hour, time.Minute, time.Second);
             return SbPool.PutAndToStr(sb);
         }
@@ -70,9 +70,8 @@ namespace YIUIFramework
         public static string GetSource(this RedDotStack self)
         {
             var data = self.FirstData;
-            var sb   = SbPool.Get();
-            sb.AppendFormat(m_SourceFormat, (int)data.ChangeData.Config.Key,
-                RedDotMgr.Inst.GetKeyDes(data.ChangeData.Config.Key));
+            var sb = SbPool.Get();
+            sb.AppendFormat(m_SourceFormat, (int)data.ChangeData.Config.Key, RedDotMgr.Inst.GetKeyDes(data.ChangeData.Config.Key));
             sb.AppendFormat(m_SourceCountFormat, data.ChangeTips, data.OriginalCount, data.ChangeCount);
             return SbPool.PutAndToStr(sb);
         }
@@ -196,10 +195,10 @@ namespace YIUIFramework
         }
 
         static readonly string m_FrameFormat = "{0} {1}.{2} : {3} : {4}";
-        static readonly string m_FileFormat  = "\tFile: {0}";
+        static readonly string m_FileFormat = "\tFile: {0}";
 
-        static readonly string m_StackContinueUnityEngine   = "UnityEngine";
-        static readonly string m_StackContinueYIUIBind      = "YIUIBind";
+        static readonly string m_StackContinueUnityEngine = "UnityEngine";
+        static readonly string m_StackContinueYIUIBind = "YIUIBind";
         static readonly string m_StackContinueYIUIFramework = "YIUIFramework";
 
         /// <summary>
@@ -216,15 +215,15 @@ namespace YIUIFramework
                 for (int i = 0; i < stackFrames.Length; i++)
                 {
                     var stackFrame = stackFrames[i];
-                    var method     = stackFrame.GetMethod();
-                    var declaring  = method.DeclaringType;
+                    var method = stackFrame.GetMethod();
+                    var declaring = method.DeclaringType;
                     if (declaring == null)
                     {
                         continue;
                     }
 
                     var stackNamespace = declaring.Namespace ?? ""; //命名空间
-                    var className      = declaring.Name;            //类名
+                    var className = declaring.Name; //类名
 
 
                     if (StackHideUnityEngine)
@@ -252,10 +251,10 @@ namespace YIUIFramework
                     }
 
                     sb.Append(string.Format(m_FrameFormat,
-                        ShowStackIndex ? i.ToString() : "",          //堆栈索引
-                        stackNamespace,                              //命名空间
-                        className,                                   //类名
-                        method.Name,                                 //方法名
+                        ShowStackIndex ? i.ToString() : "", //堆栈索引
+                        stackNamespace, //命名空间
+                        className, //类名
+                        method.Name, //方法名
                         stackFrame.GetFileLineNumber().ToString())); //所在行数
 
                     //所在的文件路径

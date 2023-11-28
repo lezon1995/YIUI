@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 namespace YIUIFramework
 {
@@ -70,14 +71,14 @@ namespace YIUIFramework
 
         internal RedDotData(RedDotConfigData config)
         {
-            Config     = config;
+            Config = config;
             ParentList = new HashSet<RedDotData>();
-            ChildList  = new HashSet<RedDotData>();
+            ChildList = new HashSet<RedDotData>();
             InitTips();
 
-            #if UNITY_EDITOR || YIUIMACRO_REDDOT_STACK
+#if UNITY_EDITOR || YIUIMACRO_REDDOT_STACK
             StackList = new List<RedDotStack>();
-            #endif
+#endif
         }
 
         /// <summary>
@@ -92,9 +93,9 @@ namespace YIUIFramework
                 return;
             }
 
-            m_PlayerTipsKey          = $"PlayerRedDotTips_{(int)Config.Key}";
+            m_PlayerTipsKey = $"PlayerRedDotTips_{(int)Config.Key}";
             m_PlayerTipsKeyBoolPrefs = new BoolPrefs(m_PlayerTipsKey, null, Config.SwitchTips);
-            Tips                     = m_PlayerTipsKeyBoolPrefs.Value;
+            Tips = m_PlayerTipsKeyBoolPrefs.Value;
         }
 
         internal void DeletePlayerTipsPrefs()
@@ -109,7 +110,7 @@ namespace YIUIFramework
         {
             //所有父子关联关系 都在编辑器中检查完成
             //要保证不会出现循环引用关系
-            ParentList.Add(data);       //目标设定为我的父级
+            ParentList.Add(data); //目标设定为我的父级
             return data.AddChild(this); //因为他是我的父级所以我为他的子级
         }
 
@@ -149,7 +150,7 @@ namespace YIUIFramework
             }
 
 
-            #if UNITY_EDITOR || YIUIMACRO_REDDOT_STACK
+#if UNITY_EDITOR || YIUIMACRO_REDDOT_STACK
 
             if (stack == null)
             {
@@ -161,7 +162,7 @@ namespace YIUIFramework
                 AddStack(stack);
             }
 
-            #endif
+#endif
 
             RealCount = count;
             NotifyChange(stack);
@@ -215,7 +216,7 @@ namespace YIUIFramework
 
             Tips = tips;
 
-            #if UNITY_EDITOR || YIUIMACRO_REDDOT_STACK
+#if UNITY_EDITOR || YIUIMACRO_REDDOT_STACK
 
             if (stack == null)
             {
@@ -227,10 +228,10 @@ namespace YIUIFramework
                 AddStack(stack);
             }
 
-            #endif
+#endif
 
             m_PlayerTipsKeyBoolPrefs.Value = tips; //存储到本地
-            NotifyChange(stack);                   //提示改变后 通知 监听改变
+            NotifyChange(stack); //提示改变后 通知 监听改变
             return true;
         }
 
@@ -269,7 +270,7 @@ namespace YIUIFramework
             }
         }
 
-        #if UNITY_EDITOR || YIUIMACRO_REDDOT_STACK
+#if UNITY_EDITOR || YIUIMACRO_REDDOT_STACK
 
         //因为有堆栈操作的需求 所以还是有可能 同一时间刷新2个节点  他们都有相同的路线时 会被刷新2次
         //因为需要这2次的堆栈操作信息  如果去掉堆栈 可以合并 TODO
@@ -279,22 +280,22 @@ namespace YIUIFramework
         /// 目前只有在编辑器下执行  以后可能修改成一个可开关的 这样在手机上也可以查看 debug模式
         /// </summary>
         private RedDotStack AddNewStack(
-            ERedDotOSType         osType,
-            int                   originalCount,
-            int                   changeCount,
-            bool                  changeTips,
+            ERedDotOSType osType,
+            int originalCount,
+            int changeCount,
+            bool changeTips,
             FirstRedDotChangeData firstData)
         {
             var stack = new RedDotStack
             {
-                Id            = StackList.Count + 1,
-                DataTime      = DateTime.Now,
-                StackTrace    = new System.Diagnostics.StackTrace(true),
-                RedDotOSType  = osType,
+                Id = StackList.Count + 1,
+                DataTime = DateTime.Now,
+                StackTrace = new StackTrace(true),
+                RedDotOSType = osType,
                 OriginalCount = originalCount,
-                ChangeCount   = changeCount,
-                ChangeTips    = changeTips,
-                FirstData     = firstData,
+                ChangeCount = changeCount,
+                ChangeTips = changeTips,
+                FirstData = firstData,
             };
 
             //新的在前 其他地方就不用翻转数据了
@@ -307,6 +308,6 @@ namespace YIUIFramework
             StackList.Insert(0, stack);
         }
 
-        #endif
+#endif
     }
 }

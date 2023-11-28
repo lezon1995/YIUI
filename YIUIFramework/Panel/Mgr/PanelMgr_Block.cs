@@ -9,11 +9,14 @@ namespace YIUIFramework
     //适用于 统一动画播放时 某些操作需要等待时 都可以调节
     public partial class PanelMgr
     {
-        private GameObject m_LayerBlock; //内部屏蔽对象 显示时之下的所有UI将不可操作
+        //内部屏蔽对象 显示时之下的所有UI将不可操作
+        private GameObject m_LayerBlock;
 
-        private int m_LastCountDownGuid; //倒计时的唯一ID
+        //倒计时的唯一ID
+        private int m_LastCountDownGuid;
 
-        private float m_LastRecoverOptionTime; //下一次恢复操作时间
+        //下一次恢复操作时间
+        private float m_LastRecoverOptionTime;
 
         private void OnBlockDispose()
         {
@@ -74,7 +77,8 @@ namespace YIUIFramework
         {
             SetLayerBlockOption(false);
 
-            var currentTime = Time.realtimeSinceStartup; //当前的时间不受暂停影响
+            //当前的时间不受暂停影响
+            var currentTime = Time.realtimeSinceStartup;
             var currentRecoverOptionTime = currentTime + time;
 
             //假设A 先禁止100秒

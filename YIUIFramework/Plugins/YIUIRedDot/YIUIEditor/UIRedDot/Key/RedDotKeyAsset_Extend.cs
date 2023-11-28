@@ -1,8 +1,8 @@
 ﻿#if UNITY_EDITOR
 
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 namespace YIUIFramework
 {
@@ -37,10 +37,10 @@ namespace YIUIFramework
             }
 
             var listData = GetDataList(self);
-            var id       = 1;
+            var id = 1;
             for (var i = 0; i < listData.Count; i++)
             {
-                var data   = listData[i];
+                var data = listData[i];
                 var dataId = data.Id;
                 if (id != dataId)
                 {

@@ -11,6 +11,7 @@ namespace YIUIFramework
         /// 主要是作为缓存PanelInfo
         /// </summary>
         private readonly Dictionary<string, PanelInfo> m_PanelCfgMap = new Dictionary<string, PanelInfo>();
+
         private readonly HashSet<string> m_PanelOpening = new HashSet<string>();
 
         /// <summary>

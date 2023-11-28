@@ -64,9 +64,9 @@ namespace YIUIFramework
         {
             foreach (var pkgDic in m_AllLoadDic.Values)
             {
-                foreach (var load in pkgDic.Values)
+                foreach (var handle in pkgDic.Values)
                 {
-                    RefPool.Put(load);
+                    RefPool.Put(handle);
                 }
             }
 

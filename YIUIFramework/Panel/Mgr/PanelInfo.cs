@@ -9,10 +9,7 @@ namespace YIUIFramework
     {
         public BasePanel Panel { get; private set; }
 
-        public bool ActiveSelf
-        {
-            get { return Panel is { ActiveSelf: true }; }
-        }
+        public bool ActiveSelf => Panel is { ActiveSelf: true };
 
         /// <summary>
         /// 包名

@@ -14,10 +14,9 @@ namespace YIUIFramework
         public RedDotData GetData(ERedDotKeyType key)
         {
             m_AllRedDotData.TryGetValue(key, out var data);
-            if (data == null)
+            if (data == null && !Disposed)
             {
-                if (!Disposed)
-                    Debug.LogError($"没有获取到这个红点数据 {key}");
+                Debug.LogError($"没有获取到这个红点数据 {key}");
             }
 
             return data;
@@ -65,10 +64,8 @@ namespace YIUIFramework
             {
                 return data.TrySetCount(count);
             }
-            else
-            {
-                return TryDirtySetCount(data, count);
-            }
+
+            return TryDirtySetCount(data, count);
         }
 
         /// <summary>
@@ -86,7 +83,12 @@ namespace YIUIFramework
                 return 0;
             }
 
-            return isReal ? data.RealCount : data.Count;
+            if (isReal)
+            {
+                return data.RealCount;
+            }
+
+            return data.Count;
         }
 
         /// <summary>

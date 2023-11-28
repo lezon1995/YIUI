@@ -16,10 +16,7 @@ namespace YIUIFramework
                 m_RefType = refType;
             }
 
-            internal Type RefType
-            {
-                get { return m_RefType; }
-            }
+            internal Type RefType => m_RefType;
 
             internal T _Get<T>() where T : class, IRefPool, new()
             {
@@ -57,14 +54,14 @@ namespace YIUIFramework
                 iRef.Recycle();
                 lock (m_Refs)
                 {
-                    if (!m_Refs.Contains(iRef))
+                    if (m_Refs.Contains(iRef))
                     {
-                        m_Refs.Enqueue(iRef);
-                        return true;
+                        return false;
                     }
-                }
 
-                return false;
+                    m_Refs.Enqueue(iRef);
+                    return true;
+                }
             }
 
             internal void _Add<T>(int count) where T : class, IRefPool, new()

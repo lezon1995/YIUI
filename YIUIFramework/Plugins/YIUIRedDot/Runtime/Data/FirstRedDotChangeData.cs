@@ -32,14 +32,14 @@
         }
 
         public FirstRedDotChangeData(RedDotData changeData,
-                                     int        originalCount,
-                                     int        changeCount,
-                                     bool       changeTips)
+            int originalCount,
+            int changeCount,
+            bool changeTips)
         {
-            ChangeData    = changeData;
+            ChangeData = changeData;
             OriginalCount = originalCount;
-            ChangeCount   = changeCount;
-            ChangeTips    = changeTips;
+            ChangeCount = changeCount;
+            ChangeTips = changeTips;
         }
     }
 }

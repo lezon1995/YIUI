@@ -1,21 +1,19 @@
 ﻿#if UNITY_EDITOR
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace YIUIFramework.Editor
 {
     internal class Node
     {
-        public ERedDotKeyType Key      { get; set; }
-        public List<Node>     Parents  { get; set; }
-        public List<Node>     Children { get; set; }
+        public ERedDotKeyType Key { get; set; }
+        public List<Node> Parents { get; set; }
+        public List<Node> Children { get; set; }
 
         public Node(ERedDotKeyType key)
         {
-            Key      = key;
-            Parents  = new List<Node>();
+            Key = key;
+            Parents = new List<Node>();
             Children = new List<Node>();
         }
     }
@@ -37,7 +35,7 @@ namespace YIUIFramework.Editor
         public void AddEdge(ERedDotKeyType parentKey, ERedDotKeyType childKey)
         {
             var parent = Nodes.Find(n => n.Key == parentKey);
-            var child  = Nodes.Find(n => n.Key == childKey);
+            var child = Nodes.Find(n => n.Key == childKey);
 
             parent.Children.Add(child);
             child.Parents.Add(parent);
@@ -51,7 +49,7 @@ namespace YIUIFramework.Editor
         //拓扑排序算法 检查循环引用
         private static bool CheckCyclesSort(List<Node> nodes)
         {
-            var sortedNodes         = new List<Node>();
+            var sortedNodes = new List<Node>();
             var nodesWithoutParents = new Queue<Node>(nodes.Where(n => n.Parents.Count == 0));
             while (nodesWithoutParents.Count > 0)
             {

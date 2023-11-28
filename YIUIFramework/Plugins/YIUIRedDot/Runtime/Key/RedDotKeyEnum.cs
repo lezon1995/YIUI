@@ -10,7 +10,5 @@ namespace YIUIFramework
     {
         [LabelText("无")]
         None = 0,
-
-
     }
 }

@@ -63,10 +63,10 @@ namespace YIUIFramework
         /// </summary>
         private int m_AtCount = 0;
 
-        protected override UniTask<bool> MgrAsyncInit()
+        protected override UniTask<bool> InitMgrAsync()
         {
             Initialize();
-            return base.MgrAsyncInit();
+            return base.InitMgrAsync();
         }
 
         //初始化

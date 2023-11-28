@@ -50,7 +50,10 @@ namespace YIUIFramework
             {
                 var inst = singles[i];
 
-                if (inst == null || inst.Disposed) continue;
+                if (inst == null || inst.Disposed)
+                {
+                    continue;
+                }
 
                 inst.Dispose();
                 singles[i] = null;

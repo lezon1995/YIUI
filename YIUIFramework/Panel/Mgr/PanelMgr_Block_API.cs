@@ -35,7 +35,7 @@ namespace YIUIFramework
         {
             BanLayerOptionCountDown(time);
         }
-        
+
         /// <summary>
         /// 强制恢复层级到可操作状态
         /// 此方法会强制打断倒计时 

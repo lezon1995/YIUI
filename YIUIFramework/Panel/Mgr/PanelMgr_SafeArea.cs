@@ -11,10 +11,10 @@ namespace YIUIFramework
         /// <summary>
         /// 在刘海屏机子时，是否打开黑边
         /// </summary>
-        public const bool OpenBlackBorder = false;
+        public static bool OpenBlackBorder = false;
 
         //启用2倍安全 则左右2边都会裁剪
-        public const bool DoubleSafe = false;
+        public static bool DoubleSafe = false;
 
         //安全区
         private static Rect g_SafeArea;

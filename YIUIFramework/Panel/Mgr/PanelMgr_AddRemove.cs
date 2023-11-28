@@ -1,4 +1,6 @@
-﻿namespace YIUIFramework
+﻿using UnityEngine;
+
+namespace YIUIFramework
 {
     /// <summary>
     /// 加入 移除
@@ -20,7 +22,7 @@
             {
                 panelLayer = EPanelLayer.Bottom;
                 layerRect = GetLayerRect(panelLayer);
-                UnityEngine.Debug.LogError($"没有找到这个UILayer {panelLayer}  强制修改为使用最低层 请检查");
+                Debug.LogError($"没有找到这个UILayer {panelLayer}  强制修改为使用最低层 请检查");
             }
 
             var addLast = true; //放到最后 也就是最前面
@@ -81,7 +83,7 @@
         {
             if (panelInfo.Panel == null)
             {
-                UnityEngine.Debug.LogError($"无法移除一个null panelInfo 数据 {panelInfo.ResName}");
+                Debug.LogError($"无法移除一个null panelInfo 数据 {panelInfo.ResName}");
                 return;
             }
 
@@ -110,7 +112,7 @@
             else
             {
                 var uiObj = panel.OwnerGameObject;
-                UnityEngine.Object.Destroy(uiObj);
+                Object.Destroy(uiObj);
                 panelInfo.Reset(null);
             }
         }

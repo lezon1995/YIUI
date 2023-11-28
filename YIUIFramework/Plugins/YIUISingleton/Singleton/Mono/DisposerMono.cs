@@ -8,18 +8,17 @@ namespace YIUIFramework
     //没有的不需要的可以改为UnityEngine.MonoBehaviour
     public abstract class DisposerMonoSingleton : SerializedMonoBehaviour, IManagerAsyncInit
     {
-        private bool m_Disposed;
-        public bool Disposed => m_Disposed;
+        public bool Disposed { get; private set; }
 
         //释放方法1: 对象释放
         public bool Dispose()
         {
-            if (m_Disposed)
+            if (Disposed)
             {
                 return false;
             }
 
-            m_Disposed = true;
+            Disposed = true;
             gameObject.SafeDestroySelf();
             return true;
         }
@@ -29,7 +28,7 @@ namespace YIUIFramework
         //推荐使用OnDispose
         protected virtual void OnDestroy()
         {
-            if (!m_Disposed)
+            if (!Disposed)
             {
                 if (GetDontDestroyOnLoad())
                 {
@@ -37,7 +36,7 @@ namespace YIUIFramework
                     {
                         //进入到这里说明不是被dispose 调用后摧毁的
                         //而是直接被摧毁的 这种行为是不允许的
-                        Debug.LogError($"{this.name} 请调用 Dispose/DisposeInst 来移除Mono单例 而非直接删除GameObject对象");
+                        Debug.LogError($"{name} 请调用 Dispose/DisposeInst 来移除Mono单例 而非直接删除GameObject对象");
                     }
                 }
             }
@@ -77,29 +76,28 @@ namespace YIUIFramework
         }
 
 
-        public bool Enabled => true; //在mono中无效
+        //在mono中无效
+        public bool Enabled => true;
 
-        private bool m_InitedSucceed;
+        public bool InitedSucceed { get; private set; }
 
-        public bool InitedSucceed => m_InitedSucceed;
-
-        public async UniTask<bool> ManagerAsyncInit()
+        async UniTask<bool> IManagerAsyncInit.InitManagerAsync()
         {
-            if (m_InitedSucceed)
+            if (InitedSucceed)
             {
                 Debug.LogError($"{gameObject.name}已成功初始化过 请勿重复初始化");
                 return true;
             }
 
             var result = await MgrAsyncInit();
-            if (!result)
+            if (result)
             {
-                Debug.LogError($"{gameObject.name} 初始化失败");
+                //成功初始化才记录
+                InitedSucceed = true;
             }
             else
             {
-                //成功初始化才记录
-                m_InitedSucceed = true;
+                Debug.LogError($"{gameObject.name} 初始化失败");
             }
 
             return result;

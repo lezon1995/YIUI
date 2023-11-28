@@ -56,7 +56,7 @@
             {
             }
 
-            public void Reset(double totalTime, double interval, TimerCallback timerCallback, bool forver = false)
+            public void Reset(double totalTime, double interval, TimerCallback timerCallback, bool forever = false)
             {
                 var time = GetTime();
                 TotalTime = totalTime;
@@ -65,7 +65,7 @@
                 StartTime = time;
                 LastCallBackTime = time;
                 EndTime = time + totalTime;
-                Forever = forver;
+                Forever = forever;
                 TimerCallback = timerCallback;
             }
 

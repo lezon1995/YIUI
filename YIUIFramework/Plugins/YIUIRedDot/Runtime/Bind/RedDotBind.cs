@@ -41,7 +41,7 @@ namespace YIUIFramework
 
         private void OnRedDotChangeHandler(int count)
         {
-            Show  = count >= 1;
+            Show = count >= 1;
             Count = count;
             Refresh();
         }
@@ -49,8 +49,10 @@ namespace YIUIFramework
         private void Refresh()
         {
             gameObject.SetActive(Show);
-            if (m_Text != null)
+            if (m_Text)
+            {
                 m_Text.text = Count.ToString();
+            }
         }
     }
 }

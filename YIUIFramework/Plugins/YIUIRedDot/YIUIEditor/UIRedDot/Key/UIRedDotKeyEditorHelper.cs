@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
 
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace YIUIFramework.Editor
@@ -56,7 +55,7 @@ namespace YIUIFramework.Editor
         }
 
         internal static void ChangeKeyByLink(RedDotConfigAsset configAsset, RedDotLinkData linkData,
-                                             RedDotKeyData     changeKeyData)
+            RedDotKeyData changeKeyData)
         {
             var newKey = (ERedDotKeyType)changeKeyData.Id;
             if (linkData.ConfigSet)
@@ -74,7 +73,7 @@ namespace YIUIFramework.Editor
                 //添加一个新的
                 var newConfigData = new RedDotConfigData
                 {
-                    Key        = newKey,
+                    Key = newKey,
                     SwitchTips = configData.SwitchTips,
                     ParentList = configData.ParentList
                 };

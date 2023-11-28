@@ -8,9 +8,11 @@
         /// </summary>
         bool InitedSucceed { get; }
 
-        //激活状态
-        //激活被关闭时 Update,LateUpdate,FixedUpdate 都会被停止
-        //其他不影响
+        /// <summary>
+        /// 激活状态
+        /// 激活被关闭时 Update,LateUpdate,FixedUpdate 都会被停止
+        /// 其他不影响
+        /// </summary>
         bool Enabled { get; }
     }
 }

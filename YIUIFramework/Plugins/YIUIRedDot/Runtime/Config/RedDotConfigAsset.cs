@@ -11,8 +11,7 @@ namespace YIUIFramework
         [OdinSerialize]
         [ReadOnly]
         [ShowInInspector]
-        internal Dictionary<ERedDotKeyType, RedDotConfigData> m_AllRedDotConfigDic =
-            new Dictionary<ERedDotKeyType, RedDotConfigData>();
+        internal Dictionary<ERedDotKeyType, RedDotConfigData> m_AllRedDotConfigDic = new Dictionary<ERedDotKeyType, RedDotConfigData>();
 
         public IReadOnlyDictionary<ERedDotKeyType, RedDotConfigData> AllRedDotConfigDic => m_AllRedDotConfigDic;
 

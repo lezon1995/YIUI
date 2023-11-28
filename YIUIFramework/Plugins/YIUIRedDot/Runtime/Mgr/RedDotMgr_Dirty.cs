@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using YIUIBind;
 
 namespace YIUIFramework
 {
@@ -21,7 +20,7 @@ namespace YIUIFramework
         private void InitAsyncDirty()
         {
             m_DirtyData = new HashSet<RedDotData>();
-            m_LoopId    = SchedulerMgr.Loop(RedDotUpdateRefresh, 1f / m_RedDotDirtyFrame);
+            m_LoopId = SchedulerMgr.Loop(RedDotUpdateRefresh, 1f / m_RedDotDirtyFrame);
         }
 
         private void DisposeDirty()

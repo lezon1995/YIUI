@@ -1,12 +1,9 @@
 ﻿#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
-using Sirenix.Utilities;
 using UnityEngine;
-using YIUIBind;
 
 namespace YIUIFramework.Editor
 {
@@ -14,12 +11,11 @@ namespace YIUIFramework.Editor
     [HideReferenceObjectPicker]
     internal class UIRedDotConfigView : BaseCreateModule
     {
-        internal UIRedDotModule    m_UIRedDotModule;
+        internal UIRedDotModule m_UIRedDotModule;
         internal RedDotConfigAsset m_RedDotConfigAsset;
 
         private EnumPrefs<ERedDotConfigViewIndexType> m_ERedDotConfigViewIndexTypePrefs =
-            new EnumPrefs<ERedDotConfigViewIndexType>("AutoUIRedDotModule_ERedDotConfigViewIndexType", null,
-                ERedDotConfigViewIndexType.Get);
+            new EnumPrefs<ERedDotConfigViewIndexType>("AutoUIRedDotModule_ERedDotConfigViewIndexType", null, ERedDotConfigViewIndexType.Get);
 
         [EnumToggleButtons]
         [HideLabel]
@@ -30,7 +26,7 @@ namespace YIUIFramework.Editor
 
         public UIRedDotConfigView(UIRedDotModule redDotModule)
         {
-            m_UIRedDotModule    = redDotModule;
+            m_UIRedDotModule = redDotModule;
             m_RedDotConfigAsset = redDotModule.m_RedDotConfigAsset;
         }
 
@@ -170,9 +166,9 @@ namespace YIUIFramework.Editor
         {
             var editorData = new UIRedDotConfigEditorData(this)
             {
-                Id            = (int)data.Key,
-                KeyType       = data.Key,
-                SwitchTips    = data.SwitchTips,
+                Id = (int)data.Key,
+                KeyType = data.Key,
+                SwitchTips = data.SwitchTips,
                 ShowDeleteBtn = true
             };
 
@@ -181,8 +177,8 @@ namespace YIUIFramework.Editor
             return editorData;
         }
 
-        private List<UIRedDotKeyEditorData> GetParentListByRuntimeData(RedDotConfigData         data,
-                                                                       UIRedDotConfigEditorData editorData)
+        private List<UIRedDotKeyEditorData> GetParentListByRuntimeData(RedDotConfigData data,
+            UIRedDotConfigEditorData editorData)
         {
             var parentList = new List<UIRedDotKeyEditorData>();
 
@@ -190,7 +186,7 @@ namespace YIUIFramework.Editor
             {
                 parentList.Add(new UIRedDotKeyEditorData(editorData)
                 {
-                    Id      = (int)key,
+                    Id = (int)key,
                     KeyType = key,
                 });
             }
@@ -231,7 +227,7 @@ namespace YIUIFramework.Editor
         {
             var runtimeData = new RedDotConfigData()
             {
-                Key        = data.KeyType,
+                Key = data.KeyType,
                 ParentList = GetParentListByEditorData(data),
                 SwitchTips = data.SwitchTips,
             };

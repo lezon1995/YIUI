@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
-using YIUIBind;
 
 namespace YIUIFramework.Editor
 {
@@ -61,7 +60,7 @@ namespace YIUIFramework.Editor
         {
             m_UIRedDotModule = redDotModule;
             m_RedDotKeyAsset = redDotModule.m_RedDotKeyAsset;
-            m_AllRedDotKey   = m_RedDotKeyAsset.AllRedDotDic;
+            m_AllRedDotKey = m_RedDotKeyAsset.AllRedDotDic;
         }
 
         internal override void Initialize()
@@ -131,9 +130,9 @@ namespace YIUIFramework.Editor
             var createData = new UICreateRedDotKeyData
             {
                 AutoRefresh = true,
-                ShowTips    = true,
-                ClassPath   = m_UIRedDotModule.UIRedDotKeyClassPath,
-                Content     = UICreateRedDotKeyGet.Get(m_RedDotKeyAsset.GetDataList()),
+                ShowTips = true,
+                ClassPath = m_UIRedDotModule.UIRedDotKeyClassPath,
+                Content = UICreateRedDotKeyGet.Get(m_RedDotKeyAsset.GetDataList()),
             };
 
             new UICreateRedDotKeyCode(out var resultBase, YIUIAutoTool.Author, createData);
@@ -240,7 +239,7 @@ namespace YIUIFramework.Editor
             if (linkData.ConfigSet || linkData.LinkKey.Count >= 1)
             {
                 var configSetTips = linkData.ConfigSet ? "已配置" : "未配置";
-                var linkTips      = $"关联引用 {linkData.LinkKey.Count}";
+                var linkTips = $"关联引用 {linkData.LinkKey.Count}";
                 foreach (var linkKey in linkData.LinkKey)
                 {
                     linkTips += $"\n已被 {linkKey} 设定为父级";
@@ -322,7 +321,7 @@ namespace YIUIFramework.Editor
             if (linkData.ConfigSet || linkData.LinkKey.Count >= 1)
             {
                 var configSetTips = linkData.ConfigSet ? "已配置" : "未配置";
-                var linkTips      = $"关联引用 {linkData.LinkKey.Count}";
+                var linkTips = $"关联引用 {linkData.LinkKey.Count}";
                 foreach (var linkKey in linkData.LinkKey)
                 {
                     linkTips += $"\n已被 {linkKey} 设定为父级";
@@ -371,7 +370,7 @@ namespace YIUIFramework.Editor
 
             if (result)
             {
-                m_GetKeyData    = null;
+                m_GetKeyData = null;
                 m_ChangeKeyData = null;
             }
         }
@@ -420,7 +419,7 @@ namespace YIUIFramework.Editor
         private void GetKey()
         {
             var (data, tips) = m_RedDotKeyAsset.GetKey(m_GetId);
-            m_GetKeyData     = data;
+            m_GetKeyData = data;
             UnityTipsHelper.Show(tips);
             UpdateChangeData(data);
         }

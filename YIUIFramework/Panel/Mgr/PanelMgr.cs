@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
 
 namespace YIUIFramework
 {
@@ -14,8 +12,8 @@ namespace YIUIFramework
 
         //绑定初始化情况
         public static bool BindInit { private set; get; }
-        
-        protected override async UniTask<bool> MgrAsyncInit()
+
+        protected override async UniTask<bool> InitMgrAsync()
         {
             BindInit = UIBindHelper.InitAllBind();
 

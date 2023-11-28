@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -10,9 +8,10 @@ namespace YIUIFramework
     /// <summary>
     /// 红点 管理器
     /// </summary>
-    public partial class RedDotMgr : MgrSingleton<RedDotMgr>, IManagerAsyncInit
+    public partial class RedDotMgr : MgrSingleton<RedDotMgr>
     {
-        private const bool SyncSetCount = false; //实时修改红点还是异步脏标定时修改
+        //实时修改红点还是异步脏标定时修改
+        private static bool SyncSetCount = false;
 
         private const string RedDotConfigAssetName = "RedDotConfigAsset";
 
@@ -27,14 +26,20 @@ namespace YIUIFramework
             DisposeDirty();
         }
 
-        protected async override UniTask<bool> MgrAsyncInit()
+        protected override async UniTask<bool> InitMgrAsync()
         {
             var resultConfig = await LoadConfigAsset();
-            if (!resultConfig) return false;
-            #if UNITY_EDITOR || YIUIMACRO_REDDOT_STACK
+            if (!resultConfig)
+            {
+                return false;
+            }
+#if UNITY_EDITOR || YIUIMACRO_REDDOT_STACK
             var resultKey = await LoadKeyAsset();
-            if (!resultKey) return false;
-            #endif
+            if (!resultKey)
+            {
+                return false;
+            }
+#endif
 
             if (!SyncSetCount)
             {
@@ -73,8 +78,13 @@ namespace YIUIFramework
             foreach (ERedDotKeyType key in Enum.GetValues(typeof(ERedDotKeyType)))
             {
                 //有配置则使用配置 没有则使用默认配置
-                var config = m_RedDotConfigAsset.GetConfigData(key) ?? new RedDotConfigData { Key = key };
-                var data   = new RedDotData(config);
+                var config = m_RedDotConfigAsset.GetConfigData(key);
+                if (config == null)
+                {
+                    config = new RedDotConfigData { Key = key };
+                }
+
+                var data = new RedDotData(config);
                 m_AllRedDotData.Add(key, data);
             }
         }
@@ -87,7 +97,11 @@ namespace YIUIFramework
             foreach (var config in m_RedDotConfigAsset.AllRedDotConfigDic.Values)
             {
                 var data = GetData(config.Key);
-                if (data == null) continue;
+                if (data == null)
+                {
+                    continue;
+                }
+
                 foreach (var parentId in config.ParentList)
                 {
                     var parentData = GetData(parentId);
