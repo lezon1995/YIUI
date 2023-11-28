@@ -1,7 +1,6 @@
 ﻿#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using YIUIBind;
 
 namespace YIUIFramework.Editor
 {
@@ -17,8 +16,7 @@ namespace YIUIFramework.Editor
                 return;
             }
 
-            var path =
-                $"{UIStaticHelper.UIFrameworkPath}/Plugins/YIUI3DDisplay/YIUIEditor/TemplatePrefabs/YIUI3DDisplay.prefab";
+            var path = $"{UIStaticHelper.UIFrameworkPath}/Plugins/YIUI3DDisplay/YIUIEditor/TemplatePrefabs/YIUI3DDisplay.prefab";
 
             Selection.activeObject = UIMenuItemHelper.CloneGameObjectByPath(path, activeObject.transform);
         }

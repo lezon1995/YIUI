@@ -11,11 +11,8 @@ namespace YIUIFramework
     public partial class YIUI3DDisplayExtend
     {
         private UI3DDisplay m_UI3DDisplay;
-
         private Dictionary<string, GameObject> m_ObjPool = new Dictionary<string, GameObject>();
-
-        private Dictionary<GameObject, Dictionary<string, Camera>> m_CameraPool =
-            new Dictionary<GameObject, Dictionary<string, Camera>>();
+        private Dictionary<GameObject, Dictionary<string, Camera>> m_CameraPool = new Dictionary<GameObject, Dictionary<string, Camera>>();
 
         private YIUI3DDisplayExtend()
         {
@@ -35,21 +32,27 @@ namespace YIUIFramework
             }
 
             var obj = GetDisplayObject(resName);
-            if (obj == null) return;
-            var camera = GetCamera(obj, cameraName);
-            if (camera == null) return;
-            m_UI3DDisplay.Show(obj, camera);
+            if (obj)
+            {
+                var camera = GetCamera(obj, cameraName);
+                if (camera)
+                {
+                    m_UI3DDisplay.Show(obj, camera);
+                }
+            }
         }
 
         private GameObject GetDisplayObject(string resName)
         {
-            if (!m_ObjPool.ContainsKey(resName))
+            if (m_ObjPool.TryGetValue(resName, out var displayObject))
             {
-                var newObj = CreateObject(resName);
-                m_ObjPool.Add(resName, newObj);
+                return displayObject;
             }
 
-            return m_ObjPool[resName];
+            displayObject = CreateObject(resName);
+            m_ObjPool.Add(resName, displayObject);
+
+            return displayObject;
         }
 
         private GameObject CreateObject(string resName)
@@ -72,13 +75,15 @@ namespace YIUIFramework
 
             var objDic = m_CameraPool[obj];
 
-            if (!objDic.ContainsKey(cameraName))
+            if (objDic.TryGetValue(cameraName, out var camera))
             {
-                var camera = GetCameraByName(obj, cameraName);
-                objDic.Add(cameraName, camera);
+                return camera;
             }
 
-            return objDic[cameraName];
+            camera = GetCameraByName(obj, cameraName);
+            objDic.Add(cameraName, camera);
+            
+            return camera;
         }
 
         private Camera GetCameraByName(GameObject obj, string cameraName)

@@ -1,13 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using System.Collections.Generic;
+﻿using System;
 using Sirenix.OdinInspector;
-using System;
 using Sirenix.Serialization;
-using UnityEngine.Serialization;
-using YIUIBind;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace YIUIFramework
 {
@@ -25,9 +20,9 @@ namespace YIUIFramework
         [ShowInInspector]
         private Vector2 m_OnClickOffset = new Vector2(50, 50);
 
-        private Vector2                        m_OnClickDownPos = Vector2.zero;
-        private RaycastHit                     m_ClickRaycastHit;
-        private RaycastHit                     m_DragRaycastHit;
+        private Vector2 m_OnClickDownPos = Vector2.zero;
+        private RaycastHit m_ClickRaycastHit;
+        private RaycastHit m_DragRaycastHit;
         private Action<GameObject, GameObject> m_OnClickEvent; //参数1 被点击的对象 参数2 他的最终父级是谁(显示对象)
 
         //添加一个回调
@@ -45,9 +40,8 @@ namespace YIUIFramework
         //从屏幕坐标发送射线检测
         public bool Raycast(Vector2 screenPoint, out RaycastHit hitInfo)
         {
-            var rect = transform as RectTransform;
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, screenPoint, UICamera,
-                    out var localScreenPoint) == false)
+            var rect = (RectTransform)transform;
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, screenPoint, UICamera, out var localScreenPoint) == false)
             {
                 hitInfo = default;
                 return false;
@@ -59,31 +53,32 @@ namespace YIUIFramework
         }
 
         //可拖拽目标
-        private GameObject m_DragTarge;
+        private GameObject m_DragTarget;
 
         //拖拽
         public void OnDrag(PointerEventData eventData)
         {
-            if (!m_CanDrag) return;
-
-            if (!m_DragTarge || !(m_DragSpeed > 0.0f)) return;
-
-            var delta    = eventData.delta.x;
-            var deltaRot = -m_DragSpeed * delta * Time.deltaTime;
-            var dragTsf  = m_DragTarge.transform;
-
-            if (m_MultipleTargetMode)
+            if (m_CanDrag)
             {
-                dragTsf.Rotate(Vector3.up * deltaRot, Space.World);
-            }
-            else
-            {
-                m_DragRotation += deltaRot;
-                var showRotation = Quaternion.Euler(m_ShowRotation);
-                var showUp       = showRotation * Vector3.up;
-                showRotation *= Quaternion.AngleAxis(
-                    m_DragRotation, showUp);
-                dragTsf.rotation = showRotation;
+                if (m_DragTarget && m_DragSpeed > 0.0f)
+                {
+                    var delta = eventData.delta.x;
+                    var deltaRot = -m_DragSpeed * delta * Time.deltaTime;
+                    var dragTsf = m_DragTarget.transform;
+
+                    if (m_MultipleTargetMode)
+                    {
+                        dragTsf.Rotate(Vector3.up * deltaRot, Space.World);
+                    }
+                    else
+                    {
+                        m_DragRotation += deltaRot;
+                        var showRotation = Quaternion.Euler(m_ShowRotation);
+                        var showUp = showRotation * Vector3.up;
+                        showRotation *= Quaternion.AngleAxis(m_DragRotation, showUp);
+                        dragTsf.rotation = showRotation;
+                    }
+                }
             }
         }
 
@@ -92,15 +87,20 @@ namespace YIUIFramework
         {
             if (m_MultipleTargetMode)
             {
-                if (!Raycast(eventData.position, out m_DragRaycastHit))
+                if (Raycast(eventData.position, out m_DragRaycastHit))
+                {
+                    m_DragTarget = GetMultipleTargetByClick(m_DragRaycastHit.collider.gameObject);
+                }
+                else
+                {
                     return;
-
-                m_DragTarge = GetMultipleTargetByClick(m_DragRaycastHit.collider.gameObject);
+                }
             }
 
-
             if (m_OnClickEvent != null)
+            {
                 m_OnClickDownPos = eventData.position;
+            }
         }
 
         //抬起
@@ -115,7 +115,7 @@ namespace YIUIFramework
             if (!Raycast(eventData.position, out m_ClickRaycastHit))
                 return;
 
-            var clickObj       = m_ClickRaycastHit.collider.gameObject;
+            var clickObj = m_ClickRaycastHit.collider.gameObject;
             var clickObjParent = m_MultipleTargetMode ? GetMultipleTargetByClick(clickObj) : m_ShowObject;
 
             try

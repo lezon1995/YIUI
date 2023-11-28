@@ -1,12 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using System.Collections.Generic;
-using Sirenix.OdinInspector;
-using System;
-using Sirenix.Serialization;
-using YIUIBind;
+﻿using System;
+using UnityEngine;
 
 namespace YIUIFramework
 {
@@ -60,7 +53,7 @@ namespace YIUIFramework
         //清除显示的对象
         public void ClearShow()
         {
-            if (m_ShowCameraCtrl != null)
+            if (m_ShowCameraCtrl)
             {
                 m_ShowCameraCtrl.ShowObject = null;
             }
@@ -74,58 +67,62 @@ namespace YIUIFramework
         public void ResetRotation()
         {
             m_DragRotation = 0.0f;
-            if (m_ShowObject == null) return;
-
-            var showTsf      = m_ShowObject.transform;
-            var showRotation = Quaternion.Euler(m_ShowRotation);
-            var showUp       = showRotation * Vector3.up;
-            showRotation     *= Quaternion.AngleAxis(m_DragRotation, showUp);
-            showTsf.rotation =  showRotation;
+            if (m_ShowObject)
+            {
+                var showTsf = m_ShowObject.transform;
+                var showRotation = Quaternion.Euler(m_ShowRotation);
+                var showUp = showRotation * Vector3.up;
+                showRotation *= Quaternion.AngleAxis(m_DragRotation, showUp);
+                showTsf.rotation = showRotation;
+            }
         }
 
         //设置旋转
         public void SetRotation(Vector3 rotation)
         {
             m_ShowRotation = rotation;
-            if (m_ShowObject == null) return;
-
-            var showTsf      = m_ShowObject.transform;
-            var showRotation = Quaternion.Euler(m_ShowRotation);
-            var showUp       = showRotation * Vector3.up;
-            showRotation     *= Quaternion.AngleAxis(m_DragRotation, showUp);
-            showTsf.rotation =  showRotation;
+            if (m_ShowObject)
+            {
+                var showTsf = m_ShowObject.transform;
+                var showRotation = Quaternion.Euler(m_ShowRotation);
+                var showUp = showRotation * Vector3.up;
+                showRotation *= Quaternion.AngleAxis(m_DragRotation, showUp);
+                showTsf.rotation = showRotation;
+            }
         }
 
         //设置位置偏移
         public void SetOffset(Vector3 offset)
         {
             m_ShowOffset = offset;
-            if (m_ShowObject == null) return;
-
-            var showTsf = m_ShowObject.transform;
-            showTsf.localPosition = m_ModelGlobalOffset + m_ShowOffset;
-            m_ShowPosition        = showTsf.localPosition;
+            if (m_ShowObject)
+            {
+                var showTsf = m_ShowObject.transform;
+                showTsf.localPosition = m_ModelGlobalOffset + m_ShowOffset;
+                m_ShowPosition = showTsf.localPosition;
+            }
         }
 
         //设置大小
         public void SetScale(Vector3 scale)
         {
             m_ShowScale = scale;
-            if (m_ShowObject == null) return;
-
-            var showTsf = m_ShowObject.transform;
-            showTsf.localScale = m_ShowScale;
+            if (m_ShowObject)
+            {
+                var showTsf = m_ShowObject.transform;
+                showTsf.localScale = m_ShowScale;
+            }
         }
 
         //改变 当前的分辨率 一般情况下 都不会改变
         public void ChangeResolution(Vector2 newResolution)
         {
-            if (!(Math.Abs(newResolution.x - m_ResolutionX) > 0.01f) &&
-                !(Math.Abs(newResolution.y - m_ResolutionY) > 0.01f)) return;
-
-            m_ResolutionX = (int)Math.Round(newResolution.x);
-            m_ResolutionY = (int)Math.Round(newResolution.y);
-            SetTemporaryRenderTexture();
+            if (Math.Abs(newResolution.x - m_ResolutionX) > 0.01f || Math.Abs(newResolution.y - m_ResolutionY) > 0.01f)
+            {
+                m_ResolutionX = (int)Math.Round(newResolution.x);
+                m_ResolutionY = (int)Math.Round(newResolution.y);
+                SetTemporaryRenderTexture();
+            }
         }
     }
 }

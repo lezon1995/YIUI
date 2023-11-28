@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace YIUIFramework
 {
@@ -12,7 +11,7 @@ namespace YIUIFramework
     {
         [SerializeField]
         [LabelText("多目标模式")]
-        private bool m_MultipleTargetMode = false;
+        private bool m_MultipleTargetMode;
 
         //可动态设置改变多目标 但是尽量不要所以关闭了
         public bool MultipleTargetMode
@@ -36,25 +35,28 @@ namespace YIUIFramework
 
         private Dictionary<GameObject, GameObject> m_MultipleCache;
 
-        private bool m_InitMultipleData = false;
+        private bool m_InitMultipleData;
 
         //初始化
         private void InitRotationData()
         {
-            if (m_InitMultipleData) return;
+            if (m_InitMultipleData)
+            {
+                return;
+            }
 
             m_AllMultipleTarget = new List<GameObject>();
-            m_MultipleCache     = new Dictionary<GameObject, GameObject>();
-            m_InitMultipleData  = true;
+            m_MultipleCache = new Dictionary<GameObject, GameObject>();
+            m_InitMultipleData = true;
         }
 
         //清除
         private void ClearMultipleData()
         {
             m_AllMultipleTarget = null;
-            m_MultipleCache     = null;
-            m_InitMultipleData  = false;
-            m_DragTarge         = m_ShowObject;
+            m_MultipleCache = null;
+            m_InitMultipleData = false;
+            m_DragTarget = m_ShowObject;
         }
 
         //添加目标
@@ -97,15 +99,21 @@ namespace YIUIFramework
         private GameObject GetMultipleTargetByClick(GameObject child)
         {
             var obj = GetMultipleCache(child);
-            if (obj != null)
+            if (obj)
+            {
                 return obj;
+            }
 
             if (IsMultipleTarget(child))
+            {
                 return child;
+            }
 
             var parent = child.transform.parent;
             if (parent)
+            {
                 return GetMultipleTargetByClick(parent.gameObject);
+            }
 
             Debug.LogError($"没有找到这个对象 {child.name}");
             return null;
@@ -135,12 +143,12 @@ namespace YIUIFramework
         private static void SetPosAndRotAndParent(Transform target, Camera lookCamera = null, Transform parent = null)
         {
             if (parent)
+            {
                 target.SetParent(parent, false);
+            }
 
             target.localPosition = Vector3.zero;
-
             target.localScale = Vector3.one;
-
             target.localRotation = lookCamera ? lookCamera.transform.localRotation : Quaternion.identity;
         }
     }

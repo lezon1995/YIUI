@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace YIUIFramework
@@ -12,19 +11,20 @@ namespace YIUIFramework
             get => m_ShowObject;
             set
             {
-                if (m_ShowObject != null &&
-                    m_ShowObject != value)
+                if (m_ShowObject && m_ShowObject != value)
                 {
                     ResetRenderer(m_ShowObject.transform);
                 }
 
                 m_ShowObject = value;
-                if (value != null)
+                if (value)
+                {
                     SetupRenderer(value.transform);
+                }
             }
         }
 
-        private int m_ShowLayer = 0;
+        private int m_ShowLayer;
 
         internal int ShowLayer
         {
@@ -34,35 +34,43 @@ namespace YIUIFramework
                 if (m_ShowLayer != value)
                 {
                     m_ShowLayer = value;
-                    if (ShowObject != null)
+                    if (ShowObject)
+                    {
                         SetupRenderer(ShowObject.transform);
+                    }
                 }
             }
         }
 
-        private static void ResetRenderer(Transform transform)
+        private static void ResetRenderer(Transform trans)
         {
             var renderers = ListPool<Renderer>.Get();
-            transform.GetComponentsInChildren(true, renderers);
+            trans.GetComponentsInChildren(true, renderers);
             foreach (var renderer in renderers)
+            {
                 renderer.gameObject.layer = 0;
+            }
+
             ListPool<Renderer>.Put(renderers);
         }
 
-        public void SetupRenderer(Transform transform)
+        public void SetupRenderer(Transform trans)
         {
             if (ShowObject == null) return;
 
             var renderers = ListPool<Renderer>.Get();
-            transform.GetComponentsInChildren(true, renderers);
+            trans.GetComponentsInChildren(true, renderers);
             foreach (var renderer in renderers)
+            {
                 renderer.gameObject.layer = ShowLayer;
+            }
+
             ListPool<Renderer>.Put(renderers);
         }
 
         private void OnEnable()
         {
-            if (ShowObject != null)
+            if (ShowObject)
             {
                 SetupRenderer(ShowObject.transform);
             }
@@ -70,7 +78,7 @@ namespace YIUIFramework
 
         private void OnDisable()
         {
-            if (ShowObject != null)
+            if (ShowObject)
             {
                 ResetRenderer(ShowObject.transform);
             }

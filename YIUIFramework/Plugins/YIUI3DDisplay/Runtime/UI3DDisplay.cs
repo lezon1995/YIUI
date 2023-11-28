@@ -1,14 +1,12 @@
-﻿
-
+﻿using System;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
-using System.Collections.Generic;
-using Sirenix.OdinInspector;
-using System;
-using Sirenix.Serialization;
-using YIUIBind;
 
 namespace YIUIFramework
 {
@@ -16,7 +14,9 @@ namespace YIUIFramework
     /// 这个类用于在UI中显示3D对象。
     /// </summary>
     public sealed partial class UI3DDisplay : SerializedMonoBehaviour,
-        IDragHandler, IPointerDownHandler, IPointerUpHandler
+        IDragHandler,
+        IPointerDownHandler,
+        IPointerUpHandler
     {
         [OdinSerialize]
         [ShowInInspector]
@@ -26,7 +26,7 @@ namespace YIUIFramework
         [OdinSerialize]
         [ShowInInspector]
         [LabelText("[动态] 观察的摄像机")]
-        private Camera m_LookCamera = null;
+        private Camera m_LookCamera;
 
         [Required]
         [OdinSerialize]
@@ -82,7 +82,7 @@ namespace YIUIFramework
         [ShowInInspector]
         [ReadOnly]
         [LabelText("当前显示层级")]
-        private int m_ShowLayer = 0;
+        private int m_ShowLayer;
 
         private const string YIUI3DLayer = "YIUI3DLayer";
 
@@ -120,22 +120,22 @@ namespace YIUIFramework
         [OdinSerialize]
         [ShowInInspector]
         [LabelText("镜面反射面")]
-        private Transform m_ReflectionPlane = null;
+        private Transform m_ReflectionPlane;
 
         [OdinSerialize]
         [ShowInInspector]
         [LabelText("阴影面")]
-        private Transform m_ShadowPlane = null;
+        private Transform m_ShadowPlane;
 
         [OdinSerialize]
         [ShowInInspector]
         [LabelText("使用观察摄像机的颜色")]
-        private bool m_UseLookCameraColor = false;
+        private bool m_UseLookCameraColor;
 
         [OdinSerialize]
         [ShowInInspector]
         [LabelText("自动同步")]
-        private bool m_AutoSync = false;
+        private bool m_AutoSync;
 
         //显示的拖动旋转
         private float m_DragRotation;
@@ -150,7 +150,7 @@ namespace YIUIFramework
         private float m_OrthographicSize;
 
         //每显示一次就会+1 用于位置偏移
-        private static int g_DisPlayUIIndex = 0;
+        private static int g_DisPlayUIIndex;
 
         //当前模型偏移位置
         private Vector3 m_ModelGlobalOffset = Vector3.zero;
@@ -158,13 +158,17 @@ namespace YIUIFramework
         //所有已采集的阴影
         private List<Renderer> m_RenderList = new List<Renderer>();
 
-        private Camera m_UICamera = null;
+        private Camera m_UICamera;
 
         private Camera UICamera
         {
             get
             {
-                if (m_UICamera != null) return m_UICamera;
+                if (m_UICamera)
+                {
+                    return m_UICamera;
+                }
+
                 m_UICamera = PanelMgr.Inst.UICamera;
                 return m_UICamera;
             }
@@ -177,7 +181,9 @@ namespace YIUIFramework
         {
             var animator = target.GetComponent<Animator>();
             if (animator)
+            {
                 animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+            }
         }
 
         //设置所有动画
@@ -195,7 +201,7 @@ namespace YIUIFramework
         //吧指定对象的层级改为设定的层级
         private void SetupShowLayer()
         {
-            if (m_ShowCameraCtrl != null && m_ShowCameraCtrl.ShowObject != null)
+            if (m_ShowCameraCtrl && m_ShowCameraCtrl.ShowObject)
             {
                 m_ShowCameraCtrl.SetupRenderer(m_ShowCameraCtrl.ShowObject.transform);
             }
@@ -205,17 +211,19 @@ namespace YIUIFramework
         private void ChangeLayerName(string layerName)
         {
             m_ShowLayerName = layerName;
-            m_ShowLayer     = LayerMask.NameToLayer(layerName);
-            if (m_ShowLayer != -1) return;
-            if (layerName == YIUI3DLayer)
+            m_ShowLayer = LayerMask.NameToLayer(layerName);
+            if (m_ShowLayer == -1)
             {
-                Debug.LogError($"第一次使用请手动创建 YIUI3DLayer 层级");
-                return;
-            }
+                if (layerName == YIUI3DLayer)
+                {
+                    Debug.LogError($"第一次使用请手动创建 YIUI3DLayer 层级");
+                    return;
+                }
 
-            Debug.LogError($"当前设定的UI层级不存在请检查 {layerName} 强制修改层级为 {YIUI3DLayer}");
-            m_ShowLayerName = YIUI3DLayer;
-            m_ShowLayer     = LayerMask.NameToLayer(YIUI3DLayer);
+                Debug.LogError($"当前设定的UI层级不存在请检查 {layerName} 强制修改层级为 {YIUI3DLayer}");
+                m_ShowLayerName = YIUI3DLayer;
+                m_ShowLayer = LayerMask.NameToLayer(YIUI3DLayer);
+            }
         }
 
         /// <summary>
@@ -223,7 +231,7 @@ namespace YIUIFramework
         /// </summary>
         private void SetupShowLayerTarget(Transform target)
         {
-            if (m_ShowCameraCtrl != null && m_ShowCameraCtrl.ShowObject != null)
+            if (m_ShowCameraCtrl && m_ShowCameraCtrl.ShowObject)
             {
                 m_ShowCameraCtrl.SetupRenderer(target);
             }
@@ -235,9 +243,11 @@ namespace YIUIFramework
         //回收之前的对象 如果有回调就回调自行处理  否则会被无视
         private void RecycleLastShow(GameObject lastShowObject)
         {
-            if (lastShowObject == null) return;
-            lastShowObject.SetActive(false);
-            m_RecycleLastAction?.Invoke(lastShowObject);
+            if (lastShowObject)
+            {
+                lastShowObject.SetActive(false);
+                m_RecycleLastAction?.Invoke(lastShowObject);
+            }
         }
 
         //更新显示的对象
@@ -245,7 +255,9 @@ namespace YIUIFramework
         private void UpdateShowObject(GameObject showObject)
         {
             if (showObject != m_ShowObject)
+            {
                 RecycleLastShow(m_ShowObject);
+            }
 
             showObject.SetActive(true);
 
@@ -253,22 +265,24 @@ namespace YIUIFramework
 
             m_DragRotation = 0f;
 
-            m_DragTarge = m_MultipleTargetMode ? null : m_ShowObject;
+            m_DragTarget = m_MultipleTargetMode ? null : m_ShowObject;
 
             var showTransform = m_ShowObject.transform;
-            if (m_FitScaleRoot != null)
+            if (m_FitScaleRoot)
             {
                 m_FitScaleRoot.localScale = Vector3.one;
-                showTransform.SetParent(
-                    m_FitScaleRoot, true);
+                showTransform.SetParent(m_FitScaleRoot, true);
             }
             else
             {
-                showTransform.SetParent(
-                    transform, true);
+                showTransform.SetParent(transform, true);
             }
 
-            m_ShowCameraCtrl ??= m_ShowCamera.GetOrAddComponent<UI3DDisplayCamera>();
+            if (m_ShowCameraCtrl == null)
+            {
+                m_ShowCameraCtrl = m_ShowCamera.GetOrAddComponent<UI3DDisplayCamera>();
+            }
+
             if (m_ShowCameraCtrl == null)
             {
                 Debug.LogError($"必须有 UI3DDisplayCamera 组件 请检查");
@@ -276,7 +290,7 @@ namespace YIUIFramework
             }
 
             //对象层级
-            m_ShowCameraCtrl.ShowLayer  = m_ShowLayer;
+            m_ShowCameraCtrl.ShowLayer = m_ShowLayer;
             m_ShowCameraCtrl.ShowObject = m_ShowObject;
 
             //动画屏幕外也可动
@@ -284,16 +298,15 @@ namespace YIUIFramework
 
             //位置大小旋转
             var showRotation = Quaternion.Euler(m_ShowRotation);
-            var showUp       = showRotation * Vector3.up;
-            showRotation *= Quaternion.AngleAxis(
-                m_DragRotation, showUp);
+            var showUp = showRotation * Vector3.up;
+            showRotation *= Quaternion.AngleAxis(m_DragRotation, showUp);
             showTransform.localRotation = showRotation;
-            showTransform.localScale    = m_ShowScale;
+            showTransform.localScale = m_ShowScale;
             showTransform.localPosition = m_ModelGlobalOffset + m_ShowOffset;
-            m_ShowPosition              = showTransform.localPosition;
+            m_ShowPosition = showTransform.localPosition;
 
             //镜面反射
-            if (m_ReflectionPlane != null)
+            if (m_ReflectionPlane)
             {
                 m_ReflectionPlane.position = showTransform.position;
                 m_ReflectionPlane.rotation = showTransform.rotation;
@@ -301,14 +314,14 @@ namespace YIUIFramework
 
             //阴影
             DisableMeshRectShadow();
-            if (m_ShadowPlane != null)
+            if (m_ShadowPlane)
             {
                 EnableMeshRectShadow(m_ShowObject.transform);
                 m_ShadowPlane.position = showTransform.position;
                 m_ShadowPlane.rotation = showTransform.rotation;
             }
 
-            if (m_FitScaleRoot != null)
+            if (m_FitScaleRoot)
             {
                 var lossyScale = m_FitScaleRoot.lossyScale;
                 var localScale = transform.localScale;
@@ -325,28 +338,27 @@ namespace YIUIFramework
             Assert.IsNotNull(m_ShowCamera);
 
             lookCamera.gameObject.SetActive(false);
-            m_ShowCamera.orthographic     = lookCamera.orthographic;
+            m_ShowCamera.orthographic = lookCamera.orthographic;
             m_ShowCamera.orthographicSize = lookCamera.orthographicSize;
-            m_ShowCamera.fieldOfView      = lookCamera.fieldOfView;
-            m_ShowCamera.nearClipPlane    = Mathf.Max(lookCamera.nearClipPlane, 1);
-            m_ShowCamera.farClipPlane     = Mathf.Min(lookCamera.farClipPlane, 100);
-            m_ShowCamera.orthographic     = lookCamera.orthographic;
+            m_ShowCamera.fieldOfView = lookCamera.fieldOfView;
+            m_ShowCamera.nearClipPlane = Mathf.Max(lookCamera.nearClipPlane, 1);
+            m_ShowCamera.farClipPlane = Mathf.Min(lookCamera.farClipPlane, 100);
+            m_ShowCamera.orthographic = lookCamera.orthographic;
             m_ShowCamera.orthographicSize = lookCamera.orthographicSize;
-            m_ShowCamera.clearFlags       = CameraClearFlags.SolidColor;
-            m_ShowCamera.backgroundColor  = m_UseLookCameraColor ? lookCamera.backgroundColor : Color.clear;
-            m_OrthographicSize            = lookCamera.orthographicSize;
-            m_LookCamera                  = lookCamera;
+            m_ShowCamera.clearFlags = CameraClearFlags.SolidColor;
+            m_ShowCamera.backgroundColor = m_UseLookCameraColor ? lookCamera.backgroundColor : Color.clear;
+            m_OrthographicSize = lookCamera.orthographicSize;
+            m_LookCamera = lookCamera;
 
             m_ShowCamera.cullingMask = 1 << m_ShowLayer;
 
             if (m_ShowLight)
+            {
                 m_ShowLight.cullingMask = m_ShowCamera.cullingMask;
+            }
 
             var lookCameraTsf = lookCamera.transform;
-            m_ShowCamera.transform.SetPositionAndRotation(
-                lookCameraTsf.position,
-                lookCameraTsf.rotation);
-
+            m_ShowCamera.transform.SetPositionAndRotation(lookCameraTsf.position, lookCameraTsf.rotation);
             m_ShowCamera.enabled = true;
             m_ShowCamera.gameObject.SetActive(true);
         }
@@ -356,8 +368,10 @@ namespace YIUIFramework
         {
             Assert.IsNotNull(m_ShowImage);
 
-            if (m_ShowTexture != null)
+            if (m_ShowTexture)
+            {
                 RenderTexture.ReleaseTemporary(m_ShowTexture);
+            }
 
             m_ShowTexture = RenderTexture.GetTemporary(m_ResolutionX, m_ResolutionY, m_RenderTextureDepthBuffer);
             m_ShowImage.texture = m_ShowTexture;
@@ -369,11 +383,11 @@ namespace YIUIFramework
         private void EnableMeshRectShadow(Transform goNode)
         {
             var render = goNode.GetComponent<SkinnedMeshRenderer>();
-            if (render != null)
+            if (render)
             {
-                if (render.shadowCastingMode == UnityEngine.Rendering.ShadowCastingMode.Off)
+                if (render.shadowCastingMode == ShadowCastingMode.Off)
                 {
-                    render.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+                    render.shadowCastingMode = ShadowCastingMode.On;
                     m_RenderList.Add(render);
                 }
             }
@@ -389,7 +403,7 @@ namespace YIUIFramework
         {
             foreach (var render in m_RenderList)
             {
-                render.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                render.shadowCastingMode = ShadowCastingMode.Off;
             }
 
             m_RenderList.Clear();
@@ -399,7 +413,7 @@ namespace YIUIFramework
         private void ExchangeShowImage(RawImage img)
         {
             m_ShowImage = img;
-            if (null != m_ShowTexture)
+            if (m_ShowTexture)
             {
                 m_ShowImage.texture = m_ShowTexture;
             }

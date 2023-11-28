@@ -7,38 +7,40 @@ namespace YIUIFramework
     /// </summary>
     public sealed class UI3DDisplayRecord : MonoBehaviour
     {
-        private int               m_Layer;
-        private bool              m_Visible;
-        private Renderer          m_AttachRenderer;
+        private int m_Layer;
+        private bool m_Visible;
+        private Renderer m_AttachRenderer;
         private UI3DDisplayCamera m_ShowCamera;
 
-        internal void Initialize(Renderer renderer, UI3DDisplayCamera camera)
+        internal void Initialize(Renderer _renderer, UI3DDisplayCamera _camera)
         {
-            m_AttachRenderer = renderer;
-            m_ShowCamera     = camera;
-            m_Layer          = renderer.gameObject.layer;
-            m_Visible        = renderer.enabled;
+            m_AttachRenderer = _renderer;
+            m_ShowCamera = _camera;
+            m_Layer = _renderer.gameObject.layer;
+            m_Visible = _renderer.enabled;
         }
 
         private static bool IsParentOf(Transform obj, Transform parent)
         {
-            if (obj == parent)
+            while (true)
             {
-                return true;
-            }
+                if (obj == parent)
+                {
+                    return true;
+                }
 
-            if (obj.parent == null)
-            {
-                return false;
-            }
+                if (obj.parent == null)
+                {
+                    return false;
+                }
 
-            return IsParentOf(obj.parent, parent);
+                obj = obj.parent;
+            }
         }
 
         private void OnTransformParentChanged()
         {
-            if (m_ShowCamera == null ||
-                !IsParentOf(transform, m_ShowCamera.transform))
+            if (m_ShowCamera == null || !IsParentOf(transform, m_ShowCamera.transform))
             {
                 this.SafeDestroySelf();
             }
@@ -46,7 +48,7 @@ namespace YIUIFramework
 
         private void OnDestroy()
         {
-            if (m_AttachRenderer != null)
+            if (m_AttachRenderer)
             {
                 m_AttachRenderer.enabled = m_Visible;
             }

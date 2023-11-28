@@ -1,7 +1,5 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using YIUIBind;
 
 namespace YIUIFramework
 {
@@ -12,36 +10,48 @@ namespace YIUIFramework
     {
         private void Awake()
         {
-            m_ShowImage ??= GetComponent<RawImage>();
-
-            if (m_ShowImage != null)
+            if (m_ShowImage == null)
             {
-                if (m_ShowObject == null)
-                    m_ShowImage.enabled = false;
+                m_ShowImage = GetComponent<RawImage>();
             }
 
-            if (m_ShowCamera != null)
+            if (m_ShowImage)
             {
                 if (m_ShowObject == null)
+                {
+                    m_ShowImage.enabled = false;
+                }
+            }
+
+            if (m_ShowCamera)
+            {
+                if (m_ShowObject == null)
+                {
                     m_ShowCamera.enabled = false;
+                }
+
                 m_ShowCameraCtrl = m_ShowCamera.GetOrAddComponent<UI3DDisplayCamera>();
             }
 
             g_DisPlayUIIndex += 1;
             var offsetY = g_DisPlayUIIndex * 100.0f;
             if (offsetY >= 2147)
+            {
                 g_DisPlayUIIndex = 0;
+            }
 
             m_ModelGlobalOffset = new Vector3(0, offsetY, 0);
 
             if (m_MultipleTargetMode)
+            {
                 InitRotationData();
+            }
         }
 
         private void Start()
         {
             //如果提前设置显示对象 在非多模式下 自动设置
-            if (!m_MultipleTargetMode && m_ShowObject != null && m_LookCamera != null)
+            if (!m_MultipleTargetMode && m_ShowObject && m_LookCamera)
             {
                 Show(m_ShowObject, m_LookCamera);
             }
@@ -49,73 +59,74 @@ namespace YIUIFramework
 
         private void OnEnable()
         {
-            if (m_ShowObject == null || m_ShowTexture != null) return;
-
-            m_ShowTexture = RenderTexture.GetTemporary(
-                m_ResolutionX, m_ResolutionY, m_RenderTextureDepthBuffer);
-
-            if (m_ShowImage != null)
+            if (m_ShowObject && m_ShowTexture == null)
             {
-                m_ShowImage.texture = m_ShowTexture;
-                m_ShowImage.enabled = true;
-            }
+                m_ShowTexture = RenderTexture.GetTemporary(m_ResolutionX, m_ResolutionY, m_RenderTextureDepthBuffer);
 
-            if (m_ShowCamera != null)
-            {
-                m_ShowCamera.targetTexture = m_ShowTexture;
-                m_ShowCamera.enabled       = true;
+                if (m_ShowImage)
+                {
+                    m_ShowImage.texture = m_ShowTexture;
+                    m_ShowImage.enabled = true;
+                }
+
+                if (m_ShowCamera)
+                {
+                    m_ShowCamera.targetTexture = m_ShowTexture;
+                    m_ShowCamera.enabled = true;
+                }
             }
         }
 
         private void OnDisable()
         {
-            if (m_ShowTexture == null) return;
-
-            RenderTexture.ReleaseTemporary(m_ShowTexture);
-            m_ShowTexture = null;
-
-            if (m_ShowImage != null)
+            if (m_ShowTexture)
             {
-                m_ShowImage.texture = null;
-                m_ShowImage.enabled = false;
-            }
+                RenderTexture.ReleaseTemporary(m_ShowTexture);
+                m_ShowTexture = null;
 
-            if (m_ShowCamera != null)
-            {
-                m_ShowCamera.targetTexture = null;
-                m_ShowCamera.enabled       = false;
+                if (m_ShowImage)
+                {
+                    m_ShowImage.texture = null;
+                    m_ShowImage.enabled = false;
+                }
+
+                if (m_ShowCamera)
+                {
+                    m_ShowCamera.targetTexture = null;
+                    m_ShowCamera.enabled = false;
+                }
             }
         }
 
         private void OnDestroy()
         {
-            if (m_ShowTexture != null)
+            if (m_ShowTexture)
             {
                 RenderTexture.ReleaseTemporary(m_ShowTexture);
-                m_ShowTexture              = null;
-                m_ShowImage.texture        = null;
+                m_ShowTexture = null;
+                m_ShowImage.texture = null;
                 m_ShowCamera.targetTexture = null;
-                m_ShowCamera.enabled       = false;
+                m_ShowCamera.enabled = false;
             }
 
             DisableMeshRectShadow();
 
-            if (m_ShowCameraCtrl != null)
+            if (m_ShowCameraCtrl)
             {
                 m_ShowCameraCtrl.ShowObject = null;
             }
         }
 
+        //自动同步摄像机位置旋转
         private void Update()
         {
-            if (!m_ShowCamera)
-                return;
-
-            //自动同步摄像机位置旋转
-            if (m_AutoSync && m_LookCamera)
+            if (m_ShowCamera)
             {
-                var tsf = m_LookCamera.transform;
-                m_ShowCamera.transform.SetPositionAndRotation(tsf.position, tsf.rotation);
+                if (m_AutoSync && m_LookCamera)
+                {
+                    var tsf = m_LookCamera.transform;
+                    m_ShowCamera.transform.SetPositionAndRotation(tsf.position, tsf.rotation);
+                }
             }
         }
     }
