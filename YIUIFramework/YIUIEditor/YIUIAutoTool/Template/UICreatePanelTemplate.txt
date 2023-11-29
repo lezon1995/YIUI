@@ -5,12 +5,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
-namespace ${Namespace}.${PkgName}
+namespace ${Namespace}
 {
-    /// <summary>
-    /// Author  ${Author}
-    /// Date    ${CreateDate}
-    /// </summary>
     public sealed partial class ${ResName} : ${ResName}Base
     {
     
@@ -18,33 +14,33 @@ namespace ${Namespace}.${PkgName}
         
         protected override void Initialize()
         {
-            Debug.Log($"${ResName} Initialize");
+            //Debug.Log($"${ResName} Initialize");
         }
 
         protected override void Start()
         {
-            Debug.Log($"${ResName} Start");
+            //Debug.Log($"${ResName} Start");
         }
 
         protected override void OnEnable()
         {
-            Debug.Log($"${ResName} OnEnable");
+            //Debug.Log($"${ResName} OnEnable");
         }
 
         protected override void OnDisable()
         {
-            Debug.Log($"${ResName} OnDisable");
+            //Debug.Log($"${ResName} OnDisable");
         }
 
         protected override void OnDestroy()
         {
-            Debug.Log($"${ResName} OnDestroy");
+            //Debug.Log($"${ResName} OnDestroy");
         }
 
         protected override async UniTask<bool> OnOpen()
         {
             await UniTask.CompletedTask;
-            Debug.Log($"${ResName} OnOpen");
+            //Debug.Log($"${ResName} OnOpen");
             return true;
         }
 

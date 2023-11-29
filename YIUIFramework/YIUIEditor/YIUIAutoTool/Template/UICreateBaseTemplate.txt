@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
-namespace ${Namespace}.${PkgName}
+namespace ${Namespace}
 {
 
 ${PanelViewEnum}

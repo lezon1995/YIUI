@@ -133,7 +133,7 @@ namespace YIUIFramework.Editor
                 }
 
                 existName.Add(newName);
-                sb.AppendFormat("            {0} = CDETable.FindUIBase<{1}>(\"{2}\");\r\n", newName, $"{UIStaticHelper.UINamespace}.{pkgName}.{resName}", name);
+                sb.AppendFormat("            {0} = CDETable.FindUIBase<{1}>(\"{2}\");\r\n", newName, $"{UIStaticHelper.UINamespace}.{resName}", name);
             }
         }
 

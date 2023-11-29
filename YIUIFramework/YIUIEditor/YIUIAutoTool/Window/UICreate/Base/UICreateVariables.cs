@@ -155,7 +155,7 @@ namespace YIUIFramework.Editor
                 }
 
                 existName.Add(newName);
-                sb.AppendFormat("        public {0} {1} {{ get; private set; }}\r\n", $"{UIStaticHelper.UINamespace}.{pkgName}.{resName}", newName);
+                sb.AppendFormat("        public {0} {1} {{ get; private set; }}\r\n", $"{UIStaticHelper.UINamespace}.{resName}", newName);
             }
         }
 
