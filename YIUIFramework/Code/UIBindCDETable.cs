@@ -9,7 +9,7 @@ namespace YIUIFramework
 {
     [Serializable]
     [LabelText("UI CDE总表")]
-    [AddComponentMenu("YIUIBind/★★★★★UI CDE Table 总表★★★★★")]
+    [AddComponentMenu("YIUIBind/CDE Table")]
     public sealed partial class UIBindCDETable : SerializedMonoBehaviour
     {
 #if UNITY_EDITOR
@@ -87,7 +87,7 @@ namespace YIUIFramework
 
         public T FindUIBase<T>(string uiName) where T : UIBase
         {
-            return (T)FindUIBase(uiName);
+            return FindUIBase(uiName) as T;
         }
 
         #endregion

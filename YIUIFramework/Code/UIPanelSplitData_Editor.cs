@@ -161,7 +161,7 @@ namespace YIUIFramework
         }
 
         //检查null / 父级
-        private void CheckViewParent(List<RectTransform> list, RectTransform parent)
+        private void CheckViewParent(List<RectTransform> list, Transform parent)
         {
             for (var i = list.Count - 1; i >= 0; i--)
             {

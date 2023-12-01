@@ -7,7 +7,7 @@ namespace YIUIFramework
     /// </summary>
     public static class YIUIRectFactory
     {
-        public static RectTransform CreateUIRect(RectTransform parent)
+        public static RectTransform CreateUIRect(Transform parent)
         {
             var obj = new GameObject();
             var rect = obj.AddComponent<RectTransform>();

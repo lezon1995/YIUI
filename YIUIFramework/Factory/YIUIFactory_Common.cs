@@ -19,7 +19,6 @@ namespace YIUIFramework
             //强制添加 既然你要使用这个方法那就必须接受 否则请使用其他方式
             //被摧毁时 自动回收 无需调用 UIFactory.Destroy
             obj.AddComponent<YIUIReleaseInstantiate>();
-
             return obj;
         }
 
@@ -33,7 +32,6 @@ namespace YIUIFramework
             }
 
             obj.AddComponent<YIUIReleaseInstantiate>();
-
             return obj;
         }
     }

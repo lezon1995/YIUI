@@ -13,49 +13,49 @@ namespace YIUIFramework
         #region 界面参数
 
         [ReadOnly]
-        [LabelText("组件类型")]
+        [LabelText("UI类型")]
         [OnValueChanged(nameof(OnValueChangedEUICodeType))]
         public EUICodeType UICodeType = EUICodeType.Component;
 
         [BoxGroup("配置", true, true)]
-        [HideIf("UICodeType", EUICodeType.Component)]
+        [HideIf(nameof(UICodeType), EUICodeType.Component)]
         [LabelText("窗口选项")]
         [GUIColor(0, 1, 1)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public EWindowOption WindowOption = EWindowOption.None;
 
-        [ShowIf("UICodeType", EUICodeType.Panel)]
+        [ShowIf(nameof(UICodeType), EUICodeType.Panel)]
         [BoxGroup("配置", true, true)]
         [GUIColor(0, 1, 1)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         [OnValueChanged(nameof(OnValueChangedEPanelLayer))]
         public EPanelLayer PanelLayer = EPanelLayer.Panel;
 
-        [ShowIf("UICodeType", EUICodeType.Panel)]
+        [ShowIf(nameof(UICodeType), EUICodeType.Panel)]
         [BoxGroup("配置", true, true)]
         [GUIColor(0, 1, 1)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public EPanelOption PanelOption = EPanelOption.None;
 
-        [ShowIf("UICodeType", EUICodeType.Panel)]
+        [ShowIf(nameof(UICodeType), EUICodeType.Panel)]
         [BoxGroup("配置", true, true)]
         [GUIColor(0, 1, 1)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public EPanelStackOption PanelStackOption = EPanelStackOption.VisibleTween;
 
-        [ShowIf("UICodeType", EUICodeType.View)]
+        [ShowIf(nameof(UICodeType), EUICodeType.View)]
         [BoxGroup("配置", true, true)]
         [GUIColor(0, 1, 1)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public EViewWindowType ViewWindowType = EViewWindowType.View;
 
-        [ShowIf("UICodeType", EUICodeType.View)]
+        [ShowIf(nameof(UICodeType), EUICodeType.View)]
         [BoxGroup("配置", true, true)]
         [GUIColor(0, 1, 1)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public EViewStackOption ViewStackOption = EViewStackOption.VisibleTween;
 
-        [ShowIf("ShowCachePanelTime", EUICodeType.Panel)]
+        [ShowIf(nameof(ShowCachePanelTime), EUICodeType.Panel)]
         [BoxGroup("配置", true, true)]
         [GUIColor(0, 1, 1)]
         [LabelText("缓存时间")]
@@ -65,7 +65,7 @@ namespace YIUIFramework
         private bool ShowCachePanelTime => PanelOption.Has(EPanelOption.TimeCache);
 
         [LabelText("同层级时 优先级高的在前面")] //相同时后开的在前
-        [ShowIf("UICodeType", EUICodeType.Panel)]
+        [ShowIf(nameof(UICodeType), EUICodeType.Panel)]
         [BoxGroup("配置", true, true)]
         [GUIColor(0, 1, 1)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]

@@ -5,7 +5,7 @@ namespace YIUIFramework
 {
     public static partial class YIUIFactory
     {
-        public static T Instantiate<T>(RectTransform parent = null) where T : UIBase
+        public static T Instantiate<T>(Transform parent = null) where T : UIBase
         {
             if (UIBindHelper.TryGetBindVo<T>(out var vo))
             {
@@ -15,22 +15,18 @@ namespace YIUIFramework
             return null;
         }
 
-        public static T Instantiate<T>(UIBindVo vo, RectTransform parent = null) where T : UIBase
+        public static T Instantiate<T>(UIBindVo vo, Transform parent = null) where T : UIBase
         {
-            var instance = (T)Create(vo);
-            if (instance == null)
-            {
-                return null;
-            }
-
-            SetParent(instance.OwnerRectTransform, parent ? parent : PanelMgr.Inst.UICache);
-            return instance;
+            return Create(vo, parent) as T;
         }
 
-        private static void SetParent(RectTransform self, RectTransform parent)
+        private static void SetParent(Transform self, Transform parent)
         {
             self.SetParent(parent, false);
-            self.AutoReset();
+            if (self is RectTransform rectTransform)
+            {
+                rectTransform.AutoReset();
+            }
         }
 
         internal static UIBase CreateCommon(string pkgName, string resName, GameObject obj)
@@ -52,7 +48,7 @@ namespace YIUIFramework
         {
             if (UIBindHelper.TryGetBindVo<T>(out var vo))
             {
-                return (T)Create(vo);
+                return Create(vo) as T;
             }
 
             return null;
@@ -68,19 +64,19 @@ namespace YIUIFramework
             return null;
         }
 
-        private static UIBase Create(UIBindVo vo)
+        private static UIBase Create(UIBindVo vo, Transform parent = null)
         {
             var obj = YIUILoadHelper.LoadAssetInstantiate(vo.PkgName, vo.ResName);
-            if (obj == null)
+            if (obj)
             {
-                Debug.LogError($"没有加载到这个资源 {vo.PkgName}/{vo.ResName}");
-                return null;
+                return CreateByObjVo(vo, obj, parent);
             }
 
-            return CreateByObjVo(vo, obj);
+            Debug.LogError($"没有加载到这个资源 {vo.PkgName}/{vo.ResName}");
+            return null;
         }
 
-        private static UIBase CreateByObjVo(UIBindVo vo, GameObject obj)
+        private static UIBase CreateByObjVo(UIBindVo vo, GameObject obj, Transform parent = null)
         {
             var cdeTable = obj.GetComponent<UIBindCDETable>();
             if (cdeTable == null)
@@ -91,6 +87,7 @@ namespace YIUIFramework
 
             cdeTable.CreateComponent();
             var uiBase = (UIBase)Activator.CreateInstance(vo.CreatorType);
+            SetParent(obj.transform, parent ? parent : PanelMgr.Inst.UICache);
             uiBase.InitUIBase(vo, obj);
             return uiBase;
         }
