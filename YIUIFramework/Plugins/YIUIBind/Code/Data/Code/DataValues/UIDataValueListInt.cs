@@ -29,6 +29,7 @@ namespace YIUIBind
 
         protected override void SetValueFrom(List<int> value)
         {
+            base.SetValueFrom(value);
             //因为List是引用类型，所以这里要做一下特殊处理，如果要设置的值为0元素的List
             //否则就拷贝全部元素
             GetValue().Clear();
@@ -39,12 +40,13 @@ namespace YIUIBind
 
         private bool EqualsList(List<int> value)
         {
-            if (GetValue().Count != value.Count)
+            List<int> list = GetValue();
+            if (list == null || list.Count != value.Count)
             {
                 return false;
             }
 
-            return !GetValue().Where((t, i) => t != value[i]).Any();
+            return !list.Where((t, i) => t != value[i]).Any();
         }
 
         public bool Equals(UIDataValueListInt other)

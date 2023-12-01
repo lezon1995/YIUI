@@ -2,47 +2,45 @@ using Sirenix.OdinInspector;
 
 namespace YIUIBind
 {
-    [LabelText("类型")]
-
     //禁止修改ID
     //因为涉及到Mask 所以最高只有32个 请注意
-    //@lsy
+    [LabelText("Type")]
     public enum EUIBindDataType
     {
-        [LabelText("Bool")]
+        [LabelText("bool")]
         Bool = 0,
 
-        [LabelText("String")]
+        [LabelText("string")]
         String = 1,
 
-        [LabelText("Int")]
+        [LabelText("int")]
         Int = 2,
 
-        [LabelText("Float")]
+        [LabelText("float")]
         Float = 3,
 
         [LabelText("Vector3")]
         Vector3 = 4,
 
-        [LabelText("List_Int")]
+        [LabelText("List<int>")]
         List_Int = 5,
 
-        [LabelText("List_Long")]
+        [LabelText("List<long>")]
         List_Long = 6,
 
-        [LabelText("List_String")]
+        [LabelText("List<string>")]
         List_String = 7,
 
-        [LabelText("Long")]
+        [LabelText("long")]
         Long = 8,
 
-        [LabelText("Uint")]
+        [LabelText("uint")]
         Uint = 9,
 
-        [LabelText("Ulong")]
+        [LabelText("ulong")]
         Ulong = 10,
 
-        [LabelText("Double")]
+        [LabelText("double")]
         Double = 11,
 
         [LabelText("Vector2")]

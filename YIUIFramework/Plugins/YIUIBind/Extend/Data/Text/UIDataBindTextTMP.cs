@@ -6,7 +6,7 @@ using Logger = YIUIFramework.Logger;
 namespace YIUIBind
 {
     [RequireComponent(typeof(TextMeshProUGUI))]
-    [LabelText("Text 文本TMP")]
+    [LabelText("TextTMP")]
     [AddComponentMenu("YIUIBind/Data/文本TMP 【TextTMP】 UIDataBindTextTMP")]
     public sealed class UIDataBindTextTMP : UIDataBindTextBase
     {

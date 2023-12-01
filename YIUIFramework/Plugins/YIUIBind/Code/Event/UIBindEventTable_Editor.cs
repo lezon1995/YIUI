@@ -60,7 +60,7 @@ namespace YIUIBind
         [PropertyOrder(-98)]
         [OdinSerialize]
         [ShowInInspector]
-        [LabelText("需要添加的事件参数")]
+        [LabelText("Param Type")]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
 
         //[ListDrawerSettings(DraggableItems = false,lsyExpanded = false,ShowIndexLabels = true,ShowPaging = false,ShowItemCount = false,HideRemoveButton = true)]
@@ -163,12 +163,10 @@ namespace YIUIBind
                 return;
             }
 
-            foreach (var data in m_EventDic)
+            foreach (var (eventName, uiEvent) in m_EventDic)
             {
-                var uiEventName = data.Key;
-                var uiEvent     = data.Value;
                 uiEvent.ClearBinds();
-                uiEvent.ChangeName(uiEventName);
+                uiEvent.ChangeName(eventName);
                 uiEvent.OnRemoveAction = OnRemoveUIEvent;
             }
 

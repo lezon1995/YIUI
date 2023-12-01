@@ -8,19 +8,17 @@ using Logger = YIUIFramework.Logger;
 
 namespace YIUIBind
 {
-    //[DetailedInfoBox("UI 数据表 点击展开详细介绍", @"李胜扬")]
     [LabelText("UI 数据表")]
     [Serializable]
-    [AddComponentMenu("YIUIBind/★★★UI Data Table 数据表★★★")]
+    [AddComponentMenu("YIUIBind/Data Table")]
     public sealed partial class UIBindDataTable : SerializedMonoBehaviour
     {
         [OdinSerialize]
-        [HideLabel]
+        [LabelText("Runtime Datas")]
         [ShowInInspector]
-        [Title("所有数据", TitleAlignment = TitleAlignments.Centered)]
-        [DictionaryDrawerSettings(KeyLabel = "数据名称", ValueLabel = "数据内容", IsReadOnly = true, DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
+        [DictionaryDrawerSettings(KeyLabel = "Data Name", ValueLabel = "数据内容", IsReadOnly = true, DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
         private Dictionary<string, UIData> m_DataDic = new Dictionary<string, UIData>();
-
+        
         public IReadOnlyDictionary<string, UIData> DataDic => m_DataDic;
 
         private void Awake()
@@ -30,7 +28,10 @@ namespace YIUIBind
 
         public UIData FindData(string dataName)
         {
-            if (string.IsNullOrEmpty(dataName)) return null;
+            if (dataName.IsEmpty())
+            {
+                return null;
+            }
 
             return m_DataDic.TryGetValue(dataName, out var data) ? data : null;
         }
@@ -50,7 +51,7 @@ namespace YIUIBind
                 return default;
             }
 
-            return (T) uiData.DataValue;
+            return uiData.DataValue as T;
         }
 
         #region 递归初始化所有绑定数据
@@ -74,8 +75,9 @@ namespace YIUIBind
 
             ListPool<UIDataBind>.Put(binds);
 
-            foreach (Transform child in transform)
+            for (int i = 0; i < transform.childCount; i++)
             {
+                var child = transform.GetChild(i);
                 InitializeBindsDeep(child);
             }
         }
@@ -96,8 +98,9 @@ namespace YIUIBind
 
             ListPool<UIDataBind>.Put(binds);
 
-            foreach (Transform child in transform)
+            for (int i = 0; i < transform.childCount; i++)
             {
+                var child = transform.GetChild(i);
                 InitializeBindsDeep(child);
             }
         }

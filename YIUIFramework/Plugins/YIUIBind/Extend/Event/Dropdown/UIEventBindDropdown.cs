@@ -8,7 +8,7 @@ using Logger = YIUIFramework.Logger;
 namespace YIUIBind
 {
     [InfoBox("提示: 可用事件参数 <参数1:int(下拉菜单被选择的索引值)>")]
-    [LabelText("下拉菜单<int>")]
+    [LabelText("Dropdown Change")]
     [RequireComponent(typeof(Dropdown))]
     [AddComponentMenu("YIUIBind/Event/下拉菜单 【Dropdown】 UIEventBindDropdown")]
     public class UIEventBindDropdown : UIEventBind
@@ -31,7 +31,10 @@ namespace YIUIBind
 
         private void Awake()
         {
-            m_Dropdown ??= GetComponent<Dropdown>();
+            if (m_Dropdown == null)
+            {
+                m_Dropdown = GetComponent<Dropdown>();
+            }
         }
 
         private void OnEnable()

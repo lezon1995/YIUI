@@ -10,8 +10,8 @@ namespace YIUIBind
 {
     public abstract partial class UIDataBindSelectBase
     {
-        [ValueDropdown("GetBindKeys")]
-        [OnValueChanged("OnBindKeySelected")]
+        [ValueDropdown(nameof(GetBindKeys))]
+        [OnValueChanged(nameof(OnBindKeySelected))]
         [ShowInInspector]
         [PropertyOrder(-10)]
         [LabelText("选择绑定数据")]
@@ -26,9 +26,9 @@ namespace YIUIBind
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
         private void AddSelect()
         {
-            if (string.IsNullOrEmpty(m_SelectBindKey))
+            if (m_SelectBindKey.IsEmpty())
             {
-                var tips = $"请选择";
+                var tips = "请选择";
                 UnityTipsHelper.Show(tips);
                 Logger.LogError(tips);
                 return;
@@ -62,7 +62,7 @@ namespace YIUIBind
             var data = new UIDataSelect(uiData);
             m_DataSelectDic.Add(m_SelectBindKey, data);
             m_SelectBindKey = "";
-            base.OnValidate();
+            OnValidate();
         }
 
         [GUIColor(1, 1, 0)]
@@ -72,7 +72,7 @@ namespace YIUIBind
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
         private void RemoveSelect()
         {
-            if (string.IsNullOrEmpty(m_SelectBindKey))
+            if (m_SelectBindKey.IsEmpty())
             {
                 var tips1 = $"请选择";
                 UnityTipsHelper.Show(tips1);
@@ -85,18 +85,19 @@ namespace YIUIBind
             m_SelectBindKey = "";
         }
 
-        private void RemoveSelect(string name)
+        private void RemoveSelect(string key)
         {
-            if (!m_DataSelectDic.ContainsKey(name))
+            if (m_DataSelectDic.ContainsKey(key))
             {
-                var tips = $"{name} 不存在无法移除";
-                UnityTipsHelper.ShowError(tips);
-                return;
+                UnbindData(key);
+                m_DataSelectDic.Remove(key);
+                OnValidate();
             }
-
-            UnbindData(name);
-            m_DataSelectDic.Remove(name);
-            OnValidate();
+            else
+            {
+                var tips = $"{key} 不存在无法移除";
+                UnityTipsHelper.ShowError(tips);
+            }
         }
 
         private bool IsValid(EUIBindDataType type)
@@ -129,7 +130,7 @@ namespace YIUIBind
             {
                 if (IsValid(data.DataValue.UIBindDataType))
                 {
-                    if (string.IsNullOrEmpty(data.Name))
+                    if (data.Name.IsEmpty())
                     {
                         Logger.LogErrorContext(this, $"{name} 这个表中有null名称 请检查");
                         continue;
@@ -159,7 +160,7 @@ namespace YIUIBind
         //选择这个数据然后刷新
         private void OnBindKeySelected()
         {
-            if (string.IsNullOrEmpty(m_SelectBindKey))
+            if (m_SelectBindKey.IsEmpty())
             {
                 return;
             }

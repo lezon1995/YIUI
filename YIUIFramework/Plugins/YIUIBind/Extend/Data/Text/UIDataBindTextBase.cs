@@ -27,7 +27,7 @@ namespace YIUIBind
 
         [SerializeField]
         [LabelText("精度值")]
-        [ShowIf("m_NumberPrecision")]
+        [ShowIf(nameof(m_NumberPrecision))]
         protected string m_NumberPrecisionStr = "F1";
 
         protected override int Mask()

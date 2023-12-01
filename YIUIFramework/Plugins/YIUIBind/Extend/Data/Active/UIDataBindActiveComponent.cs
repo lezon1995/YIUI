@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -20,13 +19,15 @@ namespace YIUIBind
 
         [SerializeField]
         [LabelText("过度时间")]
-        [ShowIf("m_TransitionMode", UITransitionModeEnum.Fade)]
+        [ShowIf(nameof(m_TransitionMode), UITransitionModeEnum.Fade)]
         private float m_TransitionTime = 0.1f;
 
         protected override void OnValueChanged()
         {
             if (m_Target == null)
+            {
                 return;
+            }
 
             var result = GetResult();
 
@@ -36,19 +37,23 @@ namespace YIUIBind
             }
             else
             {
-                m_WaitForSeconds ??= new WaitForSeconds(m_TransitionTime);
-                m_Coroutine      =   StartCoroutine(WaitTime(result));
+                if (m_WaitForSeconds == null)
+                {
+                    m_WaitForSeconds = new WaitForSeconds(m_TransitionTime);
+                }
+
+                m_Coroutine = StartCoroutine(WaitTime(result));
             }
         }
 
         private WaitForSeconds m_WaitForSeconds;
-        private Coroutine      m_Coroutine;
+        private Coroutine m_Coroutine;
 
         private IEnumerator WaitTime(bool result)
         {
             yield return m_WaitForSeconds;
             m_Target.enabled = result;
-            m_Coroutine      = null;
+            m_Coroutine = null;
         }
 
         private new void OnDestroy()

@@ -16,24 +16,19 @@ namespace YIUIBind
     /// </summary>
     public sealed class UIEventHandleP0
     {
-        private LinkedList<UIEventHandleP0>     m_UIEventList;
+        private LinkedList<UIEventHandleP0> m_UIEventList;
         private LinkedListNode<UIEventHandleP0> m_UIEventNode;
-
-        private UIEventDelegate m_UIEventParamDelegate;
-        public  UIEventDelegate UIEventParamDelegate => m_UIEventParamDelegate;
+        public UIEventDelegate UIEventParamDelegate { get; private set; }
 
         public UIEventHandleP0()
         {
         }
 
-        internal UIEventHandleP0 Init(
-            LinkedList<UIEventHandleP0>     uiEventList,
-            LinkedListNode<UIEventHandleP0> uiEventNode,
-            UIEventDelegate                 uiEventDelegate)
+        internal UIEventHandleP0 Init(LinkedList<UIEventHandleP0> uiEventList, LinkedListNode<UIEventHandleP0> uiEventNode, UIEventDelegate uiEventDelegate)
         {
-            m_UIEventList          = uiEventList;
-            m_UIEventNode          = uiEventNode;
-            m_UIEventParamDelegate = uiEventDelegate;
+            m_UIEventList = uiEventList;
+            m_UIEventNode = uiEventNode;
+            UIEventParamDelegate = uiEventDelegate;
             return this;
         }
 

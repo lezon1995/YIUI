@@ -21,7 +21,7 @@ namespace YIUIBind
 Event 那边已经做好一个自动关联 可以直接关联到事件回调
 因为有接口 IPointerClickHandler 所以任何可以被射线检测到的都可以点击
 不一定需要Selectable组件 他不是必须的")]
-    [LabelText("改变数据")]
+    [LabelText("DataChanged")]
     [AddComponentMenu("YIUIBind/Data/★改变数据 【Change】 UIDataBindSelectBase")]
     public class UIDataBindChange : UIDataBindSelectBase, IPointerClickHandler
     {
@@ -44,7 +44,7 @@ Event 那边已经做好一个自动关联 可以直接关联到事件回调
 
         [SerializeField]
         [LabelText("拖拽时不响应点击")]
-        [ShowIf("m_InvokeClick")]
+        [ShowIf(nameof(m_InvokeClick))]
         #if UNITY_EDITOR
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         #endif
@@ -53,7 +53,7 @@ Event 那边已经做好一个自动关联 可以直接关联到事件回调
         [SerializeField]
         [ReadOnly]
         [LabelText("可选组件")]
-        [ShowIf("m_InvokeClick")]
+        [ShowIf(nameof(m_InvokeClick))]
         private Selectable m_Selectable;
 
         private event Action OnChangeDataValueAction;
@@ -71,19 +71,20 @@ Event 那边已经做好一个自动关联 可以直接关联到事件回调
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (!m_InvokeClick) return;
-
-            if (m_Selectable != null && !m_Selectable.interactable)
+            if (m_InvokeClick)
             {
-                return;
-            }
+                if (m_Selectable && !m_Selectable.interactable)
+                {
+                    return;
+                }
 
-            if (m_SkipWhenDrag && eventData.dragging)
-            {
-                return;
-            }
+                if (m_SkipWhenDrag && eventData.dragging)
+                {
+                    return;
+                }
 
-            ChangeDataValue();
+                ChangeDataValue();
+            }
         }
 
         protected override int Mask()
@@ -93,7 +94,7 @@ Event 那边已经做好一个自动关联 可以直接关联到事件回调
 
         [GUIColor(0, 1, 1)]
         [Button("响应点击", 30)]
-        [ShowIf("m_InvokeClick")]
+        [ShowIf(nameof(m_InvokeClick))]
         [PropertyOrder(-100)]
         public void ChangeDataValue()
         {
@@ -131,7 +132,10 @@ Event 那边已经做好一个自动关联 可以直接关联到事件回调
             //没有的就删除
             //缺少的就添加
             //且同步修改后的名字
-            m_Selectable ??= GetComponent<Selectable>();
+            if (m_Selectable == null)
+            {
+                m_Selectable = GetComponent<Selectable>();
+            }
 
             foreach (var target in DataSelectDic.Values)
             {
@@ -140,7 +144,7 @@ Event 那边已经做好一个自动关联 可以直接关联到事件回调
                 //我的
                 foreach (var self in m_Datas)
                 {
-                    if (target.Data.DataGuid == self.Data.DataGuid)
+                    if (target.Data.Guid == self.Data.Guid)
                     {
                         //存在则刷新
                         self.Refresh(target.Data);
@@ -162,7 +166,7 @@ Event 那边已经做好一个自动关联 可以直接关联到事件回调
                 var exist = false;
                 foreach (var target in DataSelectDic.Values)
                 {
-                    if (target.Data.DataGuid == self.Data.DataGuid)
+                    if (target.Data.Guid == self.Data.Guid)
                     {
                         exist = true;
                         break;
@@ -182,7 +186,7 @@ Event 那边已经做好一个自动关联 可以直接关联到事件回调
         [HideInInspector]
         private UIEventBindChangeDataValue m_UIEventBindChangeDataValue;
 
-        [ShowIf("ShowAddEventBtn")]
+        [ShowIf(nameof(ShowAddEventBtn))]
         [Button("添加事件", 30)]
         #if UNITY_EDITOR
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
@@ -194,8 +198,12 @@ Event 那边已经做好一个自动关联 可以直接关联到事件回调
 
         private bool ShowAddEventBtn()
         {
-            if (!m_InvokeClick) return false;
-            return m_UIEventBindChangeDataValue == null;
+            if (m_InvokeClick)
+            {
+                return m_UIEventBindChangeDataValue == null;
+            }
+
+            return false;
         }
 
         #endif

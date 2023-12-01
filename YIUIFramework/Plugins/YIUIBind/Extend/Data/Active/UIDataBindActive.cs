@@ -14,7 +14,7 @@ namespace YIUIBind
 
         [SerializeField]
         [LabelText("过度时间")]
-        [ShowIf("m_TransitionMode", UITransitionModeEnum.Fade)]
+        [ShowIf(nameof(m_TransitionMode), UITransitionModeEnum.Fade)]
         private float m_TransitionTime = 0.1f;
 
         private CanvasGroup m_CanvasGroup;
@@ -22,7 +22,9 @@ namespace YIUIBind
         protected override void OnValueChanged()
         {
             if (gameObject == null)
+            {
                 return;
+            }
 
             var result = GetResult();
 
@@ -37,7 +39,7 @@ namespace YIUIBind
                     m_CanvasGroup = gameObject.GetComponent<CanvasGroup>();
                 }
 
-                if (m_CanvasGroup != null)
+                if (m_CanvasGroup)
                 {
                     gameObject.SetActive(true);
                     if (gameObject.activeInHierarchy)

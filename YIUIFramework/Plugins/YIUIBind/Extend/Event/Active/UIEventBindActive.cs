@@ -7,7 +7,7 @@ using Logger = YIUIFramework.Logger;
 namespace YIUIBind
 {
     [InfoBox("提示: 可用事件参数 <参数1:Unity.GameObj(被控制的对象),bool(激活状态)>")]
-    [LabelText("显隐<Unity.GameObj,bool>")]
+    [LabelText("SetActive")]
     [AddComponentMenu("YIUIBind/Event/显隐 【Active】 UIEventBindActive")]
     public class UIEventBindActive : UIEventBind
     {

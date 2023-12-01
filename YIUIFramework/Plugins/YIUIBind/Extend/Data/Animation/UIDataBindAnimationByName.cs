@@ -44,8 +44,11 @@ namespace YIUIBind
         protected override void OnRefreshData()
         {
             base.OnRefreshData();
-            m_Animation ??= GetComponent<Animation>();
-            if (m_Animation != null)
+            if (m_Animation == null)
+            {
+                m_Animation = GetComponent<Animation>();
+            }
+            if (m_Animation)
             {
                 m_Animation.playAutomatically = false;
                 #if UNITY_EDITOR
@@ -69,18 +72,22 @@ namespace YIUIBind
 
         protected override void OnValueChanged()
         {
-            if (m_Animation == null) return;
-
-            var dataValue = GetFirstValue<string>();
-            if (string.IsNullOrEmpty(dataValue)) return;
-
-            if (!m_AllClipName.Contains(dataValue))
+            if (m_Animation)
             {
-                Logger.LogErrorContext(this, $"{name} 播放失败 请检查动画名称是否存在 {dataValue}");
-                return;
-            }
+                var dataValue = GetFirstValue<string>();
+                if (string.IsNullOrEmpty(dataValue))
+                {
+                    return;
+                }
 
-            m_Animation.Play(dataValue);
+                if (!m_AllClipName.Contains(dataValue))
+                {
+                    Logger.LogErrorContext(this, $"{name} 播放失败 请检查动画名称是否存在 {dataValue}");
+                    return;
+                }
+
+                m_Animation.Play(dataValue);
+            }
         }
     }
 }

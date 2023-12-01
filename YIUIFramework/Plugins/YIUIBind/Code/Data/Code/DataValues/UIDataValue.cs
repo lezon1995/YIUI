@@ -14,9 +14,6 @@ namespace YIUIBind
 
         public abstract Type UIDataValueType { get; }
 
-        /// <summary>
-        /// 从另一个Value设置数据
-        /// </summary>
         internal abstract bool SetValueFrom(UIDataValue dataValue);
 
         //值改变消息 无参

@@ -8,7 +8,7 @@ using Logger = YIUIFramework.Logger;
 namespace YIUIBind
 {
     [InfoBox("提示: 可用事件参数 <参数1:float(当前滑动值)>")]
-    [LabelText("滑动条<Float>")]
+    [LabelText("Slider Change")]
     [RequireComponent(typeof(Slider))]
     [AddComponentMenu("YIUIBind/Event/滑动条 【Slider】 UIEventBindSlider")]
     public class UIEventBindSlider : UIEventBind

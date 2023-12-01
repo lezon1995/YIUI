@@ -21,14 +21,14 @@ namespace YIUIBind
         public UIBindEventTable EventTable => m_EventTable;
 
         [OdinSerialize]
-        [LabelText("事件名称")]
+        [LabelText("Publish Event")]
 #if UNITY_EDITOR
-        [ValueDropdown("GetEventNameKeys")]
-        [OnValueChanged("OnEventNameSelected")]
+        [ValueDropdown(nameof(GetEventNameKeys))]
+        [OnValueChanged(nameof(OnEventNameSelected))]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
 #endif
         [PropertyOrder(-99)]
-        protected string m_EventName = null;
+        protected string m_EventName;
 
         /// <summary>
         /// 当前的UI事件
@@ -39,7 +39,7 @@ namespace YIUIBind
 
         private UIEventBase GetEvent(string eventName)
         {
-            if (string.IsNullOrEmpty(eventName))
+            if (eventName.IsEmpty())
             {
                 //Logger.LogErrorContext(this,$"{name} 尝试获取一个空名称的事件 请检查");
                 return null;
@@ -66,10 +66,11 @@ namespace YIUIBind
 
         internal void Initialize(bool refresh = false)
         {
-            if (!refresh && m_Binded) return;
-
-            m_Binded = true;
-            OnRefreshEvent();
+            if (refresh || !m_Binded)
+            {
+                m_Binded = true;
+                OnRefreshEvent();
+            }
         }
 
         private void RefreshEventName()

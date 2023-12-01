@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using YIUIFramework;
 using Logger = YIUIFramework.Logger;
 
 namespace YIUIBind
@@ -14,9 +15,9 @@ namespace YIUIBind
     public abstract partial class UIDataBindSelectBase : UIDataBind
     {
         [OdinSerialize]
-        [LabelText("所有已绑定数据")]
+        [LabelText("Binded Data")]
         [ShowInInspector]
-        [DictionaryDrawerSettings(KeyLabel = "数据名称", ValueLabel = "数据内容", IsReadOnly = true, DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
+        [DictionaryDrawerSettings(KeyLabel = "Data Name", ValueLabel = "数据内容", IsReadOnly = true, DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
         [ReadOnly]
 #if UNITY_EDITOR
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
@@ -29,17 +30,28 @@ namespace YIUIBind
 
         protected T GetFirstValue<T>(T defaultValue = default)
         {
-            if (DataSelectDic.Count == 0) return default;
+            if (DataSelectDic.Count == 0)
+            {
+                return default;
+            }
 
-            var data = DataSelectDic?.First().Value?.Data;
-            return data == null ? default : data.GetValue<T>(defaultValue);
+            var data = DataSelectDic.First().Value?.Data;
+            if (data == null)
+            {
+                return default;
+            }
+
+            return data.GetValue(defaultValue);
         }
 
         protected void SetFirstValue<T>(T value, bool force = false)
         {
-            if (DataSelectDic.Count == 0) return;
+            if (DataSelectDic.Count == 0)
+            {
+                return;
+            }
 
-            DataSelectDic?.First().Value?.Data?.Set<T>(value, force);
+            DataSelectDic.First().Value?.Data?.Set(value, force);
         }
 
         #endregion
@@ -50,7 +62,7 @@ namespace YIUIBind
         {
             foreach (var (dataName, dataSelect) in m_DataSelectDic)
             {
-                if (string.IsNullOrEmpty(dataName))
+                if (dataName.IsEmpty())
                 {
                     continue;
                 }
@@ -82,7 +94,7 @@ namespace YIUIBind
 
         private void UnbindData(UIDataSelect value)
         {
-            var data = value?.Data;
+            var data = value.Data;
             if (data == null)
             {
                 Logger.LogErrorContext(this, $"{name}空数据 请检查为什么 当前是否不在预制件编辑器中使用了");

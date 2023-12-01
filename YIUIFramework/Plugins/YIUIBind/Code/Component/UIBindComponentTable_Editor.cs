@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
@@ -10,43 +11,36 @@ using Logger = YIUIFramework.Logger;
 
 namespace YIUIBind
 {
-    //Editor
     public sealed partial class UIBindComponentTable
     {
         [OdinSerialize]
-        [LabelText("所有绑定数据 编辑数据")]
-        [Searchable]
+        [LabelText("Editor Components")]
         [HideReferenceObjectPicker]
         [PropertyOrder(-10)]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
-        private List<UIBindPairData> m_AllBindPair = new List<UIBindPairData>();
+        private List<UIBindData> m_ComponentList = new List<UIBindData>();
 
-        [GUIColor(0, 1, 1)]
-        [LabelText("空名称自动设置")]
-        [SerializeField]
-        [HorizontalGroup("SetGroup")]
-        [PropertyOrder(-99)]
-        [ShowIf("@UIOperationHelper.CommonShowIf()")]
-        private bool m_AutoSetNullName = true;
-
-        [GUIColor(0, 1, 1)]
-        [LabelText("空名称额外添加类型后缀")]
-        [SerializeField]
-        [ShowIf("m_AutoSetNullName")]
-        [HorizontalGroup("SetGroup")]
-        [PropertyOrder(-99)]
-        [ShowIf("@UIOperationHelper.CommonShowIf()")]
-        private bool m_NullNameAddTypeName = true;
-
-        [GUIColor(1, 1, 0)]
-        [Button("自动检查", 30)]
+        [Button("Auto Name", 30)]
         [PropertyOrder(-100)]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
         public void AutoCheck()
         {
             if (UIOperationHelper.CheckUIOperation(this))
             {
-                CheckAllBindName();
+                CheckComponentsName();
+            }
+        }
+
+        public void AddComponent(Component component)
+        {
+            if (UIOperationHelper.CheckUIOperation(this))
+            {
+                m_ComponentList.Add(new UIBindData
+                {
+                    GameObject = component.gameObject,
+                    Name = component.gameObject.name,
+                    Type = component.GetType(),
+                });
             }
         }
 
@@ -57,16 +51,20 @@ namespace YIUIBind
         /// 会尝试强制修改
         /// 如果还有同名则报错
         /// </summary>
-        private void CheckAllBindName()
+        private void CheckComponentsName()
         {
             m_AllBindDic.Clear();
-            if (m_AllBindPair == null || m_AllBindPair.Count < 1) return;
-
-            for (var i = 0; i < m_AllBindPair.Count; i++)
+            if (m_ComponentList.IsEmpty())
             {
-                var bindPair = m_AllBindPair[i];
-                var oldName = bindPair.Name;
-                var component = bindPair.Component;
+                return;
+            }
+
+            for (var i = 0; i < m_ComponentList.Count; i++)
+            {
+                var data = m_ComponentList[i];
+                var oldName = data.Name;
+                var type = data.Type;
+                var component = data.GameObject.GetComponent(type);
                 if (component == null)
                 {
                     Logger.LogErrorContext(this, $"{name} 空对象  所以 {oldName} 已忽略");
@@ -75,25 +73,14 @@ namespace YIUIBind
 
                 var newName = oldName;
 
-                if (!oldName.CheckFirstName(NameUtility.ComponentName))
+                var cName = NameUtility.ComponentName;
+                if (!oldName.CheckFirstName(cName))
                 {
-                    if (string.IsNullOrEmpty(newName))
+                    if (newName.IsEmpty())
                     {
-                        if (!m_AutoSetNullName)
-                        {
-                            continue;
-                        }
-
                         if (component)
                         {
-                            if (m_NullNameAddTypeName)
-                            {
-                                newName = $"{NameUtility.FirstName}{NameUtility.ComponentName}{component.name}{component.GetType().Name}";
-                            }
-                            else
-                            {
-                                newName = $"{NameUtility.FirstName}{NameUtility.ComponentName}{component.name}";
-                            }
+                            newName = $"{NameUtility.FirstName}{cName}{component.name}";
                         }
                         else
                         {
@@ -102,42 +89,42 @@ namespace YIUIBind
                     }
                     else
                     {
-                        newName = $"{NameUtility.FirstName}{NameUtility.ComponentName}{oldName}";
+                        newName = $"{NameUtility.FirstName}{cName}{oldName}";
                     }
                 }
 
-                newName = newName.ChangeToBigName(NameUtility.ComponentName);
+                newName = newName.ChangeToBigName(cName);
 
                 if (oldName != newName)
                 {
-                    bindPair.Name = newName;
+                    data.Name = newName;
                 }
 
-                if (string.IsNullOrEmpty(bindPair.Name))
+                if (data.Name.IsEmpty())
                 {
-                    Logger.LogErrorContext(this, $"{name} 存在空名称 {bindPair.Component?.name} 已忽略");
+                    Logger.LogErrorContext(this, $"{name} 存在空名称 {component.name} 已忽略");
                     continue;
                 }
 
-                if (bindPair.Component == null)
+                if (component == null)
                 {
-                    Logger.LogErrorContext(this, $"{name} 空对象  所以 {bindPair.Name} 已忽略");
+                    Logger.LogErrorContext(this, $"{name} 空对象  所以 {data.Name} 已忽略");
                     continue;
                 }
 
-                if (m_AllBindDic.ContainsValue(bindPair.Component))
+                if (m_AllBindDic.ContainsValue(component))
                 {
-                    Logger.LogErrorContext(bindPair.Component, $"{name} 这个组件已经存在了 重复对象 {bindPair.Component.name} 已忽略");
+                    Logger.LogErrorContext(component, $"{name} 这个组件已经存在了 重复对象 {component.name} 已忽略");
                     continue;
                 }
 
-                if (m_AllBindDic.ContainsKey(bindPair.Name))
+                if (m_AllBindDic.ContainsKey(data.Name))
                 {
-                    Logger.LogErrorContext(bindPair.Component, $"{name} 这个命名已经存在了 重复添加 {bindPair.Name} 已忽略");
+                    Logger.LogErrorContext(component, $"{name} 这个命名已经存在了 重复添加 {data.Name} 已忽略");
                     continue;
                 }
 
-                m_AllBindDic.Add(bindPair.Name, bindPair.Component);
+                m_AllBindDic.Add(data.Name, component);
             }
         }
     }
@@ -148,13 +135,31 @@ namespace YIUIBind
     [Serializable]
     [HideLabel]
     [HideReferenceObjectPicker]
-    internal class UIBindPairData
+    internal sealed class UIBindData
     {
-        [LabelText("名称")]
+        [HideLabel]
+        [HorizontalGroup("UIBindData")]
         public string Name;
 
-        [LabelText("对象")]
-        public Component Component;
+        [HideLabel]
+        [HorizontalGroup("UIBindData")]
+        [SerializeField]
+        public GameObject GameObject;
+
+        [HideLabel]
+        [HorizontalGroup("UIBindData")]
+        [ValueDropdown(nameof(GetComponentTypes))]
+        public Type Type;
+
+        private IEnumerable<Type> GetComponentTypes()
+        {
+            if (GameObject)
+            {
+                return GameObject.GetComponents<Component>().Select(t => t.GetType());
+            }
+
+            return null;
+        }
     }
 }
 #endif

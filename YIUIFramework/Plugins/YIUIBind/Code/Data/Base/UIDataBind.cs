@@ -26,7 +26,7 @@ namespace YIUIBind
 
         internal UIData FindData(string dataName)
         {
-            if (string.IsNullOrEmpty(dataName))
+            if (dataName.IsEmpty())
             {
                 Logger.LogWarning($"{name} 不能找一个空变量 请检查配置");
                 return null;

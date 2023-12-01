@@ -18,19 +18,19 @@ namespace YIUIBind
         public UIData Data => m_Data;
 
         [ShowInInspector]
-        [LabelText("名称")]
+        [LabelText("Name")]
         [ReadOnly]
         private string m_DataName;
 
 #if UNITY_EDITOR
         [ShowInInspector]
-        [LabelText("值")]
+        [LabelText("Value")]
         [ReadOnly]
         private string m_DataValue;
 #endif
         [SerializeField]
 #if UNITY_EDITOR
-        [OnValueChanged("OnValueChangedCompareMode")]
+        [OnValueChanged(nameof(OnValueChangedCompareMode))]
 #endif
         [ShowIf("ShowCompareMode")]
         private UICompareModeEnum m_CompareMode = UICompareModeEnum.Equal;
@@ -85,16 +85,16 @@ namespace YIUIBind
         //比较运算的修改
         private void OnValueChangedCompareMode()
         {
-            if (m_Data.DataValue.UIBindDataType == EUIBindDataType.String && m_CompareMode != UICompareModeEnum.Equal)
+            switch (m_Data.DataValue.UIBindDataType)
             {
-                m_CompareMode = UICompareModeEnum.Equal;
-                UnityTipsHelper.ShowError($"字符串类型 只允许使用 == 运算判断 != 使用取反");
-            }
-
-            if (m_Data.DataValue.UIBindDataType == EUIBindDataType.Bool && m_CompareMode != UICompareModeEnum.Equal)
-            {
-                m_CompareMode = UICompareModeEnum.Equal;
-                UnityTipsHelper.ShowError($"布尔类型 只允许使用 == 运算判断 != 使用取反");
+                case EUIBindDataType.String when m_CompareMode != UICompareModeEnum.Equal:
+                    m_CompareMode = UICompareModeEnum.Equal;
+                    UnityTipsHelper.ShowError($"字符串类型 只允许使用 == 运算判断 != 使用取反");
+                    break;
+                case EUIBindDataType.Bool when m_CompareMode != UICompareModeEnum.Equal:
+                    m_CompareMode = UICompareModeEnum.Equal;
+                    UnityTipsHelper.ShowError($"布尔类型 只允许使用 == 运算判断 != 使用取反");
+                    break;
             }
         }
 #endif
@@ -157,8 +157,7 @@ namespace YIUIBind
                             result = valueFloat <= referenceFloat;
                             break;
                         case UICompareModeEnum.Equal:
-                            result = Mathf.Approximately(
-                                valueFloat, referenceFloat);
+                            result = Mathf.Approximately(valueFloat, referenceFloat);
                             break;
                         case UICompareModeEnum.Great:
                             result = valueFloat > referenceFloat;

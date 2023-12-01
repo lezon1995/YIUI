@@ -10,12 +10,12 @@ namespace YIUIBind
     [HideReferenceObjectPicker]
     public abstract partial class UIEventBase
     {
-        [LabelText("事件名称")]
+        [LabelText("Event Name")]
         [SerializeField]
         [ReadOnly]
 #if UNITY_EDITOR
-        [InfoBox("此事件没有任何关联", InfoMessageType.Error, "ShowIfBindsTips")]
-        [ShowIf("ShowIfBindsTips")]
+        [InfoBox("The Event hasn't binded yet", InfoMessageType.Error, nameof(ShowIfBindsTips))]
+        [ShowIf(nameof(ShowIfBindsTips))]
 #endif
         private string m_EventName;
 
@@ -23,9 +23,9 @@ namespace YIUIBind
 
         [SerializeField]
         [ReadOnly]
-        [LabelText("当前所有参数列表")]
+        [LabelText("Param Types")]
 #if UNITY_EDITOR
-        [ShowIf("ShowIfAllEventParamType")]
+        [ShowIf(nameof(ShowIfAllEventParamType))]
 #endif
         public List<EUIEventParamType> AllEventParamType = new List<EUIEventParamType>();
 

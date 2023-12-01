@@ -13,7 +13,7 @@ namespace YIUIBind
     /// 只要是任何可以被射线检测的物体都可以响应点击事件
     /// </summary>
     [InfoBox("提示: 可用事件参数 1个 , Object(PointerEventData)")]
-    [LabelText("点击<PointerEventData>")]
+    [LabelText("Click<PointerEventData>")]
     [AddComponentMenu("YIUIBind/Event/点击 【ClickPointerEventData】 UIEventBindClickPointerEventData")]
     public class UIEventBindClickPointerEventData : UIEventBindClick
     {

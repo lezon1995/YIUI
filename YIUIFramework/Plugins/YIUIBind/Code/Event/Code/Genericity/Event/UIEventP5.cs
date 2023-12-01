@@ -7,8 +7,7 @@ namespace YIUIBind
 {
     public class UIEventP5<P1, P2, P3, P4, P5> : UIEventBase, IUIEventInvoke<P1, P2, P3, P4, P5>
     {
-        private LinkedList<UIEventHandleP5<P1, P2, P3, P4, P5>> m_UIEventDelegates;
-        public  LinkedList<UIEventHandleP5<P1, P2, P3, P4, P5>> UIEventDelegates => m_UIEventDelegates;
+        public LinkedList<UIEventHandleP5<P1, P2, P3, P4, P5>> UIEventDelegates { get; private set; }
 
         public UIEventP5()
         {
@@ -20,16 +19,16 @@ namespace YIUIBind
 
         public void Invoke(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
         {
-            if (m_UIEventDelegates == null)
+            if (UIEventDelegates == null)
             {
                 Logger.LogWarning($"{EventName} 未绑定任何事件");
                 return;
             }
 
-            var itr = m_UIEventDelegates.First;
+            var itr = UIEventDelegates.First;
             while (itr != null)
             {
-                var next  = itr.Next;
+                var next = itr.Next;
                 var value = itr.Value;
                 try
                 {
@@ -46,23 +45,29 @@ namespace YIUIBind
 
         public override bool Clear()
         {
-            if (m_UIEventDelegates == null) return false;
+            if (UIEventDelegates == null)
+            {
+                return false;
+            }
 
-            var first = m_UIEventDelegates.First;
+            var first = UIEventDelegates.First;
             while (first != null)
             {
                 PublicUIEventP5<P1, P2, P3, P4, P5>.HandlerPool.Release(first.Value);
-                first = m_UIEventDelegates.First;
+                first = UIEventDelegates.First;
             }
 
-            LinkedListPool<UIEventHandleP5<P1, P2, P3, P4, P5>>.Release(m_UIEventDelegates);
-            m_UIEventDelegates = null;
+            LinkedListPool<UIEventHandleP5<P1, P2, P3, P4, P5>>.Release(UIEventDelegates);
+            UIEventDelegates = null;
             return true;
         }
 
         public UIEventHandleP5<P1, P2, P3, P4, P5> Add(UIEventDelegate<P1, P2, P3, P4, P5> callback)
         {
-            m_UIEventDelegates ??= LinkedListPool<UIEventHandleP5<P1, P2, P3, P4, P5>>.Get();
+            if (UIEventDelegates == null)
+            {
+                UIEventDelegates = LinkedListPool<UIEventHandleP5<P1, P2, P3, P4, P5>>.Get();
+            }
 
             if (callback == null)
             {
@@ -70,13 +75,16 @@ namespace YIUIBind
             }
 
             var handler = PublicUIEventP5<P1, P2, P3, P4, P5>.HandlerPool.Get();
-            var node    = m_UIEventDelegates.AddLast(handler);
-            return handler.Init(m_UIEventDelegates, node, callback);
+            var node = UIEventDelegates.AddLast(handler);
+            return handler.Init(UIEventDelegates, node, callback);
         }
 
         public bool Remove(UIEventHandleP5<P1, P2, P3, P4, P5> handle)
         {
-            m_UIEventDelegates ??= LinkedListPool<UIEventHandleP5<P1, P2, P3, P4, P5>>.Get();
+            if (UIEventDelegates == null)
+            {
+                UIEventDelegates = LinkedListPool<UIEventHandleP5<P1, P2, P3, P4, P5>>.Get();
+            }
 
             if (handle == null)
             {
@@ -84,20 +92,19 @@ namespace YIUIBind
                 return false;
             }
 
-            return m_UIEventDelegates.Remove(handle);
+            return UIEventDelegates.Remove(handle);
         }
-        #if UNITY_EDITOR
+        
+#if UNITY_EDITOR
         public override string GetEventType()
         {
-            return
-                $"UIEventP5<{GetParamTypeString(0)},{GetParamTypeString(1)},{GetParamTypeString(2)},{GetParamTypeString(3)},{GetParamTypeString(4)}>";
+            return $"UIEventP5<{GetParamTypeString(0)},{GetParamTypeString(1)},{GetParamTypeString(2)},{GetParamTypeString(3)},{GetParamTypeString(4)}>";
         }
 
         public override string GetEventHandleType()
         {
-            return
-                $"UIEventHandleP5<{GetParamTypeString(0)},{GetParamTypeString(1)},{GetParamTypeString(2)},{GetParamTypeString(3)},{GetParamTypeString(4)}>";
+            return $"UIEventHandleP5<{GetParamTypeString(0)},{GetParamTypeString(1)},{GetParamTypeString(2)},{GetParamTypeString(3)},{GetParamTypeString(4)}>";
         }
-        #endif
+#endif
     }
 }

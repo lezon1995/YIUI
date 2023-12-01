@@ -7,8 +7,7 @@ namespace YIUIBind
 {
     public class UIEventP2<P1, P2> : UIEventBase, IUIEventInvoke<P1, P2>
     {
-        private LinkedList<UIEventHandleP2<P1, P2>> m_UIEventDelegates;
-        public  LinkedList<UIEventHandleP2<P1, P2>> UIEventDelegates => m_UIEventDelegates;
+        public LinkedList<UIEventHandleP2<P1, P2>> UIEventDelegates { get; private set; }
 
         public UIEventP2()
         {
@@ -20,16 +19,16 @@ namespace YIUIBind
 
         public void Invoke(P1 p1, P2 p2)
         {
-            if (m_UIEventDelegates == null)
+            if (UIEventDelegates == null)
             {
                 Logger.LogWarning($"{EventName} 未绑定任何事件");
                 return;
             }
 
-            var itr = m_UIEventDelegates.First;
+            var itr = UIEventDelegates.First;
             while (itr != null)
             {
-                var next  = itr.Next;
+                var next = itr.Next;
                 var value = itr.Value;
                 try
                 {
@@ -46,23 +45,29 @@ namespace YIUIBind
 
         public override bool Clear()
         {
-            if (m_UIEventDelegates == null) return false;
+            if (UIEventDelegates == null)
+            {
+                return false;
+            }
 
-            var first = m_UIEventDelegates.First;
+            var first = UIEventDelegates.First;
             while (first != null)
             {
                 PublicUIEventP2<P1, P2>.HandlerPool.Release(first.Value);
-                first = m_UIEventDelegates.First;
+                first = UIEventDelegates.First;
             }
 
-            LinkedListPool<UIEventHandleP2<P1, P2>>.Release(m_UIEventDelegates);
-            m_UIEventDelegates = null;
+            LinkedListPool<UIEventHandleP2<P1, P2>>.Release(UIEventDelegates);
+            UIEventDelegates = null;
             return true;
         }
 
         public UIEventHandleP2<P1, P2> Add(UIEventDelegate<P1, P2> callback)
         {
-            m_UIEventDelegates ??= LinkedListPool<UIEventHandleP2<P1, P2>>.Get();
+            if (UIEventDelegates == null)
+            {
+                UIEventDelegates = LinkedListPool<UIEventHandleP2<P1, P2>>.Get();
+            }
 
             if (callback == null)
             {
@@ -70,13 +75,16 @@ namespace YIUIBind
             }
 
             var handler = PublicUIEventP2<P1, P2>.HandlerPool.Get();
-            var node    = m_UIEventDelegates.AddLast(handler);
-            return handler.Init(m_UIEventDelegates, node, callback);
+            var node = UIEventDelegates.AddLast(handler);
+            return handler.Init(UIEventDelegates, node, callback);
         }
 
         public bool Remove(UIEventHandleP2<P1, P2> handle)
         {
-            m_UIEventDelegates ??= LinkedListPool<UIEventHandleP2<P1, P2>>.Get();
+            if (UIEventDelegates == null)
+            {
+                UIEventDelegates = LinkedListPool<UIEventHandleP2<P1, P2>>.Get();
+            }
 
             if (handle == null)
             {
@@ -84,9 +92,10 @@ namespace YIUIBind
                 return false;
             }
 
-            return m_UIEventDelegates.Remove(handle);
+            return UIEventDelegates.Remove(handle);
         }
-        #if UNITY_EDITOR
+        
+#if UNITY_EDITOR
         public override string GetEventType()
         {
             return $"UIEventP2<{GetParamTypeString(0)},{GetParamTypeString(1)}>";
@@ -96,6 +105,6 @@ namespace YIUIBind
         {
             return $"UIEventHandleP2<{GetParamTypeString(0)},{GetParamTypeString(1)}>";
         }
-        #endif
+#endif
     }
 }

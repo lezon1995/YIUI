@@ -20,7 +20,7 @@ namespace YIUIBind
 
         [SerializeField]
         [LabelText("自动调整图像大小")]
-        private bool m_SetNativeSize = false;
+        private bool m_SetNativeSize;
 
         [SerializeField]
         [LabelText("可修改Enabled")]
@@ -41,7 +41,11 @@ namespace YIUIBind
         protected override void OnRefreshData()
         {
             base.OnRefreshData();
-            m_Image ??= GetComponent<Image>();
+            if (m_Image == null)
+            {
+                m_Image = GetComponent<Image>();
+            }
+
             if (!m_ChangeEnabled && !m_Image.enabled)
             {
                 Logger.LogError($"{name} 当前禁止修改Enabled 且当前处于隐藏状态 可能会出现问题 请检查");
@@ -50,47 +54,47 @@ namespace YIUIBind
 
         private void SetEnabled(bool set)
         {
-            if (!m_ChangeEnabled) return;
-
-            if (m_Image == null) return;
-
-            m_Image.enabled = set;
+            if (m_ChangeEnabled && m_Image)
+            {
+                m_Image.enabled = set;
+            }
         }
 
         protected override void OnValueChanged()
         {
-            if (m_Image == null) return;
-
-            var dataValue = GetFirstValue<string>();
-
-            if (string.IsNullOrEmpty(dataValue))
+            if (m_Image)
             {
-                SetEnabled(false);
-                return;
+                var dataValue = GetFirstValue<string>();
+
+                if (string.IsNullOrEmpty(dataValue))
+                {
+                    SetEnabled(false);
+                    return;
+                }
+
+                if (m_LastSpriteName == dataValue)
+                {
+                    return;
+                }
+
+                m_LastSpriteName = dataValue;
+
+                if (!UIOperationHelper.IsPlaying())
+                {
+                    return;
+                }
+
+                ChangeSprite(dataValue).Forget();
             }
-
-            if (m_LastSpriteName == dataValue)
-            {
-                return;
-            }
-
-            m_LastSpriteName = dataValue;
-
-            if (!UIOperationHelper.IsPlaying())
-            {
-                return;
-            }
-
-            ChangeSprite(dataValue).Forget();
         }
 
         private async UniTaskVoid ChangeSprite(string resName)
         {
             ReleaseLastSprite();
             var sprite = await YIUILoadHelper.LoadAssetAsync<Sprite>(resName);
-            if (m_Image != null)
+            if (m_Image)
             {
-                m_LastSprite   = sprite;
+                m_LastSprite = sprite;
                 m_Image.sprite = sprite;
                 if (m_SetNativeSize)
                 {
@@ -104,19 +108,17 @@ namespace YIUIBind
         protected override void UnBindData()
         {
             base.UnBindData();
-            if (!UIOperationHelper.IsPlaying())
+            if (UIOperationHelper.IsPlaying())
             {
-                return;
+                ReleaseLastSprite();
             }
-
-            ReleaseLastSprite();
         }
 
         private Sprite m_LastSprite;
 
         private void ReleaseLastSprite()
         {
-            if (m_LastSprite != null)
+            if (m_LastSprite)
             {
                 YIUILoadHelper.Release(m_LastSprite);
                 m_LastSprite = null;

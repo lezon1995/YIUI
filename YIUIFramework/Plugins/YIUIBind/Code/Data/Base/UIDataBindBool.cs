@@ -90,7 +90,7 @@ namespace YIUIBind
                 //我的
                 foreach (var self in m_Datas)
                 {
-                    if (target.Data.DataGuid == self.Data.DataGuid)
+                    if (target.Data.Guid == self.Data.Guid)
                     {
                         //存在则刷新
                         self.Refresh(target.Data);
@@ -112,7 +112,7 @@ namespace YIUIBind
                 var exist = false;
                 foreach (var target in DataSelectDic.Values)
                 {
-                    if (target.Data.DataGuid == self.Data.DataGuid)
+                    if (target.Data.Guid == self.Data.Guid)
                     {
                         exist = true;
                         break;

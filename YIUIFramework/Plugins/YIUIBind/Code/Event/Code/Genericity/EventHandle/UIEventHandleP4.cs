@@ -8,9 +8,7 @@ namespace YIUIBind
     /// </summary>
     public static class PublicUIEventP4<P1, P2, P3, P4>
     {
-        public static readonly ObjectPool<UIEventHandleP4<P1, P2, P3, P4>> HandlerPool =
-            new ObjectPool<UIEventHandleP4<P1, P2, P3, P4>>(
-                null, handler => handler.Dispose());
+        public static readonly ObjectPool<UIEventHandleP4<P1, P2, P3, P4>> HandlerPool = new ObjectPool<UIEventHandleP4<P1, P2, P3, P4>>(null, handler => handler.Dispose());
     }
 
     /// <summary>
@@ -18,24 +16,19 @@ namespace YIUIBind
     /// </summary>
     public sealed class UIEventHandleP4<P1, P2, P3, P4>
     {
-        private LinkedList<UIEventHandleP4<P1, P2, P3, P4>>     m_UIEventList;
+        private LinkedList<UIEventHandleP4<P1, P2, P3, P4>> m_UIEventList;
         private LinkedListNode<UIEventHandleP4<P1, P2, P3, P4>> m_UIEventNode;
-
-        private UIEventDelegate<P1, P2, P3, P4> m_UIEventParamDelegate;
-        public  UIEventDelegate<P1, P2, P3, P4> UIEventParamDelegate => m_UIEventParamDelegate;
+        public UIEventDelegate<P1, P2, P3, P4> UIEventParamDelegate { get; private set; }
 
         public UIEventHandleP4()
         {
         }
 
-        internal UIEventHandleP4<P1, P2, P3, P4> Init(
-            LinkedList<UIEventHandleP4<P1, P2, P3, P4>>     uiEventList,
-            LinkedListNode<UIEventHandleP4<P1, P2, P3, P4>> uiEventNode,
-            UIEventDelegate<P1, P2, P3, P4>                 uiEventDelegate)
+        internal UIEventHandleP4<P1, P2, P3, P4> Init(LinkedList<UIEventHandleP4<P1, P2, P3, P4>> uiEventList, LinkedListNode<UIEventHandleP4<P1, P2, P3, P4>> uiEventNode, UIEventDelegate<P1, P2, P3, P4> uiEventDelegate)
         {
-            m_UIEventList          = uiEventList;
-            m_UIEventNode          = uiEventNode;
-            m_UIEventParamDelegate = uiEventDelegate;
+            m_UIEventList = uiEventList;
+            m_UIEventNode = uiEventNode;
+            UIEventParamDelegate = uiEventDelegate;
             return this;
         }
 

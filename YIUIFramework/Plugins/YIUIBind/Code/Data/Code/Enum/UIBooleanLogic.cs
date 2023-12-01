@@ -8,10 +8,10 @@ namespace YIUIBind
     [LabelText("布尔逻辑")]
     public enum UIBooleanLogic
     {
-        [LabelText("And 与")]
+        [LabelText("And")]
         And,
 
-        [LabelText("Or 或")]
+        [LabelText("Or")]
         Or,
 
         //没有非  变量中有非的选择

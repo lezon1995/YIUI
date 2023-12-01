@@ -12,7 +12,7 @@ namespace YIUIBind
     /// 只要是任何可以被射线检测的物体都可以响应点击事件
     /// </summary>
     [InfoBox("提示: 可用事件参数 0个")]
-    [LabelText("数据改变<null>")]
+    [LabelText("Data Change")]
     [AddComponentMenu("YIUIBind/Event/数据改变 【ChangeDataValue】 UIEventBindChangeDataValue")]
     [RequireComponent(typeof(UIDataBindChange))]
     public class UIEventBindChangeDataValue : UIEventBind
@@ -38,8 +38,12 @@ namespace YIUIBind
 
         private void InitBindChange()
         {
-            m_UIDataBindChange ??= GetComponent<UIDataBindChange>();
-            if (m_UIDataBindChange != null)
+            if (m_UIDataBindChange == null)
+            {
+                m_UIDataBindChange = GetComponent<UIDataBindChange>();
+            }
+
+            if (m_UIDataBindChange)
             {
                 m_UIDataBindChange.AddChangeAction(OnChangeDataValue);
             }
@@ -60,7 +64,7 @@ namespace YIUIBind
 
         private new void OnDestroy()
         {
-            if (m_UIDataBindChange != null)
+            if (m_UIDataBindChange)
             {
                 m_UIDataBindChange.RemoveChangeAction(OnChangeDataValue);
             }

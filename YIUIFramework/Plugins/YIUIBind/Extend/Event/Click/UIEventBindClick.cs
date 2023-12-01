@@ -13,7 +13,7 @@ namespace YIUIBind
     /// 与按钮无关
     /// 只要是任何可以被射线检测的物体都可以响应点击事件
     /// </summary>
-    [LabelText("点击<null>")]
+    [LabelText("Click")]
     [AddComponentMenu("YIUIBind/Event/点击 【Click】 UIEventBindClick")]
     public class UIEventBindClick : UIEventBind, IPointerClickHandler
     {
@@ -25,9 +25,9 @@ namespace YIUIBind
         [LabelText("可选组件")]
         private Selectable m_Selectable;
 
-        public void OnPointerClick(PointerEventData eventData)
+        void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
-            if (m_Selectable != null && !m_Selectable.interactable)
+            if (m_Selectable && !m_Selectable.interactable)
             {
                 return;
             }
@@ -57,7 +57,10 @@ namespace YIUIBind
 
         private void Awake()
         {
-            m_Selectable ??= GetComponent<Selectable>();
+            if (m_Selectable == null)
+            {
+                m_Selectable = GetComponent<Selectable>();
+            }
         }
 
         protected virtual void OnUIEvent(PointerEventData eventData)

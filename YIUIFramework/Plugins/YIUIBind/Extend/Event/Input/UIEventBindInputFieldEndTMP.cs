@@ -8,7 +8,7 @@ using Logger = YIUIFramework.Logger;
 namespace YIUIBind
 {
     [InfoBox("提示: 可用事件参数 <参数1:string(输入的值)>")]
-    [LabelText("输入栏<string> 结束时")]
+    [LabelText("InputFieldTMP EndEdit")]
     [RequireComponent(typeof(TMP_InputField))]
     [AddComponentMenu("YIUIBind/Event/输入栏 【InputFieldEnd TMP】 UIEventBindInputFieldEndTMP")]
     public class UIEventBindInputFieldEndTMP : UIEventBind

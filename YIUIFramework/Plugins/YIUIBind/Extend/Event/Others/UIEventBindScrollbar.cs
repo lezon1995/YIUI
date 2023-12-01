@@ -8,7 +8,7 @@ using Logger = YIUIFramework.Logger;
 namespace YIUIBind
 {
     [InfoBox("提示: 可用事件参数 <参数1:float(当前滚动值 0-1)>")]
-    [LabelText("滚动条<Float>")]
+    [LabelText("Scrollbar Change")]
     [RequireComponent(typeof(Scrollbar))]
     [AddComponentMenu("YIUIBind/Event/滚动条 【Scrollbar】 UIEventBindScrollbar")]
     public class UIEventBindScrollbar : UIEventBind

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
@@ -12,12 +13,28 @@ namespace YIUIBind
     /// </summary>
     public sealed class UINewData
     {
-        [LabelText("名称")]
         [Delayed]
+        [HideLabel]
+        [HorizontalGroup("UINewData")]
         public string Name;
 
         [HideLabel]
+        [HorizontalGroup("UINewData")]
+        [TypeFilter(nameof(GetFilteredTypeList))]
         public UIDataValue Data;
+
+        public IEnumerable<Type> GetFilteredTypeList()
+        {
+            var q = typeof(UIDataValue).Assembly.GetTypes()
+                // Excludes BaseClass
+                .Where(x => !x.IsAbstract)
+                // Excludes C1<>
+                .Where(x => !x.IsGenericTypeDefinition)
+                // Excludes classes not inheriting from BaseClass
+                .Where(x => typeof(UIDataValue).IsAssignableFrom(x));
+
+            return q;
+        }
     }
 
     [Serializable]
@@ -25,26 +42,20 @@ namespace YIUIBind
     [HideReferenceObjectPicker]
     public sealed partial class UIData
     {
-        [LabelText("名称")]
-        [SerializeField]
-        [ReadOnly]
-#if UNITY_EDITOR
-        [InfoBox("此数据没有任何关联", InfoMessageType.Error, "ShowIfBindsTips")]
-#endif
-        private string m_Name;
-
         /// <summary>
         /// 当前变量名称
         /// </summary>
-        public string Name => m_Name;
+        public string Name { get; private set; }
 
+#if UNITY_EDITOR
+        [InfoBox("The data hasn't binded yet", InfoMessageType.Error, nameof(ShowIfBindsTips))]
+#endif
         [SerializeField]
         [ReadOnly]
-        [LabelText("唯一ID")]
-        [HideInInspector]
+        [LabelText("Guid")]
         private int m_DataGuid;
 
-        public int DataGuid => m_DataGuid;
+        public int Guid => m_DataGuid;
 
         [OdinSerialize]
         private UIDataValue m_DataValue;
@@ -57,9 +68,9 @@ namespace YIUIBind
 
         public UIData(string name, UIDataValue dataValue)
         {
-            m_Name = name;
+            Name = name;
             m_DataValue = dataValue;
-            m_DataGuid = Guid.NewGuid().GetHashCode();
+            m_DataGuid = System.Guid.NewGuid().GetHashCode();
         }
     }
 }

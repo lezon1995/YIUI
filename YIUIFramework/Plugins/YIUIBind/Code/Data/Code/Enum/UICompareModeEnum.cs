@@ -8,19 +8,19 @@ namespace YIUIBind
     [LabelText("比较运算")]
     public enum UICompareModeEnum
     {
-        [LabelText("< 小于")]
+        [LabelText("<")]
         Less,
 
-        [LabelText("≤ 小于等于")]
+        [LabelText("≤")]
         LessEqual,
 
-        [LabelText("= 等于")]
+        [LabelText("=")]
         Equal, //取反就是不等于
 
-        [LabelText("> 大于")]
+        [LabelText(">")]
         Great,
 
-        [LabelText("≥ 大于等于")]
+        [LabelText("≥")]
         GreatEqual,
     }
 }

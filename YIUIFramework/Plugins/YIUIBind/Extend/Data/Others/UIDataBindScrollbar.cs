@@ -25,16 +25,16 @@ namespace YIUIBind
         [InfoBox(">0时 则设置值时会以动画的形式慢慢变化 需要运行时")]
         [SerializeField]
         [LabelText("滑动动画速度")]
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [OnValueChanged("OnTweenSpeedValueChanged")]
-        #endif
+#endif
         private float m_TweenSpeed = 0.0f;
 
         [SerializeField]
         private ETweenType m_TweenType = ETweenType.DoubleWay;
 
         private float m_TargetValue;
-        private bool  m_PlayingTween = false;
+        private bool m_PlayingTween = false;
 
         protected override int Mask()
         {
@@ -49,34 +49,40 @@ namespace YIUIBind
         protected override void OnRefreshData()
         {
             base.OnRefreshData();
-            m_Scrollbar ??= GetComponent<Scrollbar>();
-            if (m_Scrollbar == null) return;
+            if (m_Scrollbar == null)
+            {
+                m_Scrollbar = GetComponent<Scrollbar>();
+            }
 
-            var dataValue = GetFirstValue<float>();
-            m_TargetValue     = dataValue;
-            m_Scrollbar.value = dataValue;
-            m_PlayingTween    = false;
+            if (m_Scrollbar)
+            {
+                var dataValue = GetFirstValue<float>();
+                m_TargetValue = dataValue;
+                m_Scrollbar.value = dataValue;
+                m_PlayingTween = false;
+            }
         }
 
         protected override void OnValueChanged()
         {
-            if (m_Scrollbar == null) return;
-
-            var dataValue = GetFirstValue<float>();
-            if (m_TweenSpeed > 0.0f && Application.isPlaying)
+            if (m_Scrollbar)
             {
-                m_TargetValue  = dataValue;
-                m_PlayingTween = true;
-            }
-            else
-            {
-                m_TargetValue     = dataValue;
-                m_Scrollbar.value = dataValue;
-                m_PlayingTween    = false;
+                var dataValue = GetFirstValue<float>();
+                if (m_TweenSpeed > 0.0f && Application.isPlaying)
+                {
+                    m_TargetValue = dataValue;
+                    m_PlayingTween = true;
+                }
+                else
+                {
+                    m_TargetValue = dataValue;
+                    m_Scrollbar.value = dataValue;
+                    m_PlayingTween = false;
+                }
             }
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         private void OnTweenSpeedValueChanged()
         {
             //如果突然吧动画速度改为0
@@ -90,13 +96,11 @@ namespace YIUIBind
                 }
             }
         }
-        #endif
+#endif
 
         private void Update()
         {
-            if (m_PlayingTween &&
-                m_TweenSpeed > 0.0f &&
-                !Mathf.Approximately(m_Scrollbar.value, m_TargetValue))
+            if (m_PlayingTween && m_TweenSpeed > 0.0f && !Mathf.Approximately(m_Scrollbar.value, m_TargetValue))
             {
                 switch (m_TweenType)
                 {
@@ -155,12 +159,12 @@ namespace YIUIBind
 
         private void UpdateDoubleWay()
         {
-            var offset   = m_TargetValue - m_Scrollbar.value;
+            var offset = m_TargetValue - m_Scrollbar.value;
             var movement = m_TweenSpeed * Time.deltaTime;
             if (movement > Mathf.Abs(offset))
             {
                 m_Scrollbar.value = m_TargetValue;
-                m_PlayingTween    = false;
+                m_PlayingTween = false;
             }
             else
             {

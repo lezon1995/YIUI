@@ -43,30 +43,36 @@ namespace YIUIBind
         protected override void OnRefreshData()
         {
             base.OnRefreshData();
-            m_Image ??= GetComponent<Image>();
-            if (m_Image == null) return;
+            if (m_Image == null)
+            {
+                m_Image = GetComponent<Image>();
+            }
 
-            var dataValue = GetFirstValue<float>();
-            m_TargetValue = dataValue;
-            m_Image.fillAmount = dataValue;
-            m_PlayingTween = false;
+            if (m_Image)
+            {
+                var dataValue = GetFirstValue<float>();
+                m_TargetValue = dataValue;
+                m_Image.fillAmount = dataValue;
+                m_PlayingTween = false;
+            }
         }
 
         protected override void OnValueChanged()
         {
-            if (m_Image == null) return;
-
-            var dataValue = GetFirstValue<float>();
-            if (m_TweenSpeed > 0.0f && Application.isPlaying)
+            if (m_Image)
             {
-                m_TargetValue = dataValue;
-                m_PlayingTween = true;
-            }
-            else
-            {
-                m_TargetValue = dataValue;
-                m_Image.fillAmount = dataValue;
-                m_PlayingTween = false;
+                var dataValue = GetFirstValue<float>();
+                if (m_TweenSpeed > 0.0f && Application.isPlaying)
+                {
+                    m_TargetValue = dataValue;
+                    m_PlayingTween = true;
+                }
+                else
+                {
+                    m_TargetValue = dataValue;
+                    m_Image.fillAmount = dataValue;
+                    m_PlayingTween = false;
+                }
             }
         }
 
@@ -88,9 +94,7 @@ namespace YIUIBind
 
         private void Update()
         {
-            if (m_PlayingTween &&
-                m_TweenSpeed > 0.0f &&
-                !Mathf.Approximately(m_Image.fillAmount, m_TargetValue))
+            if (m_PlayingTween && m_TweenSpeed > 0.0f && !Mathf.Approximately(m_Image.fillAmount, m_TargetValue))
             {
                 switch (m_TweenType)
                 {

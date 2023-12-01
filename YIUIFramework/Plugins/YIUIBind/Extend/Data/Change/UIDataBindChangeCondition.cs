@@ -30,15 +30,19 @@ namespace YIUIBind
         protected override void OnValueChanged()
         {
             var result = GetResult();
-            if (!result) return;
-
-            m_UIDataBindChange.ChangeDataValue();
+            if (result)
+            {
+                m_UIDataBindChange.ChangeDataValue();
+            }
         }
 
         protected override void OnRefreshData()
         {
             base.OnRefreshData();
-            m_UIDataBindChange ??= GetComponent<UIDataBindChange>();
+            if (m_UIDataBindChange == null)
+            {
+                m_UIDataBindChange = GetComponent<UIDataBindChange>();
+            }
         }
     }
 }

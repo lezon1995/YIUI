@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace YIUIBind
@@ -25,8 +24,12 @@ namespace YIUIBind
         protected override void OnRefreshData()
         {
             base.OnRefreshData();
-            m_Animation ??= GetComponent<Animation>();
-            if (m_Animation != null)
+            if (m_Animation == null)
+            {
+                m_Animation = GetComponent<Animation>();
+            }
+
+            if (m_Animation)
             {
                 m_Animation.playAutomatically = false;
             }
@@ -34,21 +37,20 @@ namespace YIUIBind
 
         protected override void OnValueChanged()
         {
-            if (m_Animation == null) return;
-
-            if (m_Animation.clip == null)
+            if (m_Animation)
             {
-                return;
-            }
-
-            var result = GetResult();
-            if (result)
-            {
-                m_Animation.Play(m_Animation.clip.name);
-            }
-            else
-            {
-                m_Animation.Stop(m_Animation.clip.name);
+                if (m_Animation.clip)
+                {
+                    var result = GetResult();
+                    if (result)
+                    {
+                        m_Animation.Play(m_Animation.clip.name);
+                    }
+                    else
+                    {
+                        m_Animation.Stop(m_Animation.clip.name);
+                    }
+                }
             }
         }
     }

@@ -24,7 +24,7 @@ namespace YIUIBind
     }
 
     [Serializable]
-    [LabelText("滑块")]
+    [LabelText("Slider")]
     [RequireComponent(typeof(Slider))]
     [AddComponentMenu("YIUIBind/Data/滑块 【Slider】 UIDataBindSlider")]
     public class UIDataBindSlider : UIDataBindSelectBase
@@ -62,30 +62,36 @@ namespace YIUIBind
         protected override void OnRefreshData()
         {
             base.OnRefreshData();
-            m_Slider ??= GetComponent<Slider>();
-            if (m_Slider == null) return;
+            if (m_Slider == null)
+            {
+                m_Slider = GetComponent<Slider>();
+            }
 
-            var dataValue = GetFirstValue<float>();
-            m_TargetValue  = dataValue;
-            m_Slider.value = dataValue;
-            m_PlayingTween = false;
+            if (m_Slider)
+            {
+                var dataValue = GetFirstValue<float>();
+                m_TargetValue = dataValue;
+                m_Slider.value = dataValue;
+                m_PlayingTween = false;
+            }
         }
 
         protected override void OnValueChanged()
         {
-            if (m_Slider == null) return;
-
-            var dataValue = GetFirstValue<float>();
-            if (m_TweenSpeed > 0.0f && Application.isPlaying)
+            if (m_Slider)
             {
-                m_TargetValue  = dataValue;
-                m_PlayingTween = true;
-            }
-            else
-            {
-                m_TargetValue  = dataValue;
-                m_Slider.value = dataValue;
-                m_PlayingTween = false;
+                var dataValue = GetFirstValue<float>();
+                if (m_TweenSpeed > 0.0f && Application.isPlaying)
+                {
+                    m_TargetValue = dataValue;
+                    m_PlayingTween = true;
+                }
+                else
+                {
+                    m_TargetValue = dataValue;
+                    m_Slider.value = dataValue;
+                    m_PlayingTween = false;
+                }
             }
         }
 

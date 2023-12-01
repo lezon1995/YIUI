@@ -12,18 +12,18 @@ namespace YIUIBind
     [HideReferenceObjectPicker]
     public class UIDataSelect
     {
-        [LabelText("名称")]
+        [LabelText("Name")]
         [ReadOnly]
         private string m_DataName;
 
         [ShowInInspector]
-        [LabelText("类型")]
+        [LabelText("Type")]
         [ReadOnly]
         private EUIBindDataType m_DataType;
 
 #if UNITY_EDITOR
         [ShowInInspector]
-        [LabelText("值")]
+        [LabelText("Value")]
         [ReadOnly]
         private string m_DataValue;
 #endif

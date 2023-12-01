@@ -6,13 +6,12 @@ using Logger = YIUIFramework.Logger;
 
 namespace YIUIBind
 {
-    //[DetailedInfoBox("UI 组件表 点击展开详细介绍", @"李胜扬")]
     [LabelText("UI 组件表")]
-    [AddComponentMenu("YIUIBind/★★★UI Component Table 组件表★★★")]
+    [AddComponentMenu("YIUIBind/Component Table")]
     public sealed partial class UIBindComponentTable : SerializedMonoBehaviour
     {
         [OdinSerialize]
-        [LabelText("所有绑定数据 最终数据")]
+        [LabelText("Runtime Components")]
         [ReadOnly]
         [PropertyOrder(-9)]
         private Dictionary<string, Component> m_AllBindDic = new Dictionary<string, Component>();
@@ -32,7 +31,7 @@ namespace YIUIBind
 
         public T FindComponent<T>(string comName) where T : Component
         {
-            return (T)FindComponent(comName);
+            return FindComponent(comName) as T;
         }
     }
 }

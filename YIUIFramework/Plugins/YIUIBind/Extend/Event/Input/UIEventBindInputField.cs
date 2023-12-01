@@ -8,7 +8,7 @@ using Logger = YIUIFramework.Logger;
 namespace YIUIBind
 {
     [InfoBox("提示: 可用事件参数 <参数1:string(输入的值)>")]
-    [LabelText("输入栏<string> 变化时")]
+    [LabelText("InputField Change")]
     [RequireComponent(typeof(InputField))]
     [AddComponentMenu("YIUIBind/Event/输入栏 【InputField】 UIEventBindInputField")]
     public class UIEventBindInputField : UIEventBind
@@ -36,6 +36,7 @@ namespace YIUIBind
 
         private void OnEnable()
         {
+            m_InputField.onValueChanged.AddListener(OnValueChanged);
             m_InputField.onValueChanged.AddListener(OnValueChanged);
         }
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using YIUIFramework;
 using Logger = YIUIFramework.Logger;
 
 namespace YIUIBind
@@ -14,7 +15,7 @@ namespace YIUIBind
 
         public void OnDataChange(string name)
         {
-            m_Name = name;
+            Name = name;
             try
             {
                 OnDataChangAction?.Invoke(this);
@@ -31,7 +32,7 @@ namespace YIUIBind
         public Action<UIData> OnDataRemoveAction;
 
         [GUIColor(0, 1, 1)]
-        [Button("移除")]
+        [Button("Remove")]
         [PropertyOrder(100)]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
         private void OnRemoveDataClick()
@@ -50,7 +51,7 @@ namespace YIUIBind
         //确定移除
         public void OnDataRemoveCallBack()
         {
-            if (m_Binds == null || m_Binds.Count <= 0)
+            if (m_Binds.IsEmpty())
             {
                 return;
             }
@@ -66,33 +67,33 @@ namespace YIUIBind
 
         [SerializeField]
         [HideReferenceObjectPicker]
-        [LabelText("所有绑定关联")]
+        [LabelText("Update Change To")]
         [ReadOnly]
         [PropertyOrder(101)]
-        [ShowIf("ShowIfBinds")]
+        [ShowIf(nameof(ShowIfBinds))]
         private List<UIDataBind> m_Binds = new List<UIDataBind>();
 
         public int GetBindCount()
         {
-            return m_Binds?.Count ?? 0;
+            return m_Binds.Count;
         }
 
         internal void AddBind(UIDataBind bind)
         {
-            if (m_Binds?.IndexOf(bind) == -1)
+            if (m_Binds.IndexOf(bind) == -1)
             {
-                m_Binds?.Add(bind);
+                m_Binds.Add(bind);
             }
         }
 
         internal void RemoveBind(UIDataBind bind)
         {
-            m_Binds?.Remove(bind);
+            m_Binds.Remove(bind);
         }
 
         internal void ClearBinds()
         {
-            m_Binds?.Clear();
+            m_Binds.Clear();
         }
     }
 }

@@ -26,18 +26,18 @@ namespace YIUIBind
                     return new UIDataValueInt();
                 case EUIBindDataType.Float:
                     return new UIDataValueFloat();
-                case EUIBindDataType.Vector3:
-                    return new UIDataValueVector3();
+                // case EUIBindDataType.Vector3:
+                    // return new UIDataValueVector3();
                 case EUIBindDataType.List_Int:
                     return new UIDataValueListInt();
-                case EUIBindDataType.List_Long:
-                    return new UIDataValueListLong();
+                // case EUIBindDataType.List_Long:
+                    // return new UIDataValueListLong();
                 case EUIBindDataType.Long:
                     return new UIDataValueLong();
-                case EUIBindDataType.Uint:
-                    return new UIDataValueUInt();
-                case EUIBindDataType.Vector2:
-                    return new UIDataValueVector2();
+                // case EUIBindDataType.Uint:
+                    // return new UIDataValueUInt();
+                // case EUIBindDataType.Vector2:
+                    // return new UIDataValueVector2();
                 case EUIBindDataType.Color:
                     return new UIDataValueColor();
                 case EUIBindDataType.Double:
@@ -61,7 +61,11 @@ namespace YIUIBind
 
         private static UIDataValueBase<T> GetDataValueBase<T>(this UIDataValue self)
         {
-            if (self is UIDataValueBase<T> finalResult) return finalResult;
+            if (self is UIDataValueBase<T> finalResult)
+            {
+                return finalResult;
+            }
+
             Logger.LogError($"获取值转型失败，当前类型是: {self.UIDataValueType} 不是：{typeof(T)}");
             return null;
         }
@@ -98,7 +102,7 @@ namespace YIUIBind
             //由每个泛型子类实现ToString方法;
             return self.ToString();
 
-            //以下为老的值tosytring 可能会存在某些引用类型无效的情况
+            //以下为老的值ToString 可能会存在某些引用类型无效的情况
             //保留不删除
             /*
             switch (self.UIBindDataType)
@@ -248,9 +252,9 @@ namespace YIUIBind
                 return;
             }
 
-            if (self.DataValue is UIDataValueBase<T> dataBase)
+            if (self.DataValue is UIDataValueBase<T> data)
             {
-                dataBase.AddValueChangeAction(action);
+                data.AddValueChangeAction(action);
             }
             else
             {

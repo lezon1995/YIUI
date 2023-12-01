@@ -23,14 +23,18 @@ namespace YIUIBind
         protected override void OnRefreshData()
         {
             base.OnRefreshData();
-            m_Selectable ??= GetComponent<Selectable>();
+            if (m_Selectable == null)
+            {
+                m_Selectable = GetComponent<Selectable>();
+            }
         }
 
         protected override void OnValueChanged()
         {
-            if (m_Selectable == null) return;
-
-            m_Selectable.interactable = GetResult();
+            if (m_Selectable)
+            {
+                m_Selectable.interactable = GetResult();
+            }
         }
     }
 }

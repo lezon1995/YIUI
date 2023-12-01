@@ -8,7 +8,7 @@ using Logger = YIUIFramework.Logger;
 namespace YIUIBind
 {
     [InfoBox("提示: 可用事件参数 <参数1:bool(当前状态)>")]
-    [LabelText("开关<bool>")]
+    [LabelText("Toggle Change")]
     [RequireComponent(typeof(Toggle))]
     [AddComponentMenu("YIUIBind/Event/开关 【Toggle】 UIEventBindToggle")]
     public class UIEventBindToggle : UIEventBind

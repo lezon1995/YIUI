@@ -6,8 +6,7 @@ namespace YIUIBind
 {
     public class UIBindParamVo
     {
-        private static readonly ObjectPool<UIBindParamVo> g_CacheParam =
-            new ObjectPool<UIBindParamVo>(null, l => l.Reset());
+        private static readonly ObjectPool<UIBindParamVo> g_CacheParam = new ObjectPool<UIBindParamVo>(null, l => l.Reset());
 
         /// <summary>
         /// 原始数据

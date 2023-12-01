@@ -8,7 +8,7 @@ using Logger = YIUIFramework.Logger;
 namespace YIUIBind
 {
     [InfoBox("提示: 可用事件参数 <参数1:int(下拉菜单被选择的索引值)>")]
-    [LabelText("下拉菜单<int>")]
+    [LabelText("DropdownTMP Change")]
     [RequireComponent(typeof(TMP_Dropdown))]
     [AddComponentMenu("YIUIBind/Event/下拉菜单 【Dropdown TMP】 UIEventBindDropdownTMP")]
     public class UIEventBindDropdownTMP : UIEventBind

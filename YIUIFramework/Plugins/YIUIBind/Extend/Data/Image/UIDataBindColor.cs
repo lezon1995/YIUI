@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace YIUIBind
@@ -34,14 +30,17 @@ namespace YIUIBind
         protected override void OnRefreshData()
         {
             base.OnRefreshData();
-            m_Graphic ??= GetComponent<Graphic>();
+            if (m_Graphic == null)
+            {
+                m_Graphic = GetComponent<Graphic>();
+            }
         }
 
         protected override void OnValueChanged()
         {
             var dataValue = GetFirstValue<Color>();
 
-            if (m_Graphic != null)
+            if (m_Graphic)
             {
                 m_Graphic.color = dataValue;
             }

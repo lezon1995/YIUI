@@ -14,12 +14,12 @@ namespace YIUIBind
     /// 额外多一个int 参数自定义
     /// </summary>
     [InfoBox("提示: 可用事件参数 1个")]
-    [LabelText("点击<int>")]
+    [LabelText("Click<int>")]
     [AddComponentMenu("YIUIBind/Event/点击 【Click Int】 UIEventBindClickInt")]
     public class UIEventBindClickInt : UIEventBindClick
     {
         [SerializeField]
-        [LabelText("额外int参数值")]
+        [LabelText("Parameter<int>")]
         private int m_ExtraParam;
 
         [NonSerialized]

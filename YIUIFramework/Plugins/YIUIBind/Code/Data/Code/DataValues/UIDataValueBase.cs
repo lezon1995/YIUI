@@ -16,7 +16,7 @@ namespace YIUIBind
     public abstract class UIDataValueBase<T> : UIDataValue, IUIDataValue<T>
     {
         [OdinSerialize]
-        [LabelText("值")]
+        [LabelText("Value")]
         [HideReferenceObjectPicker]
         [Delayed]
 #if UNITY_EDITOR

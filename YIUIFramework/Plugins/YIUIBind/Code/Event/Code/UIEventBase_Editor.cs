@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using YIUIFramework;
 using Logger = YIUIFramework.Logger;
 
 namespace YIUIBind
@@ -33,7 +34,7 @@ namespace YIUIBind
         //确定移除
         public void OnRemoveVariableCallBack()
         {
-            if (m_Binds == null || m_Binds.Count <= 0)
+            if (m_Binds.IsEmpty())
             {
                 return;
             }
@@ -44,8 +45,8 @@ namespace YIUIBind
             }
         }
 
-        [GUIColor(0, 1, 1)]
-        [Button("移除")]
+        [GUIColor(1, 0, 0)]
+        [Button("Remove")]
         [PropertyOrder(-99)]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
         private void RemoveEvent()
@@ -61,37 +62,37 @@ namespace YIUIBind
             }
         }
 
-        private bool ShowIfBinds     => m_Binds.Count >= 1;
+        private bool ShowIfBinds => m_Binds.Count >= 1;
         private bool ShowIfBindsTips => m_Binds.Count <= 0;
 
         [ShowInInspector]
         [SerializeField]
-        [LabelText("事件绑定")]
+        [LabelText("Published By")]
         [ReadOnly]
-        [ShowIf("ShowIfBinds")]
+        [ShowIf(nameof(ShowIfBinds))]
         private List<UIEventBind> m_Binds = new List<UIEventBind>();
 
         public int GetBindCount()
         {
-            return m_Binds?.Count ?? 0;
+            return m_Binds.Count;
         }
 
         internal void AddBind(UIEventBind bind)
         {
-            if (m_Binds?.IndexOf(bind) == -1)
+            if (m_Binds.IndexOf(bind) == -1)
             {
-                m_Binds?.Add(bind);
+                m_Binds.Add(bind);
             }
         }
 
         internal void RemoveBind(UIEventBind bind)
         {
-            m_Binds?.Remove(bind);
+            m_Binds.Remove(bind);
         }
 
         internal void ClearBinds()
         {
-            m_Binds?.Clear();
+            m_Binds.Clear();
         }
     }
 }

@@ -2,55 +2,56 @@
 
 namespace YIUIBind
 {
-    [LabelText("事件参数类型")]
+    // [LabelText("事件参数类型")]
+    [HideLabel]
     public enum EUIEventParamType
     {
-        [LabelText("ParamVo 泛型类")]
+        [LabelText("ParamVo")]
         ParamVo = 0,
 
-        [LabelText("System.Object")]
+        [LabelText("object")]
         Object = 1,
 
-        [LabelText("Bool")]
+        [LabelText("bool")]
         Bool = 2,
 
-        [LabelText("String")]
+        [LabelText("string")]
         String = 3,
 
-        [LabelText("Int")]
+        [LabelText("int")]
         Int = 4,
 
-        [LabelText("Float")]
+        [LabelText("float")]
         Float = 5,
 
         [LabelText("Vector3")]
         Vector3 = 6,
 
-        [LabelText("List_Int")]
+        [LabelText("List<int>")]
         List_Int = 7,
 
-        [LabelText("List_Long")]
+        [LabelText("List<long>")]
         List_Long = 8,
 
-        [LabelText("List_String")]
+        [LabelText("List<string>")]
         List_String = 9,
 
-        [LabelText("Long")]
+        [LabelText("long")]
         Long = 10,
 
-        [LabelText("Uint")]
+        [LabelText("uint")]
         Uint = 11,
 
-        [LabelText("Ulong")]
+        [LabelText("ulong")]
         Ulong = 12,
 
-        [LabelText("Double")]
+        [LabelText("double")]
         Double = 13,
 
         [LabelText("Vector2")]
         Vector2 = 14,
 
-        [LabelText("Unity.GameObject")]
+        [LabelText("GameObject")]
         UnityGameObject = 15,
     }
 }

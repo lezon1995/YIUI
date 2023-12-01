@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -26,7 +25,9 @@ namespace YIUIBind
         protected override void OnValueChanged()
         {
             if (m_Targets == null)
+            {
                 return;
+            }
 
             var result = GetResult();
 
@@ -36,13 +37,17 @@ namespace YIUIBind
             }
             else
             {
-                m_WaitForSeconds ??= new WaitForSeconds(m_TransitionTime);
-                m_Coroutine      =   StartCoroutine(WaitTime(result));
+                if (m_WaitForSeconds == null)
+                {
+                    m_WaitForSeconds = new WaitForSeconds(m_TransitionTime);
+                }
+
+                m_Coroutine = StartCoroutine(WaitTime(result));
             }
         }
 
         private WaitForSeconds m_WaitForSeconds;
-        private Coroutine      m_Coroutine;
+        private Coroutine m_Coroutine;
 
         private IEnumerator WaitTime(bool result)
         {

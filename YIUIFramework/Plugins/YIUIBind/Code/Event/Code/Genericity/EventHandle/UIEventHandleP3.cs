@@ -8,9 +8,7 @@ namespace YIUIBind
     /// </summary>
     public static class PublicUIEventP3<P1, P2, P3>
     {
-        public static readonly ObjectPool<UIEventHandleP3<P1, P2, P3>> HandlerPool =
-            new ObjectPool<UIEventHandleP3<P1, P2, P3>>(
-                null, handler => handler.Dispose());
+        public static readonly ObjectPool<UIEventHandleP3<P1, P2, P3>> HandlerPool = new ObjectPool<UIEventHandleP3<P1, P2, P3>>(null, handler => handler.Dispose());
     }
 
     /// <summary>
@@ -18,24 +16,19 @@ namespace YIUIBind
     /// </summary>
     public sealed class UIEventHandleP3<P1, P2, P3>
     {
-        private LinkedList<UIEventHandleP3<P1, P2, P3>>     m_UIEventList;
+        private LinkedList<UIEventHandleP3<P1, P2, P3>> m_UIEventList;
         private LinkedListNode<UIEventHandleP3<P1, P2, P3>> m_UIEventNode;
-
-        private UIEventDelegate<P1, P2, P3> m_UIEventParamDelegate;
-        public  UIEventDelegate<P1, P2, P3> UIEventParamDelegate => m_UIEventParamDelegate;
+        public UIEventDelegate<P1, P2, P3> UIEventParamDelegate { get; private set; }
 
         public UIEventHandleP3()
         {
         }
 
-        internal UIEventHandleP3<P1, P2, P3> Init(
-            LinkedList<UIEventHandleP3<P1, P2, P3>>     uiEventList,
-            LinkedListNode<UIEventHandleP3<P1, P2, P3>> uiEventNode,
-            UIEventDelegate<P1, P2, P3>                 uiEventDelegate)
+        internal UIEventHandleP3<P1, P2, P3> Init(LinkedList<UIEventHandleP3<P1, P2, P3>> uiEventList, LinkedListNode<UIEventHandleP3<P1, P2, P3>> uiEventNode, UIEventDelegate<P1, P2, P3> uiEventDelegate)
         {
-            m_UIEventList          = uiEventList;
-            m_UIEventNode          = uiEventNode;
-            m_UIEventParamDelegate = uiEventDelegate;
+            m_UIEventList = uiEventList;
+            m_UIEventNode = uiEventNode;
+            UIEventParamDelegate = uiEventDelegate;
             return this;
         }
 

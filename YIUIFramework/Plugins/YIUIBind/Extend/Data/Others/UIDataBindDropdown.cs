@@ -10,7 +10,7 @@ using UnityEngine.UI;
 namespace YIUIBind
 {
     [Serializable]
-    [LabelText("下拉菜单")]
+    [LabelText("Dropdown")]
     [RequireComponent(typeof(Dropdown))]
     [AddComponentMenu("YIUIBind/Data/下拉菜单 【Dropdown】 UIDataBindDropdown")]
     public class UIDataBindDropdown : UIDataBindSelectBase
@@ -34,8 +34,12 @@ namespace YIUIBind
         protected override void OnRefreshData()
         {
             base.OnRefreshData();
-            m_Dropdown ??= GetComponent<Dropdown>();
-            if (m_Dropdown != null)
+            if (m_Dropdown == null)
+            {
+                m_Dropdown = GetComponent<Dropdown>();
+            }
+            
+            if (m_Dropdown)
             {
                 m_Dropdown.onValueChanged.RemoveListener(OnDropdownValueChanged);
                 m_Dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
@@ -44,18 +48,19 @@ namespace YIUIBind
 
         private void OnDropdownValueChanged(int index)
         {
-            SetFirstValue<int>(index);
+            SetFirstValue(index);
         }
 
         protected override void OnValueChanged()
         {
-            if (m_Dropdown == null) return;
-
-            var dataValue = GetFirstValue<int>();
-
-            if (m_Dropdown.value != dataValue)
+            if (m_Dropdown)
             {
-                m_Dropdown.value = dataValue;
+                var dataValue = GetFirstValue<int>();
+
+                if (m_Dropdown.value != dataValue)
+                {
+                    m_Dropdown.value = dataValue;
+                }
             }
         }
     }

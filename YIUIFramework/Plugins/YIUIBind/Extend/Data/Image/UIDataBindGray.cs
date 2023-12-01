@@ -11,7 +11,7 @@ namespace YIUIBind
     {
         [SerializeField]
         [Range(0, 255)]
-        private int m_EnabledGray = 0;
+        private int m_EnabledGray;
 
         [SerializeField]
         [Range(0, 255)]
@@ -26,14 +26,18 @@ namespace YIUIBind
         protected override void OnRefreshData()
         {
             base.OnRefreshData();
-            m_Grayscale ??= GetComponent<UIGrayscale>();
+            if (m_Grayscale == null)
+            {
+                m_Grayscale = GetComponent<UIGrayscale>();
+            }
         }
 
         protected override void OnValueChanged()
         {
-            if (m_Grayscale == null) return;
-
-            m_Grayscale.GrayScale = GetResult() ? m_EnabledGray : m_DisabledGray;
+            if (m_Grayscale)
+            {
+                m_Grayscale.GrayScale = GetResult() ? m_EnabledGray : m_DisabledGray;
+            }
         }
     }
 }
