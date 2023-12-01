@@ -47,7 +47,7 @@ namespace YIUIFramework.Editor
         [HideInInspector]
         public Dictionary<string, UIPlatformSettings> AllUIPlatformSettings = new Dictionary<string, UIPlatformSettings>();
 
-        [ShowIf("m_UIPublishPackageData", EPlatformType.Default)]
+        [ShowIf(nameof(m_UIPublishPackageData), EPlatformType.Default)]
         [BoxGroup("平台设置", centerLabel: true)]
         public UIPlatformSettings Default = new UIPlatformSettings
         {

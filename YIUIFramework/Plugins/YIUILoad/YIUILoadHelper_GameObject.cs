@@ -51,13 +51,14 @@ namespace YIUIFramework
         internal static async void LoadAssetAsyncInstantiate(string pkgName, string resName, System.Action<Object> action)
         {
             var obj = await LoadAssetAsyncInstantiate(pkgName, resName);
-            if (obj == null)
+            if (obj)
+            {
+                action?.Invoke(obj);
+            }
+            else
             {
                 Debug.LogError($"异步加载对象失败 {pkgName} {resName}");
-                return;
             }
-
-            action?.Invoke(obj);
         }
 
         /// <summary>

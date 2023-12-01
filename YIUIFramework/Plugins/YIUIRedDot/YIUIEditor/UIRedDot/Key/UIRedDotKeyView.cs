@@ -120,7 +120,7 @@ namespace YIUIFramework.Editor
 
         [BoxGroup("生成", centerLabel: true)]
         [Button("自动生成Key枚举类", 50)]
-        [ShowIf("m_WaitCreate")]
+        [ShowIf(nameof(m_WaitCreate))]
         [PropertyOrder(10000)]
         [GUIColor(0.4f, 0.8f, 1)]
         private void CreateKeyEnumClass()

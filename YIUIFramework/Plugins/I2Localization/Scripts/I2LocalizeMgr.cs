@@ -94,7 +94,10 @@ namespace I2.Loc
 
         private void OnValidate()
         {
-            m_LanguageSource ??= GetComponent<LanguageSource>();
+            if (m_LanguageSource == null)
+            {
+                m_LanguageSource = GetComponent<LanguageSource>();
+            }
         }
 
         #endif

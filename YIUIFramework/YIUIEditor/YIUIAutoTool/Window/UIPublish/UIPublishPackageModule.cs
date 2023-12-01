@@ -45,26 +45,26 @@ namespace YIUIFramework.Editor
         [LabelText("当前模块所有组件")]
         [ReadOnly]
         [ShowInInspector]
-        [ShowIf("m_UIPublishPackageData", EUIPublishPackageData.CDETable)]
+        [ShowIf(nameof(m_UIPublishPackageData), EUIPublishPackageData.CDETable)]
         private List<UIBindCDETable> m_AllCDETable = new List<UIBindCDETable>();
 
         [LabelText("当前模块所有精灵")]
         [ReadOnly]
         [ShowInInspector]
-        [ShowIf("m_UIPublishPackageData", EUIPublishPackageData.Sprites)]
+        [ShowIf(nameof(m_UIPublishPackageData), EUIPublishPackageData.Sprites)]
         private List<TextureImporter> m_AllTextureImporter = new List<TextureImporter>();
 
         //根据精灵文件夹创建对应的图集数量
         [LabelText("所有图集名称")]
         [ReadOnly]
         [HideInInspector]
-        [ShowIf("m_UIPublishPackageData", EUIPublishPackageData.Atlas)]
+        [ShowIf(nameof(m_UIPublishPackageData), EUIPublishPackageData.Atlas)]
         public HashSet<string> m_AtlasName = new HashSet<string>();
 
         [LabelText("当前模块所有图集")]
         [ReadOnly]
         [ShowInInspector]
-        [ShowIf("m_UIPublishPackageData", EUIPublishPackageData.Atlas)]
+        [ShowIf(nameof(m_UIPublishPackageData), EUIPublishPackageData.Atlas)]
         private List<SpriteAtlas> m_AllSpriteAtlas = new List<SpriteAtlas>();
 
         [GUIColor(0.4f, 0.8f, 1)]
