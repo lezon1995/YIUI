@@ -6,9 +6,10 @@ namespace YIUIFramework
     public static class NameUtility
     {
         //统一命名
-        public const string FirstName = "u_"; //不使用m_ 这个是给具体逻辑用的 u_ 就知道这个是自动创建的 也避免命名冲突
-        public const string ComponentName = "Com";
-        public const string DataName = "Data";
+        //不使用m_ 这个是给具体逻辑用的 u_ 就知道这个是自动创建的 也避免命名冲突
+        public const string FirstName = "";
+        public const string ComponentName = "";
+        public const string DataName = "";
         public const string EventName = "Event";
         public const string UIName = "UI";
 
@@ -16,7 +17,7 @@ namespace YIUIFramework
         public const string NameRegex = "[^a-z0-9A-Z_]";
 
         //m_必须大写
-        public const bool Big = true;
+        public const bool Big = false;
 
         public static bool CheckFirstName(this string name, string otherName)
         {
