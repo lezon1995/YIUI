@@ -150,11 +150,15 @@ namespace YIUIFramework
         {
             CDETable.UIBaseStart = UIBaseStart;
             CDETable.UIBaseOnDestroy = UIBaseOnDestroy;
-            SealedInitialize();
-            UIBind();
             try
             {
+                SealedInitialize();
+                UIBind();
                 Initialize();
+                if (ActiveSelf)
+                    UIBaseOnEnable();
+                else
+                    UIBaseOnDisable();
             }
             catch (Exception e)
             {

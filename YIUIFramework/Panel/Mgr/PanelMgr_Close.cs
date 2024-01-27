@@ -135,7 +135,6 @@ namespace YIUIFramework
             {
                 await info.Panel.InternalOnWindowCloseTween(tween);
                 info.Panel.OnClose();
-                RemoveUI(info);
             }
             
             if (!ignoreElse)
@@ -147,8 +146,9 @@ namespace YIUIFramework
             {
                 await info.Panel.InternalOnWindowCloseTween(tween);
                 info.Panel.OnClose();
-                RemoveUI(info);
             }
+            
+            RemoveUI(info);
         }
 
         public void ClosePanel(string panelName, bool tween = true, bool ignoreElse = false)
