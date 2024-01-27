@@ -63,7 +63,7 @@ namespace YIUIFramework
         /// </summary>
         private async UniTask OpenPanelBefore(PanelInfo info)
         {
-            if (!info.Panel.WindowFitstOpen)
+            if (!info.Panel.WindowFirstOpen)
             {
                 await AddUICloseElse(info);
             }
@@ -76,7 +76,7 @@ namespace YIUIFramework
         {
             if (success)
             {
-                if (info.Panel.WindowFitstOpen)
+                if (info.Panel.WindowFirstOpen)
                 {
                     await AddUICloseElse(info);
                 }

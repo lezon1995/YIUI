@@ -26,7 +26,10 @@
         public virtual bool WindowHaveIOpenAllowOpen => WindowOption.Has(EWindowOption.HaveIOpenAllowOpen);
 
         //先开
-        public virtual bool WindowFitstOpen => WindowOption.Has(EWindowOption.FitstOpen);
+        public virtual bool WindowFirstOpen => WindowOption.Has(EWindowOption.FirstOpen);
+
+        //后关
+        public virtual bool WindowLastClose => WindowOption.Has(EWindowOption.LastClose);
 
         //禁止动画
         public virtual bool WindowBanTween => WindowOption.Has(EWindowOption.BanTween);

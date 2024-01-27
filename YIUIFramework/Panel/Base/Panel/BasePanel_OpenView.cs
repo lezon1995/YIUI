@@ -140,7 +140,7 @@ namespace YIUIFramework
         /// </summary>
         private async UniTask OpenViewBefore(BaseView view)
         {
-            if (!view.WindowFitstOpen)
+            if (!view.WindowFirstOpen)
             {
                 await CloseLastView(view);
             }
@@ -153,7 +153,7 @@ namespace YIUIFramework
         {
             if (success)
             {
-                if (view.WindowFitstOpen)
+                if (view.WindowFirstOpen)
                 {
                     await CloseLastView(view);
                 }
