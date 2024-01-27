@@ -66,16 +66,17 @@ namespace YIUIBind
             {
                 var dataValue = GetFirstValue<string>();
 
-                if (string.IsNullOrEmpty(dataValue))
-                {
-                    SetEnabled(false);
-                    return;
-                }
-
-                if (m_LastSpriteName == dataValue)
-                {
-                    return;
-                }
+            if (string.IsNullOrEmpty(dataValue))
+            {
+                SetEnabled(false);
+                return;
+            }
+            
+            if (m_LastSpriteName == dataValue)
+            {
+                SetEnabled(true);
+                return;
+            }
 
                 m_LastSpriteName = dataValue;
 
@@ -92,15 +93,18 @@ namespace YIUIBind
         {
             ReleaseLastSprite();
             
+            #if UNITY_EDITOR
             if (!YIUILoadHelper.VerifyAssetValidity(resName))
             {
                 Logger.LogError($"没有这个资源 图片无法加载 请检查 {resName}");
                 SetEnabled(false);
                 return;
-            }
+            }            
+            #endif
             
             var sprite = await YIUILoadHelper.LoadAssetAsync<Sprite>(resName);
-            if (m_Image)
+            
+            if (m_Image && sprite)
             {
                 m_LastSprite = sprite;
                 m_Image.sprite = sprite;
@@ -108,9 +112,23 @@ namespace YIUIBind
                 {
                     m_Image.SetNativeSize();
                 }
-            }
 
-            SetEnabled(true);
+                SetEnabled(true);
+            }
+            else
+            {
+                if (m_Image == null)
+                {
+                    Logger.LogError($"{gameObject.name} m_Image == null");
+                }
+
+                if (sprite == null)
+                {
+                    Logger.LogError($"没有这个资源 图片无法加载 请检查 {resName}");
+                }
+                
+                SetEnabled(false);
+            }
         }
 
         protected override void UnBindData()

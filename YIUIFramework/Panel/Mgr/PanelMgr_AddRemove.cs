@@ -46,19 +46,29 @@ namespace YIUIFramework
                 var info = infoList[i];
                 var infoPriority = info.Panel != null ? info.Panel.Priority : 0;
 
-                //当前优先级比最大的都还大 那么直接放到最前面
-                if (priority >= infoPriority)
+                if (i == infoList.Count - 1 && priority >= infoPriority)
                 {
                     break;
                 }
 
-                infoList.Insert(i, panelInfo);
-                uiRect.SetParent(layerRect);
-                uiRect.SetSiblingIndex(i);
-                addLast = false;
-                break;
-            }
+                if (priority >= infoPriority)
+                {
+                    infoList.Insert(i + 1, panelInfo);
+                    uiRect.SetParent(layerRect);
+                    uiRect.SetSiblingIndex(i + 1);
+                    addLast = false;
+                    break;
+                }
 
+                if (i <= 0)
+                {
+                    infoList.Insert(0, panelInfo);
+                    uiRect.SetParent(layerRect);
+                    uiRect.SetSiblingIndex(0);
+                    addLast = false;
+                    break;
+                }
+            }
 
             if (addLast)
             {
@@ -69,11 +79,7 @@ namespace YIUIFramework
 
             uiRect.ResetToFullScreen();
             uiRect.ResetLocalPosAndRot();
-
-            if (panel.PanelTimeCache)
-            {
-                panel.StopCountDownDestroyPanel();
-            }
+            panel.StopCountDownDestroyPanel();
         }
 
         /// <summary>

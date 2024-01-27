@@ -83,7 +83,9 @@ namespace YIUIFramework
             }
             else
             {
-                info.Panel.Close();
+                //如果打开失败直接屏蔽
+                info?.Panel?.SetActive(false);
+                info?.Panel?.Close();
             }
 
             return info.Panel;

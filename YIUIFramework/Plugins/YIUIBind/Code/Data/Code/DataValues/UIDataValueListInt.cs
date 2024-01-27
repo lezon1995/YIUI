@@ -32,6 +32,11 @@ namespace YIUIBind
             base.SetValueFrom(value);
             //因为List是引用类型，所以这里要做一下特殊处理，如果要设置的值为0元素的List
             //否则就拷贝全部元素
+            if (GetValue() == null)
+            {
+                base.SetValueFrom(value);
+                return;
+            }
             GetValue().Clear();
             GetValue().AddRange(value);
         }
