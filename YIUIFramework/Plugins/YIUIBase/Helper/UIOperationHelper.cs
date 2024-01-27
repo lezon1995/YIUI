@@ -12,24 +12,22 @@ namespace YIUIFramework
     {
         public static bool IsPlaying()
         {
-            if (!Application.isPlaying)
+            if (Application.isPlaying)
             {
-                return EditorApplication.isPlayingOrWillChangePlaymode;
+                //编辑时点结束的一瞬间 还是在运行中的 所以要判断是否正在退出
+                //如果正在退出 算非运行
+                if (SingletonMgr.IsQuitting)
+                {
+                    return false;
+                }
+                return true;
             }
-
-            //编辑时点结束的一瞬间 还是在运行中的 所以要判断是否正在退出
-            //如果正在退出 算非运行
-            if (SingletonMgr.IsQuitting)
-            {
-                return false;
-            }
-
-            return true;
-
+            
 #if UNITY_EDITOR
             //编辑器时 点开始的一瞬间是不算正在运行的 在我这里算运行中
+            return EditorApplication.isPlayingOrWillChangePlaymode; 
 #endif
-
+            
             return false;
         }
 

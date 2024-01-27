@@ -38,11 +38,11 @@ namespace YIUIFramework.Editor
         [ShowInInspector]
         private CreateUIBaseEditorData UIBaseData = new CreateUIBaseEditorData();
 
-        internal override void Initialize()
+        public override void Initialize()
         {
         }
 
-        internal override void OnDestroy()
+        public override void OnDestroy()
         {
         }
 
@@ -51,17 +51,14 @@ namespace YIUIFramework.Editor
         [Button("初始化项目")]
         private void CreateProject()
         {
-            if (UIOperationHelper.CheckUIOperation())
-            {
-                UIPublishModule.CreateUIBindProvider();
-                EditorHelper.CreateExistsDirectory(UIGenerationPath);
-                EditorHelper.CreateExistsDirectory(UIProjectResPath);
-                EditorHelper.CreateExistsDirectory(UICodeScriptsPath);
-                //默认初始化一个common模块
-                UICreateResModule.Create(m_CommonPkg);
-                CopyUIRoot();
-                YIUIAutoTool.CloseWindowRefresh();
-            }
+            if (!UIOperationHelper.CheckUIOperation()) return;
+
+            EditorHelper.CreateExistsDirectory(UIGenerationPath);
+            EditorHelper.CreateExistsDirectory(UIProjectResPath);
+            EditorHelper.CreateExistsDirectory(UICodeScriptsPath);
+            UICreateResModule.Create(m_CommonPkg); //默认初始化一个common模块
+            CopyUIRoot();
+            YIUIAutoTool.CloseWindowRefresh();
         }
 
         private static void CopyUIRoot()

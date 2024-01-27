@@ -97,13 +97,13 @@ namespace YIUIFramework.Editor
             }
         }
 
-        internal override void Initialize()
+        public override void Initialize()
         {
             AddAllPkg();
             CreateResModule?.Initialize();
         }
 
-        internal override void OnDestroy()
+        public override void OnDestroy()
         {
             CreateResModule?.OnDestroy();
         }

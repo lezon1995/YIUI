@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace YIUIFramework
@@ -15,7 +16,29 @@ namespace YIUIFramework
             return null;
         }
 
-        public static async UniTask<T> InstantiateAsync<T>(UIBindVo vo, Transform parent = null) where T : UIBase
+        public static async UniTask<UIBase> InstantiateAsync(Type uiType, Transform parent = null)
+        {
+            if (UIBindHelper.TryGetBindVo(uiType, out var vo))
+            {
+                return await InstantiateAsync(vo, parent);
+            }
+
+            return null;
+        }
+
+
+        public static async UniTask<UIBase> InstantiateAsync(string pkgName, string resName, RectTransform parent = null)
+        {
+            if (UIBindHelper.TryGetBindVoByPath(pkgName, resName, out var vo))
+            {
+                return await InstantiateAsync(vo, parent);
+            }
+
+            return null;
+        }
+
+
+        private static async UniTask<T> InstantiateAsync<T>(UIBindVo vo, Transform parent = null) where T : UIBase
         {
             return await CreateAsync(vo, parent) as T;
         }

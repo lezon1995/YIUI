@@ -7,7 +7,7 @@ namespace YIUIFramework
     {
         //普通的UI预制体 创建与摧毁 一定要成对
         //为了防止忘记 所以默认自动回收
-        public static GameObject Instantiate(string pkgName, string resName)
+        public static GameObject InstantiateGameObject(string pkgName, string resName)
         {
             var obj = YIUILoadHelper.LoadAssetInstantiate(pkgName, resName);
             if (obj == null)
@@ -22,7 +22,7 @@ namespace YIUIFramework
             return obj;
         }
 
-        public static async UniTask<GameObject> InstantiateAsync(string pkgName, string resName)
+        public static async UniTask<GameObject> InstantiateGameObjectAsync(string pkgName, string resName)
         {
             var obj = await YIUILoadHelper.LoadAssetAsyncInstantiate(pkgName, resName);
             if (obj == null)

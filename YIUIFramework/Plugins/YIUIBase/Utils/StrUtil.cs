@@ -4,6 +4,10 @@ namespace YIUIFramework
 {
     public static partial class StrUtil
     {
+        public static bool IsEmpty(this string str)
+        {
+            return string.IsNullOrEmpty(str);
+        }
         public static string Concat(string str1, string str2)
         {
             var sb = SbPool.Get();

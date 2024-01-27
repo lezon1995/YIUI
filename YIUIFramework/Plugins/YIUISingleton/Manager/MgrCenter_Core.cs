@@ -1,8 +1,9 @@
 ﻿#define YIUIMACRO_SINGLETON_LOG
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace YIUIFramework
 {
@@ -33,20 +34,33 @@ namespace YIUIFramework
 
                 m_CacheInitMgr.Add(manager);
 
-                if (manager is IManagerAsyncInit init)
+                if (manager is IManagerAsyncInit initialize)
                 {
-                    var result = await init.InitManagerAsync();
+#if YIUIMACRO_SINGLETON_LOG
+                    var sw = new Stopwatch();
+                    sw.Start();
+#endif
+
+                    var result = await initialize.InitManagerAsync();
+
+#if YIUIMACRO_SINGLETON_LOG
+                    sw.Stop();
+                    Debug.Log($"<color=green>MgrCenter: 管理器[<color=Brown>{manager.GetType().Name}</color>]初始化耗时 {sw.ElapsedMilliseconds} 毫秒</color>");
+#endif
+
                     if (!result)
                     {
-                        //初始化失败的管理器 不添加
-                        return false;
+#if YIUIMACRO_SINGLETON_LOG
+                        Debug.Log($"<color=red>MgrCenter: 管理器[<color=Brown>{manager.GetType().Name}</color>]初始化失败</color>");
+#endif
+                        return false; //初始化失败的管理器 不添加
                     }
                 }
 
                 m_CacheInitMgr.Remove(manager);
 
 #if YIUIMACRO_SINGLETON_LOG
-                Debug.Log($"<color=navy>MgrCenter: 管理器[<color=Brown>{manager.GetType().Name}</color>]启动</color>");
+                Debug.Log($"<color=navy>MgrCenter: 管理器[<color=Brown>{manager.GetType().Name}</color>]启动完毕</color>");
 #endif
 
                 m_MgrList.Add(manager);
@@ -95,7 +109,7 @@ namespace YIUIFramework
                         }
                         catch (Exception e)
                         {
-                            Debug.LogError($"manager={manager.GetType().Name}, err={e.Message}{e.StackTrace}");
+                            Debug.LogError($"管理器={manager.GetType().Name}, err={e.Message}{e.StackTrace}");
                         }
                     }
                 }
@@ -125,7 +139,7 @@ namespace YIUIFramework
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError($"manager={manager.GetType().Name}, err={e.Message}{e.StackTrace}");
+                        Debug.LogError($"管理器={manager.GetType().Name}, err={e.Message}{e.StackTrace}");
                     }
                 }
             }
@@ -152,7 +166,7 @@ namespace YIUIFramework
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError($"manager={manager.GetType().Name}, err={e.Message}{e.StackTrace}");
+                        Debug.LogError($"管理器={manager.GetType().Name}, err={e.Message}{e.StackTrace}");
                     }
                 }
             }

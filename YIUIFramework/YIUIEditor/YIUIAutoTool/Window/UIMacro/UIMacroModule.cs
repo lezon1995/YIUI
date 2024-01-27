@@ -50,7 +50,7 @@ namespace YIUIFramework.Editor
             YIUIAutoTool.CloseWindowRefresh();
         }
 
-        internal override void Initialize()
+        public override void Initialize()
         {
             BuildTargetGroup = GetCurrentBuildPlatform();
             SelfInitialize();
@@ -98,7 +98,7 @@ namespace YIUIFramework.Editor
             SelfInitialize();
         }
 
-        internal override void OnDestroy()
+        public override void OnDestroy()
         {
         }
     }

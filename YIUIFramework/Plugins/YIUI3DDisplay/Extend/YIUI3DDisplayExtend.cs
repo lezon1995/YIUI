@@ -23,23 +23,20 @@ namespace YIUIFramework
             m_UI3DDisplay = ui3DDisplay;
         }
 
-        public void Show(string resName, string cameraName = "Camera")
+        public GameObject Show(string resName, string cameraName = "Camera")
         {
             if (m_UI3DDisplay == null)
             {
                 Debug.LogError($"没有3D显示组件");
-                return;
+                return null;
             }
 
             var obj = GetDisplayObject(resName);
-            if (obj)
-            {
-                var camera = GetCamera(obj, cameraName);
-                if (camera)
-                {
-                    m_UI3DDisplay.Show(obj, camera);
-                }
-            }
+            if (obj == null) return null;
+            var camera = GetCamera(obj, cameraName);
+            if (camera == null) return obj;
+            m_UI3DDisplay.Show(obj, camera);
+            return obj;
         }
 
         private GameObject GetDisplayObject(string resName)
@@ -57,7 +54,7 @@ namespace YIUIFramework
 
         private GameObject CreateObject(string resName)
         {
-            var obj = YIUIFactory.Instantiate("", resName);
+            var obj = YIUIFactory.InstantiateGameObject("", resName);
             if (obj == null)
             {
                 Debug.LogError($"实例化失败 {resName}  请检查为何没有加载成功 是否配置");

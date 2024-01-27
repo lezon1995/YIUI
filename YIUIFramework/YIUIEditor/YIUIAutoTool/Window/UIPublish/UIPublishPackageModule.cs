@@ -107,9 +107,9 @@ namespace YIUIFramework.Editor
         public UIPublishPackageModule(UIPublishModule publishModule, string pkgName)
         {
             m_UIPublishModule = publishModule;
-            m_UIAtlasModule = publishModule.AutoTool.AtlasModule;
-            PkgName = pkgName;
-            PkgPath = $"{UIStaticHelper.UIProjectResPath}/{pkgName}";
+            m_UIAtlasModule   = ((YIUIAutoTool)publishModule.AutoTool).AtlasModule;
+            PkgName           = pkgName;
+            PkgPath           = $"{UIStaticHelper.UIProjectResPath}/{pkgName}";
             FindUIBindCDETableResources();
             FindUITextureResources();
             FindUISpriteAtlasResources();

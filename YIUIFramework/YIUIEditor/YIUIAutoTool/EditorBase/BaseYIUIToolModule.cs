@@ -7,7 +7,7 @@ namespace YIUIFramework.Editor
     [HideReferenceObjectPicker]
     public class BaseYIUIToolModule : BaseCreateModule
     {
-        public YIUIAutoTool AutoTool { get; internal set; }
+        public OdinMenuEditorWindow AutoTool { get; internal set; }
 
         public OdinMenuTree Tree { get; internal set; }
 

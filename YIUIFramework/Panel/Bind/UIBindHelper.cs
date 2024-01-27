@@ -108,8 +108,6 @@ namespace YIUIFramework
         /// <summary>
         /// 得到UI包信息
         /// </summary>
-        /// <param name="uiType"></param>
-        /// <returns></returns>
         public static bool TryGetBindVo(Type uiType, out UIBindVo uiBindVo)
         {
             uiBindVo = default;
