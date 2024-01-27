@@ -176,6 +176,11 @@ namespace YIUIFramework
                 return false;
             }
 
+            if (ResName.Contains("Source"))
+            {
+                return false;
+            }
+
             if (UIOperationHelper.CheckUIOperation(this, false))
             {
                 return !PrefabUtility.IsPartOfPrefabAsset(this);

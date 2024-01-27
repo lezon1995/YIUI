@@ -95,6 +95,7 @@ namespace YIUIBind
             if (!YIUILoadHelper.VerifyAssetValidity(resName))
             {
                 Logger.LogError($"没有这个资源 图片无法加载 请检查 {resName}");
+                SetEnabled(false);
                 return;
             }
             

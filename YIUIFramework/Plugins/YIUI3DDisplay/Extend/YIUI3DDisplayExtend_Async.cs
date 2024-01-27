@@ -9,17 +9,14 @@ namespace YIUIFramework
     /// </summary>
     public partial class YIUI3DDisplayExtend
     {
-        public async UniTaskVoid ShowAsync(string resName, string cameraName = "Camera")
+        public async UniTask<GameObject> ShowAsync(string resName, string cameraName = "")
         {
             var obj = await GetDisplayObjectAsync(resName);
-            if (obj)
-            {
-                var camera = GetCamera(obj, cameraName);
-                if (camera)
-                {
-                    m_UI3DDisplay.Show(obj, camera);
-                }
-            }
+            if (obj == null) return null;
+            var camera = string.IsNullOrEmpty(cameraName) ? m_UI3DDisplay.ShowCamera : GetCamera(obj, cameraName);
+            if (camera == null) return obj; 
+            m_UI3DDisplay.Show(obj, camera);
+            return obj;
         }
 
         private async UniTask<GameObject> GetDisplayObjectAsync(string resName)
