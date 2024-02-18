@@ -48,11 +48,11 @@ namespace YIUIFramework
             return await CreateAsync(vo, parent);
         }
 
-        internal static async UniTask<UIBase> CreatePanelAsync(PanelInfo panelInfo)
+        internal static async UniTask<BasePanel> CreatePanelAsync(PanelInfo panelInfo)
         {
             if (UIBindHelper.TryGetBindVoByPath(panelInfo.PkgName, panelInfo.ResName, out var vo))
             {
-                return await CreateAsync(vo);
+                return await CreateAsync(vo) as BasePanel;
             }
 
             return null;

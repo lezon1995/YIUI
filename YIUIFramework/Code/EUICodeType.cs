@@ -1,8 +1,5 @@
-﻿using Sirenix.OdinInspector;
-
-namespace YIUIFramework
+﻿namespace YIUIFramework
 {
-    [LabelText("组件类型")]
     public enum EUICodeType
     {
         Panel,

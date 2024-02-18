@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using Sirenix.Serialization;
-using YIUIBind;
 using UnityEngine;
 
 namespace YIUIFramework
@@ -24,23 +21,29 @@ namespace YIUIFramework
         [BoxGroup("面板拆分数据", centerLabel: true)]
         [OdinSerialize]
 #if UNITY_EDITOR
-        [ShowIf("ShowPanelSplitData")]
+        [ShowIf(nameof(ShowPanelSplitData))]
 #endif
         internal UIPanelSplitData PanelSplitData = new UIPanelSplitData();
 
 #if UNITY_EDITOR
-        private bool ShowPanelSplitData => IsSplitData && UICodeType == EUICodeType.Panel;
+        private bool ShowPanelSplitData
+        {
+            get { return IsSplitData && UICodeType == EUICodeType.Panel; }
+        }
 
         //拆分后的引用数据 
         [ShowInInspector]
         [HideLabel]
         [BoxGroup("面板拆分数据", centerLabel: true)]
         [OdinSerialize]
-        [HideIf("HidePanelSplitData")]
+        [HideIf(nameof(HidePanelSplitData))]
         [ReadOnly] //就是一个只读的 展示用数据 请不要使用此数据 或修改数据
         internal UIPanelSplitData PanelSplitEditorShowData;
 
-        private bool HidePanelSplitData => IsSplitData || UICodeType != EUICodeType.Panel;
+        private bool HidePanelSplitData
+        {
+            get { return IsSplitData || UICodeType != EUICodeType.Panel; }
+        }
 #endif
     }
 }

@@ -15,7 +15,7 @@ namespace YIUIFramework
             var panel = panelInfo.Panel;
             var panelLayer = panel.Layer;
             var priority = panel.Priority;
-            var uiRect = panel.OwnerRectTransform;
+            var uiRect = panel.Transform;
 
             var layerRect = GetLayerRect(panelLayer);
             if (layerRect == null)
@@ -104,7 +104,7 @@ namespace YIUIFramework
                 //缓存界面只是单纯的吧界面隐藏
                 //再次被打开 如何重构界面需要自行设置
                 var layerRect = GetLayerRect(EPanelLayer.Cache);
-                var uiRect = panel.OwnerRectTransform;
+                var uiRect = panel.Transform;
                 uiRect.SetParent(layerRect, false);
                 panel.SetActive(false);
 
@@ -117,9 +117,9 @@ namespace YIUIFramework
             }
             else
             {
-                var uiObj = panel.OwnerGameObject;
+                var uiObj = panel.GameObject;
                 Object.Destroy(uiObj);
-                panelInfo.Reset(null);
+                panelInfo.Panel = null;
             }
         }
 
@@ -127,7 +127,7 @@ namespace YIUIFramework
         {
             if (TryGetPanelInfo(panelName, out var panelInfo))
             {
-                panelInfo.Reset(null);
+                panelInfo.Panel = null;
             }
         }
     }

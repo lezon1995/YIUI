@@ -176,14 +176,7 @@ namespace YIUIFramework
         {
             if (!m_OnClickInit) return uiBase;
 
-            var eventTable = uiBase.m_EventTable;
-            if (eventTable == null)
-            {
-                Debug.LogError($"目标item 没有 event表 请检查");
-                return uiBase;
-            }
-
-            var uEventClickItem = eventTable.FindEvent<UIEventP0>(m_ItemClickEventName);
+            var uEventClickItem = uiBase.FindEvent<UIEventP0>(m_ItemClickEventName);
             if (uEventClickItem == null)
             {
                 Debug.LogError($"当前监听的事件未找到 请检查 {typeof(TItemRenderer).Name} 中是否有这个事件 {m_ItemClickEventName}");

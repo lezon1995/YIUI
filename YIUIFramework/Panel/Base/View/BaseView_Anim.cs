@@ -64,7 +64,7 @@ namespace YIUIFramework
 
         protected override void OnOpenTweenStart()
         {
-            OwnerGameObject.SetActive(true);
+            GameObject.SetActive(true);
         }
 
         protected override void OnOpenTweenEnd()
@@ -77,7 +77,7 @@ namespace YIUIFramework
 
         protected override void OnCloseTweenEnd()
         {
-            OwnerGameObject.SetActive(false);
+            GameObject.SetActive(false);
         }
     }
 }

@@ -6,9 +6,6 @@ using UnityEditor;
 
 namespace YIUIFramework
 {
-    /// <summary>
-    /// Unity提示框@sy
-    /// </summary>
     public static class UnityTipsHelper
     {
         /// <summary>

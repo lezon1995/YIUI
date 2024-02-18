@@ -11,15 +11,13 @@ namespace YIUIFramework.Editor
         [MenuItem("CONTEXT/Component/Auto Add %w")]
         private static void CustomMenuItem(MenuCommand command)
         {
-            Component component = (Component)command.context;
-
-            UIBindComponentTable[] componentTables = component.gameObject.GetComponentsInParent<UIBindComponentTable>();
-
+            var component = (Component)command.context;
+            var table = component.gameObject.GetComponentInParent<UIBindCDETable>();
             var name = component.gameObject.name;
-            
-            if (componentTables is { Length: > 0 })
+
+            if (table)
             {
-                componentTables[0].AddComponent(component);
+                table.AddComponent(component);
                 Debug.Log($"Add Component Succeed: [{name},{component.GetType()}] ");
             }
             else

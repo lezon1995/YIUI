@@ -120,14 +120,14 @@ namespace YIUIFramework
         private TItemRenderer OnCreateItemRenderer()
         {
             var uiBase = YIUIFactory.Instantiate<TItemRenderer>(m_BindVo);
-            AddItemRendererByDic(uiBase.OwnerRectTransform, uiBase);
+            AddItemRendererByDic(uiBase.Transform, uiBase);
             return AddOnClickEvent(uiBase);
         }
 
         public GameObject GetObject(int index)
         {
             var uiBase = m_UIBasePool.Get();
-            return uiBase.OwnerGameObject;
+            return uiBase.GameObject;
         }
 
         public void ReturnObject(Transform transform)

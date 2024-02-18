@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1 &203580730528226306
 GameObject:
@@ -277,6 +277,7 @@ MonoBehaviour:
       m_Calls: []
   u_CacheRect: {fileID: 8490295764488050793}
   u_MaxClickCount: 1
+  u_AutoCancelLast: 1
   u_RepetitionCancel: 0
 --- !u!1 &3633013081488794627
 GameObject:

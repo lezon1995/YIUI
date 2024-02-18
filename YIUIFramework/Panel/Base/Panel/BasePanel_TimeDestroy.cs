@@ -44,7 +44,7 @@ namespace YIUIFramework
                 return;
             }
 
-            UnityEngine.Object.Destroy(OwnerGameObject);
+            UnityEngine.Object.Destroy(GameObject);
             PanelMgr.Inst.RemoveUIReset(UIResName);
         }
     }

@@ -12,7 +12,7 @@ namespace YIUIFramework
         //淡入
         public static async UniTask SlideUp(UIBase uiBase, float from, float to, float time = 0.15f)
         {
-            var rectTransform = uiBase.OwnerRectTransform;
+            var rectTransform = uiBase.Transform;
             if (rectTransform == null) return;
 
             // uiBase.SetActive(true);
@@ -25,7 +25,7 @@ namespace YIUIFramework
         //淡出
         public static async UniTask SlideDown(UIBase uiBase, float from, float to, float time = 0.15f)
         {
-            var rectTransform = uiBase.OwnerRectTransform;
+            var rectTransform = uiBase.Transform;
             if (rectTransform == null) return;
 
             var vector2 = rectTransform.anchoredPosition;

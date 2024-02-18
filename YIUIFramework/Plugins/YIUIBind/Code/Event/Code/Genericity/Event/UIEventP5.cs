@@ -7,7 +7,7 @@ namespace YIUIBind
 {
     public class UIEventP5<P1, P2, P3, P4, P5> : UIEventBase, IUIEventInvoke<P1, P2, P3, P4, P5>
     {
-        public LinkedList<UIEventHandleP5<P1, P2, P3, P4, P5>> UIEventDelegates { get; private set; }
+        public LinkedList<UIEventHandleP5<P1, P2, P3, P4, P5>> Actions { get; private set; }
 
         public UIEventP5()
         {
@@ -17,22 +17,22 @@ namespace YIUIBind
         {
         }
 
-        public void Invoke(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
+        void IUIEventInvoke<P1, P2, P3, P4, P5>.Invoke(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
         {
-            if (UIEventDelegates == null)
+            if (Actions == null)
             {
                 Logger.LogWarning($"{EventName} 未绑定任何事件");
                 return;
             }
 
-            var itr = UIEventDelegates.First;
+            var itr = Actions.First;
             while (itr != null)
             {
                 var next = itr.Next;
                 var value = itr.Value;
                 try
                 {
-                    value.UIEventParamDelegate?.Invoke(p1, p2, p3, p4, p5);
+                    value.Action?.Invoke(p1, p2, p3, p4, p5);
                 }
                 catch (Exception e)
                 {
@@ -45,28 +45,28 @@ namespace YIUIBind
 
         public override bool Clear()
         {
-            if (UIEventDelegates == null)
+            if (Actions == null)
             {
                 return false;
             }
 
-            var first = UIEventDelegates.First;
+            var first = Actions.First;
             while (first != null)
             {
                 PublicUIEventP5<P1, P2, P3, P4, P5>.HandlerPool.Release(first.Value);
-                first = UIEventDelegates.First;
+                first = Actions.First;
             }
 
-            LinkedListPool<UIEventHandleP5<P1, P2, P3, P4, P5>>.Release(UIEventDelegates);
-            UIEventDelegates = null;
+            LinkedListPool<UIEventHandleP5<P1, P2, P3, P4, P5>>.Release(Actions);
+            Actions = null;
             return true;
         }
 
-        public UIEventHandleP5<P1, P2, P3, P4, P5> Add(UIEventDelegate<P1, P2, P3, P4, P5> callback)
+        public UIEventHandleP5<P1, P2, P3, P4, P5> Add(UIEventAction<P1, P2, P3, P4, P5> callback)
         {
-            if (UIEventDelegates == null)
+            if (Actions == null)
             {
-                UIEventDelegates = LinkedListPool<UIEventHandleP5<P1, P2, P3, P4, P5>>.Get();
+                Actions = LinkedListPool<UIEventHandleP5<P1, P2, P3, P4, P5>>.Get();
             }
 
             if (callback == null)
@@ -75,15 +75,15 @@ namespace YIUIBind
             }
 
             var handler = PublicUIEventP5<P1, P2, P3, P4, P5>.HandlerPool.Get();
-            var node = UIEventDelegates.AddLast(handler);
-            return handler.Init(UIEventDelegates, node, callback);
+            var node = Actions.AddLast(handler);
+            return handler.Init(Actions, node, callback);
         }
 
         public bool Remove(UIEventHandleP5<P1, P2, P3, P4, P5> handle)
         {
-            if (UIEventDelegates == null)
+            if (Actions == null)
             {
-                UIEventDelegates = LinkedListPool<UIEventHandleP5<P1, P2, P3, P4, P5>>.Get();
+                Actions = LinkedListPool<UIEventHandleP5<P1, P2, P3, P4, P5>>.Get();
             }
 
             if (handle == null)
@@ -92,9 +92,9 @@ namespace YIUIBind
                 return false;
             }
 
-            return UIEventDelegates.Remove(handle);
+            return Actions.Remove(handle);
         }
-        
+
 #if UNITY_EDITOR
         public override string GetEventType()
         {

@@ -19,8 +19,8 @@ namespace YIUIBind
         [HideReferenceObjectPicker]
         [ReadOnly]
         [PropertyOrder(-999)]
-        private UIBindDataTable m_DataTable;
-        protected UIBindDataTable DataTable => m_DataTable;
+        private UIBindCDETable m_DataTable;
+        protected UIBindCDETable DataTable => m_DataTable;
 
         private bool m_Binded;
 
@@ -92,7 +92,7 @@ namespace YIUIBind
         {
             if (m_DataTable == null)
             {
-                m_DataTable = this.GetComponentInParentHard<UIBindDataTable>();
+                m_DataTable = this.GetComponentInParentHard<UIBindCDETable>();
             }
         }
 

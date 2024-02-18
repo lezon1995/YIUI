@@ -5,7 +5,7 @@ namespace YIUIFramework
     public partial class PanelMgr
     {
         //当前层级屏蔽操作状态 true = 显示 = 无法操作 不要与可操作搞混
-        public bool LayerBlockActiveSelf => m_LayerBlock.activeSelf;
+        public bool LayerBlockActiveSelf => layerBlock.activeSelf;
 
         //当前UI是否可以操作 true = 可以操作
         public bool CanLayerBlockOption => !LayerBlockActiveSelf;
@@ -14,7 +14,7 @@ namespace YIUIFramework
         //=0 不表示可以操作  也有可能被永久屏蔽了
         //可单独判断是否永久屏蔽
         //也可以使用上面的方法 CanLayerBlockOption  也可以得到是否被屏蔽
-        public float LastRecoverOptionTime => m_LastRecoverOptionTime;
+        public float LastRecoverTime => lastRecoverTime;
 
         //如果当前被屏蔽了操作 可以拿到还有多久操作会恢复
         public float GetLastRecoverOptionResidueTime()
@@ -24,7 +24,7 @@ namespace YIUIFramework
                 return 0;
             }
 
-            return LastRecoverOptionTime - Time.unscaledTime;
+            return LastRecoverTime - Time.unscaledTime;
         }
 
         /// <summary>

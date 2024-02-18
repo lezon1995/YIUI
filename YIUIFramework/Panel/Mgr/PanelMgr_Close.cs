@@ -107,7 +107,7 @@ namespace YIUIFramework
             Debug.Log($"<color=yellow> 关闭UI: {panelName} </color>");
 #endif
 
-            m_PanelCfgMap.TryGetValue(panelName, out var info);
+            panelInfos.TryGetValue(panelName, out var info);
 
             if (info is not { Panel: not null })
             {
@@ -185,7 +185,7 @@ namespace YIUIFramework
             Debug.Log($"<color=yellow> Home关闭其他所有Panel UI: {homeName} </color>");
 #endif
 
-            m_PanelCfgMap.TryGetValue(homeName, out var homeInfo);
+            panelInfos.TryGetValue(homeName, out var homeInfo);
             if (homeInfo is { Panel: not null })
             {
                 await RemoveUIToHome(homeInfo, tween);

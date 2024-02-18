@@ -1,6 +1,5 @@
 ﻿using System;
 using Sirenix.OdinInspector;
-using YIUIBind;
 using UnityEngine;
 
 namespace YIUIFramework
@@ -10,58 +9,25 @@ namespace YIUIFramework
     /// </summary>
     [HideLabel]
     [HideReferenceObjectPicker]
-    public abstract class UIBase
+    public abstract partial class UIBase
     {
         #region 所有table表禁止public 不允许任何外界获取
 
-        protected UIBindCDETable CDETable { get; set; }
-
-        protected UIBindComponentTable ComponentTable { get; set; }
-
-        protected UIBindDataTable DataTable { get; set; }
-
-        protected UIBindEventTable EventTable { get; set; }
+        protected UIBindCDETable Table { get; set; }
 
         #endregion
 
-        /// <summary>
-        /// 当前UI的预设对象
-        /// </summary>
-        [LabelText("UI对象")]
-        public GameObject OwnerGameObject;
+        public GameObject GameObject { get; private set; }
+        public RectTransform Transform { get; private set; }
+        public CanvasGroup CanvasGroup { get; private set; }
+        public bool UIBaseInit { get; private set; }
+        protected PanelMgr m_PanelMgr { get; private set; }
 
-        /// <summary>
-        /// 当前UI的Tsf
-        /// </summary>
-        [HideInInspector]
-        public RectTransform OwnerRectTransform;
-
-        [HideInInspector]
-        public CanvasGroup OwnerCanvasGroup;
-
-        /// <summary>
-        /// 初始化状态
-        /// </summary>
-        private bool m_UIBaseInit;
-
-        public bool UIBaseInit => m_UIBaseInit;
-
-        //用这个不用.单例而已
-        protected PanelMgr m_PanelMgr;
-
-        /// <summary>
-        /// UI的资源包名
-        /// </summary>
         public string UIPkgName => m_UIBindVo.PkgName;
 
-        /// <summary>
-        /// UI的资源名称
-        /// </summary>
         public string UIResName => m_UIBindVo.ResName;
 
-        /// <summary>
-        /// 绑定信息
-        /// </summary>
+
         private UIBindVo m_UIBindVo;
 
         internal UIBindVo UIBindVo => m_UIBindVo;
@@ -73,7 +39,7 @@ namespace YIUIFramework
         /// </summary>
         public bool ActiveSelf
         {
-            get { return OwnerGameObject && OwnerGameObject.activeSelf; }
+            get { return GameObject && GameObject.activeSelf; }
         }
 
         /// <summary>
@@ -88,24 +54,20 @@ namespace YIUIFramework
                 return false;
             }
 
-            OwnerGameObject = gameObject;
-            OwnerCanvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
-            OwnerRectTransform = gameObject.GetComponent<RectTransform>();
-            CDETable = OwnerGameObject.GetComponent<UIBindCDETable>();
-            if (CDETable == null)
+            GameObject = gameObject;
+            CanvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
+            Transform = gameObject.GetComponent<RectTransform>();
+            Table = GameObject.GetComponent<UIBindCDETable>();
+            if (Table == null)
             {
-                Debug.LogError($"{OwnerGameObject.name} 没有UIBindCDETable组件 这是必须的");
+                Debug.LogError($"{GameObject.name} 没有UIBindCDETable组件 这是必须的");
                 return false;
             }
 
-            ComponentTable = CDETable.ComponentTable;
-            DataTable = CDETable.DataTable;
-            EventTable = CDETable.EventTable;
-
-            m_UIBaseInit = true;
+            UIBaseInit = true;
             m_UIBindVo = uiBindVo;
             m_PanelMgr = PanelMgr.Inst;
-            CDETable.BindUIBase(this);
+            Table.BindUIBase(this);
             UIBaseInitialize();
             return true;
         }
@@ -117,9 +79,9 @@ namespace YIUIFramework
         /// </summary>
         public void SetActive(bool value)
         {
-            if (OwnerGameObject)
+            if (GameObject)
             {
-                OwnerGameObject.SetActive(value);
+                GameObject.SetActive(value);
             }
         }
 
@@ -127,11 +89,6 @@ namespace YIUIFramework
         //就直接 OwnerRectTransform. 使用Unity API 就可以了 没必要包一成
         //这么多方法 都有可能用到你都包一层嘛
 
-        public T FindEvent<T>(string eventName) where T : UIEventBase
-        {
-            return EventTable.FindEvent<T>(eventName);
-        }
-        
         #endregion
 
         #region 生命周期
@@ -148,8 +105,8 @@ namespace YIUIFramework
 
         private void UIBaseInitialize()
         {
-            CDETable.UIBaseStart = UIBaseStart;
-            CDETable.UIBaseOnDestroy = UIBaseOnDestroy;
+            Table.UIBaseOnEnable = UIBaseOnEnable;
+            Table.UIBaseStart = UIBaseStart;
             try
             {
                 SealedInitialize();
@@ -176,8 +133,8 @@ namespace YIUIFramework
         {
             SealedStart();
             Start();
-            CDETable.UIBaseOnEnable = UIBaseOnEnable;
-            CDETable.UIBaseOnDisable = UIBaseOnDisable;
+            Table.UIBaseOnDisable = UIBaseOnDisable;
+            Table.UIBaseOnDestroy = UIBaseOnDestroy;
         }
 
         //UIBase 生命周期顺序 4

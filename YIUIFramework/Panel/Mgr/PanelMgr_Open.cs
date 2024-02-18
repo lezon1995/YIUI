@@ -10,9 +10,8 @@ namespace YIUIFramework
         /// K = C#文件名
         /// 主要是作为缓存PanelInfo
         /// </summary>
-        private readonly Dictionary<string, PanelInfo> m_PanelCfgMap = new Dictionary<string, PanelInfo>();
-
-        private readonly HashSet<string> m_PanelOpening = new HashSet<string>();
+        private readonly Dictionary<string, PanelInfo> panelInfos = new Dictionary<string, PanelInfo>();
+        private readonly HashSet<string> openings = new HashSet<string>();
 
         /// <summary>
         /// 获取PanelInfo
@@ -28,13 +27,13 @@ namespace YIUIFramework
             if (UIBindHelper.TryGetBindVo(type, out var vo))
             {
                 var name = type.Name;
-                if (m_PanelCfgMap.TryGetValue(name, out panelInfo))
+                if (panelInfos.TryGetValue(name, out panelInfo))
                 {
                     return true;
                 }
 
                 panelInfo = new PanelInfo(name, vo.PkgName, vo.ResName);
-                m_PanelCfgMap.Add(name, panelInfo);
+                panelInfos.Add(name, panelInfo);
                 return true;
             }
 
@@ -93,17 +92,17 @@ namespace YIUIFramework
 
         private void AddOpening(string name)
         {
-            m_PanelOpening.Add(name);
+            openings.Add(name);
         }
 
         private void RemoveOpening(string name)
         {
-            m_PanelOpening.Remove(name);
+            openings.Remove(name);
         }
 
         public bool PanelIsOpening(string name)
         {
-            return m_PanelOpening.Contains(name);
+            return openings.Contains(name);
         }
     }
 }

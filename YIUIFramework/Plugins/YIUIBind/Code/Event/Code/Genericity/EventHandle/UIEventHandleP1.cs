@@ -16,29 +16,29 @@ namespace YIUIBind
     /// </summary>
     public sealed class UIEventHandleP1<P1>
     {
-        private LinkedList<UIEventHandleP1<P1>> m_UIEventList;
-        private LinkedListNode<UIEventHandleP1<P1>> m_UIEventNode;
-        public UIEventDelegate<P1> UIEventParamDelegate { get; private set; }
+        private LinkedList<UIEventHandleP1<P1>> list;
+        private LinkedListNode<UIEventHandleP1<P1>> node;
+        public UIEventAction<P1> Action { get; private set; }
 
         public UIEventHandleP1()
         {
         }
 
-        internal UIEventHandleP1<P1> Init(LinkedList<UIEventHandleP1<P1>> uiEventList, LinkedListNode<UIEventHandleP1<P1>> uiEventNode, UIEventDelegate<P1> uiEventDelegate)
+        internal UIEventHandleP1<P1> Init(LinkedList<UIEventHandleP1<P1>> uiEventList, LinkedListNode<UIEventHandleP1<P1>> uiEventNode, UIEventAction<P1> uiEventAction)
         {
-            m_UIEventList = uiEventList;
-            m_UIEventNode = uiEventNode;
-            UIEventParamDelegate = uiEventDelegate;
+            list = uiEventList;
+            node = uiEventNode;
+            Action = uiEventAction;
             return this;
         }
 
         public void Dispose()
         {
-            if (m_UIEventList == null || m_UIEventNode == null) return;
+            if (list == null || node == null) return;
 
-            m_UIEventList.Remove(m_UIEventNode);
-            m_UIEventNode = null;
-            m_UIEventList = null;
+            list.Remove(node);
+            node = null;
+            list = null;
         }
     }
 }

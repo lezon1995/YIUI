@@ -13,9 +13,9 @@ namespace YIUIFramework
         //一定要使用本类中的创建 否则会有报错提示
         internal static void Destroy(UIBase uiBase)
         {
-            if (uiBase.OwnerGameObject)
+            if (uiBase.GameObject)
             {
-                Destroy(uiBase.OwnerGameObject);
+                YIUILoadHelper.ReleaseInstantiate(uiBase.GameObject);
             }
             else
             {

@@ -9,7 +9,6 @@ namespace YIUIBind
 {
     /// <summary>
     /// 添加UIData前的准备数据
-    /// 过度用@lsy
     /// </summary>
     public sealed class UINewData
     {
@@ -20,8 +19,8 @@ namespace YIUIBind
 
         [HideLabel]
         [HorizontalGroup("UINewData")]
-        [TypeFilter(nameof(GetFilteredTypeList))]
-        public UIDataValue Data;
+        [ValueDropdown(nameof(GetFilteredTypeList))]
+        public Type Type;
 
         public IEnumerable<Type> GetFilteredTypeList()
         {

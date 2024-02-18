@@ -38,7 +38,7 @@ namespace YIUIFramework
         //如果 < 0 则表示这个对象在对象池里
         public int GetItemIndex(TItemRenderer item)
         {
-            return GetItemIndex(item.OwnerRectTransform);
+            return GetItemIndex(item.Transform);
         }
 
         //只能获取当前可见的对象

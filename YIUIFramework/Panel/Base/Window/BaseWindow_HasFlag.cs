@@ -21,7 +21,7 @@
 
         /// <summary>
         /// 我有其他IOpen时 允许用open
-        /// 默认fasle 我有其他iopen接口时 是不允许使用open的
+        /// 默认false 我有其他IOpen接口时 是不允许使用open的
         /// </summary>
         public virtual bool WindowHaveIOpenAllowOpen => WindowOption.Has(EWindowOption.HaveIOpenAllowOpen);
 

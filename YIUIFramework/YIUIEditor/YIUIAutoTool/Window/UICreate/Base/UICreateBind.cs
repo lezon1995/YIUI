@@ -22,15 +22,15 @@ namespace YIUIFramework.Editor
 
         private static void GetComponentTable(this UIBindCDETable self, StringBuilder sb)
         {
-            var tab = self.ComponentTable;
-            var count = tab.AllBindDic.Count;
-            if (tab == null || count == 0)
+            var AllBindDic = self.AllBindDic;
+            var count = AllBindDic.Count;
+            if (count == 0)
             {
                 return;
             }
 
             sb.AppendFormat("            //--------------------------------------Component---------------------------------------------------------------------------------------------------\r\n");
-            foreach (var (name, component) in tab.AllBindDic)
+            foreach (var (name, component) in AllBindDic)
             {
                 if (string.IsNullOrEmpty(name))
                 {
@@ -42,21 +42,21 @@ namespace YIUIFramework.Editor
                     continue;
                 }
 
-                sb.AppendFormat("            {1} = ComponentTable.FindComponent<{0}>(\"{1}\");\r\n", component.GetType(), name);
+                sb.AppendFormat("            {1} = FindComponent<{0}>(\"{1}\");\r\n", component.GetType(), name);
             }
         }
 
         private static void GetDataTable(this UIBindCDETable self, StringBuilder sb)
         {
-            var tab = self.DataTable;
-            var count = tab.DataDic.Count;
-            if (tab == null || count == 0)
+            var DataDic = self.DataDic;
+            var count = DataDic.Count;
+            if (count == 0)
             {
                 return;
             }
 
             sb.AppendFormat("            //--------------------------------------Data-----------------------------------------------------------------------------------------------------------\r\n");
-            foreach (var (name, uiData) in tab.DataDic)
+            foreach (var (name, uiData) in DataDic)
             {
                 if (string.IsNullOrEmpty(name))
                 {
@@ -69,21 +69,21 @@ namespace YIUIFramework.Editor
                     continue;
                 }
 
-                sb.AppendFormat("            {1} = DataTable.FindDataValue<{0}>(\"{1}\");\r\n", dataValue.GetType(), name);
+                sb.AppendFormat("            {1} = FindDataValue<{0}>(\"{1}\");\r\n", dataValue.GetType(), name);
             }
         }
 
         private static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
         {
-            var tab = self.EventTable;
-            var count = tab.EventDic.Count;
-            if (tab == null || count == 0)
+            var EventDic = self.EventDic;
+            var count = EventDic.Count;
+            if (count == 0)
             {
                 return;
             }
 
             sb.AppendFormat("            //--------------------------------------Event----------------------------------------------------------------------------------------------------------\r\n");
-            foreach (var (name, uiEvent) in tab.EventDic)
+            foreach (var (name, uiEvent) in EventDic)
             {
                 if (string.IsNullOrEmpty(name))
                 {
@@ -95,7 +95,7 @@ namespace YIUIFramework.Editor
                     continue;
                 }
 
-                sb.AppendFormat("            {1} = EventTable.FindEvent<{0}>(\"{1}\");\r\n", uiEvent.GetEventType(), name);
+                sb.AppendFormat("            {1} = FindEvent<{0}>(\"{1}\");\r\n", uiEvent.GetEventType(), name);
                 sb.AppendFormat("            {0} = {1}.Add({2});\r\n", $"{name}Handle", name, $"OnEvent{name.Replace($"{NameUtility.FirstName}{NameUtility.EventName}", "")}Action");
                 sb.AppendLine();
             }
@@ -103,7 +103,7 @@ namespace YIUIFramework.Editor
 
         private static void GetCDETable(this UIBindCDETable self, StringBuilder sb)
         {
-            var tab = self.AllChildCdeTable;
+            var tab = self.ChildTables;
             if (tab == null)
             {
                 return;
@@ -146,13 +146,7 @@ namespace YIUIFramework.Editor
 
         private static void GetUnEventTable(this UIBindCDETable self, StringBuilder sb)
         {
-            var tab = self.EventTable;
-            if (tab == null)
-            {
-                return;
-            }
-
-            foreach (var (name, uiEvent) in tab.EventDic)
+            foreach (var (name, uiEvent) in self.EventDic)
             {
                 if (string.IsNullOrEmpty(name))
                 {

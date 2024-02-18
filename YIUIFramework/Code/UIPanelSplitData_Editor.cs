@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
-using YIUIBind;
 
 namespace YIUIFramework
 {
@@ -11,7 +10,7 @@ namespace YIUIFramework
     {
         [OdinSerialize]
         [LabelText("生成通用界面枚举")]
-        [ShowIf("ShowCreatePanelViewEnum")]
+        [ShowIf(nameof(ShowCreatePanelViewEnum))]
         internal bool CreatePanelViewEnum = true;
 
         internal bool ShowCreatePanelViewEnum()
@@ -31,7 +30,7 @@ namespace YIUIFramework
 
         [GUIColor(0, 1, 1)]
         [Button("检查拆分数据", 30)]
-        [ShowIf("ShowCheckBtn")]
+        [ShowIf(nameof(ShowCheckBtn))]
         private void AutoCheckBtn()
         {
             AutoCheck();
@@ -66,26 +65,27 @@ namespace YIUIFramework
                 return false;
             }
 
-            if (AllViewParent == null || AllViewParent.name != UIStaticHelper.UIAllViewParentName)
+            string viewParentName = UIStaticHelper.UIAllViewParentName;
+            if (AllViewParent == null || AllViewParent.name != viewParentName)
             {
-                AllViewParent = Panel.transform.FindChildByName(UIStaticHelper.UIAllViewParentName).GetComponent<RectTransform>();
+                AllViewParent = Panel.transform.FindChildByName(viewParentName).GetComponent<RectTransform>();
             }
 
             if (AllViewParent == null)
             {
-                Debug.LogError($"没有找到 {Panel.name} {UIStaticHelper.UIAllViewParentName}  这是必须存在的组件 你可以不用 但是不能没有");
+                Debug.LogError($"没有找到 {Panel.name} {viewParentName}  这是必须存在的组件 你可以不用 但是不能没有");
                 return false;
             }
 
-
-            if (AllPopupViewParent == null || AllPopupViewParent.name != UIStaticHelper.UIAllPopupViewParentName)
+            var popupViewParentName = UIStaticHelper.UIAllPopupViewParentName;
+            if (AllPopupViewParent == null || AllPopupViewParent.name != popupViewParentName)
             {
-                AllPopupViewParent = Panel.transform.FindChildByName(UIStaticHelper.UIAllPopupViewParentName).GetComponent<RectTransform>();
+                AllPopupViewParent = Panel.transform.FindChildByName(popupViewParentName).GetComponent<RectTransform>();
             }
 
             if (AllPopupViewParent == null)
             {
-                Debug.LogError($"没有找到 {Panel.name} {UIStaticHelper.UIAllPopupViewParentName}  这是必须存在的组件 你可以不用 但是不能没有");
+                Debug.LogError($"没有找到 {Panel.name} {popupViewParentName}  这是必须存在的组件 你可以不用 但是不能没有");
                 return false;
             }
 
@@ -100,23 +100,24 @@ namespace YIUIFramework
                 Panel.name = qualifiedName;
             }
 
+            var panelSourceName = UIStaticHelper.UIPanelSourceName;
             if (Panel.name == UIStaticHelper.UIYIUIPanelSourceName)
             {
-                Debug.LogError($"当前是默认名称 请手动修改名称 Xxx{UIStaticHelper.UIPanelSourceName}");
+                Debug.LogError($"当前是默认名称 请手动修改名称 Xxx{panelSourceName}");
                 return false;
             }
 
-            if (!Panel.name.EndsWith($"{UIStaticHelper.UIPanelSourceName}"))
+            if (Panel.name.EndsWith($"{panelSourceName}"))
             {
-                Debug.LogError($"{Panel.name} 命名必须以 {UIStaticHelper.UIPanelSourceName} 结尾 请勿随意修改");
-                return false;
+                return true;
             }
 
-            return true;
+            Debug.LogError($"{Panel.name} 命名必须以 {panelSourceName} 结尾 请勿随意修改");
+            return false;
         }
 
         //命名检查
-        private void CheckViewName(List<RectTransform> list)
+        private static void CheckViewName(IList<RectTransform> list)
         {
             for (var i = list.Count - 1; i >= 0; i--)
             {
@@ -133,22 +134,23 @@ namespace YIUIFramework
                     current.name = qualifiedName;
                 }
 
+                var viewParentName = UIStaticHelper.UIViewParentName;
                 if (current.name == UIStaticHelper.UIYIUIViewParentName)
                 {
-                    Debug.LogError($"当前是默认名称 请手动修改名称 Xxx{UIStaticHelper.UIViewParentName}");
+                    Debug.LogError($"当前是默认名称 请手动修改名称 Xxx{viewParentName}");
                     list.RemoveAt(i);
                     continue;
                 }
 
-                if (!current.name.EndsWith(UIStaticHelper.UIViewParentName))
+                if (!current.name.EndsWith(viewParentName))
                 {
-                    Debug.LogError($"{current.name} 命名必须以 {UIStaticHelper.UIViewParentName} 结尾 请勿随意修改");
+                    Debug.LogError($"{current.name} 命名必须以 {viewParentName} 结尾 请勿随意修改");
                     list.RemoveAt(i);
                     continue;
                 }
 
                 var viewName = current.name.Replace(UIStaticHelper.UIParentName, "");
-                var viewCde  = current.GetComponentInChildren<UIBindCDETable>();
+                var viewCde = current.GetComponentInChildren<UIBindCDETable>();
                 
                 if (viewCde == null)
                 {
@@ -172,7 +174,7 @@ namespace YIUIFramework
         }
 
         //检查null / 父级
-        private void CheckViewParent(List<RectTransform> list, Transform parent)
+        private void CheckViewParent(IList<RectTransform> list, Object parent)
         {
             for (var i = list.Count - 1; i >= 0; i--)
             {
@@ -197,21 +199,21 @@ namespace YIUIFramework
 
                     //因为只有2个父级 所以如果不是这个就会自动帮你移动到另外一个上面
                     //如果多了还是不要自动了
-                    var currentParentName = parentP.name;
-                    if (currentParentName == UIStaticHelper.UIAllViewParentName)
+                    switch (parentP.name)
                     {
-                        AllCreateView.Add(current);
-                    }
-                    else if (currentParentName == UIStaticHelper.UIAllPopupViewParentName)
-                    {
-                        AllPopupView.Add(current);
+                        case UIStaticHelper.UIAllViewParentName:
+                            AllCreateView.Add(current);
+                            break;
+                        case UIStaticHelper.UIAllPopupViewParentName:
+                            AllPopupView.Add(current);
+                            break;
                     }
                 }
             }
         }
 
         //检查重复
-        private void CheckRepetition(ref HashSet<RectTransform> hashList, List<RectTransform> list)
+        private void CheckRepetition(ref HashSet<RectTransform> hashList, IList<RectTransform> list)
         {
             for (var i = list.Count - 1; i >= 0; i--)
             {

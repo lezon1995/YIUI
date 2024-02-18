@@ -46,7 +46,7 @@ namespace YIUIFramework
         {
             m_ExistView.Clear();
             m_ViewParent.Clear();
-            m_PanelSplitData = CDETable.PanelSplitData;
+            m_PanelSplitData = Table.PanelSplitData;
             CreateCommonView();
             AddViewParent(m_PanelSplitData.AllCommonView);
             AddViewParent(m_PanelSplitData.AllCreateView);
@@ -77,7 +77,7 @@ namespace YIUIFramework
                 }
 
                 //查看本地是否已经创建
-                var viewBase = CDETable.FindUIBase<UIBase>(viewName);
+                var viewBase = Table.FindUIBase<UIBase>(viewName);
 
                 //如果没有则通用重新创建
                 if (viewBase == null)
@@ -109,30 +109,30 @@ namespace YIUIFramework
         {
             var viewName = typeof(T).Name;
             var parent = GetViewParent(viewName);
-            if (parent == null)
+            if (parent)
             {
-                Debug.LogError($"不存在这个View  请检查 {viewName}");
-                return null;
+                if (m_ExistView.TryGetValue(viewName, out var value))
+                {
+                    return value as T;
+                }
+
+                if (ViewIsOpening(viewName))
+                {
+                    Debug.LogError($"请检查 {viewName} 正在异步打开中 请勿重复调用 请检查代码是否一瞬间频繁调用");
+                    return null;
+                }
+
+                AddOpening(viewName);
+                var view = await YIUIFactory.InstantiateAsync<T>(parent);
+                RemoveOpening(viewName);
+
+                m_ExistView.Add(viewName, view);
+
+                return view;
             }
 
-            if (m_ExistView.TryGetValue(viewName, out var value))
-            {
-                return (T)value;
-            }
-
-            if (ViewIsOpening(viewName))
-            {
-                Debug.LogError($"请检查 {viewName} 正在异步打开中 请勿重复调用 请检查代码是否一瞬间频繁调用");
-                return null;
-            }
-
-            AddOpening(viewName);
-            var view = await YIUIFactory.InstantiateAsync<T>(parent);
-            RemoveOpening(viewName);
-
-            m_ExistView.Add(viewName, view);
-
-            return view;
+            Debug.LogError($"不存在这个View  请检查 {viewName}");
+            return null;
         }
 
         /// <summary>

@@ -106,19 +106,20 @@ namespace YIUIFramework.Editor
         {
             foreach (var viewParent in parentList)
             {
-                if (viewParent == null) continue;
-
-                var viewName = viewParent.name.Replace(UIStaticHelper.UIParentName, "");
-
-                var viewPath = $"{UIStaticHelper.UIProjectResPath}/{pkgName}/{UIStaticHelper.UIPrefabs}/{viewName}.prefab";
-
-                var childView = viewParent.FindChildByName(viewName);
-                if (childView)
+                if (viewParent)
                 {
-                    Object.DestroyImmediate(childView.gameObject);
-                }
+                    var viewName = viewParent.name.Replace(UIStaticHelper.UIParentName, "");
 
-                AddView(viewPath, viewParent);
+                    var viewPath = $"{UIStaticHelper.UIProjectResPath}/{pkgName}/{UIStaticHelper.UIPrefabs}/{viewName}.prefab";
+
+                    var childView = viewParent.FindChildByName(viewName);
+                    if (childView)
+                    {
+                        Object.DestroyImmediate(childView.gameObject);
+                    }
+
+                    AddView(viewPath, viewParent);
+                }
             }
         }
 

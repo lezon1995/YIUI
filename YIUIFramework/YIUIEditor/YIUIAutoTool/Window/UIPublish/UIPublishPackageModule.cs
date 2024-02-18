@@ -88,7 +88,9 @@ namespace YIUIFramework.Editor
                 CreateOrResetAtlas();
 
                 if (showTips)
+                {
                     UnityTipsHelper.CallBackOk($"YIUI当前模块 {PkgName} 发布完毕", YIUIAutoTool.CloseWindowRefresh);
+                }
             }
         }
 

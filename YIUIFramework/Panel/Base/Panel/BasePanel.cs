@@ -5,19 +5,8 @@
     /// </summary>
     public abstract partial class BasePanel : BaseWindow, IYIUIPanel
     {
-        /// <summary>
-        /// 所在层级
-        /// </summary>
         public virtual EPanelLayer Layer => EPanelLayer.Panel;
-
-        /// <summary>
-        /// 界面选项
-        /// </summary>
         public virtual EPanelOption PanelOption => EPanelOption.None;
-
-        /// <summary>
-        /// 堆栈操作
-        /// </summary>
         public virtual EPanelStackOption StackOption => EPanelStackOption.Visible;
 
         /// <summary>

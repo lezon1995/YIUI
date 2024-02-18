@@ -182,7 +182,7 @@ namespace YIUIBind
 
         #region 添加事件
 
-        public static UIEventHandleP0 AddEvent(this UIEventBase self, UIEventDelegate callback)
+        public static UIEventHandleP0 AddEvent(this UIEventBase self, UIEventAction callback)
         {
             if (self is UIEventP0 uiEventParam)
             {
@@ -194,7 +194,7 @@ namespace YIUIBind
             return null;
         }
 
-        public static UIEventHandleP1<P1> AddEvent<P1>(this UIEventBase self, UIEventDelegate<P1> callback)
+        public static UIEventHandleP1<P1> AddEvent<P1>(this UIEventBase self, UIEventAction<P1> callback)
         {
             if (self is UIEventP1<P1> uiEventParam)
             {
@@ -206,7 +206,7 @@ namespace YIUIBind
             return null;
         }
 
-        public static UIEventHandleP2<P1, P2> AddEvent<P1, P2>(this UIEventBase self, UIEventDelegate<P1, P2> callback)
+        public static UIEventHandleP2<P1, P2> AddEvent<P1, P2>(this UIEventBase self, UIEventAction<P1, P2> callback)
         {
             if (self is UIEventP2<P1, P2> uiEventParam)
             {
@@ -218,7 +218,7 @@ namespace YIUIBind
             return null;
         }
 
-        public static UIEventHandleP3<P1, P2, P3> AddEvent<P1, P2, P3>(this UIEventBase self, UIEventDelegate<P1, P2, P3> callback)
+        public static UIEventHandleP3<P1, P2, P3> AddEvent<P1, P2, P3>(this UIEventBase self, UIEventAction<P1, P2, P3> callback)
         {
             if (self is UIEventP3<P1, P2, P3> uiEventParam)
             {
@@ -230,7 +230,7 @@ namespace YIUIBind
             return null;
         }
 
-        public static UIEventHandleP4<P1, P2, P3, P4> AddEvent<P1, P2, P3, P4>(this UIEventBase self, UIEventDelegate<P1, P2, P3, P4> callback)
+        public static UIEventHandleP4<P1, P2, P3, P4> AddEvent<P1, P2, P3, P4>(this UIEventBase self, UIEventAction<P1, P2, P3, P4> callback)
         {
             if (self is UIEventP4<P1, P2, P3, P4> uiEventParam)
             {
@@ -242,7 +242,7 @@ namespace YIUIBind
             return null;
         }
 
-        public static UIEventHandleP5<P1, P2, P3, P4, P5> AddEvent<P1, P2, P3, P4, P5>(this UIEventBase self, UIEventDelegate<P1, P2, P3, P4, P5> callback)
+        public static UIEventHandleP5<P1, P2, P3, P4, P5> AddEvent<P1, P2, P3, P4, P5>(this UIEventBase self, UIEventAction<P1, P2, P3, P4, P5> callback)
         {
             if (self is UIEventP5<P1, P2, P3, P4, P5> uiEventParam)
             {

@@ -10,22 +10,16 @@ namespace YIUIFramework.Editor
     /// </summary>
     public static class UICreateMethod
     {
-        public static string Get(UIBindCDETable cdeTable)
+        public static string Get(UIBindCDETable table)
         {
             var sb = SbPool.Get();
-            cdeTable.GetEventTable(sb);
+            table.GetEventTable(sb);
             return SbPool.PutAndToStr(sb);
         }
 
         private static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
         {
-            var tab = self.EventTable;
-            if (tab == null)
-            {
-                return;
-            }
-
-            foreach (var (name, uiEvent) in tab.EventDic)
+            foreach (var (name, uiEvent) in self.EventDic)
             {
                 if (string.IsNullOrEmpty(name))
                 {
@@ -69,7 +63,7 @@ namespace YIUIFramework.Editor
         /// <summary>
         /// 子类 帮助直接写上重写事件
         /// </summary>
-        public static Dictionary<string, List<Dictionary<string, string>>> GetEventOverrideDic(UIBindCDETable cdeTable)
+        public static Dictionary<string, List<Dictionary<string, string>>> GetEventOverrideDic(UIBindCDETable table)
         {
             var overrideDic = new Dictionary<string, List<Dictionary<string, string>>>();
 
@@ -78,13 +72,7 @@ namespace YIUIFramework.Editor
             var newList = new List<Dictionary<string, string>>();
             overrideDic.Add("Event", newList);
 
-            var tab = cdeTable.EventTable;
-            if (tab == null)
-            {
-                return null;
-            }
-
-            foreach (var (name, uiEvent) in tab.EventDic)
+            foreach (var (name, uiEvent) in table.EventDic)
             {
                 if (string.IsNullOrEmpty(name))
                 {

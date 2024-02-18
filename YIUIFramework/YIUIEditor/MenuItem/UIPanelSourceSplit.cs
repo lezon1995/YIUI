@@ -40,11 +40,11 @@ namespace YIUIFramework.Editor
 
 
             var newSource = UIMenuItemHelper.CopyGameObject(loadSource);
-            var cdeTable = newSource.GetComponent<UIBindCDETable>();
+            var table = newSource.GetComponent<UIBindCDETable>();
             newSource.name = newSource.name.Replace(UIStaticHelper.UISource, "");
-            cdeTable.IsSplitData = false;
-            cdeTable.PanelSplitEditorShowData = cdeTable.PanelSplitData;
-            var splitData = cdeTable.PanelSplitData;
+            table.IsSplitData = false;
+            table.PanelSplitEditorShowData = table.PanelSplitData;
+            var splitData = table.PanelSplitData;
             var savePath = $"{UIStaticHelper.UIProjectResPath}/{pkgName}/{UIStaticHelper.UIPrefabs}";
 
             AllViewSaveAsPrefabAsset(oldSplitData.AllCommonView, splitData.AllCommonView, savePath, true);
@@ -146,21 +146,21 @@ namespace YIUIFramework.Editor
         private static GameObject SaveAsPrefabAsset(GameObject obj, string path)
         {
             var prefab = PrefabUtility.SaveAsPrefabAsset(obj, path);
-            if (prefab == null)
-            {
-                Debug.LogError($"{obj.name} 创建失败");
-            }
-            else
+            if (prefab)
             {
                 var cde = prefab.GetComponent<UIBindCDETable>();
-                if (cde == null)
-                {
-                    Debug.LogError($"{obj.name} cde == null");
-                }
-                else
+                if (cde)
                 {
                     cde.AutoCheck();
                 }
+                else
+                {
+                    Debug.LogError($"{obj.name} cde == null");
+                }
+            }
+            else
+            {
+                Debug.LogError($"{obj.name} 创建失败");
             }
 
             return prefab;

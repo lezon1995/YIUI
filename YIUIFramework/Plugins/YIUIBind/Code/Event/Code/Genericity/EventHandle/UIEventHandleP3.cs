@@ -16,29 +16,29 @@ namespace YIUIBind
     /// </summary>
     public sealed class UIEventHandleP3<P1, P2, P3>
     {
-        private LinkedList<UIEventHandleP3<P1, P2, P3>> m_UIEventList;
-        private LinkedListNode<UIEventHandleP3<P1, P2, P3>> m_UIEventNode;
-        public UIEventDelegate<P1, P2, P3> UIEventParamDelegate { get; private set; }
+        private LinkedList<UIEventHandleP3<P1, P2, P3>> list;
+        private LinkedListNode<UIEventHandleP3<P1, P2, P3>> node;
+        public UIEventAction<P1, P2, P3> Action { get; private set; }
 
         public UIEventHandleP3()
         {
         }
 
-        internal UIEventHandleP3<P1, P2, P3> Init(LinkedList<UIEventHandleP3<P1, P2, P3>> uiEventList, LinkedListNode<UIEventHandleP3<P1, P2, P3>> uiEventNode, UIEventDelegate<P1, P2, P3> uiEventDelegate)
+        internal UIEventHandleP3<P1, P2, P3> Init(LinkedList<UIEventHandleP3<P1, P2, P3>> uiEventList, LinkedListNode<UIEventHandleP3<P1, P2, P3>> uiEventNode, UIEventAction<P1, P2, P3> uiEventAction)
         {
-            m_UIEventList = uiEventList;
-            m_UIEventNode = uiEventNode;
-            UIEventParamDelegate = uiEventDelegate;
+            list = uiEventList;
+            node = uiEventNode;
+            Action = uiEventAction;
             return this;
         }
 
         public void Dispose()
         {
-            if (m_UIEventList == null || m_UIEventNode == null) return;
+            if (list == null || node == null) return;
 
-            m_UIEventList.Remove(m_UIEventNode);
-            m_UIEventNode = null;
-            m_UIEventList = null;
+            list.Remove(node);
+            node = null;
+            list = null;
         }
     }
 }

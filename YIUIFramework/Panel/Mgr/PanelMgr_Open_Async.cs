@@ -23,7 +23,7 @@ namespace YIUIFramework
                 return null;
             }
 
-            if (!m_PanelCfgMap.TryGetValue(panelName, out var info))
+            if (!panelInfos.TryGetValue(panelName, out var info))
             {
                 Debug.LogError($"请检查 {panelName} 没有获取到PanelInfo  1. 必须继承IPanel 的才可行  2. 检查是否没有注册上");
                 return null;
@@ -38,16 +38,16 @@ namespace YIUIFramework
                 }
 
                 AddOpening(panelName);
-                var uiBase = await YIUIFactory.CreatePanelAsync(info);
+                var panel = await YIUIFactory.CreatePanelAsync(info);
                 RemoveOpening(panelName);
-                if (uiBase == null)
+                if (panel == null)
                 {
                     Debug.LogError($"面板[{panelName}]没有创建成功，packName={info.PkgName}, resName={info.ResName}");
                     return null;
                 }
 
-                uiBase.SetActive(false);
-                info.Reset(uiBase);
+                panel.SetActive(false);
+                info.Panel = panel;
             }
 
             AddUI(info);
@@ -194,13 +194,13 @@ namespace YIUIFramework
         {
             if (UIBindHelper.TryGetBindVoByPanelName(panelName, out var vo))
             {
-                if (m_PanelCfgMap.TryGetValue(panelName, out panelInfo))
+                if (panelInfos.TryGetValue(panelName, out panelInfo))
                 {
                     return true;
                 }
 
                 panelInfo = new PanelInfo(panelName, vo.PkgName, vo.ResName);
-                m_PanelCfgMap.Add(panelName, panelInfo);
+                panelInfos.Add(panelName, panelInfo);
                 return true;
             }
 

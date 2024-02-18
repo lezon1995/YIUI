@@ -6,6 +6,11 @@ namespace YIUIFramework
     //生命周期
     public sealed partial class UIBindCDETable
     {
+        internal Action UIBaseOnEnable;
+        internal Action UIBaseStart;
+        internal Action UIBaseOnDisable;
+        internal Action UIBaseOnDestroy;
+
         /// <summary>
         /// 关联UIBase
         /// 由UIBase初始化后调用
@@ -21,7 +26,11 @@ namespace YIUIFramework
             m_UIBase = uiBase;
         }
 
-        internal Action UIBaseOnEnable;
+        private void Awake()
+        {
+            AwakeData();
+            AwakeEvent();
+        }
 
         private void OnEnable()
         {
@@ -36,7 +45,6 @@ namespace YIUIFramework
             }
         }
 
-        internal Action UIBaseStart;
 
         private void Start()
         {
@@ -51,7 +59,6 @@ namespace YIUIFramework
             }
         }
 
-        internal Action UIBaseOnDisable;
 
         private void OnDisable()
         {
@@ -66,8 +73,6 @@ namespace YIUIFramework
             }
         }
 
-        internal Action UIBaseOnDestroy;
-
         private void OnDestroy()
         {
             try
@@ -79,6 +84,17 @@ namespace YIUIFramework
                 Debug.LogError(e);
                 throw;
             }
+
+            OnDestroyEvent();
         }
+
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            OnValidateData();
+            OnValidateEvent();
+        }
+#endif
     }
 }

@@ -25,9 +25,9 @@ namespace YIUIFramework.Editor
 
         private static void GetComponentTable(this UIBindCDETable self, StringBuilder sb)
         {
-            var tab = self.ComponentTable;
-            var count = tab.AllBindDic.Count;
-            if (tab == null || count == 0)
+            var AllBindDic = self.AllBindDic;
+            var count = AllBindDic.Count;
+            if (count == 0)
             {
                 return;
             }
@@ -35,7 +35,7 @@ namespace YIUIFramework.Editor
             sb.AppendLine();
             sb.AppendFormat("        #region Component");
             sb.AppendLine();
-            foreach (var (name, component) in tab.AllBindDic)
+            foreach (var (name, component) in AllBindDic)
             {
                 if (string.IsNullOrEmpty(name))
                 {
@@ -57,9 +57,9 @@ namespace YIUIFramework.Editor
 
         private static void GetDataTable(this UIBindCDETable self, StringBuilder sb)
         {
-            var tab = self.DataTable;
-            var count = tab.DataDic.Count;
-            if (tab == null || count == 0)
+            var DataDic = self.DataDic;
+            var count = DataDic.Count;
+            if (count == 0)
             {
                 return;
             }
@@ -67,7 +67,7 @@ namespace YIUIFramework.Editor
             sb.AppendLine();
             sb.AppendFormat("        #region Data");
             sb.AppendLine();
-            foreach (var (name, uiData) in tab.DataDic)
+            foreach (var (name, uiData) in DataDic)
             {
                 if (string.IsNullOrEmpty(name))
                 {
@@ -90,9 +90,9 @@ namespace YIUIFramework.Editor
 
         private static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
         {
-            var tab = self.EventTable;
-            var count = tab.EventDic.Count;
-            if (tab == null || count == 0)
+            var EventDic = self.EventDic;
+            var count = EventDic.Count;
+            if (count == 0)
             {
                 return;
             }
@@ -101,7 +101,7 @@ namespace YIUIFramework.Editor
             sb.AppendFormat("        #region Event");
             sb.AppendLine();
 
-            foreach (var (name, uiEvent) in tab.EventDic)
+            foreach (var (name, uiEvent) in EventDic)
             {
                 if (string.IsNullOrEmpty(name))
                 {
@@ -124,7 +124,7 @@ namespace YIUIFramework.Editor
 
         private static void GetCDETable(this UIBindCDETable self, StringBuilder sb)
         {
-            var tab = self.AllChildCdeTable;
+            var tab = self.ChildTables;
             if (tab == null)
             {
                 return;

@@ -14,8 +14,8 @@ namespace YIUIFramework
         //淡入
         public static async UniTask In(UIBase uiBase, float time = 0.25f)
         {
-            var obj = uiBase.OwnerGameObject;
-            var canvasGroup = uiBase.OwnerCanvasGroup;
+            var obj = uiBase.GameObject;
+            var canvasGroup = uiBase.CanvasGroup;
             if (obj == null) return;
 
             uiBase.SetActive(true);
@@ -28,8 +28,8 @@ namespace YIUIFramework
         //淡出
         public static async UniTask Out(UIBase uiBase, float time = 0.25f)
         {
-            var obj = uiBase.OwnerGameObject;
-            var canvasGroup = uiBase.OwnerCanvasGroup;
+            var obj = uiBase.GameObject;
+            var canvasGroup = uiBase.CanvasGroup;
             if (obj == null) return;
 
             obj.transform.localScale = Vector3.one;

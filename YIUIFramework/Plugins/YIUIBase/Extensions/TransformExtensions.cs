@@ -52,48 +52,6 @@ namespace YIUIFramework
             return target;
         }
 
-        public static Transform FindByName(this Transform trans, string name1, string name2)
-        {
-            if (trans.name.Equals(name1) || trans.name.Equals(name2))
-            {
-                return trans;
-            }
-
-            for (int i = 0; i < trans.childCount; ++i)
-            {
-                var child = trans.GetChild(i);
-                var result = FindByName(child, name1, name2);
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-
-            return null;
-        }
-
-        public static Transform FindByName(this Transform trans, string name1, string name2, string name3)
-        {
-            if (trans.name.Equals(name1) ||
-                trans.name.Equals(name2) ||
-                trans.name.Equals(name3))
-            {
-                return trans;
-            }
-
-            for (int i = 0; i < trans.childCount; ++i)
-            {
-                var child = trans.GetChild(i);
-                var result = FindByName(child, name1, name2, name3);
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-
-            return null;
-        }
-
         public static Transform FindByName(this Transform trans, string name)
         {
             if (trans.name == name)
@@ -104,8 +62,8 @@ namespace YIUIFramework
             for (int i = 0; i < trans.childCount; ++i)
             {
                 var child = trans.GetChild(i);
-                var result = FindByName(child, name);
-                if (result != null)
+                var result = child.FindByName(name);
+                if (result)
                 {
                     return result;
                 }
@@ -124,7 +82,8 @@ namespace YIUIFramework
 
             for (int i = 0; i < trans.childCount; i++)
             {
-                childT = FindChildByName(trans.GetChild(i), childName);
+                var child = trans.GetChild(i);
+                childT = child.FindChildByName(childName);
                 if (childT)
                 {
                     return childT;

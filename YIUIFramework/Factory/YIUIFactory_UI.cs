@@ -63,36 +63,36 @@ namespace YIUIFramework
 
         private static UIBase CreateByObjVo(UIBindVo vo, GameObject obj, Transform parent = null)
         {
-            var cdeTable = obj.GetComponent<UIBindCDETable>();
-            if (cdeTable == null)
+            var table = obj.GetComponent<UIBindCDETable>();
+            if (table)
             {
-                Debug.LogError($"{obj.name} 没有 UIBindCDETable 组件 无法创建 请检查");
-                return null;
+                table.CreateComponent();
+                var uiBase = (UIBase)Activator.CreateInstance(vo.CreatorType);
+                SetParent(obj.transform, parent ? parent : PanelMgr.Inst.UICache);
+                uiBase.InitUIBase(vo, obj);
+                return uiBase;
             }
 
-            cdeTable.CreateComponent();
-            var uiBase = (UIBase)Activator.CreateInstance(vo.CreatorType);
-            SetParent(obj.transform, parent ? parent : PanelMgr.Inst.UICache);
-            uiBase.InitUIBase(vo, obj);
-            return uiBase;
+            Debug.LogError($"{obj.name} 没有 UIBindCDETable 组件 无法创建 请检查");
+            return null;
         }
 
         private static void CreateComponent(this UIBindCDETable cdeTable)
         {
-            foreach (var childCde in cdeTable.AllChildCdeTable)
+            foreach (var childTable in cdeTable.ChildTables)
             {
-                if (childCde == null)
+                if (childTable == null)
                 {
                     Debug.LogError($"{cdeTable.name} 存在null对象的childCde 检查是否因为删除或丢失或未重新生成");
                     continue;
                 }
 
-                if (UIBindHelper.TryGetBindVoByPath(childCde.PkgName, childCde.ResName, out var vo))
+                if (UIBindHelper.TryGetBindVoByPath(childTable.PkgName, childTable.ResName, out var vo))
                 {
                     var childBase = (UIBase)Activator.CreateInstance(vo.CreatorType);
-                    childCde.CreateComponent();
-                    childBase.InitUIBase(vo, childCde.gameObject);
-                    cdeTable.AddUIBase(childCde.gameObject.name, childBase);
+                    childTable.CreateComponent();
+                    childBase.InitUIBase(vo, childTable.gameObject);
+                    cdeTable.AddUIBase(childTable.gameObject.name, childBase);
                 }
             }
         }

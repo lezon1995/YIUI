@@ -33,7 +33,7 @@ namespace YIUIFramework
 
         //K1 = 层级枚举 V1 = 层级对应的rect
         //List = 当前层级中的当前所有UI 前面的代表这个UI在前面以此类推
-        private readonly Dictionary<EPanelLayer, Dictionary<RectTransform, List<PanelInfo>>> m_AllPanelLayer = new Dictionary<EPanelLayer, Dictionary<RectTransform, List<PanelInfo>>>();
+        private readonly Dictionary<EPanelLayer, Dictionary<RectTransform, List<PanelInfo>>> panelLayers = new Dictionary<EPanelLayer, Dictionary<RectTransform, List<PanelInfo>>>();
 
         private async UniTask<bool> InitRoot()
         {
@@ -107,7 +107,7 @@ namespace YIUIFramework
 
             //分层
             const int len = (int)EPanelLayer.Count;
-            m_AllPanelLayer.Clear();
+            panelLayers.Clear();
             for (var i = len - 1; i >= 0; i--)
             {
                 var layer = new GameObject($"Layer{i}-{(EPanelLayer)i}");
@@ -121,7 +121,7 @@ namespace YIUIFramework
                 rect.localRotation = Quaternion.identity;
                 rect.localPosition = new Vector3(0, 0, i * LayerDistance); //这个是为了3D模型时穿插的问题
                 var rectDic = new Dictionary<RectTransform, List<PanelInfo>> { { rect, new List<PanelInfo>() } };
-                m_AllPanelLayer.Add((EPanelLayer)i, rectDic);
+                panelLayers.Add((EPanelLayer)i, rectDic);
             }
 
             //所有层级初始化后添加一个终极屏蔽层 可根据API 定时屏蔽UI操作
@@ -139,41 +139,27 @@ namespace YIUIFramework
 
         #region 快捷获取层级
 
-        private RectTransform m_UICache;
+        private RectTransform _UICache;
 
         public RectTransform UICache
         {
             get
             {
-                if (m_UICache == null)
+                if (_UICache == null)
                 {
-                    m_UICache = GetLayerRect(EPanelLayer.Cache);
+                    _UICache = GetLayerRect(EPanelLayer.Cache);
                 }
 
-                return m_UICache;
+                return _UICache;
             }
         }
 
-        private RectTransform m_UIPanel;
-
-        public RectTransform UIPanel
-        {
-            get
-            {
-                if (m_UIPanel == null)
-                {
-                    m_UIPanel = GetLayerRect(EPanelLayer.Panel);
-                }
-
-                return m_UIPanel;
-            }
-        }
 
         #endregion
 
         public RectTransform GetLayerRect(EPanelLayer panelLayer)
         {
-            m_AllPanelLayer.TryGetValue(panelLayer, out var rectDic);
+            panelLayers.TryGetValue(panelLayer, out var rectDic);
             if (rectDic == null)
             {
                 Debug.LogError($"没有这个层级 请检查 {panelLayer}");
@@ -191,7 +177,7 @@ namespace YIUIFramework
 
         private List<PanelInfo> GetLayerPanelInfoList(EPanelLayer panelLayer)
         {
-            m_AllPanelLayer.TryGetValue(panelLayer, out var rectDic);
+            panelLayers.TryGetValue(panelLayer, out var rectDic);
             if (rectDic == null)
             {
                 Debug.LogError($"没有这个层级 请检查 {panelLayer}");

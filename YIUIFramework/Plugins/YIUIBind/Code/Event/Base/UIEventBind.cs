@@ -16,9 +16,9 @@ namespace YIUIBind
         [Required("必须选择")]
         [HideLabel]
         [PropertyOrder(-999)]
-        private UIBindEventTable m_EventTable;
+        private UIBindCDETable m_EventTable;
 
-        public UIBindEventTable EventTable => m_EventTable;
+        public UIBindCDETable EventTable => m_EventTable;
 
         [OdinSerialize]
         [LabelText("Publish Event")]
@@ -104,7 +104,7 @@ namespace YIUIBind
         {
             if (m_EventTable == null)
             {
-                m_EventTable = this.GetComponentInParentHard<UIBindEventTable>();
+                m_EventTable = this.GetComponentInParentHard<UIBindCDETable>();
             }
         }
     }

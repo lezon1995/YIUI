@@ -10,13 +10,13 @@ namespace YIUIFramework
     public partial class PanelMgr
     {
         //内部屏蔽对象 显示时之下的所有UI将不可操作
-        private GameObject m_LayerBlock;
+        private GameObject layerBlock;
 
         //倒计时的唯一ID
-        private int m_LastCountDownGuid;
+        private int lastCountDownId;
 
         //下一次恢复操作时间
-        private float m_LastRecoverOptionTime;
+        private float lastRecoverTime;
 
         private void OnBlockDispose()
         {
@@ -25,16 +25,16 @@ namespace YIUIFramework
 
         private void RemoveLastCountDown()
         {
-            CountDownMgr.Inst?.Remove(ref m_LastCountDownGuid);
+            CountDownMgr.Inst.Remove(ref lastCountDownId);
         }
 
         //初始化添加屏蔽模块
         private void InitAddUIBlock()
         {
-            m_LayerBlock = new GameObject("LayerBlock");
-            var rect = m_LayerBlock.AddComponent<RectTransform>();
-            m_LayerBlock.AddComponent<CanvasRenderer>();
-            m_LayerBlock.AddComponent<UIBlock>();
+            layerBlock = new GameObject("LayerBlock");
+            var rect = layerBlock.AddComponent<RectTransform>();
+            layerBlock.AddComponent<CanvasRenderer>();
+            layerBlock.AddComponent<UIBlock>();
             rect.SetParent(UILayerRoot);
             rect.SetAsLastSibling();
             rect.ResetToFullScreen();
@@ -51,7 +51,7 @@ namespace YIUIFramework
         /// <param name="value">true = 可以操作 = 屏蔽层会被隐藏</param>
         private void SetLayerBlockOption(bool value)
         {
-            m_LayerBlock.SetActive(!value);
+            layerBlock.SetActive(!value);
         }
 
         /// <summary>
@@ -61,8 +61,8 @@ namespace YIUIFramework
         private void RecoverLayerOptionAll()
         {
             SetLayerBlockOption(true);
-            m_LastRecoverOptionTime = 0;
-            m_AllForeverBlockCode.Clear();
+            lastRecoverTime = 0;
+            blockIds.Clear();
             RemoveLastCountDown();
         }
 
@@ -83,11 +83,11 @@ namespace YIUIFramework
 
             //假设A 先禁止100秒
             //B 又想禁止10秒  显然 B这个就会被屏蔽最少需要等到A禁止的时间结束
-            if (currentRecoverOptionTime > m_LastRecoverOptionTime)
+            if (currentRecoverOptionTime > lastRecoverTime)
             {
-                m_LastRecoverOptionTime = currentRecoverOptionTime;
+                lastRecoverTime = currentRecoverOptionTime;
                 RemoveLastCountDown();
-                CountDownMgr.Inst?.Add(ref m_LastCountDownGuid, time, OnCountDownLayerOption);
+                CountDownMgr.Inst.Add(ref lastCountDownId, time, OnCountDownLayerOption);
             }
         }
 
@@ -95,7 +95,7 @@ namespace YIUIFramework
         {
             if (residue <= 0)
             {
-                m_LastCountDownGuid = 0;
+                lastCountDownId = 0;
 
                 if (IsForeverBlock)
                 {
@@ -112,11 +112,11 @@ namespace YIUIFramework
         #region 永久屏蔽 forever
 
         //当前是否正在被永久屏蔽
-        public bool IsForeverBlock => m_AllForeverBlockCode.Count >= 1;
+        public bool IsForeverBlock => blockIds.Count >= 1;
 
         //永久屏蔽引用计数 一定要成对使用且保证
         //否则将会出现永久屏蔽的情况只能通过RecoverLayerOptionCountDown 强制恢复
-        private readonly HashSet<int> m_AllForeverBlockCode = new HashSet<int>();
+        private readonly HashSet<int> blockIds = new HashSet<int>();
 
         //永久屏蔽
         //适用于 不知道要屏蔽多久 但是能保证可以成对调用的
@@ -126,20 +126,20 @@ namespace YIUIFramework
         public int BanLayerOptionForever()
         {
             SetLayerBlockOption(false);
-            var foreverBlockCode = IDHelper.GetGuid();
-            m_AllForeverBlockCode.Add(foreverBlockCode);
-            return foreverBlockCode;
+            var blockId = IDHelper.GetGuid();
+            blockIds.Add(blockId);
+            return blockId;
         }
 
         //恢复永久屏蔽
-        public void RecoverLayerOptionForever(int code)
+        public void RecoverLayerOptionForever(int blockId)
         {
-            if (!m_AllForeverBlockCode.Contains(code))
+            if (!blockIds.Contains(blockId))
             {
                 return;
             }
 
-            m_AllForeverBlockCode.Remove(code);
+            blockIds.Remove(blockId);
 
             if (IsForeverBlock)
             {
@@ -148,7 +148,7 @@ namespace YIUIFramework
 
             //如果当前有其他倒计时 就等待倒计时恢复
             //否则可直接恢复
-            if (m_LastCountDownGuid == 0)
+            if (lastCountDownId == 0)
             {
                 SetLayerBlockOption(true);
             }
