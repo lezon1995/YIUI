@@ -12,7 +12,7 @@ namespace YIUIFramework
     /// </summary>
     public class YIUIReleaseInstantiate : MonoBehaviour
     {
-        private void OnDestroy()
+        void OnDestroy()
         {
             YIUIFactory.Destroy(gameObject);
         }

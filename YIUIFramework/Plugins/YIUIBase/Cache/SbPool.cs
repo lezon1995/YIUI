@@ -8,7 +8,7 @@ namespace YIUIFramework
     /// </summary>
     public static class SbPool
     {
-        private static Stack<StringBuilder> g_pool = new Stack<StringBuilder>(5);
+        static Stack<StringBuilder> g_pool = new Stack<StringBuilder>(5);
 
         public static StringBuilder Get()
         {

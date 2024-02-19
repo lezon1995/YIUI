@@ -9,7 +9,7 @@ namespace YIUIFramework
     /// </summary>
     public static partial class RefPool
     {
-        private static readonly Dictionary<Type, RefCollection> s_RefCollections = new Dictionary<Type, RefCollection>();
+        static readonly Dictionary<Type, RefCollection> s_RefCollections = new Dictionary<Type, RefCollection>();
 
         public static int Count
         {
@@ -131,7 +131,7 @@ namespace YIUIFramework
             GetRefCollection(refType, true)?.RemoveAll();
         }
 
-        private static bool InternalCheckRefType(Type refType)
+        static bool InternalCheckRefType(Type refType)
         {
             if (refType == null)
             {
@@ -154,7 +154,7 @@ namespace YIUIFramework
             return true;
         }
 
-        private static RefCollection GetRefCollection(Type refType, bool allowNull = false)
+        static RefCollection GetRefCollection(Type refType, bool allowNull = false)
         {
             if (refType == null)
             {

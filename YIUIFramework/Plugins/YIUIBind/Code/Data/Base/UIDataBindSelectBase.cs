@@ -22,7 +22,7 @@ namespace YIUIBind
 #if UNITY_EDITOR
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
 #endif
-        private Dictionary<string, UIDataSelect> m_DataSelectDic = new Dictionary<string, UIDataSelect>();
+        Dictionary<string, UIDataSelect> m_DataSelectDic = new Dictionary<string, UIDataSelect>();
 
         public IReadOnlyDictionary<string, UIDataSelect> DataSelectDic => m_DataSelectDic;
 
@@ -84,7 +84,7 @@ namespace YIUIBind
             OnValueChanged();
         }
 
-        private void UnbindData(string dataName)
+        void UnbindData(string dataName)
         {
             if (m_DataSelectDic.TryGetValue(dataName, out var value))
             {
@@ -92,7 +92,7 @@ namespace YIUIBind
             }
         }
 
-        private void UnbindData(UIDataSelect value)
+        void UnbindData(UIDataSelect value)
         {
             var data = value.Data;
             if (data == null)

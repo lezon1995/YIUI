@@ -12,19 +12,19 @@ namespace YIUIFramework
     public sealed partial class SchedulerMgr : MonoSingleton<SchedulerMgr>
     {
         // 链表 任务
-        private static LinkedList<Action> frameTasks = new LinkedList<Action>();
+        static LinkedList<Action> frameTasks = new LinkedList<Action>();
 
         // 正在执行的
-        private static List<Action> executing = new List<Action>();
+        static List<Action> executing = new List<Action>();
 
         // 发送的任务
-        private static List<Action> postTasks = new List<Action>();
+        static List<Action> postTasks = new List<Action>();
 
         // 下一帧执行的任务
-        private static List<Action> nextFrameTasks = new List<Action>();
+        static List<Action> nextFrameTasks = new List<Action>();
 
         // 延迟执行的任务
-        private static List<DelayTime> delayTasks = new List<DelayTime>();
+        static List<DelayTime> delayTasks = new List<DelayTime>();
 
         //时间缩放的延迟执行的任务
         private static List<DelayTime> delayTasksWithScale = new List<DelayTime>();

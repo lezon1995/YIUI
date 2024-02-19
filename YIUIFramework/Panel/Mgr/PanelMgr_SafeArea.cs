@@ -17,7 +17,7 @@ namespace YIUIFramework
         public static bool DoubleSafe = false;
 
         //安全区
-        private static Rect g_SafeArea;
+        static Rect g_SafeArea;
 
         /// <summary>
         /// 安全区
@@ -29,9 +29,9 @@ namespace YIUIFramework
         /// </summary>
         public static float SafeAreaLeft => Screen.orientation == ScreenOrientation.LandscapeRight ? Screen.width - g_SafeArea.xMax : g_SafeArea.x;
 
-        private ScreenOrientation ScreenOrientation = Screen.orientation;
+        ScreenOrientation ScreenOrientation = Screen.orientation;
 
-        private void InitSafeArea()
+        void InitSafeArea()
         {
             var safeAreaX = Math.Max(Screen.safeArea.x, Screen.width - Screen.safeArea.xMax);
             var safeAreaY = Math.Max(Screen.safeArea.y, Screen.height - Screen.safeArea.yMax);
@@ -48,12 +48,12 @@ namespace YIUIFramework
             InitUISafeArea();
         }
 
-        private float GetSafeValue(float safeValue)
+        float GetSafeValue(float safeValue)
         {
             return DoubleSafe ? safeValue * 2 : safeValue;
         }
 
-        private void InitUISafeArea()
+        void InitUISafeArea()
         {
             UILayerRoot.anchoredPosition = new Vector2(SafeArea.x, -SafeArea.y);
             if (DoubleSafe)

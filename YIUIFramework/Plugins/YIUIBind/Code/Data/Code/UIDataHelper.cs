@@ -59,7 +59,7 @@ namespace YIUIBind
 
         #region Get/Set Value
 
-        private static UIDataValueBase<T> GetDataValueBase<T>(this UIDataValue self)
+        static UIDataValueBase<T> GetDataValueBase<T>(this UIDataValue self)
         {
             if (self is UIDataValueBase<T> finalResult)
             {

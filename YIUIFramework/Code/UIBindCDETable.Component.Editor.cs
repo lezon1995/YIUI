@@ -16,7 +16,7 @@ namespace YIUIFramework
         [HideReferenceObjectPicker]
         [PropertyOrder(-10)]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
-        private List<UIBindData> m_ComponentList = new List<UIBindData>();
+        List<UIBindData> m_ComponentList = new List<UIBindData>();
 
         [FoldoutGroup("Component", 1)]
         [Button("Auto Name", 30)]
@@ -50,7 +50,7 @@ namespace YIUIFramework
         /// 会尝试强制修改
         /// 如果还有同名则报错
         /// </summary>
-        private void CheckComponentsName()
+        void CheckComponentsName()
         {
             m_AllBindDic.Clear();
             if (m_ComponentList.IsEmpty())
@@ -150,7 +150,7 @@ namespace YIUIFramework
         [ValueDropdown(nameof(GetComponentTypes))]
         public Type Type;
 
-        private IEnumerable<Type> GetComponentTypes()
+        IEnumerable<Type> GetComponentTypes()
         {
             if (GameObject)
             {

@@ -12,7 +12,7 @@ namespace YIUIFramework
         /// 打开一个同级UI时关闭其他UI 
         /// 只有Panel层才有这个逻辑
         /// </summary>
-        private async UniTask AddUICloseElse(PanelInfo info)
+        async UniTask AddUICloseElse(PanelInfo info)
         {
             if (info.Panel is not { Layer: EPanelLayer.Panel })
             {
@@ -75,7 +75,7 @@ namespace YIUIFramework
             }
         }
 
-        private async UniTask RemoveUIAddElse(PanelInfo info)
+        async UniTask RemoveUIAddElse(PanelInfo info)
         {
             if (info.Panel is not { Layer: EPanelLayer.Panel })
             {
@@ -136,7 +136,7 @@ namespace YIUIFramework
             }
         }
 
-        private async UniTask RemoveUIToHome(PanelInfo home, bool tween = true)
+        async UniTask RemoveUIToHome(PanelInfo home, bool tween = true)
         {
             if (home.Panel is not { Layer: EPanelLayer.Panel })
             {

@@ -9,10 +9,10 @@ namespace YIUIFramework
     /// </summary>
     public sealed class DelayTimer : IDisposable
     {
-        private LinkedListNode<Action> updateHandle;
-        private float delayTime;
-        private float leftTime;
-        private Action task;
+        LinkedListNode<Action> updateHandle;
+        float delayTime;
+        float leftTime;
+        Action task;
 
         /// <summary>
         /// 在指定秒后调用任务
@@ -34,13 +34,13 @@ namespace YIUIFramework
             updateHandle = null;
         }
 
-        private void Start()
+        void Start()
         {
             leftTime = delayTime;
             updateHandle = SchedulerMgr.AddFrameListener(Update);
         }
 
-        private void Update()
+        void Update()
         {
             leftTime -= Time.deltaTime;
             if (leftTime <= 0.0f)

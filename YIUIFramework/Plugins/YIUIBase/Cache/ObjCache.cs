@@ -8,7 +8,7 @@ namespace YIUIFramework
     /// </summary>
     public class ObjCache<T>
     {
-        private Stack<T> m_pool;
+        Stack<T> m_pool;
         protected Func<T> m_createCallback;
 
         public ObjCache(Func<T> createCallback, int capacity = 0)

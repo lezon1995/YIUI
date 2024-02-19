@@ -8,7 +8,7 @@ namespace YIUIFramework
     /// </summary>
     public sealed class ListComparer<T> : IEqualityComparer<List<T>>
     {
-        private static volatile ListComparer<T> defaultComparer;
+        static volatile ListComparer<T> defaultComparer;
 
         /// <summary>
         /// Gets a default instance of the <see cref="ListComparer{T}"/>.

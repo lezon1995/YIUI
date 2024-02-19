@@ -16,8 +16,8 @@ namespace YIUIBind
     /// </summary>
     public sealed class UIEventHandleP5<P1, P2, P3, P4, P5>
     {
-        private LinkedList<UIEventHandleP5<P1, P2, P3, P4, P5>> list;
-        private LinkedListNode<UIEventHandleP5<P1, P2, P3, P4, P5>> node;
+        LinkedList<UIEventHandleP5<P1, P2, P3, P4, P5>> list;
+        LinkedListNode<UIEventHandleP5<P1, P2, P3, P4, P5>> node;
         public UIEventAction<P1, P2, P3, P4, P5> Action { get; private set; }
 
         public UIEventHandleP5()

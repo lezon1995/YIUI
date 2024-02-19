@@ -17,7 +17,7 @@ namespace YIUIBind
         [InfoBox("The Event hasn't binded yet", InfoMessageType.Error, nameof(ShowIfBindsTips))]
         [ShowIf(nameof(ShowIfBindsTips))]
 #endif
-        private string m_EventName;
+        string m_EventName;
 
         public string EventName => m_EventName;
 

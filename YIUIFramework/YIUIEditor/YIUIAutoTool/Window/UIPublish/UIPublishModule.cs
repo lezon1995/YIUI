@@ -19,16 +19,16 @@ namespace YIUIFramework.Editor
         [LabelText("所有模块资源路径")]
         [ReadOnly]
         [ShowInInspector]
-        private string m_AllPkgPath = UIStaticHelper.UIProjectResPath;
+        string m_AllPkgPath = UIStaticHelper.UIProjectResPath;
 
         [BoxGroup("创建模块", centerLabel: true)]
         [ShowInInspector]
         internal UICreateResModule CreateResModule = new UICreateResModule();
 
         //所有模块
-        private List<UIPublishPackageModule> m_AllUIPublishPackageModule = new List<UIPublishPackageModule>();
+        List<UIPublishPackageModule> m_AllUIPublishPackageModule = new List<UIPublishPackageModule>();
 
-        private void AddAllPkg()
+        void AddAllPkg()
         {
             EditorHelper.CreateExistsDirectory(m_AllPkgPath);
             string[] folders;

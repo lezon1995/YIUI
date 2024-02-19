@@ -7,7 +7,7 @@ namespace YIUIFramework
     /// </summary>
     public class StackPool<T>
     {
-        private static Stack<Stack<T>> g_pool = new Stack<Stack<T>>(5);
+        static Stack<Stack<T>> g_pool = new Stack<Stack<T>>(5);
 
         public static Stack<T> Get()
         {

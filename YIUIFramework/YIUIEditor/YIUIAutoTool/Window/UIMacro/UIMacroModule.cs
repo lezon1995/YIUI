@@ -28,7 +28,7 @@ namespace YIUIFramework.Editor
         [ShowInInspector]
         [ListDrawerSettings(IsReadOnly = true)]
         [HideReferenceObjectPicker]
-        private List<MacroDataBase> AllMacroData;
+        List<MacroDataBase> AllMacroData;
 
         [Button("更新自定义宏", 50), GUIColor(0.53f, 0.95f, 0.72f)]
         public void Refresh()
@@ -56,7 +56,7 @@ namespace YIUIFramework.Editor
             SelfInitialize();
         }
 
-        private void SelfInitialize()
+        void SelfInitialize()
         {
             MacroStaticData = new MacroCurrentData(SelfInitialize);
 
@@ -66,7 +66,7 @@ namespace YIUIFramework.Editor
             };
         }
 
-        private static BuildTargetGroup GetCurrentBuildPlatform()
+        static BuildTargetGroup GetCurrentBuildPlatform()
         {
             var buildTargetName = EditorUserBuildSettings.activeBuildTarget.ToString();
             buildTargetName = buildTargetName.ToLower();
@@ -93,7 +93,7 @@ namespace YIUIFramework.Editor
             return BuildTargetGroup.Standalone;
         }
 
-        private void OnBuildTargetGroupChange()
+        void OnBuildTargetGroupChange()
         {
             SelfInitialize();
         }

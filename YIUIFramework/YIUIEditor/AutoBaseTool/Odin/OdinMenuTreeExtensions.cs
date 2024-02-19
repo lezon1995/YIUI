@@ -75,7 +75,7 @@ namespace YIUIFramework.Editor
             return result;
         }
 
-        private static void SplitMenuPath(string menuPath, out string path, out string name)
+        static void SplitMenuPath(string menuPath, out string path, out string name)
         {
             menuPath = menuPath.Trim('/');
             int length = menuPath.LastIndexOf('/');

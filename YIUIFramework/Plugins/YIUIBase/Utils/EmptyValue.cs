@@ -5,7 +5,7 @@
     /// </summary>
     public static class EmptyValue<T> where T : new()
     {
-        private static T g_value;
+        static T g_value;
 
         public static T Value
         {

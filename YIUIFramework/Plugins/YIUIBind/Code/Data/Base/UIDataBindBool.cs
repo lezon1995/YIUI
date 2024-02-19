@@ -16,7 +16,7 @@ namespace YIUIBind
 #if UNITY_EDITOR
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
 #endif
-        private UIBooleanLogic m_BooleanLogic = UIBooleanLogic.And;
+        UIBooleanLogic m_BooleanLogic = UIBooleanLogic.And;
 
         [OdinSerialize]
         [LabelText("所有计算结果的变量")]
@@ -24,7 +24,7 @@ namespace YIUIBind
 #if UNITY_EDITOR
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
 #endif
-        private List<UIDataBoolRef> m_Datas = new List<UIDataBoolRef>();
+        List<UIDataBoolRef> m_Datas = new List<UIDataBoolRef>();
 
         protected override int Mask()
         {

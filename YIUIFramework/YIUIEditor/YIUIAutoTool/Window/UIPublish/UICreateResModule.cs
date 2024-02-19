@@ -13,7 +13,7 @@ namespace YIUIFramework.Editor
 
         [GUIColor(0, 1, 0)]
         [Button("创建", 30)]
-        private void Create()
+        void Create()
         {
             if (!UIOperationHelper.CheckUIOperation()) return;
 

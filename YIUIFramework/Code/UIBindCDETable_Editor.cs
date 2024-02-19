@@ -48,7 +48,7 @@ namespace YIUIFramework
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public float CachePanelTime = 10;
 
-        private bool ShowCachePanelTime => PanelOption.Has(EPanelOption.TimeCache);
+        bool ShowCachePanelTime => PanelOption.Has(EPanelOption.TimeCache);
 
         [Tooltip("同层级时，优先级高的在前面，相同时后打开的在前面")]
         [LabelText("优先级")]
@@ -56,7 +56,7 @@ namespace YIUIFramework
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public int Priority;
 
-        private void OnValueChangedEUICodeType()
+        void OnValueChangedEUICodeType()
         {
             var uiPanelName = UIStaticHelper.UIPanelName;
             if (name.EndsWith(uiPanelName) || name.EndsWith(UIStaticHelper.UIPanelSourceName))
@@ -92,7 +92,7 @@ namespace YIUIFramework
             }
         }
 
-        private void OnValueChangedEPanelLayer()
+        void OnValueChangedEPanelLayer()
         {
             if (PanelLayer >= EPanelLayer.Cache)
             {
@@ -103,7 +103,7 @@ namespace YIUIFramework
 
         #endregion
 
-        private bool ShowAutoCheckBtn()
+        bool ShowAutoCheckBtn()
         {
             return UIOperationHelper.CheckUIOperation(false);
         }
@@ -141,7 +141,7 @@ namespace YIUIFramework
             return true;
         }
 
-        private bool ShowCreateBtnByHierarchy()
+        bool ShowCreateBtnByHierarchy()
         {
             if (string.IsNullOrEmpty(PkgName) || string.IsNullOrEmpty(ResName))
             {
@@ -201,7 +201,7 @@ namespace YIUIFramework
             AssetDatabase.OpenAsset(cdeTable);
         }
 
-        private bool ShowCreateBtn()
+        bool ShowCreateBtn()
         {
             if (IsSplitData)
             {
@@ -222,7 +222,7 @@ namespace YIUIFramework
             }
         }
 
-        private bool ShowPanelSourceSplit()
+        bool ShowPanelSourceSplit()
         {
             return UIOperationHelper.CheckUIOperationAll(this, false) && IsSplitData;
         }

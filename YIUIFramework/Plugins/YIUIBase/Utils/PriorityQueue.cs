@@ -9,9 +9,9 @@ namespace YIUIFramework
     /// </summary>
     public sealed class PriorityQueue<T> : IEnumerable<T>
     {
-        private IComparer<T> comparer;
-        private T[] heap;
-        private HashSet<T> fastFinder = new HashSet<T>();
+        IComparer<T> comparer;
+        T[] heap;
+        HashSet<T> fastFinder = new HashSet<T>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PriorityQueue{T}"/> 
@@ -137,7 +137,7 @@ namespace YIUIFramework
             throw new InvalidOperationException("The PriorityQueue is empty.");
         }
 
-        private void SiftUp(int n)
+        void SiftUp(int n)
         {
             var v = heap[n];
             for (var n2 = n / 2;
@@ -150,7 +150,7 @@ namespace YIUIFramework
             heap[n] = v;
         }
 
-        private void SiftDown(int n)
+        void SiftDown(int n)
         {
             var v = heap[n];
             for (var n2 = n * 2; n2 < Count; n = n2, n2 *= 2)
@@ -177,9 +177,9 @@ namespace YIUIFramework
         /// </summary>
         public struct Enumerator : IEnumerator<T>
         {
-            private readonly T[] heap;
-            private readonly int count;
-            private int index;
+            readonly T[] heap;
+            readonly int count;
+            int index;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="Enumerator"/> 

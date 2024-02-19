@@ -12,8 +12,8 @@ namespace YIUIFramework
     public static class StreamingAssets
     {
 #if !UNITY_EDITOR && UNITY_ANDROID
-        private static AndroidJavaObject assetManager;
-        private static Dictionary<string, HashSet<string>> folderLookup =
+        static AndroidJavaObject assetManager;
+        static Dictionary<string, HashSet<string>> folderLookup =
             new Dictionary<string, HashSet<string>>();
 
         static StreamingAssets()
@@ -98,7 +98,7 @@ namespace YIUIFramework
         }
 
 #if !UNITY_EDITOR && UNITY_ANDROID
-        private static HashSet<string> GetFilesInDir(string dir)
+        static HashSet<string> GetFilesInDir(string dir)
         {
             HashSet<string> fileTable;
             if (!folderLookup.TryGetValue(dir, out fileTable))

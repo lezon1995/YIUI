@@ -151,7 +151,7 @@ namespace YIUIFramework
 
         #region 异步通过Name打开（object类型参数）
 
-        private async UniTask<BaseView> GetView(string viewName)
+        async UniTask<BaseView> GetView(string viewName)
         {
             BaseView view;
             var parent = GetViewParent(viewName);
@@ -408,7 +408,7 @@ namespace YIUIFramework
 
         #region 异步通过Type打开（泛型类型参数）
 
-        private async UniTask<BaseView> GetView(Type viewType)
+        async UniTask<BaseView> GetView(Type viewType)
         {
             var viewName = viewType.Name;
             return await GetView(viewName);

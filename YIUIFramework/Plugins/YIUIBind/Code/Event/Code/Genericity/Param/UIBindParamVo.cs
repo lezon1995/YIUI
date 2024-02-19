@@ -6,12 +6,12 @@ namespace YIUIBind
 {
     public class UIBindParamVo
     {
-        private static readonly ObjectPool<UIBindParamVo> g_CacheParam = new ObjectPool<UIBindParamVo>(null, l => l.Reset());
+        static readonly ObjectPool<UIBindParamVo> g_CacheParam = new ObjectPool<UIBindParamVo>(null, l => l.Reset());
 
         /// <summary>
         /// 原始数据
         /// </summary>
-        private object m_Data;
+        object m_Data;
 
         public UIBindParamVo()
         {
@@ -28,7 +28,7 @@ namespace YIUIBind
             return result;
         }
 
-        private ParamGetResult Get<T>(out T outResult, int index = 0, T defaultValue = default(T))
+        ParamGetResult Get<T>(out T outResult, int index = 0, T defaultValue = default(T))
         {
             if (m_Data == null)
             {
@@ -88,7 +88,7 @@ namespace YIUIBind
             }
         }
 
-        private void Reset()
+        void Reset()
         {
             m_Data = null;
         }

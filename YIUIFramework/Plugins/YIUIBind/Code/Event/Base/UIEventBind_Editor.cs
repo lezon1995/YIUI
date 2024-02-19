@@ -12,7 +12,7 @@ namespace YIUIBind
         [GUIColor(0, 1, 1)]
         [Button("响应点击 只能响应无参方法", 20)]
         [PropertyOrder(-100)]
-        private void TestOnClick()
+        void TestOnClick()
         {
             if (m_UIEvent == null)
             {
@@ -30,9 +30,9 @@ namespace YIUIBind
             }
         }
 
-        private const string c_ErrorTips = "当前事件表中无符合参数条件的事件";
+        const string c_ErrorTips = "当前事件表中无符合参数条件的事件";
 
-        private IEnumerable<string> GetEventNameKeys()
+        IEnumerable<string> GetEventNameKeys()
         {
             if (m_EventTable == null)
             {
@@ -63,7 +63,7 @@ namespace YIUIBind
             return list;
         }
 
-        private void OnEventNameSelected()
+        void OnEventNameSelected()
         {
             if (m_EventName == c_ErrorTips)
             {
@@ -78,7 +78,7 @@ namespace YIUIBind
         /// <summary>
         /// 绑定
         /// </summary>
-        private void BindEvent()
+        void BindEvent()
         {
             m_UIEvent?.AddBind(this);
         }
@@ -86,7 +86,7 @@ namespace YIUIBind
         /// <summary>
         /// 解绑
         /// </summary>
-        private void UnbindEvent()
+        void UnbindEvent()
         {
             m_UIEvent?.RemoveBind(this);
         }

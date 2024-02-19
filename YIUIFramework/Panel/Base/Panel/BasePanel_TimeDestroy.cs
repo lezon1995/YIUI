@@ -11,7 +11,7 @@ namespace YIUIFramework
     {
         protected virtual float CachePanelTime => 10;
 
-        private CancellationTokenSource m_Cts;
+        CancellationTokenSource m_Cts;
 
         internal void CacheTimeCountDownDestroyPanel()
         {
@@ -32,7 +32,7 @@ namespace YIUIFramework
             m_Cts = null;
         }
 
-        private async UniTaskVoid DoCountDownDestroyPanel(CancellationToken token)
+        async UniTaskVoid DoCountDownDestroyPanel(CancellationToken token)
         {
             try
             {

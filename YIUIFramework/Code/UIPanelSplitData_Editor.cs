@@ -18,7 +18,7 @@ namespace YIUIFramework
             return (AllCommonView.Count + AllCreateView.Count) >= 1;
         }
 
-        private bool ShowCheckBtn()
+        bool ShowCheckBtn()
         {
             if (Panel == null)
             {
@@ -31,7 +31,7 @@ namespace YIUIFramework
         [GUIColor(0, 1, 1)]
         [Button("检查拆分数据", 30)]
         [ShowIf(nameof(ShowCheckBtn))]
-        private void AutoCheckBtn()
+        void AutoCheckBtn()
         {
             AutoCheck();
         }
@@ -57,7 +57,7 @@ namespace YIUIFramework
             return true;
         }
 
-        private bool ResetParent()
+        bool ResetParent()
         {
             if (Panel == null)
             {
@@ -92,7 +92,7 @@ namespace YIUIFramework
             return true;
         }
 
-        private bool CheckPanelName()
+        bool CheckPanelName()
         {
             var qualifiedName = NameUtility.ToFirstUpper(Panel.name);
             if (Panel.name != qualifiedName)
@@ -117,7 +117,7 @@ namespace YIUIFramework
         }
 
         //命名检查
-        private static void CheckViewName(IList<RectTransform> list)
+        static void CheckViewName(IList<RectTransform> list)
         {
             for (var i = list.Count - 1; i >= 0; i--)
             {
@@ -174,7 +174,7 @@ namespace YIUIFramework
         }
 
         //检查null / 父级
-        private void CheckViewParent(IList<RectTransform> list, Object parent)
+        void CheckViewParent(IList<RectTransform> list, Object parent)
         {
             for (var i = list.Count - 1; i >= 0; i--)
             {
@@ -213,7 +213,7 @@ namespace YIUIFramework
         }
 
         //检查重复
-        private void CheckRepetition(ref HashSet<RectTransform> hashList, IList<RectTransform> list)
+        void CheckRepetition(ref HashSet<RectTransform> hashList, IList<RectTransform> list)
         {
             for (var i = list.Count - 1; i >= 0; i--)
             {

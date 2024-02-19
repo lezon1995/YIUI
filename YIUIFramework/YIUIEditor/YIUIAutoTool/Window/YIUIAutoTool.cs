@@ -14,7 +14,7 @@ namespace YIUIFramework.Editor
     public class YIUIAutoTool : OdinMenuEditorWindow
     {
         [MenuItem("Tools/YIUI 自动化工具")]
-        private static void OpenWindow()
+        static void OpenWindow()
         {
             var window = GetWindow<YIUIAutoTool>();
             window.Show();
@@ -22,7 +22,7 @@ namespace YIUIFramework.Editor
 
         //[MenuItem("Tools/关闭 YIUI 自动化工具")]
         //错误时使用的 面板出现了错误 会导致如何都打不开 就需要先关闭
-        private static void CloseWindow()
+        static void CloseWindow()
         {
             GetWindow<YIUIAutoTool>().Close();
         }
@@ -35,8 +35,8 @@ namespace YIUIFramework.Editor
             AssetDatabase.Refresh();
         }
 
-        private OdinMenuTree m_OdinMenuTree;
-        private List<BaseTreeMenuItem> m_AllMenuItem = new List<BaseTreeMenuItem>();
+        OdinMenuTree m_OdinMenuTree;
+        List<BaseTreeMenuItem> m_AllMenuItem = new List<BaseTreeMenuItem>();
 
         protected override OdinMenuTree BuildMenuTree()
         {
@@ -55,10 +55,10 @@ namespace YIUIFramework.Editor
             return m_OdinMenuTree;
         }
 
-        private bool m_FirstInit = true;
-        private StringPrefs m_LastSelectMenuPrefs = new StringPrefs("YIUIAutoTool_LastSelectMenu", null, "全局设置");
+        bool m_FirstInit = true;
+        StringPrefs m_LastSelectMenuPrefs = new StringPrefs("YIUIAutoTool_LastSelectMenu", null, "全局设置");
 
-        private void OnSelectionChanged(SelectionChangedType obj)
+        void OnSelectionChanged(SelectionChangedType obj)
         {
             if (obj != SelectionChangedType.ItemAdded)
             {
@@ -101,7 +101,7 @@ namespace YIUIFramework.Editor
         [LabelText("用户名")]
         [Required("请填写用户名")]
         [ShowInInspector]
-        private static string m_Author;
+        static string m_Author;
 
         public static string Author
         {
@@ -119,7 +119,7 @@ namespace YIUIFramework.Editor
         [HideLabel]
         [HideReferenceObjectPicker]
         [ShowInInspector]
-        private readonly BaseCreateModule m_UIBaseModule = new CreateUIBaseModule();
+        readonly BaseCreateModule m_UIBaseModule = new CreateUIBaseModule();
 
         [BoxGroup("全局图集设置", centerLabel: true)]
         [ShowInInspector]

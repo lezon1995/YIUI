@@ -16,7 +16,7 @@ namespace Coffee.UIEffects
     {
         protected static readonly Hash128 k_InvalidHash = new Hash128();
         protected static readonly List<UIVertex> s_TempVerts = new List<UIVertex>();
-        private static readonly StringBuilder s_StringBuilder = new StringBuilder();
+        static readonly StringBuilder s_StringBuilder = new StringBuilder();
 
         Hash128 _effectMaterialHash;
 

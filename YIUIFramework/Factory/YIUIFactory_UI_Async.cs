@@ -38,7 +38,7 @@ namespace YIUIFramework
         }
 
 
-        private static async UniTask<T> InstantiateAsync<T>(UIBindVo vo, Transform parent = null) where T : UIBase
+        static async UniTask<T> InstantiateAsync<T>(UIBindVo vo, Transform parent = null) where T : UIBase
         {
             return await CreateAsync(vo, parent) as T;
         }
@@ -58,7 +58,7 @@ namespace YIUIFramework
             return null;
         }
 
-        private static async UniTask<UIBase> CreateAsync(UIBindVo vo, Transform parent = null)
+        static async UniTask<UIBase> CreateAsync(UIBindVo vo, Transform parent = null)
         {
             var obj = await YIUILoadHelper.LoadAssetAsyncInstantiate(vo.PkgName, vo.ResName);
             if (obj)

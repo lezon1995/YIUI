@@ -4,16 +4,16 @@ namespace YIUIFramework.Editor
 {
     public class UICreateBaseCode : BaseTemplate
     {
-        private string m_EventName = "UI核心代码创建";
-        public override string EventName => m_EventName;
+        string m_EventName = "UI核心代码创建";
+        protected override string EventName => m_EventName;
 
-        public override bool Cover => true;
+        protected override bool Cover => true;
 
-        private bool m_AutoRefresh;
-        public override bool AutoRefresh => m_AutoRefresh;
+        bool m_AutoRefresh;
+        protected override bool AutoRefresh => m_AutoRefresh;
 
-        private bool m_ShowTips;
-        public override bool ShowTips => m_ShowTips;
+        bool m_ShowTips;
+        protected override bool ShowTips => m_ShowTips;
 
         public UICreateBaseCode(out bool result, string authorName, UICreateBaseData codeData) : base(authorName)
         {

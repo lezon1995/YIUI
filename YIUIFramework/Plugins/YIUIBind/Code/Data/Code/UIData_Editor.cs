@@ -35,7 +35,7 @@ namespace YIUIBind
         [Button("Remove")]
         [PropertyOrder(100)]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
-        private void OnRemoveDataClick()
+        void OnRemoveDataClick()
         {
             try
             {
@@ -62,8 +62,8 @@ namespace YIUIBind
             }
         }
 
-        private bool ShowIfBindsTips => m_Binds.Count <= 0;
-        private bool ShowIfBinds => m_Binds.Count >= 1;
+        bool ShowIfBindsTips => m_Binds.Count <= 0;
+        bool ShowIfBinds => m_Binds.Count >= 1;
 
         [SerializeField]
         [HideReferenceObjectPicker]
@@ -71,7 +71,7 @@ namespace YIUIBind
         [ReadOnly]
         [PropertyOrder(101)]
         [ShowIf(nameof(ShowIfBinds))]
-        private List<UIDataBind> m_Binds = new List<UIDataBind>();
+        List<UIDataBind> m_Binds = new List<UIDataBind>();
 
         public int GetBindCount()
         {

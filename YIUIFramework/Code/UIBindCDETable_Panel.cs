@@ -26,7 +26,7 @@ namespace YIUIFramework
         internal UIPanelSplitData PanelSplitData = new UIPanelSplitData();
 
 #if UNITY_EDITOR
-        private bool ShowPanelSplitData
+        bool ShowPanelSplitData
         {
             get { return IsSplitData && UICodeType == EUICodeType.Panel; }
         }
@@ -40,7 +40,7 @@ namespace YIUIFramework
         [ReadOnly] //就是一个只读的 展示用数据 请不要使用此数据 或修改数据
         internal UIPanelSplitData PanelSplitEditorShowData;
 
-        private bool HidePanelSplitData
+        bool HidePanelSplitData
         {
             get { return IsSplitData || UICodeType != EUICodeType.Panel; }
         }

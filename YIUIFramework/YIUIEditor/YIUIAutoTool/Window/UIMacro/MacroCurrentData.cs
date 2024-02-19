@@ -24,11 +24,11 @@ namespace YIUIFramework.Editor
         [InlineButton("Add", "添加")]
         public string AddMacro;
 
-        private List<string> AllMacro;
+        List<string> AllMacro;
 
         //整个界面刷新 本来应该用通知的 这里偷懒直接回调了
         //不会有其他需求了
-        private Action RefreshAction;
+        Action RefreshAction;
 
         public MacroCurrentData(Action refreshAction)
         {
@@ -39,7 +39,7 @@ namespace YIUIFramework.Editor
             CurrentMacroCount = AllMacro.Count;
         }
 
-        private IEnumerable<string> GetValues()
+        IEnumerable<string> GetValues()
         {
             return AllMacro;
         }

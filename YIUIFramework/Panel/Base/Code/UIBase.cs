@@ -28,7 +28,7 @@ namespace YIUIFramework
         public string UIResName => m_UIBindVo.ResName;
 
 
-        private UIBindVo m_UIBindVo;
+        UIBindVo m_UIBindVo;
 
         internal UIBindVo UIBindVo => m_UIBindVo;
 
@@ -103,7 +103,7 @@ namespace YIUIFramework
         {
         }
 
-        private void UIBaseInitialize()
+        void UIBaseInitialize()
         {
             Table.UIBaseOnEnable = UIBaseOnEnable;
             Table.UIBaseStart = UIBaseStart;
@@ -129,7 +129,7 @@ namespace YIUIFramework
         {
         }
 
-        private void UIBaseStart()
+        void UIBaseStart()
         {
             SealedStart();
             Start();
@@ -142,7 +142,7 @@ namespace YIUIFramework
         {
         }
 
-        private void UIBaseOnEnable()
+        void UIBaseOnEnable()
         {
             OnEnable();
         }
@@ -152,7 +152,7 @@ namespace YIUIFramework
         {
         }
 
-        private void UIBaseOnDisable()
+        void UIBaseOnDisable()
         {
             OnDisable();
         }
@@ -167,7 +167,7 @@ namespace YIUIFramework
         {
         }
 
-        private void UIBaseOnDestroy()
+        void UIBaseOnDestroy()
         {
             UnUIBind();
             OnDestroy();

@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class UIEffect_Demo_PropertyControl : MonoBehaviour
 {
-    [SerializeField] private string m_PropertyName;
-    [SerializeField] private Object[] m_Objects;
+    [SerializeField] string m_PropertyName;
+    [SerializeField] Object[] m_Objects;
 
     public void ChangeValue(int value)
     {

@@ -3,13 +3,13 @@ namespace YIUIFramework.Editor
 {
     public class CreateUIBindProviderCode : BaseTemplate
     {
-        public override string EventName => "UI反射动态码";
+        protected override string EventName => "UI反射动态码";
 
-        public override bool Cover => true;
+        protected override bool Cover => true;
 
-        public override bool AutoRefresh => true;
+        protected override bool AutoRefresh => true;
 
-        public override bool ShowTips => false;
+        protected override bool ShowTips => false;
 
         public CreateUIBindProviderCode(out bool result, string authorName, UIBindProviderData codeData) : base(authorName)
         {

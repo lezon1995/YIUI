@@ -26,6 +26,6 @@
         /// </summary>
         protected abstract void OnDispose();
 
-        private bool m_Disposed;
+        bool m_Disposed;
     }
 }

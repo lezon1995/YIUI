@@ -20,8 +20,8 @@ namespace YIUIFramework
         public const float DesignScreenWidth_F = 1080f;
         public const float DesignScreenHeight_F = 1920f;
 
-        private const int RootPosOffset = 1000;
-        private const int LayerDistance = 1000;
+        const int RootPosOffset = 1000;
+        const int LayerDistance = 1000;
 
         #region 以下名称 禁止修改
 
@@ -33,9 +33,9 @@ namespace YIUIFramework
 
         //K1 = 层级枚举 V1 = 层级对应的rect
         //List = 当前层级中的当前所有UI 前面的代表这个UI在前面以此类推
-        private readonly Dictionary<EPanelLayer, Dictionary<RectTransform, List<PanelInfo>>> panelLayers = new Dictionary<EPanelLayer, Dictionary<RectTransform, List<PanelInfo>>>();
+        readonly Dictionary<EPanelLayer, Dictionary<RectTransform, List<PanelInfo>>> panelLayers = new Dictionary<EPanelLayer, Dictionary<RectTransform, List<PanelInfo>>>();
 
-        private async UniTask<bool> InitRoot()
+        async UniTask<bool> InitRoot()
         {
             #region UICanvasRoot 查找各种组件
 
@@ -139,7 +139,7 @@ namespace YIUIFramework
 
         #region 快捷获取层级
 
-        private RectTransform _UICache;
+        RectTransform _UICache;
 
         public RectTransform UICache
         {
@@ -175,7 +175,7 @@ namespace YIUIFramework
             return null;
         }
 
-        private List<PanelInfo> GetLayerPanelInfoList(EPanelLayer panelLayer)
+        List<PanelInfo> GetLayerPanelInfoList(EPanelLayer panelLayer)
         {
             panelLayers.TryGetValue(panelLayer, out var rectDic);
             if (rectDic == null)
@@ -193,7 +193,7 @@ namespace YIUIFramework
             return null;
         }
 
-        private bool RemoveLayerPanelInfo(EPanelLayer panelLayer, PanelInfo panelInfo)
+        bool RemoveLayerPanelInfo(EPanelLayer panelLayer, PanelInfo panelInfo)
         {
             var list = GetLayerPanelInfoList(panelLayer);
             return list != null && list.Remove(panelInfo);

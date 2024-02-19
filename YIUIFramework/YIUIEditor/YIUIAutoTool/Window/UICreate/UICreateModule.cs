@@ -151,7 +151,7 @@ namespace YIUIFramework.Editor
             AssetDatabase.Refresh();
         }
 
-        private static string GetBaseClass(UIBindCDETable table)
+        static string GetBaseClass(UIBindCDETable table)
         {
             switch (table.UICodeType)
             {
@@ -167,7 +167,7 @@ namespace YIUIFramework.Editor
             }
         }
 
-        private static string GetRegionEvent(UIBindCDETable table)
+        static string GetRegionEvent(UIBindCDETable table)
         {
             return table.EventDic.Count <= 0
                 ? ""
@@ -195,7 +195,7 @@ namespace YIUIFramework.Editor
             return true;
         }
 
-        private static string GetPkgName(string path, string currentName = "")
+        static string GetPkgName(string path, string currentName = "")
         {
             while (true)
             {
@@ -231,7 +231,7 @@ namespace YIUIFramework.Editor
         }
 
         //如果自己是panel 则还需要额外检查 是不是把自己的view给收集进去了
-        private static void CheckAddCdeTable(ref List<UIBindCDETable> addCdeTable, UIBindCDETable cdeTable)
+        static void CheckAddCdeTable(ref List<UIBindCDETable> addCdeTable, UIBindCDETable cdeTable)
         {
             if (cdeTable.UICodeType != EUICodeType.Panel && !cdeTable.IsSplitData)
                 return;
@@ -251,7 +251,7 @@ namespace YIUIFramework.Editor
             }
         }
 
-        private static void AddTableFrom(ref List<UIBindCDETable> tableList, Transform transform)
+        static void AddTableFrom(ref List<UIBindCDETable> tableList, Transform transform)
         {
             var childCount = transform.childCount;
             if (childCount == 0)

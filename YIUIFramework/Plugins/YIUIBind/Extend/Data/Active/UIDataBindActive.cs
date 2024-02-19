@@ -10,7 +10,7 @@ namespace YIUIBind
     {
         [SerializeField]
         [LabelText("过度类型")]
-        private UITransitionModeEnum m_TransitionMode = UITransitionModeEnum.Instant;
+        UITransitionModeEnum m_TransitionMode = UITransitionModeEnum.Instant;
 
         [SerializeField]
         [LabelText("过度时间")]

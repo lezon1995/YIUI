@@ -4,7 +4,7 @@ namespace YIUIFramework
 {
     public static class MathUtil
     {
-        private static double PrecisionIntercept(double input)
+        static double PrecisionIntercept(double input)
         {
             return (int)(input * 1000.0) / 1000.0;
         }

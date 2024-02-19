@@ -42,7 +42,7 @@ namespace YIUIFramework
             return Create(vo, parent) as T;
         }
 
-        private static UIBase Instantiate(UIBindVo vo, Transform parent = null)
+        static UIBase Instantiate(UIBindVo vo, Transform parent = null)
         {
             return Create(vo, parent);
         }

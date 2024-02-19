@@ -6,15 +6,15 @@ using UnityEngine.UI;
 
 public class UIEffect_Demo_ColorControl : MonoBehaviour
 {
-    [SerializeField] private Color m_Color;
-    [SerializeField] private ColorEvent m_ColorEvent = new ColorEvent();
+    [SerializeField] Color m_Color;
+    [SerializeField] ColorEvent m_ColorEvent = new ColorEvent();
 
     [System.Serializable]
     public class ColorEvent : UnityEvent<Color>
     {
     }
 
-    private void Start()
+    void Start()
     {
         var sliders = GetComponentsInChildren<Slider>();
         for (var i = 0; i < sliders.Length; i++)
@@ -32,7 +32,7 @@ public class UIEffect_Demo_ColorControl : MonoBehaviour
         }
     }
 
-    private void ChangeColor(int channel, float value)
+    void ChangeColor(int channel, float value)
     {
         var old = m_Color;
         if (channel == 0)

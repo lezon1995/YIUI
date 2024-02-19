@@ -9,14 +9,14 @@ namespace YIUIFramework
     /// <typeparam name="T"></typeparam>
     public class AutoRecycleObjPool<T>
     {
-        private Action<T> m_clearCallback;
-        private Func<T> m_newCallback;
+        Action<T> m_clearCallback;
+        Func<T> m_newCallback;
 
-        private ITimeProvider m_timer;
-        private int m_lastUpdateTime;
+        ITimeProvider m_timer;
+        int m_lastUpdateTime;
 
-        private List<PoolVo> m_uses;
-        private List<PoolVo> m_frees;
+        List<PoolVo> m_uses;
+        List<PoolVo> m_frees;
 
         public AutoRecycleObjPool(ITimeProvider timer, Func<T> newCallback, Action<T> clearCallback)
         {
@@ -81,7 +81,7 @@ namespace YIUIFramework
             }
         }
 
-        private class PoolVo
+        class PoolVo
         {
             public int Timeout;
             public T Value;

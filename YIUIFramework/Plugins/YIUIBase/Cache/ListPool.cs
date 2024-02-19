@@ -8,7 +8,7 @@ namespace YIUIFramework
     /// <typeparam name="T"></typeparam>
     public static class ListPool<T>
     {
-        private static Stack<List<T>> g_pool = new Stack<List<T>>(5);
+        static Stack<List<T>> g_pool = new Stack<List<T>>(5);
 
         public static List<T> Get()
         {

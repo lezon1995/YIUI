@@ -83,7 +83,7 @@ namespace YIUIFramework.Editor
             Format = TextureImporterFormat.ASTC_4x4,
         };
 
-        private GlobalSpriteAtlasSettings m_GlobalSpriteAtlasSettings = new GlobalSpriteAtlasSettings();
+        GlobalSpriteAtlasSettings m_GlobalSpriteAtlasSettings = new GlobalSpriteAtlasSettings();
 
         public UIAtlasModule()
         {
@@ -98,10 +98,10 @@ namespace YIUIFramework.Editor
             m_GlobalSpriteAtlasSettings.iPhone = iPhone;
         }
 
-        private const string GlobalSaveSpriteAtlasSettingsPath =
+        const string GlobalSaveSpriteAtlasSettingsPath =
             UIStaticHelper.UIProjectResPath + "/GlobalSpriteAtlasSettings.text";
 
-        private class GlobalSpriteAtlasSettings
+        class GlobalSpriteAtlasSettings
         {
             public UISpriteAtlasSettings SpriteAtlasSettings;
             public UIPlatformSettings Default;
@@ -188,7 +188,7 @@ namespace YIUIFramework.Editor
         public bool sRGB = true;
         public FilterMode FilterMode = FilterMode.Bilinear;
 
-        private static List<int> PaddingListKey = new List<int> { 2, 4, 8 };
+        static List<int> PaddingListKey = new List<int> { 2, 4, 8 };
     }
 
     [HideReferenceObjectPicker]
@@ -207,7 +207,7 @@ namespace YIUIFramework.Editor
         [ValueDropdown("MaxTextureSizeListKey")]
         public int MaxTextureSize = 2048;
 
-        private static List<int> MaxTextureSizeListKey = new List<int>
+        static List<int> MaxTextureSizeListKey = new List<int>
         {
             32, 64, 128, 256, 512, 1024, 2048, 4096, 8192
         };

@@ -13,11 +13,11 @@ namespace YIUIFramework
         [LabelText("Runtime Datas")]
         [ShowInInspector]
         [DictionaryDrawerSettings(KeyLabel = "Data Name", ValueLabel = "数据内容", IsReadOnly = true, DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
-        private Dictionary<string, UIData> m_DataDic = new Dictionary<string, UIData>();
+        Dictionary<string, UIData> m_DataDic = new Dictionary<string, UIData>();
 
         public IReadOnlyDictionary<string, UIData> DataDic => m_DataDic;
 
-        private void AwakeData()
+        void AwakeData()
         {
             InitDataTable();
         }
@@ -52,12 +52,12 @@ namespace YIUIFramework
 
         #region 递归初始化所有绑定数据
 
-        private void InitDataTable()
+        void InitDataTable()
         {
             InitializeDataBinds(transform);
         }
 
-        private static void InitializeDataBinds(Transform transform)
+        static void InitializeDataBinds(Transform transform)
         {
 #if YIUIMACRO_BIND_INITIALIZE
             Logger.LogErrorContext(transform,$"{transform.name} 初始化调用所有子类 UIDataBind 绑定");
@@ -78,7 +78,7 @@ namespace YIUIFramework
             }
         }
 
-        private static void InitializeDataBindsDeep(Transform transform)
+        static void InitializeDataBindsDeep(Transform transform)
         {
             if (transform.HasComponent<UIBindCDETable>())
             {

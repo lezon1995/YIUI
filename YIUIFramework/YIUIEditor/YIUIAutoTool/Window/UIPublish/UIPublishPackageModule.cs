@@ -25,9 +25,9 @@ namespace YIUIFramework.Editor
 
     public class UIPublishPackageModule
     {
-        private UIPublishModule m_UIPublishModule;
+        UIPublishModule m_UIPublishModule;
 
-        private UIAtlasModule m_UIAtlasModule;
+        UIAtlasModule m_UIAtlasModule;
 
         [LabelText("模块名")]
         [ReadOnly]
@@ -46,13 +46,13 @@ namespace YIUIFramework.Editor
         [ReadOnly]
         [ShowInInspector]
         [ShowIf(nameof(m_UIPublishPackageData), EUIPublishPackageData.CDETable)]
-        private List<UIBindCDETable> m_AllCDETable = new List<UIBindCDETable>();
+        List<UIBindCDETable> m_AllCDETable = new List<UIBindCDETable>();
 
         [LabelText("当前模块所有精灵")]
         [ReadOnly]
         [ShowInInspector]
         [ShowIf(nameof(m_UIPublishPackageData), EUIPublishPackageData.Sprites)]
-        private List<TextureImporter> m_AllTextureImporter = new List<TextureImporter>();
+        List<TextureImporter> m_AllTextureImporter = new List<TextureImporter>();
 
         //根据精灵文件夹创建对应的图集数量
         [LabelText("所有图集名称")]
@@ -65,12 +65,12 @@ namespace YIUIFramework.Editor
         [ReadOnly]
         [ShowInInspector]
         [ShowIf(nameof(m_UIPublishPackageData), EUIPublishPackageData.Atlas)]
-        private List<SpriteAtlas> m_AllSpriteAtlas = new List<SpriteAtlas>();
+        List<SpriteAtlas> m_AllSpriteAtlas = new List<SpriteAtlas>();
 
         [GUIColor(0.4f, 0.8f, 1)]
         [Button("发布当前模块", 50)]
         [PropertyOrder(-999)]
-        private void PublishCurrent()
+        void PublishCurrent()
         {
             PublishCurrent(true);
         }
@@ -117,7 +117,7 @@ namespace YIUIFramework.Editor
             FindUISpriteAtlasResources();
         }
 
-        private void FindUIBindCDETableResources()
+        void FindUIBindCDETableResources()
         {
             var strings = AssetDatabase.GetAllAssetPaths().Where(x => x.StartsWith($"{PkgPath}/{UIStaticHelper.UIPrefabs}", StringComparison.InvariantCultureIgnoreCase));
 
@@ -134,7 +134,7 @@ namespace YIUIFramework.Editor
             }
         }
 
-        private void FindUITextureResources()
+        void FindUITextureResources()
         {
             var strings = AssetDatabase.GetAllAssetPaths().Where(x => x.StartsWith($"{PkgPath}/{UIStaticHelper.UISprites}", StringComparison.InvariantCultureIgnoreCase));
 
@@ -157,7 +157,7 @@ namespace YIUIFramework.Editor
             }
         }
 
-        private string GetSpritesAtlasName(string path, string currentName = "")
+        string GetSpritesAtlasName(string path, string currentName = "")
         {
             if (!path.Replace("\\", "/").Contains($"{PkgPath}/{UIStaticHelper.UISprites}"))
             {

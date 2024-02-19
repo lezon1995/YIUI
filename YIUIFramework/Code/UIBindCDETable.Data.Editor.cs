@@ -23,7 +23,7 @@ namespace YIUIFramework
         [Delayed]
         [NonSerialized]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
-        private UINewData m_ToAddData = new UINewData();
+        UINewData m_ToAddData = new UINewData();
 
         [FoldoutGroup("Data", 2)]
         [HorizontalGroup("Data/AddData", 0.2F)]
@@ -31,7 +31,7 @@ namespace YIUIFramework
         [Button("Add")]
         [PropertyOrder(-98)]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
-        private void AddNewData()
+        void AddNewData()
         {
             if (m_ToAddData.Name.IsEmpty())
             {
@@ -53,7 +53,7 @@ namespace YIUIFramework
             m_ToAddData = new UINewData();
         }
 
-        private void RemoveCallBack(UIData data)
+        void RemoveCallBack(UIData data)
         {
             data.OnDataRemoveCallBack();
             if (m_DataDic.ContainsKey(data.Name))
@@ -66,7 +66,7 @@ namespace YIUIFramework
             }
         }
 
-        private bool OnRemoveDataByGuid(UIData uiData)
+        bool OnRemoveDataByGuid(UIData uiData)
         {
             foreach (var cData in m_DataDic)
             {
@@ -81,7 +81,7 @@ namespace YIUIFramework
             return false;
         }
 
-        private void OnRemoveData(UIData uiData)
+        void OnRemoveData(UIData uiData)
         {
             if (uiData.Name.IsEmpty())
             {
@@ -108,7 +108,7 @@ namespace YIUIFramework
             RemoveCallBack(data);
         }
 
-        private void OnValidateData()
+        void OnValidateData()
         {
             if (UIOperationHelper.IsPlaying())
             {

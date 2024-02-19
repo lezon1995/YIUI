@@ -9,7 +9,7 @@ namespace YIUIFramework
     /// </summary>
     public static class WindowFadeAnim
     {
-        private static readonly Vector3 m_AnimScale = new Vector3(1.2F, 1.2F, 1.2F);
+        static readonly Vector3 m_AnimScale = new Vector3(1.2F, 1.2F, 1.2F);
 
         //淡入
         public static async UniTask In(UIBase uiBase, float time = 0.25f)

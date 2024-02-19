@@ -71,7 +71,7 @@ namespace YIUIFramework.Editor
             }
         }
 
-        private static void CreateNewSource(string loadPath, string savePath)
+        static void CreateNewSource(string loadPath, string savePath)
         {
             var loadPanel = (GameObject)AssetDatabase.LoadAssetAtPath(loadPath, typeof(Object));
             if (loadPanel == null)
@@ -95,14 +95,14 @@ namespace YIUIFramework.Editor
         }
 
         //关联UI
-        private static void CorrelationView(UIBindCDETable cdeTable)
+        static void CorrelationView(UIBindCDETable cdeTable)
         {
             CorrelationViewByParent(cdeTable.PkgName, cdeTable.PanelSplitData.AllCommonView);
             CorrelationViewByParent(cdeTable.PkgName, cdeTable.PanelSplitData.AllCreateView);
             CorrelationViewByParent(cdeTable.PkgName, cdeTable.PanelSplitData.AllPopupView);
         }
 
-        private static void CorrelationViewByParent(string pkgName, List<RectTransform> parentList)
+        static void CorrelationViewByParent(string pkgName, List<RectTransform> parentList)
         {
             foreach (var viewParent in parentList)
             {
@@ -124,7 +124,7 @@ namespace YIUIFramework.Editor
         }
 
         //吧其他view 关联上
-        private static void AddView(string loadPath, Transform parent)
+        static void AddView(string loadPath, Transform parent)
         {
             var loadView = (GameObject)AssetDatabase.LoadAssetAtPath(loadPath, typeof(Object));
             if (loadView == null)

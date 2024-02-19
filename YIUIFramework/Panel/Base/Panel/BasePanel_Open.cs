@@ -12,7 +12,7 @@ namespace YIUIFramework
         /// 使用基础Open 打开类
         /// </summary>
         /// <returns></returns>
-        private async UniTask<bool> UseBaseOpen()
+        async UniTask<bool> UseBaseOpen()
         {
             if (!WindowCanUseBaseOpen)
             {

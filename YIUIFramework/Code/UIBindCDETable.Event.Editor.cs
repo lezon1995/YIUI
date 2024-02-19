@@ -18,7 +18,7 @@ namespace YIUIFramework
         [PropertyOrder(-99)]
         [Delayed]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
-        private string m_AddUIEventName = "";
+        string m_AddUIEventName = "";
 
         [FoldoutGroup("Event", 3)]
         [HorizontalGroup("Event/Horizontal", 0.4F)]
@@ -37,7 +37,7 @@ namespace YIUIFramework
         [Button("Add")]
         [PropertyOrder(-98)]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
-        private void AddNewUIEvent()
+        void AddNewUIEvent()
         {
             if (m_AddUIEventName.IsEmpty())
             {
@@ -64,13 +64,13 @@ namespace YIUIFramework
             m_AddUIEventName = "";
         }
 
-        private void RemoveCallBack(UIEventBase uiEvent)
+        void RemoveCallBack(UIEventBase uiEvent)
         {
             uiEvent.OnRemoveVariableCallBack();
             m_EventDic.Remove(uiEvent.EventName);
         }
 
-        private void OnRemoveUIEvent(UIEventBase uiEvent)
+        void OnRemoveUIEvent(UIEventBase uiEvent)
         {
             if (!m_EventDic.ContainsValue(uiEvent))
             {
@@ -114,7 +114,7 @@ namespace YIUIFramework
             return allName;
         }
 
-        private void OnValidateEvent()
+        void OnValidateEvent()
         {
             if (m_EventDic == null)
             {

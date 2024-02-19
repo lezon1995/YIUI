@@ -16,8 +16,8 @@ namespace YIUIBind
     /// </summary>
     public sealed class UIEventHandleP3<P1, P2, P3>
     {
-        private LinkedList<UIEventHandleP3<P1, P2, P3>> list;
-        private LinkedListNode<UIEventHandleP3<P1, P2, P3>> node;
+        LinkedList<UIEventHandleP3<P1, P2, P3>> list;
+        LinkedListNode<UIEventHandleP3<P1, P2, P3>> node;
         public UIEventAction<P1, P2, P3> Action { get; private set; }
 
         public UIEventHandleP3()

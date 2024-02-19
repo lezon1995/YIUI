@@ -11,7 +11,7 @@ namespace YIUIFramework
     {
         #region 异步通过泛型打开
 
-        private async UniTask<PanelInfo> OpenPanelStartAsync(string panelName)
+        async UniTask<PanelInfo> OpenPanelStartAsync(string panelName)
         {
 #if YIUIMACRO_PANEL_OPENCLOSE
             Debug.Log($"<color=yellow> 打开UI: {panelName} </color>");
@@ -190,7 +190,7 @@ namespace YIUIFramework
         /// 这个根据BindVo创建  为什么没有直接用VO  因为里面有Panel 实例对象
         /// 这个k 根据resName
         /// </summary>
-        private bool TryGetPanelInfo(string panelName, out PanelInfo panelInfo)
+        bool TryGetPanelInfo(string panelName, out PanelInfo panelInfo)
         {
             if (UIBindHelper.TryGetBindVoByPanelName(panelName, out var vo))
             {

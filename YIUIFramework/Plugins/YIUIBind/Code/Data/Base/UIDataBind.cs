@@ -19,10 +19,10 @@ namespace YIUIBind
         [HideReferenceObjectPicker]
         [ReadOnly]
         [PropertyOrder(-999)]
-        private UIBindCDETable m_DataTable;
+        UIBindCDETable m_DataTable;
         protected UIBindCDETable DataTable => m_DataTable;
 
-        private bool m_Binded;
+        bool m_Binded;
 
         internal UIData FindData(string dataName)
         {
@@ -88,7 +88,7 @@ namespace YIUIBind
         /// </summary>
         protected abstract void OnRefreshData();
 
-        private void RefreshDataTable()
+        void RefreshDataTable()
         {
             if (m_DataTable == null)
             {

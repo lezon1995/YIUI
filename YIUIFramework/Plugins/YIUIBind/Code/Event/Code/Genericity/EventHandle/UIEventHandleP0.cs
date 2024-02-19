@@ -16,8 +16,8 @@ namespace YIUIBind
     /// </summary>
     public sealed class UIEventHandleP0
     {
-        private LinkedList<UIEventHandleP0> list;
-        private LinkedListNode<UIEventHandleP0> node;
+        LinkedList<UIEventHandleP0> list;
+        LinkedListNode<UIEventHandleP0> node;
         public UIEventAction Action { get; private set; }
 
         public UIEventHandleP0()

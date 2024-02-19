@@ -17,14 +17,14 @@ namespace YIUIBind
         [LabelText("选择绑定数据")]
         [NonSerialized]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
-        private string m_SelectBindKey;
+        string m_SelectBindKey;
 
         [GUIColor(0, 1, 0)]
         [ButtonGroup("Select")]
         [Button("添加")]
         [PropertyOrder(-9)]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
-        private void AddSelect()
+        void AddSelect()
         {
             if (m_SelectBindKey.IsEmpty())
             {
@@ -70,7 +70,7 @@ namespace YIUIBind
         [Button("移除")]
         [PropertyOrder(-8)]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
-        private void RemoveSelect()
+        void RemoveSelect()
         {
             if (m_SelectBindKey.IsEmpty())
             {
@@ -85,7 +85,7 @@ namespace YIUIBind
             m_SelectBindKey = "";
         }
 
-        private void RemoveSelect(string key)
+        void RemoveSelect(string key)
         {
             if (m_DataSelectDic.ContainsKey(key))
             {
@@ -100,13 +100,13 @@ namespace YIUIBind
             }
         }
 
-        private bool IsValid(EUIBindDataType type)
+        bool IsValid(EUIBindDataType type)
         {
             return (1 << (int)type & Mask()) != 0;
         }
 
         //找到黑板字典里的所有数据
-        private IEnumerable<string> GetBindKeys()
+        IEnumerable<string> GetBindKeys()
         {
             var allKey = new List<string>();
 
@@ -158,7 +158,7 @@ namespace YIUIBind
         const string m_Pattern = @"\[[^\]]*\]|\s";
 
         //选择这个数据然后刷新
-        private void OnBindKeySelected()
+        void OnBindKeySelected()
         {
             if (m_SelectBindKey.IsEmpty())
             {
@@ -176,7 +176,7 @@ namespace YIUIBind
         /// <summary>
         /// 数据的名称的改变
         /// </summary>
-        private void OnNameChanged(UIData change)
+        void OnNameChanged(UIData change)
         {
             var keys = m_DataSelectDic.Keys.ToArray();
 

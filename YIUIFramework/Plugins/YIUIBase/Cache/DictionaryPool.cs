@@ -7,7 +7,7 @@ namespace YIUIFramework
     /// </summary>
     public class DictionaryPool<TKey, TValue>
     {
-        private static Stack<Dictionary<TKey, TValue>> g_pool = new Stack<Dictionary<TKey, TValue>>();
+        static Stack<Dictionary<TKey, TValue>> g_pool = new Stack<Dictionary<TKey, TValue>>();
 
         public static Dictionary<TKey, TValue> Get()
         {

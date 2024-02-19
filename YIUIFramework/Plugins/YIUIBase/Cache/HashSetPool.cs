@@ -7,7 +7,7 @@ namespace YIUIFramework
     /// </summary>
     public class HashSetPool<T>
     {
-        private static Stack<HashSet<T>> g_pool = new Stack<HashSet<T>>(5);
+        static Stack<HashSet<T>> g_pool = new Stack<HashSet<T>>(5);
 
         public static HashSet<T> Get()
         {

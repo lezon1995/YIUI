@@ -22,17 +22,17 @@ namespace YIUIBind
 #if UNITY_EDITOR
         [OnValueChanged(nameof(OnValueChanged))]
 #endif
-        private T m_Value;
+        T m_Value;
 
 #if UNITY_EDITOR
-        private void OnValueChanged()
+        void OnValueChanged()
         {
             InvokeValueChangeAction();
         }
 #endif
 
         //基类中的事件 双参数 1 新值 2 老值
-        private event Action<T, T> m_OnValueChangeAction;
+        event Action<T, T> m_OnValueChangeAction;
 
         public void AddValueChangeAction(Action<T, T> action)
         {

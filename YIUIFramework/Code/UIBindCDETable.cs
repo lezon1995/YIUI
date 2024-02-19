@@ -24,7 +24,7 @@ namespace YIUIFramework
         #region 关联
 
         //关联的UI
-        private UIBase m_UIBase;
+        UIBase m_UIBase;
 
         [OdinSerialize]
         [LabelText("编辑时所有公共组件")]
@@ -44,7 +44,7 @@ namespace YIUIFramework
 #if UNITY_EDITOR
         [HideIf("@UIOperationHelper.CommonShowIf()")]
 #endif
-        private Dictionary<string, UIBase> m_ChildUIBases = new Dictionary<string, UIBase>();
+        Dictionary<string, UIBase> m_ChildUIBases = new Dictionary<string, UIBase>();
 
         internal void AddUIBase(string uiName, UIBase uiBase)
         {

@@ -16,7 +16,7 @@ namespace YIUIBind
         [Required("必须选择")]
         [HideLabel]
         [PropertyOrder(-999)]
-        private UIBindCDETable m_EventTable;
+        UIBindCDETable m_EventTable;
 
         public UIBindCDETable EventTable => m_EventTable;
 
@@ -34,10 +34,9 @@ namespace YIUIBind
         /// 当前的UI事件
         /// </summary>
         [OdinSerialize]
-        [HideInInspector]
         protected UIEventBase m_UIEvent;
 
-        private UIEventBase GetEvent(string eventName)
+        UIEventBase GetEvent(string eventName)
         {
             if (eventName.IsEmpty())
             {
@@ -62,7 +61,7 @@ namespace YIUIBind
 
         protected abstract List<EUIEventParamType> GetFilterParamType();
 
-        private bool m_Binded;
+        bool m_Binded;
 
         internal void Initialize(bool refresh = false)
         {
@@ -73,7 +72,7 @@ namespace YIUIBind
             }
         }
 
-        private void RefreshEventName()
+        void RefreshEventName()
         {
             if (m_UIEvent != null)
             {
@@ -85,7 +84,7 @@ namespace YIUIBind
         {
         }
 
-        private void OnRefreshEvent()
+        void OnRefreshEvent()
         {
             RefreshEventTable();
 #if UNITY_EDITOR
@@ -100,7 +99,7 @@ namespace YIUIBind
             RefreshBind();
         }
 
-        private void RefreshEventTable()
+        void RefreshEventTable()
         {
             if (m_EventTable == null)
             {

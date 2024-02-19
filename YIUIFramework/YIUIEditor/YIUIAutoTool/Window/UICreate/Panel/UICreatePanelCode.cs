@@ -4,16 +4,16 @@ namespace YIUIFramework.Editor
 {
     public class UICreatePanelCode : BaseTemplate
     {
-        private string m_EventName = "UI继承Panel代码创建";
-        public override string EventName => m_EventName;
+        string m_EventName = "UI继承Panel代码创建";
+        protected override string EventName => m_EventName;
 
-        public override bool Cover => false;
+        protected override bool Cover => false;
 
-        private bool m_AutoRefresh;
-        public override bool AutoRefresh => m_AutoRefresh;
+        bool m_AutoRefresh;
+        protected override bool AutoRefresh => m_AutoRefresh;
 
-        private bool m_ShowTips;
-        public override bool ShowTips => m_ShowTips;
+        bool m_ShowTips;
+        protected override bool ShowTips => m_ShowTips;
 
         public UICreatePanelCode(out bool result, string authorName, UICreatePanelData codeData) : base(authorName)
         {

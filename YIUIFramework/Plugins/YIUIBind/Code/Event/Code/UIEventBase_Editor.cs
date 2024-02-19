@@ -11,7 +11,7 @@ namespace YIUIBind
 {
     public abstract partial class UIEventBase
     {
-        private bool ShowIfAllEventParamType => AllEventParamType.Count >= 1;
+        bool ShowIfAllEventParamType => AllEventParamType.Count >= 1;
 
         protected string GetParamTypeString(int index)
         {
@@ -49,7 +49,7 @@ namespace YIUIBind
         [Button("Remove")]
         [PropertyOrder(-99)]
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
-        private void RemoveEvent()
+        void RemoveEvent()
         {
             try
             {
@@ -62,15 +62,15 @@ namespace YIUIBind
             }
         }
 
-        private bool ShowIfBinds => m_Binds.Count >= 1;
-        private bool ShowIfBindsTips => m_Binds.Count <= 0;
+        bool ShowIfBinds => m_Binds.Count >= 1;
+        bool ShowIfBindsTips => m_Binds.Count <= 0;
 
         [ShowInInspector]
         [SerializeField]
         [LabelText("Published By")]
         [ReadOnly]
         [ShowIf(nameof(ShowIfBinds))]
-        private List<UIEventBind> m_Binds = new List<UIEventBind>();
+        List<UIEventBind> m_Binds = new List<UIEventBind>();
 
         public int GetBindCount()
         {

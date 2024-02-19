@@ -5,10 +5,10 @@ namespace YIUIFramework
 {
     public static partial class RefPool
     {
-        private sealed class RefCollection
+        sealed class RefCollection
         {
-            private readonly Queue<IRefPool> m_Refs;
-            private readonly Type m_RefType;
+            readonly Queue<IRefPool> m_Refs;
+            readonly Type m_RefType;
 
             internal RefCollection(Type refType)
             {

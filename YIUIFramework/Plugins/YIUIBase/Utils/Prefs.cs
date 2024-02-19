@@ -8,16 +8,16 @@ namespace YIUIFramework
     ///         另外集成了以groupKey(比如userid)来分组数据
     public struct Prefs<T>
     {
-        private T m_value;
-        private string m_key;
-        private string m_valueKey;
-        private RwFlag m_rwFlag;
+        T m_value;
+        string m_key;
+        string m_valueKey;
+        RwFlag m_rwFlag;
 
-        private int m_groupKeyVer;
-        private IGroupKey m_groupKey;
-        private IPrefsAccessor m_accessor;
+        int m_groupKeyVer;
+        IGroupKey m_groupKey;
+        IPrefsAccessor m_accessor;
 
-        private T m_defValue;
+        T m_defValue;
 
         public Prefs(string key, IGroupKey groupKey, T defValue, IPrefsAccessor accessor)
         {
@@ -32,7 +32,7 @@ namespace YIUIFramework
             UpdateKey();
         }
 
-        private void UpdateKey(bool notWrite = false)
+        void UpdateKey(bool notWrite = false)
         {
             if (m_groupKey == null)
             {
@@ -125,7 +125,7 @@ namespace YIUIFramework
 
     public struct IntPrefs
     {
-        private Prefs<int> m_value;
+        Prefs<int> m_value;
 
         public int Value
         {
@@ -151,7 +151,7 @@ namespace YIUIFramework
 
     public struct FloatPrefs
     {
-        private Prefs<float> m_value;
+        Prefs<float> m_value;
 
         public float Value
         {
@@ -177,7 +177,7 @@ namespace YIUIFramework
 
     public struct StringPrefs
     {
-        private Prefs<string> m_value;
+        Prefs<string> m_value;
 
         public string Value
         {
@@ -203,7 +203,7 @@ namespace YIUIFramework
 
     public struct BoolPrefs
     {
-        private Prefs<int> m_value;
+        Prefs<int> m_value;
 
         public bool Value
         {
@@ -229,7 +229,7 @@ namespace YIUIFramework
 
     public struct ArrPrefs<T> where T : IComparable
     {
-        private Prefs<string> m_value;
+        Prefs<string> m_value;
 
         public ArrPrefs(string key, IGroupKey groupKey = null)
         {
@@ -273,7 +273,7 @@ namespace YIUIFramework
 
     public struct EnumPrefs<T> where T : Enum
     {
-        private Prefs<int> m_value;
+        Prefs<int> m_value;
 
         public T Value
         {

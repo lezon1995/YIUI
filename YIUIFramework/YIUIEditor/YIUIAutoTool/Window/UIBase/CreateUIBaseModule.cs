@@ -14,29 +14,29 @@ namespace YIUIFramework.Editor
         [LabelText("YIUI项目命名空间")]
         [ShowInInspector]
         [ReadOnly]
-        private const string UINamespace = UIStaticHelper.UINamespace;
+        const string UINamespace = UIStaticHelper.UINamespace;
 
         [LabelText("YIUI项目资源路径")]
         [FolderPath]
         [ShowInInspector]
         [ReadOnly]
-        private const string UIProjectResPath = UIStaticHelper.UIProjectResPath;
+        const string UIProjectResPath = UIStaticHelper.UIProjectResPath;
 
         [LabelText("YIUI项目脚本路径")]
         [FolderPath]
         [ShowInInspector]
         [ReadOnly]
-        private const string UIGenerationPath = UIStaticHelper.UIGenerationPath;
+        const string UIGenerationPath = UIStaticHelper.UIGenerationPath;
 
         [LabelText("YIUI项目自定义脚本路径")]
         [FolderPath]
         [ShowInInspector]
         [ReadOnly]
-        private const string UICodeScriptsPath = UIStaticHelper.UICodeScriptsPath;
+        const string UICodeScriptsPath = UIStaticHelper.UICodeScriptsPath;
 
         [HideLabel]
         [ShowInInspector]
-        private CreateUIBaseEditorData UIBaseData = new CreateUIBaseEditorData();
+        CreateUIBaseEditorData UIBaseData = new CreateUIBaseEditorData();
 
         public override void Initialize()
         {

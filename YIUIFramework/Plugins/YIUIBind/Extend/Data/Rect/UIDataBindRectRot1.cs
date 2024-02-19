@@ -29,12 +29,12 @@ namespace YIUIBind
         [ReadOnly]
         [Required("必须有此组件")]
         [LabelText("UI变换组件")]
-        private RectTransform m_RectTransform;
+        RectTransform m_RectTransform;
 
         [SerializeField]
         [InfoBox("那个轴有值就是控制那个轴 单位1, 多的就是倍数 默认使用 Z轴旋转1")]
         [LabelText("目标轴")]
-        private Vector3 m_TargetRot = Vector3.forward;
+        Vector3 m_TargetRot = Vector3.forward;
 
         protected override void OnRefreshData()
         {

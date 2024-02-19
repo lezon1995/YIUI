@@ -10,8 +10,8 @@ namespace YIUIFramework
         /// K = C#文件名
         /// 主要是作为缓存PanelInfo
         /// </summary>
-        private readonly Dictionary<string, PanelInfo> panelInfos = new Dictionary<string, PanelInfo>();
-        private readonly HashSet<string> openings = new HashSet<string>();
+        readonly Dictionary<string, PanelInfo> panelInfos = new Dictionary<string, PanelInfo>();
+        readonly HashSet<string> openings = new HashSet<string>();
 
         /// <summary>
         /// 获取PanelInfo
@@ -21,7 +21,7 @@ namespace YIUIFramework
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        private bool TryGetPanelInfo<T>(out PanelInfo panelInfo) where T : BasePanel
+        bool TryGetPanelInfo<T>(out PanelInfo panelInfo) where T : BasePanel
         {
             var type = typeof(T);
             if (UIBindHelper.TryGetBindVo(type, out var vo))
@@ -47,7 +47,7 @@ namespace YIUIFramework
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        private string GetPanelName<T>() where T : BasePanel
+        string GetPanelName<T>() where T : BasePanel
         {
             if (TryGetPanelInfo<T>(out var panelInfo))
             {
@@ -60,7 +60,7 @@ namespace YIUIFramework
         /// <summary>
         /// 打开之前
         /// </summary>
-        private async UniTask OpenPanelBefore(PanelInfo info)
+        async UniTask OpenPanelBefore(PanelInfo info)
         {
             if (!info.Panel.WindowFirstOpen)
             {
@@ -71,7 +71,7 @@ namespace YIUIFramework
         /// <summary>
         /// 打开之后
         /// </summary>
-        private async UniTask<BasePanel> OpenPanelAfter(PanelInfo info, bool success)
+        async UniTask<BasePanel> OpenPanelAfter(PanelInfo info, bool success)
         {
             if (success)
             {
@@ -90,12 +90,12 @@ namespace YIUIFramework
             return info.Panel;
         }
 
-        private void AddOpening(string name)
+        void AddOpening(string name)
         {
             openings.Add(name);
         }
 
-        private void RemoveOpening(string name)
+        void RemoveOpening(string name)
         {
             openings.Remove(name);
         }

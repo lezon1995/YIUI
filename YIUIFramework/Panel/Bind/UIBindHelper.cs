@@ -14,17 +14,17 @@ namespace YIUIFramework
         /// <summary>
         /// 根据创建时的类获取
         /// </summary>
-        private static Dictionary<Type, UIBindVo> g_UITypeToPkgInfo = new Dictionary<Type, UIBindVo>();
+        static Dictionary<Type, UIBindVo> g_UITypeToPkgInfo = new Dictionary<Type, UIBindVo>();
 
         /// <summary>
         /// 根据 pkg + res 双字典获取
         /// </summary>
-        private static Dictionary<string, Dictionary<string, UIBindVo>> g_UIPathToPkgInfo = new Dictionary<string, Dictionary<string, UIBindVo>>();
+        static Dictionary<string, Dictionary<string, UIBindVo>> g_UIPathToPkgInfo = new Dictionary<string, Dictionary<string, UIBindVo>>();
 
         /// <summary>
         /// 只有panel 的信息
         /// </summary>
-        private static Dictionary<string, UIBindVo> g_UIPanelNameToPkgInfo = new Dictionary<string, UIBindVo>();
+        static Dictionary<string, UIBindVo> g_UIPanelNameToPkgInfo = new Dictionary<string, UIBindVo>();
 
         //改为dll过后 提供给外部的方法
         //1 从UI工具中自动生成绑定代码
@@ -85,7 +85,7 @@ namespace YIUIFramework
             return true;
         }
 
-        private static void AddPkgInfoToPathDic(UIBindVo vo)
+        static void AddPkgInfoToPathDic(UIBindVo vo)
         {
             var pkgName = vo.PkgName;
             var resName = vo.ResName;

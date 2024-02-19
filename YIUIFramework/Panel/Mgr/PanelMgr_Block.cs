@@ -10,26 +10,26 @@ namespace YIUIFramework
     public partial class PanelMgr
     {
         //内部屏蔽对象 显示时之下的所有UI将不可操作
-        private GameObject layerBlock;
+        GameObject layerBlock;
 
         //倒计时的唯一ID
-        private int lastCountDownId;
+        int lastCountDownId;
 
         //下一次恢复操作时间
-        private float lastRecoverTime;
+        float lastRecoverTime;
 
-        private void OnBlockDispose()
+        void OnBlockDispose()
         {
             RemoveLastCountDown();
         }
 
-        private void RemoveLastCountDown()
+        void RemoveLastCountDown()
         {
             CountDownMgr.Inst.Remove(ref lastCountDownId);
         }
 
         //初始化添加屏蔽模块
-        private void InitAddUIBlock()
+        void InitAddUIBlock()
         {
             layerBlock = new GameObject("LayerBlock");
             var rect = layerBlock.AddComponent<RectTransform>();
@@ -49,7 +49,7 @@ namespace YIUIFramework
         /// 之后调用恢复操作也可以做到
         /// </summary>
         /// <param name="value">true = 可以操作 = 屏蔽层会被隐藏</param>
-        private void SetLayerBlockOption(bool value)
+        void SetLayerBlockOption(bool value)
         {
             layerBlock.SetActive(!value);
         }
@@ -58,7 +58,7 @@ namespace YIUIFramework
         /// 强制恢复层级到可操作状态
         /// 此方法会强制打断倒计时 根据需求调用
         /// </summary>
-        private void RecoverLayerOptionAll()
+        void RecoverLayerOptionAll()
         {
             SetLayerBlockOption(true);
             lastRecoverTime = 0;
@@ -73,7 +73,7 @@ namespace YIUIFramework
         /// 适合于知道想屏蔽多久 且可托管的操作
         /// </summary>
         /// <param name="time">需要禁止的时间</param>
-        private void BanLayerOptionCountDown(float time)
+        void BanLayerOptionCountDown(float time)
         {
             SetLayerBlockOption(false);
 
@@ -91,7 +91,7 @@ namespace YIUIFramework
             }
         }
 
-        private void OnCountDownLayerOption(double residue, double elapsed, double total)
+        void OnCountDownLayerOption(double residue, double elapsed, double total)
         {
             if (residue <= 0)
             {
@@ -116,7 +116,7 @@ namespace YIUIFramework
 
         //永久屏蔽引用计数 一定要成对使用且保证
         //否则将会出现永久屏蔽的情况只能通过RecoverLayerOptionCountDown 强制恢复
-        private readonly HashSet<int> blockIds = new HashSet<int>();
+        readonly HashSet<int> blockIds = new HashSet<int>();
 
         //永久屏蔽
         //适用于 不知道要屏蔽多久 但是能保证可以成对调用的

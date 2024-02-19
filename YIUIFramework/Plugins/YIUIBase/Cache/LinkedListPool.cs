@@ -4,7 +4,7 @@ namespace YIUIFramework
 {
     /*public static class ListPool<T>
     {
-        private static readonly ObjectPool<List<T>> s_ListPool = new ObjectPool<List<T>>(null, l => l.Clear());
+        static readonly ObjectPool<List<T>> s_ListPool = new ObjectPool<List<T>>(null, l => l.Clear());
 
         public static List<T> Get()
         {
@@ -19,7 +19,7 @@ namespace YIUIFramework
 
     public static class LinkedListPool<T>
     {
-        private static readonly ObjectPool<LinkedList<T>> s_ListPool = new ObjectPool<LinkedList<T>>(null, l => l.Clear());
+        static readonly ObjectPool<LinkedList<T>> s_ListPool = new ObjectPool<LinkedList<T>>(null, l => l.Clear());
 
         public static LinkedList<T> Get()
         {

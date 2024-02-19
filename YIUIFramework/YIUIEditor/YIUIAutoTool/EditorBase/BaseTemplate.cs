@@ -32,14 +32,14 @@ namespace YIUIFramework.Editor
         /// 这个模板动作的名称
         /// 作用于提示信息
         /// </summary>
-        public virtual string EventName => "";
+        protected virtual string EventName => "";
 
         protected CreateVo CreateVo;
 
         //常规新文件用字典
         protected Dictionary<string, string> ValueDic;
 
-        public BaseTemplate(string authorName)
+        protected BaseTemplate(string authorName)
         {
             var dt = DateTime.Now;
             ValueDic = new Dictionary<string, string>
@@ -53,29 +53,29 @@ namespace YIUIFramework.Editor
         /// 是否覆盖  如果存在的情况下
         /// 写入新文件时可用
         /// </summary>
-        public virtual bool Cover => true;
+        protected virtual bool Cover => true;
 
         /// <summary>
         /// 其他是否保留
         /// 重写文件时可用
         /// </summary>
-        public virtual bool OtherRetain => true;
+        protected virtual bool OtherRetain => true;
 
         /// <summary>
         /// 如果值已存在是否跳过
         /// 重写文件时可用
         /// </summary>
-        public virtual bool ExistSkip => true;
+        protected virtual bool ExistSkip => true;
 
         /// <summary>
         /// 完成后自动刷新
         /// </summary>
-        public virtual bool AutoRefresh => true;
+        protected virtual bool AutoRefresh => true;
 
         /// <summary>
         /// 提示
         /// </summary>
-        public virtual bool ShowTips => true;
+        protected virtual bool ShowTips => true;
 
         /// <summary>
         /// 根据模板创建一个新文件
@@ -215,8 +215,8 @@ namespace YIUIFramework.Editor
     /// </summary>
     public class TestTemplate : BaseTemplate
     {
-        public override string EventName => "测试案例一 创建新文件";
-        public override bool Cover => false;
+        protected override string EventName => "测试案例一 创建新文件";
+        protected override bool Cover => false;
 
         public TestTemplate(string authorName, string moduleName, string pkgName, string resName) : base(authorName)
         {
@@ -238,7 +238,7 @@ namespace YIUIFramework.Editor
     /// </summary>
     public class TestTemplate2 : BaseTemplate
     {
-        public override string EventName => "测试案例二 重写文件内容";
+        protected override string EventName => "测试案例二 重写文件内容";
 
         //public override bool OtherRetain => false;
 

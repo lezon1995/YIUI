@@ -12,14 +12,14 @@ namespace YIUIFramework
         //默认有Unity默认程序集 可以根据需求修改
         internal static readonly string[] LogicAssemblyNames = {"Assembly-CSharp"};
 
-        private static Type[] GetLogicTypes()
+        static Type[] GetLogicTypes()
         {
             return AppDomain.CurrentDomain.GetTypesByAssemblyName(LogicAssemblyNames);
         }
 
-        private Type m_BasePanelType = typeof(BasePanel);
-        private Type m_BaseViewType = typeof(BaseView);
-        private Type m_BaseComponentType = typeof(BaseComponent);
+        Type m_BasePanelType = typeof(BasePanel);
+        Type m_BaseViewType = typeof(BaseView);
+        Type m_BaseComponentType = typeof(BaseComponent);
 
         public UIBindVo[] Get()
         {
@@ -95,7 +95,7 @@ namespace YIUIFramework
             return binds.ToArray();
         }
 
-        private static bool GetBindVo(Type uiBaseType, Type creatorType, Type groupType, out UIBindVo bindVo)
+        static bool GetBindVo(Type uiBaseType, Type creatorType, Type groupType, out UIBindVo bindVo)
         {
             bindVo = new UIBindVo();
             if (uiBaseType == null ||
@@ -122,7 +122,7 @@ namespace YIUIFramework
             sb.Append("            };\r\n");
         }
 
-        private string GetCodeTypeName(Type uiBaseType)
+        string GetCodeTypeName(Type uiBaseType)
         {
             if (uiBaseType == m_BasePanelType)
             {

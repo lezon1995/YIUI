@@ -9,7 +9,7 @@ namespace YIUIFramework
     /// </summary>
     public static class GeometryUtilityHelper
     {
-        private static readonly Action<Plane[], Matrix4x4> ExtractPlanesDelegate;
+        static readonly Action<Plane[], Matrix4x4> ExtractPlanesDelegate;
 
         static GeometryUtilityHelper()
         {

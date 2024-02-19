@@ -43,7 +43,7 @@ namespace YIUIBind
 
         #region 对比函数
 
-        private bool EqualsList(List<int> value)
+        bool EqualsList(List<int> value)
         {
             List<int> list = GetValue();
             if (list == null || list.Count != value.Count)

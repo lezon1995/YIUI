@@ -7,7 +7,7 @@
             m_createCallback = Create;
         }
 
-        private T Create()
+        T Create()
         {
             return new T();
         }

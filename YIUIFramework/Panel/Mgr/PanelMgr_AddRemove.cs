@@ -10,7 +10,7 @@ namespace YIUIFramework
         /// <summary>
         /// 加入UI到对应层级 设置顺序 大小
         /// </summary>
-        private void AddUI(PanelInfo panelInfo)
+        void AddUI(PanelInfo panelInfo)
         {
             var panel = panelInfo.Panel;
             var panelLayer = panel.Layer;
@@ -85,7 +85,7 @@ namespace YIUIFramework
         /// <summary>
         /// 移除一个UI
         /// </summary>
-        private void RemoveUI(PanelInfo panelInfo)
+        void RemoveUI(PanelInfo panelInfo)
         {
             if (panelInfo.Panel == null)
             {

@@ -5,7 +5,7 @@ namespace YIUIFramework
 {
     public class ParamVo
     {
-        private static readonly SimplePool<ParamVo> g_cacheParam = new SimplePool<ParamVo>(5);
+        static readonly SimplePool<ParamVo> g_cacheParam = new SimplePool<ParamVo>(5);
 
         /// <summary>
         /// 原始数据

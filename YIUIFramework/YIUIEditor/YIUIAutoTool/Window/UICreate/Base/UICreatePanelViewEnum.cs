@@ -18,7 +18,7 @@ namespace YIUIFramework.Editor
             return SbPool.PutAndToStr(sb);
         }
 
-        private static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
+        static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
         {
             var splitData = self.PanelSplitData;
             if (splitData == null)
@@ -45,7 +45,7 @@ namespace YIUIFramework.Editor
             sb.Append("    }");
         }
 
-        private static void AddViewEnum(List<RectTransform> viewList, StringBuilder sb, ref int index)
+        static void AddViewEnum(List<RectTransform> viewList, StringBuilder sb, ref int index)
         {
             foreach (var viewParent in viewList)
             {

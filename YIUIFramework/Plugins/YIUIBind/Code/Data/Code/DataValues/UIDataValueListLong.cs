@@ -40,7 +40,7 @@ namespace YIUIBind
 
         #region 对比函数
 
-        private bool EqualsList(List<long> value)
+        bool EqualsList(List<long> value)
         {
             if (GetValue()?.Count != value.Count)
             {

@@ -9,12 +9,12 @@ namespace YIUIFramework
     /// </summary>
     public sealed class RepeatedTimer : IDisposable
     {
-        private LinkedListNode<Action> updateHandle;
-        private float leftTime;
-        private float repeatTime;
-        private bool unscaled;
-        private float speed = 1.0f;
-        private Action task;
+        LinkedListNode<Action> updateHandle;
+        float leftTime;
+        float repeatTime;
+        bool unscaled;
+        float speed = 1.0f;
+        Action task;
 
         /// <summary>
         /// 获取或设置此计时器的速度
@@ -78,12 +78,12 @@ namespace YIUIFramework
             updateHandle = null;
         }
 
-        private void Start()
+        void Start()
         {
             updateHandle = SchedulerMgr.AddFrameListener(Update);
         }
 
-        private void Update()
+        void Update()
         {
             if (unscaled)
             {

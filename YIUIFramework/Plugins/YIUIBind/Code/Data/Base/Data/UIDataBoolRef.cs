@@ -13,29 +13,29 @@ namespace YIUIBind
     {
         //当前的变量
         [OdinSerialize]
-        private UIData m_Data;
+        UIData m_Data;
 
         public UIData Data => m_Data;
 
         [ShowInInspector]
         [LabelText("Name")]
         [ReadOnly]
-        private string m_DataName;
+        string m_DataName;
 
 #if UNITY_EDITOR
         [ShowInInspector]
         [LabelText("Value")]
         [ReadOnly]
-        private string m_DataValue;
+        string m_DataValue;
 #endif
         [SerializeField]
 #if UNITY_EDITOR
         [OnValueChanged(nameof(OnValueChangedCompareMode))]
 #endif
         [ShowIf("ShowCompareMode")]
-        private UICompareModeEnum m_CompareMode = UICompareModeEnum.Equal;
+        UICompareModeEnum m_CompareMode = UICompareModeEnum.Equal;
 
-        private bool ShowCompareMode()
+        bool ShowCompareMode()
         {
             return m_Data.DataValue.UIBindDataType is EUIBindDataType.Int or EUIBindDataType.Float;
         }
@@ -50,9 +50,9 @@ namespace YIUIBind
         [SerializeField]
         [LabelText("取反")]
         [ShowInInspector]
-        private bool m_Reverse;
+        bool m_Reverse;
 
-        private UIDataBoolRef()
+        UIDataBoolRef()
         {
         }
 
@@ -83,7 +83,7 @@ namespace YIUIBind
 #if UNITY_EDITOR
 
         //比较运算的修改
-        private void OnValueChangedCompareMode()
+        void OnValueChangedCompareMode()
         {
             switch (m_Data.DataValue.UIBindDataType)
             {

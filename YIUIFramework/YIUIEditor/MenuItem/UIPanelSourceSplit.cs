@@ -63,7 +63,7 @@ namespace YIUIFramework.Editor
             AssetDatabase.Refresh();
         }
 
-        private static void AllViewSaveAsPrefabAsset(List<RectTransform> oldList, List<RectTransform> newList, string savePath, bool nest = false)
+        static void AllViewSaveAsPrefabAsset(List<RectTransform> oldList, List<RectTransform> newList, string savePath, bool nest = false)
         {
             if (oldList.Count != newList.Count)
             {
@@ -79,7 +79,7 @@ namespace YIUIFramework.Editor
             }
         }
 
-        private static bool SaveAsPrefabAssetViewParent(RectTransform oldViewParent, RectTransform viewParent, string savePath, bool nest = false)
+        static bool SaveAsPrefabAssetViewParent(RectTransform oldViewParent, RectTransform viewParent, string savePath, bool nest = false)
         {
             //View 查找
             var view = viewParent.FindChildByName(viewParent.name.Replace(UIStaticHelper.UIParentName, ""));
@@ -143,7 +143,7 @@ namespace YIUIFramework.Editor
             return true;
         }
 
-        private static GameObject SaveAsPrefabAsset(GameObject obj, string path)
+        static GameObject SaveAsPrefabAsset(GameObject obj, string path)
         {
             var prefab = PrefabUtility.SaveAsPrefabAsset(obj, path);
             if (prefab)

@@ -8,12 +8,12 @@ namespace YIUIFramework
     {
 #if UNITY_EDITOR
         public static bool isRunning = false;
-        private readonly HashSet<T> Trace = new HashSet<T>();
+        readonly HashSet<T> Trace = new HashSet<T>();
 #endif
 
-        private readonly Stack<T> m_Stack = new Stack<T>();
-        private readonly UnityAction<T> m_ActionOnGet;
-        private readonly UnityAction<T> m_ActionOnRelease;
+        readonly Stack<T> m_Stack = new Stack<T>();
+        readonly UnityAction<T> m_ActionOnGet;
+        readonly UnityAction<T> m_ActionOnRelease;
 
         public int countAll { get; private set; }
 

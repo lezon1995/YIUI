@@ -13,7 +13,7 @@ namespace YIUIFramework.Editor
     /// </summary>
     public class TemplateEngine
     {
-        private static readonly Dictionary<string, string> g_templateCacheMap = new Dictionary<string, string>();
+        static readonly Dictionary<string, string> g_templateCacheMap = new Dictionary<string, string>();
 
         /// <summary>
         /// 模板文件的基础路径
@@ -22,8 +22,8 @@ namespace YIUIFramework.Editor
         /// </summary>
         public static string TemplateBasePath;
 
-        private const string m_StartSignFormat = "#region {0}开始";
-        private const string m_EndSignFormat = "#endregion {0}结束";
+        const string m_StartSignFormat = "#region {0}开始";
+        const string m_EndSignFormat = "#endregion {0}结束";
 
         /// <summary>
         /// 处理模板
@@ -202,7 +202,7 @@ namespace YIUIFramework.Editor
         /// </summary>
         /// <param name="otherRetain">标记中的其他的是否保留</param>
         /// <returns></returns>
-        private static bool RegionReplace(string path, KeyValuePair<string, string> pair, bool otherRetain = true)
+        static bool RegionReplace(string path, KeyValuePair<string, string> pair, bool otherRetain = true)
         {
             //获取文件 
             if (path != null)

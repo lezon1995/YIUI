@@ -26,13 +26,13 @@ namespace YIUIFramework
             m_UIBase = uiBase;
         }
 
-        private void Awake()
+        void Awake()
         {
             AwakeData();
             AwakeEvent();
         }
 
-        private void OnEnable()
+        void OnEnable()
         {
             try
             {
@@ -46,7 +46,7 @@ namespace YIUIFramework
         }
 
 
-        private void Start()
+        void Start()
         {
             try
             {
@@ -60,7 +60,7 @@ namespace YIUIFramework
         }
 
 
-        private void OnDisable()
+        void OnDisable()
         {
             try
             {
@@ -73,7 +73,7 @@ namespace YIUIFramework
             }
         }
 
-        private void OnDestroy()
+        void OnDestroy()
         {
             try
             {
@@ -90,7 +90,7 @@ namespace YIUIFramework
 
 
 #if UNITY_EDITOR
-        private void OnValidate()
+        void OnValidate()
         {
             OnValidateData();
             OnValidateEvent();

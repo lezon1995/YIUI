@@ -17,7 +17,7 @@ namespace YIUIBind
         internal abstract bool SetValueFrom(UIDataValue dataValue);
 
         //值改变消息 无参
-        private event Action m_OnValueChangeAction;
+        event Action m_OnValueChangeAction;
 
         internal void AddValueChangeAction(Action action)
         {

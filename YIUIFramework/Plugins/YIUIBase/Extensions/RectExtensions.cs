@@ -9,7 +9,7 @@ namespace YIUIFramework
     /// </summary>
     public static class RectExtensions
     {
-        private static Regex parseRegex;
+        static Regex parseRegex;
 
         public static Rect Parse(string text)
         {

@@ -15,7 +15,7 @@ namespace YIUIFramework
         [ShowInInspector]
         [LabelText("Runtime Events")]
         [DictionaryDrawerSettings(KeyLabel = "Event Name", ValueLabel = "事件内容", IsReadOnly = true, DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
-        private Dictionary<string, UIEventBase> m_EventDic = new Dictionary<string, UIEventBase>();
+        Dictionary<string, UIEventBase> m_EventDic = new Dictionary<string, UIEventBase>();
 
         public IReadOnlyDictionary<string, UIEventBase> EventDic => m_EventDic;
 
@@ -68,7 +68,7 @@ namespace YIUIFramework
             m_EventDic.Clear();
         }
 
-        private void OnDestroyEvent()
+        void OnDestroyEvent()
         {
             foreach (var uiEvent in m_EventDic.Values)
             {
@@ -78,19 +78,19 @@ namespace YIUIFramework
             m_EventDic = null;
         }
 
-        private void AwakeEvent()
+        void AwakeEvent()
         {
             InitEventTable();
         }
 
         #region 递归初始化所有绑定数据
 
-        private void InitEventTable()
+        void InitEventTable()
         {
             InitializeEventBinds(transform);
         }
 
-        private static void InitializeEventBinds(Transform transform)
+        static void InitializeEventBinds(Transform transform)
         {
 #if YIUIMACRO_BIND_INITIALIZE
             Logger.LogErrorContext(transform,$"{transform.name} 初始化调用所有子类 UIEventBind 绑定");
@@ -112,7 +112,7 @@ namespace YIUIFramework
             }
         }
 
-        private static void InitializeEventBindsDeep(Transform transform)
+        static void InitializeEventBindsDeep(Transform transform)
         {
             if (transform.HasComponent<UIBindCDETable>())
             {

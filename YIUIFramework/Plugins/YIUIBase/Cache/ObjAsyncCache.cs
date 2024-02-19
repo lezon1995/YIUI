@@ -9,7 +9,7 @@ namespace YIUIFramework
     /// </summary>
     public class ObjAsyncCache<T>
     {
-        private Stack<T> m_pool;
+        Stack<T> m_pool;
         protected Func<UniTask<T>> m_createCallback;
 
         public ObjAsyncCache(Func<UniTask<T>> createCallback, int capacity = 0)

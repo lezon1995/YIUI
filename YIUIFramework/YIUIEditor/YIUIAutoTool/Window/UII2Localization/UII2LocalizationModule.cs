@@ -11,7 +11,7 @@ namespace YIUIFramework.Editor
 {
     public class UII2LocalizationModule : BaseYIUIToolModule
     {
-        private LanguageSourceData m_LanguageSourceData;
+        LanguageSourceData m_LanguageSourceData;
 
         [LabelText("全数据名称")]
         [ShowInInspector]
@@ -32,14 +32,14 @@ namespace YIUIFramework.Editor
 
         [Button("打开多语言数据", 50)]
         [GUIColor(0.4f, 0.8f, 1)]
-        private void OpenI2Languages()
+        void OpenI2Languages()
         {
             EditorApplication.ExecuteMenuItem("Tools/I2 Localization/Open I2Languages.asset");
         }
 
         [Button("导入", 50)]
         [GUIColor(0f, 1f, 1f)]
-        private void ImportAllCsvTips()
+        void ImportAllCsvTips()
         {
             UnityTipsHelper.CallBack("确认导入当前所有多语言数据吗\n\n此操作将会覆盖现有数据\n\n请确认", ImportAllCsv);
         }

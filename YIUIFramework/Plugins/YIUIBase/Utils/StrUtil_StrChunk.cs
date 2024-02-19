@@ -212,7 +212,7 @@ namespace YIUIFramework
             return arr;
         }
 
-        private static readonly List<StrChunk> g_cacheStrChunkList = new List<StrChunk>();
+        static readonly List<StrChunk> g_cacheStrChunkList = new List<StrChunk>();
 
         private enum ReadChunkState
         {

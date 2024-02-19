@@ -4,7 +4,7 @@ namespace YIUIFramework
 {
     public partial class AppTick
     {
-        private static readonly AppTick g_inst = new AppTick();
+        static readonly AppTick g_inst = new AppTick();
 
         public static int Count
         {
@@ -20,8 +20,8 @@ namespace YIUIFramework
     /// </summary>
     public partial class AppTick
     {
-        private int m_lastTick;
-        private int m_count;
+        int m_lastTick;
+        int m_count;
 
         public AppTick()
         {

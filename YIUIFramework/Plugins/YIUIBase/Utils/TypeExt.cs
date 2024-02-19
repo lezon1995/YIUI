@@ -6,7 +6,7 @@ namespace YIUIFramework
 {
     public static class TypeExt
     {
-        private static readonly Dictionary<Type, NumericType> g_numTypeMap;
+        static readonly Dictionary<Type, NumericType> g_numTypeMap;
 
         static TypeExt()
         {

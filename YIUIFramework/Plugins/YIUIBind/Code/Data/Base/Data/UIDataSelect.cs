@@ -14,27 +14,27 @@ namespace YIUIBind
     {
         [LabelText("Name")]
         [ReadOnly]
-        private string m_DataName;
+        string m_DataName;
 
         [ShowInInspector]
         [LabelText("Type")]
         [ReadOnly]
-        private EUIBindDataType m_DataType;
+        EUIBindDataType m_DataType;
 
 #if UNITY_EDITOR
         [ShowInInspector]
         [LabelText("Value")]
         [ReadOnly]
-        private string m_DataValue;
+        string m_DataValue;
 #endif
 
         [SerializeField]
         [HideInInspector]
-        private UIData m_Data;
+        UIData m_Data;
 
         public UIData Data => m_Data;
 
-        private UIDataSelect()
+        UIDataSelect()
         {
         }
 

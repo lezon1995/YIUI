@@ -23,7 +23,7 @@ namespace YIUIFramework.Editor
             return SbPool.PutAndToStr(sb);
         }
 
-        private static void GetComponentTable(this UIBindCDETable self, StringBuilder sb)
+        static void GetComponentTable(this UIBindCDETable self, StringBuilder sb)
         {
             var AllBindDic = self.AllBindDic;
             var count = AllBindDic.Count;
@@ -55,7 +55,7 @@ namespace YIUIFramework.Editor
             sb.AppendLine();
         }
 
-        private static void GetDataTable(this UIBindCDETable self, StringBuilder sb)
+        static void GetDataTable(this UIBindCDETable self, StringBuilder sb)
         {
             var DataDic = self.DataDic;
             var count = DataDic.Count;
@@ -88,7 +88,7 @@ namespace YIUIFramework.Editor
             sb.AppendLine();
         }
 
-        private static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
+        static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
         {
             var EventDic = self.EventDic;
             var count = EventDic.Count;
@@ -122,7 +122,7 @@ namespace YIUIFramework.Editor
             sb.AppendLine();
         }
 
-        private static void GetCDETable(this UIBindCDETable self, StringBuilder sb)
+        static void GetCDETable(this UIBindCDETable self, StringBuilder sb)
         {
             var tab = self.ChildTables;
             if (tab == null)
@@ -173,7 +173,7 @@ namespace YIUIFramework.Editor
             return newName.ChangeToBigName(NameUtility.UIName);
         }
 
-        private static void GetOverrideConfig(this UIBindCDETable self, StringBuilder sb)
+        static void GetOverrideConfig(this UIBindCDETable self, StringBuilder sb)
         {
             switch (self.UICodeType)
             {

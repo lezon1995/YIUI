@@ -33,9 +33,9 @@ namespace YIUIFramework
             sweep.Clear();
         }
 
-        private static class RemoveList<T>
+        static class RemoveList<T>
         {
-            private static List<T> sweepList = new List<T>();
+            static List<T> sweepList = new List<T>();
 
             public static List<T> SweepList
             {

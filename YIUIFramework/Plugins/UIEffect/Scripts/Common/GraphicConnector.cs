@@ -7,18 +7,18 @@ namespace Coffee.UIEffects
 {
     public class GraphicConnector
     {
-        private static readonly List<GraphicConnector> s_Connectors = new List<GraphicConnector>();
+        static readonly List<GraphicConnector> s_Connectors = new List<GraphicConnector>();
 
-        private static readonly Dictionary<Type, GraphicConnector> s_ConnectorMap =
+        static readonly Dictionary<Type, GraphicConnector> s_ConnectorMap =
             new Dictionary<Type, GraphicConnector>();
 
-        private static readonly GraphicConnector s_EmptyConnector = new GraphicConnector();
+        static readonly GraphicConnector s_EmptyConnector = new GraphicConnector();
 
 #if UNITY_EDITOR
         [UnityEditor.InitializeOnLoadMethod]
 #endif
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void Init()
+        static void Init()
         {
             AddConnector(new GraphicConnector());
         }

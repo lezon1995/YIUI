@@ -32,7 +32,7 @@ namespace YIUIFramework.Editor
             }
         }
 
-        private static UIBindProviderData GenCodeByType(Type type)
+        static UIBindProviderData GenCodeByType(Type type)
         {
             var codeGenObj = Activator.CreateInstance(type);
             var getFunInfo = type.GetMethod("Get");

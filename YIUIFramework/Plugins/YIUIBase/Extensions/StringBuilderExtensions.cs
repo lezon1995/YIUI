@@ -12,7 +12,7 @@ namespace YIUIFramework
         // These digits are here in a static array to support hex with simple, 
         // easily-understandable code. Since A-Z don't sit next to 0-9 in the 
         // ASCII table.
-        private static readonly char[] Digits = new char[]
+        static readonly char[] Digits = new char[]
         {
             '0', '1', '2', '3', '4',
             '5', '6', '7', '8', '9',
@@ -20,7 +20,7 @@ namespace YIUIFramework
         };
 
         // Matches standard .NET formatting dp's
-        private static readonly uint DefaultDecimalPlaces = 5;
+        static readonly uint DefaultDecimalPlaces = 5;
         private static readonly char DefaultPadChar = '0';
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace YIUIFramework.Editor
     [HideReferenceObjectPicker]
     public abstract class BaseTreeMenuItem : BaseYIUIToolModule
     {
-        private bool m_InitEnd;
+        bool m_InitEnd;
 
         protected BaseTreeMenuItem(OdinMenuEditorWindow autoTool, OdinMenuTree tree)
         {
@@ -23,7 +23,7 @@ namespace YIUIFramework.Editor
             Select();
         }
 
-        private void Init()
+        void Init()
         {
             if (m_InitEnd) return;
             Initialize();

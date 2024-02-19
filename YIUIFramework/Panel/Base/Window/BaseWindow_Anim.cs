@@ -5,7 +5,7 @@ namespace YIUIFramework
     //动画
     public abstract partial class BaseWindow
     {
-        private bool m_FirstOpenTween;
+        bool m_FirstOpenTween;
 
         internal async UniTask InternalOnWindowOpenTween(bool tween = true)
         {
@@ -30,7 +30,7 @@ namespace YIUIFramework
             }
         }
 
-        private bool m_FirstCloseTween;
+        bool m_FirstCloseTween;
 
         internal async UniTask InternalOnWindowCloseTween(bool tween = true)
         {

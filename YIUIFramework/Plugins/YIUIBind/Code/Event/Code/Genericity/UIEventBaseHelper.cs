@@ -47,12 +47,12 @@ namespace YIUIBind
             return uiEventBase;
         }
 
-        private static UIEventBase CreatorUIEventP0()
+        static UIEventBase CreatorUIEventP0()
         {
             return (UIEventBase)(Activator.CreateInstance(typeof(UIEventP0)));
         }
 
-        private static UIEventBase CreatorUIEventP1(List<EUIEventParamType> paramList)
+        static UIEventBase CreatorUIEventP1(List<EUIEventParamType> paramList)
         {
             return (UIEventBase)(Activator.CreateInstance(typeof(UIEventP1<>)
                 .MakeGenericType(
@@ -60,7 +60,7 @@ namespace YIUIBind
                 )));
         }
 
-        private static UIEventBase CreatorUIEventP2(List<EUIEventParamType> paramList)
+        static UIEventBase CreatorUIEventP2(List<EUIEventParamType> paramList)
         {
             return (UIEventBase)(Activator.CreateInstance(typeof(UIEventP2<,>)
                 .MakeGenericType(
@@ -69,7 +69,7 @@ namespace YIUIBind
                 )));
         }
 
-        private static UIEventBase CreatorUIEventP3(List<EUIEventParamType> paramList)
+        static UIEventBase CreatorUIEventP3(List<EUIEventParamType> paramList)
         {
             return (UIEventBase)(Activator.CreateInstance(typeof(UIEventP3<,,>)
                 .MakeGenericType(
@@ -79,7 +79,7 @@ namespace YIUIBind
                 )));
         }
 
-        private static UIEventBase CreatorUIEventP4(List<EUIEventParamType> paramList)
+        static UIEventBase CreatorUIEventP4(List<EUIEventParamType> paramList)
         {
             return (UIEventBase)(Activator.CreateInstance(typeof(UIEventP4<,,,>)
                 .MakeGenericType(
@@ -90,7 +90,7 @@ namespace YIUIBind
                 )));
         }
 
-        private static UIEventBase CreatorUIEventP5(List<EUIEventParamType> paramList)
+        static UIEventBase CreatorUIEventP5(List<EUIEventParamType> paramList)
         {
             return (UIEventBase)(Activator.CreateInstance(typeof(UIEventP5<,,,,>)
                 .MakeGenericType(

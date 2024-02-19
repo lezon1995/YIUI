@@ -9,10 +9,10 @@ namespace YIUIFramework
     /// </summary>
     public abstract partial class BasePanel
     {
-        private UIPanelSplitData m_PanelSplitData;
+        UIPanelSplitData m_PanelSplitData;
 
-        private readonly Dictionary<string, BaseView> m_ExistView = new Dictionary<string, BaseView>();
-        private readonly Dictionary<string, RectTransform> m_ViewParent = new Dictionary<string, RectTransform>();
+        readonly Dictionary<string, BaseView> m_ExistView = new Dictionary<string, BaseView>();
+        readonly Dictionary<string, RectTransform> m_ViewParent = new Dictionary<string, RectTransform>();
 
         /// <summary>
         /// 当前已打开的UI 不包含弹窗
@@ -40,9 +40,9 @@ namespace YIUIFramework
             }
         }
 
-        private readonly HashSet<string> m_ViewOpening = new HashSet<string>();
+        readonly HashSet<string> m_ViewOpening = new HashSet<string>();
 
-        private void InitPanelViewData()
+        void InitPanelViewData()
         {
             m_ExistView.Clear();
             m_ViewParent.Clear();
@@ -53,7 +53,7 @@ namespace YIUIFramework
             AddViewParent(m_PanelSplitData.AllPopupView);
         }
 
-        private void AddViewParent(List<RectTransform> listParent)
+        void AddViewParent(List<RectTransform> listParent)
         {
             foreach (var parent in listParent)
             {
@@ -62,7 +62,7 @@ namespace YIUIFramework
             }
         }
 
-        private void CreateCommonView()
+        void CreateCommonView()
         {
             foreach (var commonParentView in m_PanelSplitData.AllCommonView)
             {
@@ -99,13 +99,13 @@ namespace YIUIFramework
             }
         }
 
-        private RectTransform GetViewParent(string viewName)
+        RectTransform GetViewParent(string viewName)
         {
             m_ViewParent.TryGetValue(viewName, out var value);
             return value;
         }
 
-        private async UniTask<T> GetView<T>() where T : BaseView, new()
+        async UniTask<T> GetView<T>() where T : BaseView, new()
         {
             var viewName = typeof(T).Name;
             var parent = GetViewParent(viewName);
@@ -138,7 +138,7 @@ namespace YIUIFramework
         /// <summary>
         /// 打开之前
         /// </summary>
-        private async UniTask OpenViewBefore(BaseView view)
+        async UniTask OpenViewBefore(BaseView view)
         {
             if (!view.WindowFirstOpen)
             {
@@ -149,7 +149,7 @@ namespace YIUIFramework
         /// <summary>
         /// 打开之后
         /// </summary>
-        private async UniTask OpenViewAfter(BaseView view, bool success)
+        async UniTask OpenViewAfter(BaseView view, bool success)
         {
             if (success)
             {
@@ -168,7 +168,7 @@ namespace YIUIFramework
         /// 关闭上一个
         /// </summary>
         /// <param name="view">当前</param>
-        private async UniTask CloseLastView(BaseView view)
+        async UniTask CloseLastView(BaseView view)
         {
             //其他需要被忽略
             if (view.ViewWindowType != EViewWindowType.View)
@@ -205,12 +205,12 @@ namespace YIUIFramework
             u_CurrentOpenView = view;
         }
 
-        private void AddOpening(string name)
+        void AddOpening(string name)
         {
             m_ViewOpening.Add(name);
         }
 
-        private void RemoveOpening(string name)
+        void RemoveOpening(string name)
         {
             m_ViewOpening.Remove(name);
         }

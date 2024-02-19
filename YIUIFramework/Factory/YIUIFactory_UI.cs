@@ -5,7 +5,7 @@ namespace YIUIFramework
 {
     public static partial class YIUIFactory
     {
-        private static void SetParent(Transform self, Transform parent)
+        static void SetParent(Transform self, Transform parent)
         {
             self.SetParent(parent, false);
             if (self is RectTransform rectTransform)
@@ -29,7 +29,7 @@ namespace YIUIFramework
             return Create(panelInfo.PkgName, panelInfo.ResName);
         }
 
-        private static T Create<T>() where T : UIBase
+        static T Create<T>() where T : UIBase
         {
             if (UIBindHelper.TryGetBindVo<T>(out var vo))
             {
@@ -39,7 +39,7 @@ namespace YIUIFramework
             return null;
         }
 
-        private static UIBase Create(string pkgName, string resName)
+        static UIBase Create(string pkgName, string resName)
         {
             if (UIBindHelper.TryGetBindVoByPath(pkgName, resName, out var vo))
             {
@@ -49,7 +49,7 @@ namespace YIUIFramework
             return null;
         }
 
-        private static UIBase Create(UIBindVo vo, Transform parent = null)
+        static UIBase Create(UIBindVo vo, Transform parent = null)
         {
             var obj = YIUILoadHelper.LoadAssetInstantiate(vo.PkgName, vo.ResName);
             if (obj)
@@ -61,7 +61,7 @@ namespace YIUIFramework
             return null;
         }
 
-        private static UIBase CreateByObjVo(UIBindVo vo, GameObject obj, Transform parent = null)
+        static UIBase CreateByObjVo(UIBindVo vo, GameObject obj, Transform parent = null)
         {
             var table = obj.GetComponent<UIBindCDETable>();
             if (table)
@@ -77,7 +77,7 @@ namespace YIUIFramework
             return null;
         }
 
-        private static void CreateComponent(this UIBindCDETable cdeTable)
+        static void CreateComponent(this UIBindCDETable cdeTable)
         {
             foreach (var childTable in cdeTable.ChildTables)
             {

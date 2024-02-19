@@ -17,7 +17,7 @@ namespace YIUIFramework.Editor
             return SbPool.PutAndToStr(sb);
         }
 
-        private static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
+        static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
         {
             foreach (var (name, uiEvent) in self.EventDic)
             {
@@ -37,7 +37,7 @@ namespace YIUIFramework.Editor
             }
         }
 
-        private static string GetEventMethodParam(UIEventBase uiEventBase)
+        static string GetEventMethodParam(UIEventBase uiEventBase)
         {
             var paramCount = uiEventBase.AllEventParamType.Count;
             if (paramCount <= 0)

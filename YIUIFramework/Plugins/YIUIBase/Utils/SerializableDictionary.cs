@@ -11,7 +11,7 @@ namespace YIUIFramework
     public sealed class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
     {
         [SerializeField]
-        private KeyValuePair[] data;
+        KeyValuePair[] data;
 
         /// <inheritdoc/>
         public void OnBeforeSerialize()
@@ -37,7 +37,7 @@ namespace YIUIFramework
         }
 
         [Serializable]
-        private struct KeyValuePair
+        struct KeyValuePair
         {
             [SerializeField]
             public TKey Key;

@@ -52,16 +52,16 @@ namespace YIUIBind
         [SerializeField]
         [ReadOnly]
         [LabelText("Guid")]
-        private int m_DataGuid;
+        int m_DataGuid;
 
         public int Guid => m_DataGuid;
 
         [OdinSerialize]
-        private UIDataValue m_DataValue;
+        UIDataValue m_DataValue;
 
         public UIDataValue DataValue => m_DataValue;
 
-        private UIData()
+        UIData()
         {
         }
 

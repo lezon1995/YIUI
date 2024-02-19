@@ -10,7 +10,7 @@ namespace YIUIFramework
     /// </summary>
     public static class AutoListPool<T>
     {
-        private static ListPool g_pool = new ListPool();
+        static ListPool g_pool = new ListPool();
 
         static AutoListPool()
         {
@@ -22,10 +22,10 @@ namespace YIUIFramework
             return g_pool._Get();
         }
 
-        private class ListPool : Recycler
+        class ListPool : Recycler
         {
-            private List<List<T>> m_pool = new List<List<T>>(5);
-            private int m_index;
+            List<List<T>> m_pool = new List<List<T>>(5);
+            int m_index;
 
             internal List<T> _Get()
             {
@@ -86,14 +86,14 @@ namespace YIUIFramework
             SceneManager.sceneLoaded += OnSceneLoadedHandler;
         }
 
-        private static void OnSceneLoadedHandler(Scene arg0, LoadSceneMode arg1)
+        static void OnSceneLoadedHandler(Scene arg0, LoadSceneMode arg1)
         {
             var autoListPoolGo = new GameObject("AutoListPool");
             autoListPoolGo.hideFlags = HideFlags.HideInHierarchy;
             autoListPoolGo.AddComponent<AutoListPool>();
         }
 
-        private void LateUpdate()
+        void LateUpdate()
         {
             if (!g_dirty)
             {

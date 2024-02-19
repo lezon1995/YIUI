@@ -9,7 +9,7 @@ namespace YIUIFramework.Editor
     public class MenuItemYIUIAddComponent : UnityEditor.Editor
     {
         [MenuItem("CONTEXT/Component/Auto Add %w")]
-        private static void CustomMenuItem(MenuCommand command)
+        static void CustomMenuItem(MenuCommand command)
         {
             var component = (Component)command.context;
             var table = component.gameObject.GetComponentInParent<UIBindCDETable>();
