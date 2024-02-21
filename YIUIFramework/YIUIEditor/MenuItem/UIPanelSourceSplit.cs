@@ -10,7 +10,7 @@ namespace YIUIFramework.Editor
     /// </summary>
     public static class UIPanelSourceSplit
     {
-        internal static void Do(UIBindCDETable source)
+        internal static void Do(UITable source)
         {
             if (!source.IsSplitData)
             {
@@ -35,21 +35,21 @@ namespace YIUIFramework.Editor
             }
 
             var oldSource = UIMenuItemHelper.CopyGameObject(loadSource);
-            var oldCdeTable = oldSource.GetComponent<UIBindCDETable>();
-            var oldSplitData = oldCdeTable.PanelSplitData;
+            var oldTable = oldSource.GetComponent<UITable>();
+            var oldSplitData = oldTable.PanelSplitData;
 
 
             var newSource = UIMenuItemHelper.CopyGameObject(loadSource);
-            var table = newSource.GetComponent<UIBindCDETable>();
-            newSource.name = newSource.name.Replace(UIStaticHelper.UISource, "");
+            var table = newSource.GetComponent<UITable>();
+            newSource.name = newSource.name.Replace(UIConst.Source, "");
             table.IsSplitData = false;
             table.PanelSplitEditorShowData = table.PanelSplitData;
             var splitData = table.PanelSplitData;
-            var savePath = $"{UIStaticHelper.UIProjectResPath}/{pkgName}/{UIStaticHelper.UIPrefabs}";
+            var savePath = $"{UIConst.ResPath}/{pkgName}/{UIConst.Prefabs}";
 
-            AllViewSaveAsPrefabAsset(oldSplitData.AllCommonView, splitData.AllCommonView, savePath, true);
-            AllViewSaveAsPrefabAsset(oldSplitData.AllCreateView, splitData.AllCreateView, savePath);
-            AllViewSaveAsPrefabAsset(oldSplitData.AllPopupView, splitData.AllPopupView, savePath);
+            AllViewSaveAsPrefabAsset(oldSplitData.ViewTabsStatic, splitData.ViewTabsStatic, savePath, true);
+            AllViewSaveAsPrefabAsset(oldSplitData.ViewTabs, splitData.ViewTabs, savePath);
+            AllViewSaveAsPrefabAsset(oldSplitData.ViewPopups, splitData.ViewPopups, savePath);
 
             //拆分后新的
             SaveAsPrefabAsset(newSource, $"{savePath}/{newSource.name}.prefab");
@@ -82,30 +82,29 @@ namespace YIUIFramework.Editor
         static bool SaveAsPrefabAssetViewParent(RectTransform oldViewParent, RectTransform viewParent, string savePath, bool nest = false)
         {
             //View 查找
-            var view = viewParent.FindChildByName(viewParent.name.Replace(UIStaticHelper.UIParentName, ""));
+            var view = viewParent.FindChildByName(viewParent.name.Replace(UIConst.ParentName, ""));
             if (view == null)
             {
                 Debug.LogError($"{viewParent.name} 没找到View");
                 return false;
             }
 
-            var oldView = oldViewParent.FindChildByName(oldViewParent.name.Replace(UIStaticHelper.UIParentName, ""));
+            var oldView = oldViewParent.FindChildByName(oldViewParent.name.Replace(UIConst.ParentName, ""));
             if (oldView == null)
             {
                 Debug.LogError($"{oldViewParent.name} 没找到oldView");
                 return false;
             }
 
-            //CDE 查找
-            if (view.GetComponent<UIBindCDETable>() == null)
+            if (view.GetComponent<UITable>() == null)
             {
-                Debug.LogError($"{viewParent.name} 没找到 UIBindCDETable 组件 请检查");
+                Debug.LogError($"{viewParent.name} 没找到 UITable 组件 请检查");
                 return false;
             }
 
-            if (oldView.GetComponent<UIBindCDETable>() == null)
+            if (oldView.GetComponent<UITable>() == null)
             {
-                Debug.LogError($"{oldViewParent.name} Old没找到 UIBindCDETable 组件 请检查");
+                Debug.LogError($"{oldViewParent.name} Old没找到 UITable 组件 请检查");
                 return false;
             }
 
@@ -148,14 +147,14 @@ namespace YIUIFramework.Editor
             var prefab = PrefabUtility.SaveAsPrefabAsset(obj, path);
             if (prefab)
             {
-                var cde = prefab.GetComponent<UIBindCDETable>();
-                if (cde)
+                var table = prefab.GetComponent<UITable>();
+                if (table)
                 {
-                    cde.AutoCheck();
+                    table.AutoCheck();
                 }
                 else
                 {
-                    Debug.LogError($"{obj.name} cde == null");
+                    Debug.LogError($"{obj.name} UITable == null");
                 }
             }
             else

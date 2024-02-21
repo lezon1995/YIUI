@@ -1,8 +1,4 @@
 ﻿#if UNITY_EDITOR
-using System.Collections.Generic;
-using System.Text;
-using YIUIBind;
-
 namespace YIUIFramework.Editor
 {
     /// <summary>
@@ -10,91 +6,10 @@ namespace YIUIFramework.Editor
     /// </summary>
     public static class UICreateMethod
     {
-        public static string Get(UIBindCDETable table)
+        public static string Get(UITable table)
         {
             var sb = SbPool.Get();
-            table.GetEventTable(sb);
             return SbPool.PutAndToStr(sb);
-        }
-
-        static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
-        {
-            foreach (var (name, uiEvent) in self.EventDic)
-            {
-                if (string.IsNullOrEmpty(name))
-                {
-                    continue;
-                }
-
-                if (uiEvent == null)
-                {
-                    continue;
-                }
-
-                sb.AppendFormat("        protected virtual void {0}({1}){{}}\r\n",
-                    $"OnEvent{name.Replace($"{NameUtility.FirstName}{NameUtility.EventName}", "")}Action",
-                    GetEventMethodParam(uiEvent));
-            }
-        }
-
-        static string GetEventMethodParam(UIEventBase uiEventBase)
-        {
-            var paramCount = uiEventBase.AllEventParamType.Count;
-            if (paramCount <= 0)
-            {
-                return "";
-            }
-
-            var sb = SbPool.Get();
-
-            for (int i = 0; i < paramCount; i++)
-            {
-                var paramType = uiEventBase.AllEventParamType[i];
-                sb.AppendFormat("{0} p{1}", paramType.GetParamTypeString(), i + 1);
-                if (i < paramCount - 1)
-                {
-                    sb.Append(",");
-                }
-            }
-
-            return SbPool.PutAndToStr(sb);
-        }
-
-        /// <summary>
-        /// 子类 帮助直接写上重写事件
-        /// </summary>
-        public static Dictionary<string, List<Dictionary<string, string>>> GetEventOverrideDic(UIBindCDETable table)
-        {
-            var overrideDic = new Dictionary<string, List<Dictionary<string, string>>>();
-
-            #region Event开始
-
-            var newList = new List<Dictionary<string, string>>();
-            overrideDic.Add("Event", newList);
-
-            foreach (var (name, uiEvent) in table.EventDic)
-            {
-                if (string.IsNullOrEmpty(name))
-                {
-                    continue;
-                }
-
-                if (uiEvent == null)
-                {
-                    continue;
-                }
-
-                var onEvent = $"OnEvent{name.Replace($"{NameUtility.FirstName}{NameUtility.EventName}", "")}";
-                var methodParam = $"Action({GetEventMethodParam(uiEvent)})";
-                var check = $"void {onEvent}{methodParam}";
-                var firstContent = $"\r\n        protected override void {onEvent}{methodParam}";
-                var content = firstContent + "\r\n        {\r\n            \r\n        }\r\n       ";
-                newList.Add(new Dictionary<string, string> { { check, content } });
-            }
-
-            #endregion Event结束
-
-            return overrideDic;
         }
     }
 }

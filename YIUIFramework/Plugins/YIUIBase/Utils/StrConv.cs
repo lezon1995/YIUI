@@ -27,7 +27,6 @@ namespace YIUIFramework
         /// </summary>
         /// <param name="valueIn"></param>
         /// <param name="valueOut"></param>
-        /// <param name="logger">默认值为null</param>
         /// <returns></returns>
         public static bool ToU16(string valueIn, out ushort valueOut)
         {
@@ -53,7 +52,6 @@ namespace YIUIFramework
         /// </summary>
         /// <param name="valueIn"></param>
         /// <param name="valueOut"></param>
-        /// <param name="logger">默认值为null</param>
         /// <returns></returns>
         public static bool ToU32(string valueIn, out uint valueOut)
         {
@@ -101,7 +99,6 @@ namespace YIUIFramework
         /// </summary>
         /// <param name="valueIn"></param>
         /// <param name="valueOut"></param>
-        /// <param name="logger">默认值为null</param>
         /// <returns></returns>
         public static bool ToI32(string valueIn, out int valueOut)
         {
@@ -129,7 +126,7 @@ namespace YIUIFramework
         /// <returns></returns>
         public static int ToI32(string value)
         {
-            Int32.TryParse(value, out int newValue);
+            int.TryParse(value, out int newValue);
             return newValue;
         }
 
@@ -139,7 +136,6 @@ namespace YIUIFramework
         /// <param name="valueIn"></param>
         /// <param name="valueOut"></param>
         /// <param name="per">默认值为1</param>
-        /// <param name="logger">默认值为null</param>
         /// <returns></returns>
         public static bool ToFloat(string valueIn, out float valueOut, float per)
         {
@@ -177,7 +173,6 @@ namespace YIUIFramework
         /// </summary>
         /// <param name="valueIn"></param>
         /// <param name="valueOut"></param>
-        /// <param name="logger"></param>
         /// <returns></returns>
         public static bool ToByte(string valueIn, out byte valueOut)
         {
@@ -320,7 +315,7 @@ namespace YIUIFramework
         {
             if (string.IsNullOrEmpty(valueIn))
             {
-                valueOut = new T[0];
+                valueOut = Array.Empty<T>();
                 return true;
             }
 
@@ -372,7 +367,7 @@ namespace YIUIFramework
                 return item;
             }
 
-            return new T[0];
+            return Array.Empty<T>();
         }
 
         /// <summary>

@@ -29,47 +29,47 @@ namespace YIUIFramework
 
             for (var i = layerList.Count - 1; i >= 0; i--)
             {
-                var child = layerList[i];
+                var panelInfo = layerList[i];
 
-                if (child == info)
+                if (panelInfo == info)
                 {
                     continue;
                 }
 
-                if (child.Panel is IYIUIBack back)
+                if (panelInfo.Panel is IBack back)
                 {
                     back.DoBackClose(info);
                 }
 
-                switch (child.Panel.StackOption)
+                switch (panelInfo.Panel.StackOption)
                 {
                     case EPanelStackOption.Omit:
                         if (skipTween)
                         {
-                            child.Panel.Close(true, true);
+                            panelInfo.Panel.Close(true, true);
                         }
                         else
                         {
-                            await child.Panel.CloseAsync(true, true);
+                            await panelInfo.Panel.CloseAsync(true, true);
                         }
 
                         break;
                     case EPanelStackOption.None:
                         break;
                     case EPanelStackOption.Visible:
-                        child.Panel.SetActive(false);
+                        panelInfo.Panel.SetActive(false);
                         break;
                     case EPanelStackOption.VisibleTween:
                         if (!skipTween)
                         {
-                            await child.Panel.InternalOnWindowCloseTween();
+                            await panelInfo.Panel.InternalOnWindowCloseTween();
                         }
 
-                        child.Panel.SetActive(false);
+                        panelInfo.Panel.SetActive(false);
                         break;
                     default:
-                        Debug.LogError($"新增类型未实现 {child.Panel.StackOption}");
-                        child.Panel.SetActive(false);
+                        Debug.LogError($"新增类型未实现 {panelInfo.Panel.StackOption}");
+                        panelInfo.Panel.SetActive(false);
                         break;
                 }
             }
@@ -99,7 +99,7 @@ namespace YIUIFramework
                     continue;
                 }
 
-                if (child.Panel is IYIUIBack back)
+                if (child.Panel is IBack back)
                 {
                     back.DoBackAdd(info);
                 }
@@ -153,7 +153,7 @@ namespace YIUIFramework
 
                 if (child != home)
                 {
-                    if (child.Panel is IYIUIBack back)
+                    if (child.Panel is IBack back)
                     {
                         back.DoBackHome(home);
                     }

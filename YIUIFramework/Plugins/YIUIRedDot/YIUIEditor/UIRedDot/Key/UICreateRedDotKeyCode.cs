@@ -15,7 +15,7 @@ namespace YIUIFramework.Editor
             base(authorName)
         {
             var path = codeData.ClassPath;
-            var template = $"{UIStaticHelper.UITemplatePath}/UICreateRedDotKeyTemplate.txt";
+            var template = $"{UIConst.TemplatePath}/UICreateRedDotKeyTemplate.txt";
             CreateVo = new CreateVo(template, path);
 
             m_AutoRefresh = codeData.AutoRefresh;

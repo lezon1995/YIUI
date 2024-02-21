@@ -4,9 +4,12 @@ using UnityEngine;
 
 namespace YIUIFramework
 {
-    public abstract partial class BasePanel
+    /// <summary>
+    /// OpenView 由BasePanel调用
+    /// </summary>
+    public partial class UIView
     {
-        #region Open由PanelMgr调用
+        #region Open由BasePanel调用
 
         /// <summary>
         /// 使用基础Open 打开类
@@ -29,9 +32,9 @@ namespace YIUIFramework
 
             var success = false;
 
-            if (!WindowHaveIOpenAllowOpen && this is IYIUIOpen)
+            if (!WindowHaveIOpenAllowOpen && this is IOpen)
             {
-                Debug.LogError($"当前Panel 有其他IOpen 接口 需要参数传入 不允许直接调用Open");
+                Debug.LogError($"当前View 有其他IOpen 接口 需要参数传入 不允许直接调用Open");
                 return false;
             }
 
@@ -41,7 +44,7 @@ namespace YIUIFramework
             }
             catch (Exception e)
             {
-                Debug.LogError($"ResName{UIResName}, err={e.Message}{e.StackTrace}");
+                Debug.LogError($"ResName={UIResName}, err={e.Message}{e.StackTrace}");
             }
 
             if (success)
@@ -70,7 +73,7 @@ namespace YIUIFramework
             }
             catch (Exception e)
             {
-                Debug.LogError($"ResName{UIResName}, err={e.Message}{e.StackTrace}");
+                Debug.LogError($"ResName={UIResName}, err={e.Message}{e.StackTrace}");
             }
 
             if (success)
@@ -87,11 +90,11 @@ namespace YIUIFramework
 
             var success = false;
 
-            if (this is IYIUIOpen<P1> panel)
+            if (this is IOpen<P1> view)
             {
                 try
                 {
-                    success = await panel.OnOpen(p1);
+                    success = await view.OnOpen(p1);
                 }
                 catch (Exception e)
                 {
@@ -117,11 +120,11 @@ namespace YIUIFramework
 
             var success = false;
 
-            if (this is IYIUIOpen<P1, P2> panel)
+            if (this is IOpen<P1, P2> view)
             {
                 try
                 {
-                    success = await panel.OnOpen(p1, p2);
+                    success = await view.OnOpen(p1, p2);
                 }
                 catch (Exception e)
                 {
@@ -147,11 +150,11 @@ namespace YIUIFramework
 
             var success = false;
 
-            if (this is IYIUIOpen<P1, P2, P3> panel)
+            if (this is IOpen<P1, P2, P3> view)
             {
                 try
                 {
-                    success = await panel.OnOpen(p1, p2, p3);
+                    success = await view.OnOpen(p1, p2, p3);
                 }
                 catch (Exception e)
                 {
@@ -177,11 +180,11 @@ namespace YIUIFramework
 
             var success = false;
 
-            if (this is IYIUIOpen<P1, P2, P3, P4> panel)
+            if (this is IOpen<P1, P2, P3, P4> view)
             {
                 try
                 {
-                    success = await panel.OnOpen(p1, p2, p3, p4);
+                    success = await view.OnOpen(p1, p2, p3, p4);
                 }
                 catch (Exception e)
                 {
@@ -207,11 +210,11 @@ namespace YIUIFramework
 
             var success = false;
 
-            if (this is IYIUIOpen<P1, P2, P3, P4, P5> panel)
+            if (this is IOpen<P1, P2, P3, P4, P5> view)
             {
                 try
                 {
-                    success = await panel.OnOpen(p1, p2, p3, p4, p5);
+                    success = await view.OnOpen(p1, p2, p3, p4, p5);
                 }
                 catch (Exception e)
                 {

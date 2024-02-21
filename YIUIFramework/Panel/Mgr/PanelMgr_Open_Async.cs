@@ -54,7 +54,7 @@ namespace YIUIFramework
             return info;
         }
 
-        public async UniTask<T> OpenPanelAsync<T>() where T : BasePanel, new()
+        public async UniTask<T> OpenPanelAsync<T>() where T : UIPanel, new()
         {
             var info = await OpenPanelStartAsync(GetPanelName<T>());
             if (info == null) return default;
@@ -75,7 +75,7 @@ namespace YIUIFramework
             return (T)await OpenPanelAfter(info, success);
         }
 
-        public async UniTask<T> OpenPanelAsync<T, P1>(P1 p1) where T : BasePanel, IYIUIOpen<P1>, new()
+        public async UniTask<T> OpenPanelAsync<T, P1>(P1 p1) where T : UIPanel, IOpen<P1>, new()
         {
             var info = await OpenPanelStartAsync(GetPanelName<T>());
             if (info == null) return default;
@@ -96,7 +96,7 @@ namespace YIUIFramework
             return (T)await OpenPanelAfter(info, success);
         }
 
-        public async UniTask<T> OpenPanelAsync<T, P1, P2>(P1 p1, P2 p2) where T : BasePanel, IYIUIOpen<P1, P2>, new()
+        public async UniTask<T> OpenPanelAsync<T, P1, P2>(P1 p1, P2 p2) where T : UIPanel, IOpen<P1, P2>, new()
         {
             var info = await OpenPanelStartAsync(GetPanelName<T>());
             if (info == null) return default;
@@ -117,7 +117,7 @@ namespace YIUIFramework
             return (T)await OpenPanelAfter(info, success);
         }
 
-        public async UniTask<T> OpenPanelAsync<T, P1, P2, P3>(P1 p1, P2 p2, P3 p3) where T : BasePanel, IYIUIOpen<P1, P2, P3>, new()
+        public async UniTask<T> OpenPanelAsync<T, P1, P2, P3>(P1 p1, P2 p2, P3 p3) where T : UIPanel, IOpen<P1, P2, P3>, new()
         {
             var info = await OpenPanelStartAsync(GetPanelName<T>());
             if (info == null) return default;
@@ -138,7 +138,7 @@ namespace YIUIFramework
             return (T)await OpenPanelAfter(info, success);
         }
 
-        public async UniTask<T> OpenPanelAsync<T, P1, P2, P3, P4>(P1 p1, P2 p2, P3 p3, P4 p4) where T : BasePanel, IYIUIOpen<P1, P2, P3, P4>, new()
+        public async UniTask<T> OpenPanelAsync<T, P1, P2, P3, P4>(P1 p1, P2 p2, P3 p3, P4 p4) where T : UIPanel, IOpen<P1, P2, P3, P4>, new()
         {
             var info = await OpenPanelStartAsync(GetPanelName<T>());
             if (info == null) return default;
@@ -159,7 +159,7 @@ namespace YIUIFramework
             return (T)await OpenPanelAfter(info, success);
         }
 
-        public async UniTask<T> OpenPanelAsync<T, P1, P2, P3, P4, P5>(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) where T : BasePanel, IYIUIOpen<P1, P2, P3, P4, P5>, new()
+        public async UniTask<T> OpenPanelAsync<T, P1, P2, P3, P4, P5>(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) where T : UIPanel, IOpen<P1, P2, P3, P4, P5>, new()
         {
             var info = await OpenPanelStartAsync(GetPanelName<T>());
             if (info == null) return default;
@@ -192,7 +192,7 @@ namespace YIUIFramework
         /// </summary>
         bool TryGetPanelInfo(string panelName, out PanelInfo panelInfo)
         {
-            if (UIBindHelper.TryGetBindVoByPanelName(panelName, out var vo))
+            if (UIBindHelper.TryGetBindVo(panelName, out var vo))
             {
                 if (panelInfos.TryGetValue(panelName, out panelInfo))
                 {
@@ -212,7 +212,7 @@ namespace YIUIFramework
         /// 用字符串开启 必须保证类名与资源名一致否则无法找到
         /// 首选使用T泛型方法打开UI 字符串只适合于特定场合使用
         /// </summary>
-        public async UniTask<BasePanel> OpenPanelAsync(string panelName, object param = null)
+        public async UniTask<UIPanel> OpenPanelAsync(string panelName, object param = null)
         {
             if (TryGetPanelInfo(panelName, out var info))
             {
@@ -243,7 +243,7 @@ namespace YIUIFramework
             return default;
         }
 
-        public async UniTask<BasePanel> OpenPanelAsync(string panelName, object param1, object param2)
+        public async UniTask<UIPanel> OpenPanelAsync(string panelName, object param1, object param2)
         {
             var paramList = ListPool<object>.Get();
             paramList.Add(param1);
@@ -253,7 +253,7 @@ namespace YIUIFramework
             return panel;
         }
 
-        public async UniTask<BasePanel> OpenPanelAsync(string panelName, object param1, object param2, object param3)
+        public async UniTask<UIPanel> OpenPanelAsync(string panelName, object param1, object param2, object param3)
         {
             var paramList = ListPool<object>.Get();
             paramList.Add(param1);
@@ -264,7 +264,7 @@ namespace YIUIFramework
             return panel;
         }
 
-        public async UniTask<BasePanel> OpenPanelAsync(string panelName, object param1, object param2, object param3, object param4)
+        public async UniTask<UIPanel> OpenPanelAsync(string panelName, object param1, object param2, object param3, object param4)
         {
             var paramList = ListPool<object>.Get();
             paramList.Add(param1);
@@ -276,7 +276,7 @@ namespace YIUIFramework
             return panel;
         }
 
-        public async UniTask<BasePanel> OpenPanelAsync(string panelName, object param1, object param2, object param3, object param4, params object[] paramMore)
+        public async UniTask<UIPanel> OpenPanelAsync(string panelName, object param1, object param2, object param3, object param4, params object[] paramMore)
         {
             var paramList = ListPool<object>.Get();
             paramList.Add(param1);
@@ -297,32 +297,32 @@ namespace YIUIFramework
 
         #region 同步通过泛型打开（泛型类型参数）
 
-        public void OpenPanel<T>() where T : BasePanel, new()
+        public void OpenPanel<T>() where T : UIPanel, new()
         {
             OpenPanelAsync<T>().Forget();
         }
 
-        public void OpenPanel<T, P1>(P1 p1) where T : BasePanel, IYIUIOpen<P1>, new()
+        public void OpenPanel<T, P1>(P1 p1) where T : UIPanel, IOpen<P1>, new()
         {
             OpenPanelAsync<T, P1>(p1).Forget();
         }
 
-        public void OpenPanel<T, P1, P2>(P1 p1, P2 p2) where T : BasePanel, IYIUIOpen<P1, P2>, new()
+        public void OpenPanel<T, P1, P2>(P1 p1, P2 p2) where T : UIPanel, IOpen<P1, P2>, new()
         {
             OpenPanelAsync<T, P1, P2>(p1, p2).Forget();
         }
 
-        public void OpenPanel<T, P1, P2, P3>(P1 p1, P2 p2, P3 p3) where T : BasePanel, IYIUIOpen<P1, P2, P3>, new()
+        public void OpenPanel<T, P1, P2, P3>(P1 p1, P2 p2, P3 p3) where T : UIPanel, IOpen<P1, P2, P3>, new()
         {
             OpenPanelAsync<T, P1, P2, P3>(p1, p2, p3).Forget();
         }
 
-        public void OpenPanel<T, P1, P2, P3, P4>(P1 p1, P2 p2, P3 p3, P4 p4) where T : BasePanel, IYIUIOpen<P1, P2, P3, P4>, new()
+        public void OpenPanel<T, P1, P2, P3, P4>(P1 p1, P2 p2, P3 p3, P4 p4) where T : UIPanel, IOpen<P1, P2, P3, P4>, new()
         {
             OpenPanelAsync<T, P1, P2, P3, P4>(p1, p2, p3, p4).Forget();
         }
 
-        public void OpenPanel<T, P1, P2, P3, P4, P5>(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) where T : BasePanel, IYIUIOpen<P1, P2, P3, P4, P5>, new()
+        public void OpenPanel<T, P1, P2, P3, P4, P5>(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) where T : UIPanel, IOpen<P1, P2, P3, P4, P5>, new()
         {
             OpenPanelAsync<T, P1, P2, P3, P4, P5>(p1, p2, p3, p4, p5).Forget();
         }

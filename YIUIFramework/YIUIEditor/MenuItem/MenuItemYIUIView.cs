@@ -16,23 +16,23 @@ namespace YIUIFramework.Editor
                 return;
             }
 
-            var panelCdeTable = activeObject.transform.parent.GetComponentInParent<UIBindCDETable>();
-            if (panelCdeTable == null)
+            var table = activeObject.transform.parent.GetComponentInParent<UITable>();
+            if (table == null)
             {
                 UnityTipsHelper.ShowError($"只能在AllViewParent / AllPopupViewParent 下使用 快捷创建View");
                 return;
             }
 
-            if (panelCdeTable.UICodeType != EUICodeType.Panel)
+            if (table.UICodeType != UIType.Panel)
             {
                 UnityTipsHelper.ShowError($"必须是Panel 下使用 快捷创建View");
                 return;
             }
 
-            var panelEditorData = panelCdeTable.PanelSplitData;
+            var panelEditorData = table.PanelSplitData;
 
-            if (activeObject != panelEditorData.AllViewParent.gameObject &&
-                activeObject != panelEditorData.AllPopupViewParent.gameObject)
+            if (activeObject != panelEditorData.ViewTabsParent.gameObject &&
+                activeObject != panelEditorData.ViewPopupsParent.gameObject)
             {
                 UnityTipsHelper.ShowError($"只能在AllViewParent / AllPopupViewParent 下使用 快捷创建View");
                 return;
@@ -42,7 +42,7 @@ namespace YIUIFramework.Editor
             //ViewParent
             var viewParentObject = new GameObject();
             var viewParentRect = viewParentObject.GetOrAddComponent<RectTransform>();
-            viewParentObject.name = UIStaticHelper.UIYIUIViewParentName;
+            viewParentObject.name = UIConst.YIUIViewParentName;
             viewParentRect.SetParent(activeObject.transform, false);
             viewParentRect.ResetToFullScreen();
 
@@ -51,22 +51,22 @@ namespace YIUIFramework.Editor
             var viewObject = new GameObject();
             var viewRect = viewObject.GetOrAddComponent<RectTransform>();
             viewObject.GetOrAddComponent<CanvasRenderer>();
-            var cdeTable = viewObject.GetOrAddComponent<UIBindCDETable>();
-            cdeTable.UICodeType = EUICodeType.View;
-            viewObject.name = UIStaticHelper.UIYIUIViewName;
+            var uiTable = viewObject.GetOrAddComponent<UITable>();
+            uiTable.UICodeType = UIType.View;
+            viewObject.name = UIConst.YIUIViewName;
             viewRect.SetParent(viewParentRect, false);
             viewRect.ResetToFullScreen();
 
 
-            if (activeObject == panelEditorData.AllViewParent.gameObject)
+            if (activeObject == panelEditorData.ViewTabsParent.gameObject)
             {
-                panelEditorData.AllCreateView.Add(viewParentRect);
-                cdeTable.ViewWindowType = EViewWindowType.View;
+                panelEditorData.ViewTabs.Add(viewParentRect);
+                uiTable.ViewWindowType = EViewWindowType.View;
             }
-            else if (activeObject == panelEditorData.AllPopupViewParent.gameObject)
+            else if (activeObject == panelEditorData.ViewPopupsParent.gameObject)
             {
-                panelEditorData.AllPopupView.Add(viewParentRect);
-                cdeTable.ViewWindowType = EViewWindowType.Popup;
+                panelEditorData.ViewPopups.Add(viewParentRect);
+                uiTable.ViewWindowType = EViewWindowType.Popup;
             }
 
             viewParentObject.SetLayerRecursively(LayerMask.NameToLayer("UI"));

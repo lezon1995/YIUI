@@ -7,7 +7,7 @@ namespace YIUIFramework
     /// <summary>
     /// View堆栈操作
     /// </summary>
-    [LabelText("堆栈操作")]
+    [LabelText("Stack")]
     public enum EViewStackOption
     {
         [LabelText("不操作 就叠加管理")]

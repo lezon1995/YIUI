@@ -2,7 +2,7 @@
 {
     public class PanelInfo
     {
-        public BasePanel Panel { get; set; }
+        public UIPanel Panel { get; set; }
 
         // 包名
         public string PkgName { get; }
@@ -18,6 +18,11 @@
             Name = panelName;
             PkgName = pkgName;
             ResName = resName;
+        }
+
+        public static implicit operator bool(PanelInfo self)
+        {
+            return self != null;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using YIUIBind;
+
 
 namespace YIUIFramework.Editor
 {
@@ -13,15 +13,15 @@ namespace YIUIFramework.Editor
             var activeObject = Selection.activeObject as DefaultAsset;
             if (activeObject == null)
             {
-                UnityTipsHelper.ShowError($"请在路径 {UIStaticHelper.UIProjectResPath}/xxx/{UIStaticHelper.UISource} 下右键创建");
+                UnityTipsHelper.ShowError($"请在路径 {UIConst.ResPath}/xxx/{UIConst.Source} 下右键创建");
                 return;
             }
 
             var path = AssetDatabase.GetAssetPath(Selection.activeObject);
 
-            if (activeObject.name != UIStaticHelper.UISource || !path.Contains(UIStaticHelper.UIProjectResPath))
+            if (activeObject.name != UIConst.Source || !path.Contains(UIConst.ResPath))
             {
-                UnityTipsHelper.ShowError($"请在路径 {UIStaticHelper.UIProjectResPath}/xxx/{UIStaticHelper.UISource} 下右键创建");
+                UnityTipsHelper.ShowError($"请在路径 {UIConst.ResPath}/xxx/{UIConst.Source} 下右键创建");
                 return;
             }
 
@@ -30,15 +30,15 @@ namespace YIUIFramework.Editor
 
         internal static void CreateYIUIPanelByPath(string path, string name = null)
         {
-            if (!path.Contains(UIStaticHelper.UIProjectResPath))
+            if (!path.Contains(UIConst.ResPath))
             {
-                UnityTipsHelper.ShowError($"请在路径 {UIStaticHelper.UIProjectResPath}/xxx/{UIStaticHelper.UISource} 下右键创建");
+                UnityTipsHelper.ShowError($"请在路径 {UIConst.ResPath}/xxx/{UIConst.Source} 下右键创建");
                 return;
             }
 
             var saveName = string.IsNullOrEmpty(name)
-                ? UIStaticHelper.UIYIUIPanelSourceName
-                : $"{name}{UIStaticHelper.UIPanelSourceName}";
+                ? UIConst.YIUIPanelSourceName
+                : $"{name}{UIConst.PanelSourceName}";
             var savePath = $"{path}/{saveName}.prefab";
 
             if (AssetDatabase.LoadAssetAtPath(savePath, typeof(Object)) != null)
@@ -75,53 +75,60 @@ namespace YIUIFramework.Editor
         static GameObject CreateYIUIPanel(GameObject activeObject = null)
         {
             //panel
-            var panelObject = new GameObject();
-            var panelRect = panelObject.GetOrAddComponent<RectTransform>();
-            panelObject.GetOrAddComponent<CanvasRenderer>();
-            var cdeTable = panelObject.GetOrAddComponent<UIBindCDETable>();
-            cdeTable.UICodeType = EUICodeType.Panel;
-            cdeTable.IsSplitData = true;
+            var panel = new GameObject();
+            var transform = panel.GetOrAddComponent<RectTransform>();
+            panel.GetOrAddComponent<CanvasRenderer>();
+            var table = panel.GetOrAddComponent<UITable>();
+            table.UICodeType = UIType.Panel;
+            table.IsSplitData = true;
 
-            //cdeTable.PanelOption |= EPanelOption.DisReset; //如果想要都是默认缓存界面可开启
-            var panelEditorData = cdeTable.PanelSplitData;
-            panelEditorData.Panel = panelObject;
-            panelObject.name = UIStaticHelper.UIYIUIPanelSourceName;
+            // table.PanelOption |= EPanelOption.DisReset; //如果想要都是默认缓存界面可开启
+            var splitData = table.PanelSplitData;
+            splitData.Panel = panel;
+            panel.name = UIConst.YIUIPanelSourceName;
             if (activeObject)
             {
-                panelRect.SetParent(activeObject.transform, false);
+                transform.SetParent(activeObject.transform, false);
             }
 
-            panelRect.ResetToFullScreen();
+            transform.ResetToFullScreen();
 
-            //阻挡图
-            var backgroundObject = new GameObject();
-            var backgroundRect = backgroundObject.GetOrAddComponent<RectTransform>();
-            backgroundObject.GetOrAddComponent<CanvasRenderer>();
-            backgroundObject.GetOrAddComponent<UIBlock>();
-            backgroundObject.name = "UIBlockBG";
-            backgroundRect.SetParent(panelRect, false);
-            backgroundRect.ResetToFullScreen();
+            //UI射线阻挡
+            var block = new GameObject();
+            var blockRectTrans = block.GetOrAddComponent<RectTransform>();
+            block.GetOrAddComponent<CanvasRenderer>();
+            block.GetOrAddComponent<UIBlock>();
+            block.name = "UIBlock";
+            blockRectTrans.SetParent(transform, false);
+            blockRectTrans.ResetToFullScreen();
 
+            //Panel主要内容
+            var content = new GameObject();
+            var contentRectTrans = content.GetOrAddComponent<RectTransform>();
+            content.GetOrAddComponent<CanvasRenderer>();
+            content.name = "Content";
+            contentRectTrans.SetParent(transform, false);
+            contentRectTrans.ResetToFullScreen();
 
-            // 添加allView节点
-            var allViewObject = new GameObject();
-            var allViewRect = allViewObject.GetOrAddComponent<RectTransform>();
-            allViewObject.name = UIStaticHelper.UIAllViewParentName;
-            allViewRect.SetParent(panelRect, false);
-            allViewRect.ResetToFullScreen();
-            panelEditorData.AllViewParent = allViewRect;
+            // 添加viewTabs节点
+            var viewTabs = new GameObject();
+            var viewTabsRect = viewTabs.GetOrAddComponent<RectTransform>();
+            viewTabs.name = UIConst.ViewTabsName;
+            viewTabsRect.SetParent(transform, false);
+            viewTabsRect.ResetToFullScreen();
+            splitData.ViewTabsParent = viewTabsRect;
 
-            // 添加AllPopupView节点
-            var allPopupViewObject = new GameObject();
-            var allPopupViewRect = allPopupViewObject.GetOrAddComponent<RectTransform>();
-            allPopupViewObject.name = UIStaticHelper.UIAllPopupViewParentName;
-            allPopupViewRect.SetParent(panelRect, false);
-            allPopupViewRect.ResetToFullScreen();
-            panelEditorData.AllPopupViewParent = allPopupViewRect;
+            // 添加viewPopups节点
+            var viewPopups = new GameObject();
+            var viewPopupsRect = viewPopups.GetOrAddComponent<RectTransform>();
+            viewPopups.name = UIConst.ViewPopupsName;
+            viewPopupsRect.SetParent(transform, false);
+            viewPopupsRect.ResetToFullScreen();
+            splitData.ViewPopupsParent = viewPopupsRect;
 
-            panelObject.SetLayerRecursively(LayerMask.NameToLayer("UI"));
+            panel.SetLayerRecursively(LayerMask.NameToLayer("UI"));
 
-            return panelObject;
+            return panel;
         }
     }
 }

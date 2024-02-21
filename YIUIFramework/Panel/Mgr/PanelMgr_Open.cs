@@ -21,7 +21,7 @@ namespace YIUIFramework
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        bool TryGetPanelInfo<T>(out PanelInfo panelInfo) where T : BasePanel
+        bool TryGetPanelInfo<T>(out PanelInfo panelInfo) where T : UIPanel
         {
             var type = typeof(T);
             if (UIBindHelper.TryGetBindVo(type, out var vo))
@@ -47,7 +47,7 @@ namespace YIUIFramework
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        string GetPanelName<T>() where T : BasePanel
+        string GetPanelName<T>() where T : UIPanel
         {
             if (TryGetPanelInfo<T>(out var panelInfo))
             {
@@ -71,7 +71,7 @@ namespace YIUIFramework
         /// <summary>
         /// 打开之后
         /// </summary>
-        async UniTask<BasePanel> OpenPanelAfter(PanelInfo info, bool success)
+        async UniTask<UIPanel> OpenPanelAfter(PanelInfo info, bool success)
         {
             if (success)
             {

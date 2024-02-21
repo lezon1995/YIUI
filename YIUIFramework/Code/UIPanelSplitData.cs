@@ -15,26 +15,24 @@ namespace YIUIFramework
         [HideInInspector]
         public GameObject Panel;
 
-        [BoxGroup("通用界面")]
-        [LabelText("所有子界面父对象")]
+        [BoxGroup("TabView")]
         [ReadOnly]
-        public RectTransform AllViewParent;
+        public RectTransform ViewTabsParent;
 
-        [BoxGroup("通用界面")]
-        [LabelText("所有通用界面(已存在不创建的)")]
-        public List<RectTransform> AllCommonView = new List<RectTransform>();
+        [BoxGroup("TabView")]
+        [LabelText("TabView(Static)")]
+        public List<RectTransform> ViewTabsStatic = new List<RectTransform>();
 
-        [BoxGroup("通用界面")]
-        [LabelText("所有需要被创建的界面")]
-        public List<RectTransform> AllCreateView = new List<RectTransform>();
+        [BoxGroup("TabView")]
+        [LabelText("TabView(Dynamic)")]
+        public List<RectTransform> ViewTabs = new List<RectTransform>();
 
-        [BoxGroup("弹窗界面")]
-        [LabelText("所有弹出界面父级")]
+        [BoxGroup("PopupView")]
         [ReadOnly]
-        public RectTransform AllPopupViewParent;
+        public RectTransform ViewPopupsParent;
 
-        [BoxGroup("弹窗界面")]
-        [LabelText("所有弹出界面")]
-        public List<RectTransform> AllPopupView = new List<RectTransform>();
+        [BoxGroup("PopupView")]
+        [LabelText("PopupView(Dynamic)")]
+        public List<RectTransform> ViewPopups = new List<RectTransform>();
     }
 }

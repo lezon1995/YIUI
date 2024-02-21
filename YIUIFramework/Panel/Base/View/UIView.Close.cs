@@ -2,7 +2,7 @@
 
 namespace YIUIFramework
 {
-    public partial class BaseView
+    public partial class UIView
     {
         public void Close(bool tween = true, bool ignoreElse = false)
         {

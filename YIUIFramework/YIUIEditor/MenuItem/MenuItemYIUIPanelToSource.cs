@@ -22,44 +22,44 @@ namespace YIUIFramework.Editor
 
             var path = AssetDatabase.GetAssetPath(Selection.activeObject);
 
-            if (!path.Contains(UIStaticHelper.UIProjectResPath))
+            if (!path.Contains(UIConst.ResPath))
             {
-                UnityTipsHelper.ShowError($"请在路径 {UIStaticHelper.UIProjectResPath}/xxx/{UIStaticHelper.UIPanelName} 下右键选择一个Panel 进行转换");
+                UnityTipsHelper.ShowError($"请在路径 {UIConst.ResPath}/xxx/{UIConst.PanelName} 下右键选择一个Panel 进行转换");
                 return;
             }
 
-            var panelCdeTable = activeObject.GetComponent<UIBindCDETable>();
-            if (panelCdeTable == null)
+            var table = activeObject.GetComponent<UITable>();
+            if (table == null)
             {
-                UnityTipsHelper.ShowError("预设错误 没有 UIBindCDETable");
+                UnityTipsHelper.ShowError("预设错误 没有 UITable");
                 return;
             }
 
-            if (panelCdeTable.UICodeType != EUICodeType.Panel)
+            if (table.UICodeType != UIType.Panel)
             {
                 UnityTipsHelper.ShowError("预设错误 必须是Panel");
                 return;
             }
 
-            if (panelCdeTable.IsSplitData)
+            if (table.IsSplitData)
             {
                 UnityTipsHelper.ShowError("这是一个源数据 无法逆向转换");
                 return;
             }
 
-            if (string.IsNullOrEmpty(panelCdeTable.PkgName))
+            if (string.IsNullOrEmpty(table.PkgName))
             {
-                panelCdeTable.AutoCheck();
+                table.AutoCheck();
             }
 
-            if (string.IsNullOrEmpty(panelCdeTable.PkgName))
+            if (string.IsNullOrEmpty(table.PkgName))
             {
                 UnityTipsHelper.ShowError("未知错误 无法识别 包名");
                 return;
             }
 
-            var newSourceName = $"{panelCdeTable.name}{UIStaticHelper.UISource}";
-            var savePath = $"{UIStaticHelper.UIProjectResPath}/{panelCdeTable.PkgName}/{UIStaticHelper.UISource}/{newSourceName}.prefab";
+            var newSourceName = $"{table.name}{UIConst.Source}";
+            var savePath = $"{UIConst.ResPath}/{table.PkgName}/{UIConst.Source}/{newSourceName}.prefab";
 
             if (AssetDatabase.LoadAssetAtPath(savePath, typeof(Object)) != null)
             {
@@ -81,11 +81,11 @@ namespace YIUIFramework.Editor
             }
 
             var newSource = UIMenuItemHelper.CopyGameObject(loadPanel);
-            var oldCdeTable = newSource.GetComponent<UIBindCDETable>();
-            oldCdeTable.IsSplitData = true;
-            newSource.name = $"{loadPanel.name}{UIStaticHelper.UISource}";
+            var table = newSource.GetComponent<UITable>();
+            table.IsSplitData = true;
+            newSource.name = $"{loadPanel.name}{UIConst.Source}";
 
-            CorrelationView(oldCdeTable);
+            CorrelationView(table);
 
             PrefabUtility.SaveAsPrefabAsset(newSource, savePath);
             Object.DestroyImmediate(newSource);
@@ -95,11 +95,11 @@ namespace YIUIFramework.Editor
         }
 
         //关联UI
-        static void CorrelationView(UIBindCDETable cdeTable)
+        static void CorrelationView(UITable table)
         {
-            CorrelationViewByParent(cdeTable.PkgName, cdeTable.PanelSplitData.AllCommonView);
-            CorrelationViewByParent(cdeTable.PkgName, cdeTable.PanelSplitData.AllCreateView);
-            CorrelationViewByParent(cdeTable.PkgName, cdeTable.PanelSplitData.AllPopupView);
+            CorrelationViewByParent(table.PkgName, table.PanelSplitData.ViewTabsStatic);
+            CorrelationViewByParent(table.PkgName, table.PanelSplitData.ViewTabs);
+            CorrelationViewByParent(table.PkgName, table.PanelSplitData.ViewPopups);
         }
 
         static void CorrelationViewByParent(string pkgName, List<RectTransform> parentList)
@@ -108,9 +108,9 @@ namespace YIUIFramework.Editor
             {
                 if (viewParent)
                 {
-                    var viewName = viewParent.name.Replace(UIStaticHelper.UIParentName, "");
+                    var viewName = viewParent.name.Replace(UIConst.ParentName, "");
 
-                    var viewPath = $"{UIStaticHelper.UIProjectResPath}/{pkgName}/{UIStaticHelper.UIPrefabs}/{viewName}.prefab";
+                    var viewPath = $"{UIConst.ResPath}/{pkgName}/{UIConst.Prefabs}/{viewName}.prefab";
 
                     var childView = viewParent.FindChildByName(viewName);
                     if (childView)

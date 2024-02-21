@@ -1,6 +1,6 @@
 ﻿namespace YIUIFramework
 {
-    public abstract partial class BaseWindow : UIBase
+    public abstract partial class UIWindow : UIBase
     {
         /// <summary>
         /// 窗口选项

@@ -17,8 +17,8 @@ namespace YIUIFramework.Editor
 
         public UICreateViewCode(out bool result, string authorName, UICreateViewData codeData) : base(authorName)
         {
-            var path = $"{UIStaticHelper.UICodeScriptsPath}/{codeData.PkgName}/{codeData.ResName}.cs";
-            var template = $"{UIStaticHelper.UITemplatePath}/UICreateViewTemplate.txt";
+            var path = $"{UIConst.CodePath}/{codeData.PkgName}/{codeData.ResName}.cs";
+            var template = $"{UIConst.TemplatePath}/UICreateViewTemplate.txt";
             CreateVo = new CreateVo(template, path);
 
             m_EventName = $"{codeData.ResName} 继承 {codeData.ResName}Base 创建";

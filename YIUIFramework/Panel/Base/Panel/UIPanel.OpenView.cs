@@ -7,17 +7,16 @@ namespace YIUIFramework
     /// <summary>
     /// 部类 界面拆分数据
     /// </summary>
-    public abstract partial class BasePanel
+    public abstract partial class UIPanel
     {
-        UIPanelSplitData m_PanelSplitData;
-
-        readonly Dictionary<string, BaseView> m_ExistView = new Dictionary<string, BaseView>();
-        readonly Dictionary<string, RectTransform> m_ViewParent = new Dictionary<string, RectTransform>();
+        UIPanelSplitData splitData;
+        Dictionary<string, UIView> viewTabsStatic = new Dictionary<string, UIView>();
+        Dictionary<string, RectTransform> viewParents = new Dictionary<string, RectTransform>();
 
         /// <summary>
         /// 当前已打开的UI 不包含弹窗
         /// </summary>
-        protected BaseView u_CurrentOpenView;
+        UIView curTabView;
 
         /// <summary>
         /// 外界可判断的当前打开的view名字
@@ -26,11 +25,11 @@ namespace YIUIFramework
         {
             get
             {
-                if (u_CurrentOpenView != null)
+                if (curTabView != null)
                 {
-                    if (u_CurrentOpenView.UIResName != null)
+                    if (curTabView.UIResName != null)
                     {
-                        return u_CurrentOpenView.UIResName;
+                        return curTabView.UIResName;
                     }
 
                     return "";
@@ -40,57 +39,57 @@ namespace YIUIFramework
             }
         }
 
-        readonly HashSet<string> m_ViewOpening = new HashSet<string>();
+        HashSet<string> openingViews = new HashSet<string>();
 
         void InitPanelViewData()
         {
-            m_ExistView.Clear();
-            m_ViewParent.Clear();
-            m_PanelSplitData = Table.PanelSplitData;
-            CreateCommonView();
-            AddViewParent(m_PanelSplitData.AllCommonView);
-            AddViewParent(m_PanelSplitData.AllCreateView);
-            AddViewParent(m_PanelSplitData.AllPopupView);
+            viewTabsStatic.Clear();
+            viewParents.Clear();
+            splitData = Table.PanelSplitData;
+            CreateStaticView();
+            AddViewParent(splitData.ViewTabsStatic);
+            AddViewParent(splitData.ViewTabs);
+            AddViewParent(splitData.ViewPopups);
         }
 
-        void AddViewParent(List<RectTransform> listParent)
+        void AddViewParent(List<RectTransform> list)
         {
-            foreach (var parent in listParent)
+            foreach (var transform in list)
             {
-                var viewName = parent.name.Replace(UIStaticHelper.UIParentName, "");
-                m_ViewParent.Add(viewName, parent);
+                var viewName = transform.name.Replace(UIConst.ParentName, "");
+                viewParents.Add(viewName, transform);
             }
         }
 
-        void CreateCommonView()
+        void CreateStaticView()
         {
-            foreach (var commonParentView in m_PanelSplitData.AllCommonView)
+            foreach (var viewTab in splitData.ViewTabsStatic)
             {
-                var viewName = commonParentView.name.Replace(UIStaticHelper.UIParentName, "");
+                var viewName = viewTab.name.Replace(UIConst.ParentName, "");
 
                 //通用view的名称是不允许修改的 如果修改了 那么就创建一个新的
-                var viewTsf = commonParentView.FindChildByName(viewName);
-                if (viewTsf == null)
+                var transform = viewTab.FindChildByName(viewName);
+                if (transform == null)
                 {
                     Debug.LogError($"{viewName} 当前通用View 不存在于父级下 所以无法自动创建 将会动态创建");
                     continue;
                 }
 
                 //查看本地是否已经创建
-                var viewBase = Table.FindUIBase<UIBase>(viewName);
+                var view = Table.FindUIBase<UIBase>(viewName);
 
                 //如果没有则通用重新创建
-                if (viewBase == null)
+                if (view == null)
                 {
-                    viewBase = YIUIFactory.CreateCommon(UIPkgName, viewName, viewTsf.gameObject);
+                    view = YIUIFactory.CreateCommon(UIPkgName, viewName, transform.gameObject);
                 }
 
-                switch (viewBase)
+                switch (view)
                 {
                     case null:
                         continue;
-                    case BaseView baseView:
-                        m_ExistView.Add(viewName, baseView);
+                    case UIView uiView:
+                        viewTabsStatic.Add(viewName, uiView);
                         break;
                     default:
                         Debug.LogError($"{viewName} 不应该存在的错误 当前创建的View 不是BaseView");
@@ -101,17 +100,21 @@ namespace YIUIFramework
 
         RectTransform GetViewParent(string viewName)
         {
-            m_ViewParent.TryGetValue(viewName, out var value);
-            return value;
+            if (viewParents.TryGetValue(viewName, out var transform))
+            {
+                return transform;
+            }
+
+            return null;
         }
 
-        async UniTask<T> GetView<T>() where T : BaseView, new()
+        async UniTask<T> GetView<T>() where T : UIView, new()
         {
             var viewName = typeof(T).Name;
             var parent = GetViewParent(viewName);
             if (parent)
             {
-                if (m_ExistView.TryGetValue(viewName, out var value))
+                if (viewTabsStatic.TryGetValue(viewName, out var value))
                 {
                     return value as T;
                 }
@@ -126,7 +129,7 @@ namespace YIUIFramework
                 var view = await YIUIFactory.InstantiateAsync<T>(parent);
                 RemoveOpening(viewName);
 
-                m_ExistView.Add(viewName, view);
+                viewTabsStatic.Add(viewName, view);
 
                 return view;
             }
@@ -138,7 +141,7 @@ namespace YIUIFramework
         /// <summary>
         /// 打开之前
         /// </summary>
-        async UniTask OpenViewBefore(BaseView view)
+        async UniTask OpenViewBefore(UIView view)
         {
             if (!view.WindowFirstOpen)
             {
@@ -149,7 +152,7 @@ namespace YIUIFramework
         /// <summary>
         /// 打开之后
         /// </summary>
-        async UniTask OpenViewAfter(BaseView view, bool success)
+        async UniTask OpenViewAfter(UIView view, bool success)
         {
             if (success)
             {
@@ -168,7 +171,7 @@ namespace YIUIFramework
         /// 关闭上一个
         /// </summary>
         /// <param name="view">当前</param>
-        async UniTask CloseLastView(BaseView view)
+        async UniTask CloseLastView(UIView view)
         {
             //其他需要被忽略
             if (view.ViewWindowType != EViewWindowType.View)
@@ -179,45 +182,45 @@ namespace YIUIFramework
             //View只有切换没有关闭
             var skipTween = view.WindowSkipOtherCloseTween;
 
-            if (u_CurrentOpenView != null && u_CurrentOpenView != view)
+            if (curTabView != null && curTabView != view)
             {
                 //View 没有自动回退功能  比如AView 关闭 自动吧上一个BView 给打开 没有这种需求 也不能有这个需求
                 //只能有 打开一个新View 上一个View的自动处理 99% 都是吧上一个隐藏即可
                 //外部就只需要关心 打开 A B C 即可
                 //因为这是View  不是 Panel
-                switch (u_CurrentOpenView.StackOption)
+                switch (curTabView.StackOption)
                 {
                     case EViewStackOption.None:
                         break;
                     case EViewStackOption.Visible:
-                        u_CurrentOpenView.SetActive(false);
+                        curTabView.SetActive(false);
                         break;
                     case EViewStackOption.VisibleTween:
-                        await u_CurrentOpenView.CloseAsync(!skipTween);
+                        await curTabView.CloseAsync(!skipTween);
                         break;
                     default:
-                        Debug.LogError($"新增类型未实现 {u_CurrentOpenView.StackOption}");
-                        u_CurrentOpenView.SetActive(false);
+                        Debug.LogError($"新增类型未实现 {curTabView.StackOption}");
+                        curTabView.SetActive(false);
                         break;
                 }
             }
 
-            u_CurrentOpenView = view;
+            curTabView = view;
         }
 
         void AddOpening(string name)
         {
-            m_ViewOpening.Add(name);
+            openingViews.Add(name);
         }
 
         void RemoveOpening(string name)
         {
-            m_ViewOpening.Remove(name);
+            openingViews.Remove(name);
         }
 
-        public bool ViewIsOpening(string name)
+        bool ViewIsOpening(string name)
         {
-            return m_ViewOpening.Contains(name);
+            return openingViews.Contains(name);
         }
     }
 }

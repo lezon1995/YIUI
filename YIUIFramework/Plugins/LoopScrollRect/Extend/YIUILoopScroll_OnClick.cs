@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using YIUIBind;
 
 namespace YIUIFramework
 {
@@ -176,15 +175,15 @@ namespace YIUIFramework
         {
             if (!m_OnClickInit) return uiBase;
 
-            var uEventClickItem = uiBase.FindEvent<UIEventP0>(m_ItemClickEventName);
-            if (uEventClickItem == null)
-            {
-                Debug.LogError($"当前监听的事件未找到 请检查 {typeof(TItemRenderer).Name} 中是否有这个事件 {m_ItemClickEventName}");
-            }
-            else
-            {
-                uEventClickItem.Add(() => { OnClickItem(uiBase); });
-            }
+            // var uEventClickItem = uiBase.FindEvent<UIEventP0>(m_ItemClickEventName);
+            // if (uEventClickItem == null)
+            // {
+            //     Debug.LogError($"当前监听的事件未找到 请检查 {typeof(TItemRenderer).Name} 中是否有这个事件 {m_ItemClickEventName}");
+            // }
+            // else
+            // {
+            //     uEventClickItem.Add(() => { OnClickItem(uiBase); });
+            // }
 
             return uiBase;
         }

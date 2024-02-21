@@ -7,9 +7,8 @@ using UnityEngine;
 namespace YIUIFramework
 {
     [Serializable]
-    [LabelText("UI CDE总表")]
-    [AddComponentMenu("YIUIBind/CDE Table")]
-    public sealed partial class UIBindCDETable : SerializedMonoBehaviour
+    [AddComponentMenu("YIUIBind/UITable")]
+    public sealed partial class UITable : SerializedMonoBehaviour
     {
         [ReadOnly]
         [HorizontalGroup("UIInfo", 0.2F)]
@@ -24,16 +23,16 @@ namespace YIUIFramework
         #region 关联
 
         //关联的UI
-        UIBase m_UIBase;
+        UIBase UI;
 
         [OdinSerialize]
-        [LabelText("编辑时所有公共组件")]
+        [LabelText("Child UITables")]
         [ReadOnly]
         [PropertyOrder(1000)] //生成UI类时使用
 #if UNITY_EDITOR
         [ShowIf("@UIOperationHelper.CommonShowIf()")]
 #endif
-        internal List<UIBindCDETable> ChildTables = new List<UIBindCDETable>();
+        internal List<UITable> ChildTables = new List<UITable>();
 
         [OdinSerialize]
         [NonSerialized]
@@ -44,11 +43,11 @@ namespace YIUIFramework
 #if UNITY_EDITOR
         [HideIf("@UIOperationHelper.CommonShowIf()")]
 #endif
-        Dictionary<string, UIBase> m_ChildUIBases = new Dictionary<string, UIBase>();
+        Dictionary<string, UIBase> ChildUIBases = new Dictionary<string, UIBase>();
 
         internal void AddUIBase(string uiName, UIBase uiBase)
         {
-            bool success = m_ChildUIBases.TryAdd(uiName, uiBase);
+            bool success = ChildUIBases.TryAdd(uiName, uiBase);
 
             if (success == false)
             {
@@ -58,7 +57,7 @@ namespace YIUIFramework
 
         internal UIBase FindUIBase(string uiName)
         {
-            if (m_ChildUIBases.TryGetValue(uiName, out var uiBase))
+            if (ChildUIBases.TryGetValue(uiName, out var uiBase))
             {
                 return uiBase;
             }

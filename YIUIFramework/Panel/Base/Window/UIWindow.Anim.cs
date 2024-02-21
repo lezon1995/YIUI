@@ -3,7 +3,7 @@
 namespace YIUIFramework
 {
     //动画
-    public abstract partial class BaseWindow
+    public abstract partial class UIWindow
     {
         bool m_FirstOpenTween;
 

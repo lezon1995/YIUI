@@ -2,7 +2,7 @@
 
 namespace YIUIFramework
 {
-    public interface IYIUIWindow
+    public interface IWindow
     {
         UniTask<bool> Open();
         UniTask<bool> Open(ParamVo param);

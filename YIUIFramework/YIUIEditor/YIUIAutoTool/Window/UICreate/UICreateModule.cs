@@ -9,7 +9,7 @@ namespace YIUIFramework.Editor
 {
     public static class UICreateModule
     {
-        internal static void Create(UIBindCDETable table, bool refresh, bool tips)
+        internal static void Create(UITable table, bool refresh, bool tips)
         {
             if (!UIOperationHelper.CheckUIOperation()) return;
 
@@ -17,7 +17,7 @@ namespace YIUIFramework.Editor
             //留在这里看的 方便以后查API
             //当这个是个资源的时候 存在磁盘中
             var is0 = UnityEditor.EditorUtility.IsPersistent(table);
-            //返回></para>如果对象是Prefab的一部分，则为True/返回>Functionl
+            //返回></para>如果对象是Prefab的一部分，则为True/返回>Functional
             var is1= UnityEditor.PrefabUtility.IsPartOfAnyPrefab(table);
             //</para> . 0如果对象是不能编辑的Prefab的一部分，则为True
             var is2= UnityEditor.PrefabUtility.IsPartOfImmutablePrefab(table);
@@ -59,7 +59,7 @@ namespace YIUIFramework.Editor
             {
                 AutoRefresh = refresh,
                 ShowTips = tips,
-                Namespace = UIStaticHelper.UINamespace,
+                Namespace = UIConst.Namespace,
                 PkgName = table.PkgName,
                 ResName = table.ResName,
                 BaseClass = GetBaseClass(table),
@@ -79,16 +79,15 @@ namespace YIUIFramework.Editor
 
             switch (table.UICodeType)
             {
-                case EUICodeType.Panel:
+                case UIType.Panel:
                 {
                     var data = new UICreatePanelData
                     {
                         AutoRefresh = refresh,
                         ShowTips = tips,
-                        Namespace = UIStaticHelper.UINamespace,
+                        Namespace = UIConst.Namespace,
                         PkgName = table.PkgName,
                         ResName = table.ResName,
-                        OverrideDic = UICreateMethod.GetEventOverrideDic(table),
                     };
 
                     _ = new UICreatePanelCode(out var result, YIUIAutoTool.Author, data);
@@ -100,16 +99,15 @@ namespace YIUIFramework.Editor
 
                     return;
                 }
-                case EUICodeType.View:
+                case UIType.View:
                 {
                     var data = new UICreateViewData
                     {
                         AutoRefresh = refresh,
                         ShowTips = tips,
-                        Namespace = UIStaticHelper.UINamespace,
+                        Namespace = UIConst.Namespace,
                         PkgName = table.PkgName,
                         ResName = table.ResName,
-                        OverrideDic = UICreateMethod.GetEventOverrideDic(table),
                     };
 
                     _ = new UICreateViewCode(out var result, YIUIAutoTool.Author, data);
@@ -121,17 +119,16 @@ namespace YIUIFramework.Editor
 
                     return;
                 }
-                case EUICodeType.Component:
+                case UIType.Component:
                 {
                     //目前看上去3个DATA都一样 是特意设定的 以后可独立扩展
                     var data = new UICreateComponentData
                     {
                         AutoRefresh = refresh,
                         ShowTips = tips,
-                        Namespace = UIStaticHelper.UINamespace,
+                        Namespace = UIConst.Namespace,
                         PkgName = table.PkgName,
                         ResName = table.ResName,
-                        OverrideDic = UICreateMethod.GetEventOverrideDic(table),
                     };
 
                     _ = new UICreateComponentCode(out var result, YIUIAutoTool.Author, data);
@@ -151,36 +148,29 @@ namespace YIUIFramework.Editor
             AssetDatabase.Refresh();
         }
 
-        static string GetBaseClass(UIBindCDETable table)
+        static string GetBaseClass(UITable table)
         {
             switch (table.UICodeType)
             {
-                case EUICodeType.Panel:
-                    return UIStaticHelper.UIBasePanelName;
-                case EUICodeType.View:
-                    return UIStaticHelper.UIBaseViewName;
-                case EUICodeType.Component:
-                    return UIStaticHelper.UIBaseComponentName;
+                case UIType.Panel:
+                    return UIConst.BasePanelName;
+                case UIType.View:
+                    return UIConst.BaseViewName;
+                case UIType.Component:
+                    return UIConst.BaseComponentName;
                 default:
                     Debug.LogError($"是否新增了类型????");
-                    return UIStaticHelper.UIBaseName;
+                    return UIConst.UIBaseName;
             }
         }
 
-        static string GetRegionEvent(UIBindCDETable table)
-        {
-            return table.EventDic.Count <= 0
-                ? ""
-                : "        #region Event开始\r\n\r\n        #endregion Event结束";
-        }
-
-        internal static bool InitVoName(UIBindCDETable table)
+        internal static bool InitVoName(UITable table)
         {
             var path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(table);
             var pkgName = GetPkgName(path);
             if (pkgName.IsEmpty())
             {
-                UnityTipsHelper.ShowErrorContext(table, $"没有找到模块名 请在预制体上使用 且 必须在指定的文件夹下才可使用 {UIStaticHelper.UIProjectResPath}");
+                UnityTipsHelper.ShowErrorContext(table, $"没有找到模块名 请在预制体上使用 且 必须在指定的文件夹下才可使用 {UIConst.ResPath}");
                 return false;
             }
 
@@ -199,7 +189,7 @@ namespace YIUIFramework.Editor
         {
             while (true)
             {
-                if (path.Replace("\\", "/").Contains(UIStaticHelper.UIProjectResPath))
+                if (path.Replace("\\", "/").Contains(UIConst.ResPath))
                 {
                     var parentInfo = Directory.GetParent(path);
                     if (parentInfo == null)
@@ -207,7 +197,7 @@ namespace YIUIFramework.Editor
                         return currentName;
                     }
 
-                    if (parentInfo.Name == UIStaticHelper.UIProjectName)
+                    if (parentInfo.Name == UIConst.ProjectName)
                     {
                         return currentName;
                     }
@@ -223,35 +213,35 @@ namespace YIUIFramework.Editor
         }
 
         //收集所有公共组件
-        internal static void RefreshChildTable(UIBindCDETable table)
+        internal static void RefreshChildTable(UITable table)
         {
             table.ChildTables.Clear();
             AddTableFrom(ref table.ChildTables, table.transform);
-            CheckAddCdeTable(ref table.ChildTables, table);
+            CheckAddUITable(ref table.ChildTables, table);
         }
 
         //如果自己是panel 则还需要额外检查 是不是把自己的view给收集进去了
-        static void CheckAddCdeTable(ref List<UIBindCDETable> addCdeTable, UIBindCDETable cdeTable)
+        static void CheckAddUITable(ref List<UITable> tables, UITable table)
         {
-            if (cdeTable.UICodeType != EUICodeType.Panel && !cdeTable.IsSplitData)
+            if (table.UICodeType != UIType.Panel && !table.IsSplitData)
                 return;
 
-            for (var i = addCdeTable.Count - 1; i >= 0; i--)
+            for (var i = tables.Count - 1; i >= 0; i--)
             {
-                var targetTable = addCdeTable[i];
+                var targetTable = tables[i];
                 var parent = (RectTransform)targetTable.gameObject.transform.parent;
                 var parentName = parent.name;
                 //这里使用的是强判断 如果使用|| 可以弱判断根据需求  如果遵守View规则是没有问题的
-                if (parentName.Contains(UIStaticHelper.UIParentName) && parentName.Contains(targetTable.gameObject.name))
+                if (parentName.Contains(UIConst.ParentName) && parentName.Contains(targetTable.gameObject.name))
                 {
                     //常驻View 不需要移除
-                    if (cdeTable.PanelSplitData.AllCommonView.Contains(parent)) break;
-                    addCdeTable.RemoveAt(i);
+                    if (table.PanelSplitData.ViewTabsStatic.Contains(parent)) break;
+                    tables.RemoveAt(i);
                 }
             }
         }
 
-        static void AddTableFrom(ref List<UIBindCDETable> tableList, Transform transform)
+        static void AddTableFrom(ref List<UITable> tableList, Transform transform)
         {
             var childCount = transform.childCount;
             if (childCount == 0)
@@ -262,7 +252,7 @@ namespace YIUIFramework.Editor
             for (var i = childCount - 1; i >= 0; i--)
             {
                 var child = transform.GetChild(i);
-                var table = child.GetComponent<UIBindCDETable>();
+                var table = child.GetComponent<UITable>();
 
                 if (table == null)
                 {
@@ -275,7 +265,7 @@ namespace YIUIFramework.Editor
                     continue;
                 }
 
-                if (table.UICodeType == EUICodeType.Panel)
+                if (table.UICodeType == UIType.Panel)
                 {
                     Debug.LogError($"{transform.name} 公共组件嵌套了 其他面板 这是不允许的 {table.ResName} 已跳过忽略");
                     continue;

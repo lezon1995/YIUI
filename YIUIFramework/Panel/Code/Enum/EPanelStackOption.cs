@@ -7,7 +7,7 @@ namespace YIUIFramework
     /// <summary>
     /// Panel堆栈操作
     /// </summary>
-    [LabelText("堆栈操作")]
+    [LabelText("Stack")]
     public enum EPanelStackOption
     {
         [LabelText("不操作 就叠加管理")]

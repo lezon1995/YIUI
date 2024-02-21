@@ -10,16 +10,16 @@ namespace YIUIFramework
     {
         //业务代码相关程序集的名字
         //默认有Unity默认程序集 可以根据需求修改
-        internal static readonly string[] LogicAssemblyNames = {"Assembly-CSharp"};
+        static readonly string[] LogicAssemblyNames = {"Assembly-CSharp"};
 
         static Type[] GetLogicTypes()
         {
             return AppDomain.CurrentDomain.GetTypesByAssemblyName(LogicAssemblyNames);
         }
 
-        Type m_BasePanelType = typeof(BasePanel);
-        Type m_BaseViewType = typeof(BaseView);
-        Type m_BaseComponentType = typeof(BaseComponent);
+        Type panelType = typeof(UIPanel);
+        Type viewType = typeof(UIView);
+        Type componentType = typeof(UIComponent);
 
         public UIBindVo[] Get()
         {
@@ -36,57 +36,57 @@ namespace YIUIFramework
 
             foreach (var gameType in gameTypes)
             {
-                if (m_BasePanelType.IsAssignableFrom(gameType))
+                if (panelType.IsAssignableFrom(gameType))
                 {
                     panelTypes.Add(gameType);
                 }
-                else if (m_BaseViewType.IsAssignableFrom(gameType))
+                else if (viewType.IsAssignableFrom(gameType))
                 {
                     viewTypes.Add(gameType);
                 }
-                else if (m_BaseComponentType.IsAssignableFrom(gameType))
+                else if (componentType.IsAssignableFrom(gameType))
                 {
                     componentTypes.Add(gameType);
                 }
             }
 
             //panel绑定
-            foreach (var panelType in panelTypes)
+            foreach (var type in panelTypes)
             {
-                if (panelType.BaseType == null)
+                if (type.BaseType == null)
                 {
                     continue;
                 }
 
-                if (GetBindVo(panelType.BaseType, panelType, m_BasePanelType, out var bindVo))
+                if (GetBindVo(type.BaseType, type, panelType, out var bindVo))
                 {
                     binds.Add(bindVo);
                 }
             }
 
             //view绑定
-            foreach (var viewType in viewTypes)
+            foreach (var type in viewTypes)
             {
-                if (viewType.BaseType == null)
+                if (type.BaseType == null)
                 {
                     continue;
                 }
 
-                if (GetBindVo(viewType.BaseType, viewType, m_BaseViewType, out var bindVo))
+                if (GetBindVo(type.BaseType, type, viewType, out var bindVo))
                 {
                     binds.Add(bindVo);
                 }
             }
 
             //component绑定
-            foreach (var componentType in componentTypes)
+            foreach (var type in componentTypes)
             {
-                if (componentType.BaseType == null)
+                if (type.BaseType == null)
                 {
                     continue;
                 }
 
-                if (GetBindVo(componentType.BaseType, componentType, m_BaseComponentType, out var bindVo))
+                if (GetBindVo(type.BaseType, type, componentType, out var bindVo))
                 {
                     binds.Add(bindVo);
                 }
@@ -124,23 +124,23 @@ namespace YIUIFramework
 
         string GetCodeTypeName(Type uiBaseType)
         {
-            if (uiBaseType == m_BasePanelType)
+            if (uiBaseType == panelType)
             {
-                return UIStaticHelper.UIBasePanelName;
+                return UIConst.BasePanelName;
             }
 
-            if (uiBaseType == m_BaseViewType)
+            if (uiBaseType == viewType)
             {
-                return UIStaticHelper.UIBaseViewName;
+                return UIConst.BaseViewName;
             }
 
-            if (uiBaseType == m_BaseComponentType)
+            if (uiBaseType == componentType)
             {
-                return UIStaticHelper.UIBaseComponentName;
+                return UIConst.BaseComponentName;
             }
 
             Debug.LogError($"当前类型错误 是否新增了类型 {uiBaseType}");
-            return UIStaticHelper.UIBaseName;
+            return UIConst.UIBaseName;
         }
 
         public void NewCode(UIBindVo info, StringBuilder sb)

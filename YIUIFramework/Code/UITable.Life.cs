@@ -4,72 +4,61 @@ using UnityEngine;
 namespace YIUIFramework
 {
     //生命周期
-    public sealed partial class UIBindCDETable
+    public sealed partial class UITable
     {
-        internal Action UIBaseOnEnable;
-        internal Action UIBaseStart;
-        internal Action UIBaseOnDisable;
-        internal Action UIBaseOnDestroy;
+        internal Action onEnable;
+        internal Action onStart;
+        internal Action onDisable;
+        internal Action onDestroy;
 
         /// <summary>
         /// 关联UIBase
         /// 由UIBase初始化后调用
         /// 目前还没用 预留这里而已 不知道以后是否会有用
         /// </summary>
-        internal void BindUIBase(UIBase uiBase)
+        internal void BindUIBase(UIBase ui)
         {
-            if (m_UIBase != null)
+            if (UI)
             {
                 Debug.LogError($"{gameObject.name} m_UIBase 已存在 请检查为何重复调用");
             }
 
-            m_UIBase = uiBase;
-        }
-
-        void Awake()
-        {
-            AwakeData();
-            AwakeEvent();
+            UI = ui;
         }
 
         void OnEnable()
         {
             try
             {
-                UIBaseOnEnable?.Invoke();
+                onEnable?.Invoke();
             }
             catch (Exception e)
             {
                 Debug.LogError(e);
-                throw;
             }
         }
-
 
         void Start()
         {
             try
             {
-                UIBaseStart?.Invoke();
+                onStart?.Invoke();
             }
             catch (Exception e)
             {
                 Debug.LogError(e);
-                throw;
             }
         }
-
 
         void OnDisable()
         {
             try
             {
-                UIBaseOnDisable?.Invoke();
+                onDisable?.Invoke();
             }
             catch (Exception e)
             {
                 Debug.LogError(e);
-                throw;
             }
         }
 
@@ -77,24 +66,12 @@ namespace YIUIFramework
         {
             try
             {
-                UIBaseOnDestroy?.Invoke();
+                onDestroy?.Invoke();
             }
             catch (Exception e)
             {
                 Debug.LogError(e);
-                throw;
             }
-
-            OnDestroyEvent();
         }
-
-
-#if UNITY_EDITOR
-        void OnValidate()
-        {
-            OnValidateData();
-            OnValidateEvent();
-        }
-#endif
     }
 }

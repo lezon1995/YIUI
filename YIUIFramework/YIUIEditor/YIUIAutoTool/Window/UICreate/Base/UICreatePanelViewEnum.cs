@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using YIUIBind;
+
 
 namespace YIUIFramework.Editor
 {
@@ -11,14 +11,14 @@ namespace YIUIFramework.Editor
     /// </summary>
     public static class UICreatePanelViewEnum
     {
-        public static string Get(UIBindCDETable cdeTable)
+        public static string Get(UITable table)
         {
             var sb = SbPool.Get();
-            cdeTable.GetEventTable(sb);
+            table.GetViewEnums(sb);
             return SbPool.PutAndToStr(sb);
         }
 
-        static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
+        static void GetViewEnums(this UITable self, StringBuilder sb)
         {
             var splitData = self.PanelSplitData;
             if (splitData == null)
@@ -31,25 +31,20 @@ namespace YIUIFramework.Editor
                 return;
             }
 
-            if (!splitData.CreatePanelViewEnum)
-            {
-                return;
-            }
-
             var index = 1;
 
-            sb.AppendFormat("    public enum E{0}ViewEnum\r\n    {{\r\n", self.name);
-            AddViewEnum(splitData.AllCommonView, sb, ref index);
-            AddViewEnum(splitData.AllCreateView, sb, ref index);
-            AddViewEnum(splitData.AllPopupView, sb, ref index);
+            sb.AppendFormat("    public enum E{0}View\r\n    {{\r\n", self.name);
+            AddViewEnum(splitData.ViewTabsStatic, sb, ref index);
+            AddViewEnum(splitData.ViewTabs, sb, ref index);
+            AddViewEnum(splitData.ViewPopups, sb, ref index);
             sb.Append("    }");
         }
 
         static void AddViewEnum(List<RectTransform> viewList, StringBuilder sb, ref int index)
         {
-            foreach (var viewParent in viewList)
+            foreach (var transform in viewList)
             {
-                var viewName = viewParent.name.Replace(UIStaticHelper.UIParentName, "");
+                var viewName = transform.name.Replace(UIConst.ParentName, "");
                 sb.AppendFormat("        {0} = {1},\r\n", viewName, index);
                 index++;
             }

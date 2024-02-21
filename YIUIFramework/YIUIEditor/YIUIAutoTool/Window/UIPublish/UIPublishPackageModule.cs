@@ -14,7 +14,7 @@ namespace YIUIFramework.Editor
     public enum EUIPublishPackageData
     {
         [LabelText("组件")]
-        CDETable,
+        UITable,
 
         [LabelText("精灵")]
         Sprites,
@@ -40,13 +40,13 @@ namespace YIUIFramework.Editor
 
         [EnumToggleButtons]
         [HideLabel]
-        public EUIPublishPackageData m_UIPublishPackageData = EUIPublishPackageData.CDETable;
+        public EUIPublishPackageData m_UIPublishPackageData = EUIPublishPackageData.UITable;
 
         [LabelText("当前模块所有组件")]
         [ReadOnly]
         [ShowInInspector]
-        [ShowIf(nameof(m_UIPublishPackageData), EUIPublishPackageData.CDETable)]
-        List<UIBindCDETable> m_AllCDETable = new List<UIBindCDETable>();
+        [ShowIf(nameof(m_UIPublishPackageData), EUIPublishPackageData.UITable)]
+        List<UITable> m_Tables = new List<UITable>();
 
         [LabelText("当前模块所有精灵")]
         [ReadOnly]
@@ -79,9 +79,9 @@ namespace YIUIFramework.Editor
         {
             if (UIOperationHelper.CheckUIOperation())
             {
-                foreach (var current in m_AllCDETable)
+                foreach (var current in m_Tables)
                 {
-                    current.CreateUICode(false, false);
+                    current.GenUICode(false, false);
                 }
 
                 //创建图集 不重置 需要重置需要手动
@@ -111,24 +111,24 @@ namespace YIUIFramework.Editor
             m_UIPublishModule = publishModule;
             m_UIAtlasModule   = ((YIUIAutoTool)publishModule.AutoTool).AtlasModule;
             PkgName           = pkgName;
-            PkgPath           = $"{UIStaticHelper.UIProjectResPath}/{pkgName}";
-            FindUIBindCDETableResources();
+            PkgPath           = $"{UIConst.ResPath}/{pkgName}";
+            FindUITableResources();
             FindUITextureResources();
             FindUISpriteAtlasResources();
         }
 
-        void FindUIBindCDETableResources()
+        void FindUITableResources()
         {
-            var strings = AssetDatabase.GetAllAssetPaths().Where(x => x.StartsWith($"{PkgPath}/{UIStaticHelper.UIPrefabs}", StringComparison.InvariantCultureIgnoreCase));
+            var strings = AssetDatabase.GetAllAssetPaths().Where(x => x.StartsWith($"{PkgPath}/{UIConst.Prefabs}", StringComparison.InvariantCultureIgnoreCase));
 
             foreach (var path in strings)
             {
-                var cdeTable = AssetDatabase.LoadAssetAtPath<UIBindCDETable>(path);
-                if (cdeTable)
+                var table = AssetDatabase.LoadAssetAtPath<UITable>(path);
+                if (table)
                 {
-                    if (!cdeTable.IsSplitData)
+                    if (!table.IsSplitData)
                     {
-                        m_AllCDETable.Add(cdeTable);
+                        m_Tables.Add(table);
                     }
                 }
             }
@@ -136,7 +136,7 @@ namespace YIUIFramework.Editor
 
         void FindUITextureResources()
         {
-            var strings = AssetDatabase.GetAllAssetPaths().Where(x => x.StartsWith($"{PkgPath}/{UIStaticHelper.UISprites}", StringComparison.InvariantCultureIgnoreCase));
+            var strings = AssetDatabase.GetAllAssetPaths().Where(x => x.StartsWith($"{PkgPath}/{UIConst.Sprites}", StringComparison.InvariantCultureIgnoreCase));
 
             m_AtlasName.Clear();
 
@@ -147,7 +147,7 @@ namespace YIUIFramework.Editor
                     var atlasName = GetSpritesAtlasName(path);
                     if (string.IsNullOrEmpty(atlasName))
                     {
-                        Logger.LogError(texture, $"此文件位置错误 {path}  必须在 {UIStaticHelper.UISprites}/XX 图集文件下 不可以直接在根目录");
+                        Logger.LogError(texture, $"此文件位置错误 {path}  必须在 {UIConst.Sprites}/XX 图集文件下 不可以直接在根目录");
                         continue;
                     }
 
@@ -159,7 +159,7 @@ namespace YIUIFramework.Editor
 
         string GetSpritesAtlasName(string path, string currentName = "")
         {
-            if (!path.Replace("\\", "/").Contains($"{PkgPath}/{UIStaticHelper.UISprites}"))
+            if (!path.Replace("\\", "/").Contains($"{PkgPath}/{UIConst.Sprites}"))
             {
                 return null;
             }
@@ -170,7 +170,7 @@ namespace YIUIFramework.Editor
                 return currentName;
             }
 
-            if (parentInfo.Name == UIStaticHelper.UISprites)
+            if (parentInfo.Name == UIConst.Sprites)
             {
                 return currentName;
             }
@@ -180,7 +180,7 @@ namespace YIUIFramework.Editor
 
         private void FindUISpriteAtlasResources()
         {
-            var strings = AssetDatabase.GetAllAssetPaths().Where(x => x.StartsWith($"{PkgPath}/{UIStaticHelper.UIAtlas}", StringComparison.InvariantCultureIgnoreCase));
+            var strings = AssetDatabase.GetAllAssetPaths().Where(x => x.StartsWith($"{PkgPath}/{UIConst.Atlas}", StringComparison.InvariantCultureIgnoreCase));
 
             foreach (var path in strings)
             {
@@ -221,12 +221,12 @@ namespace YIUIFramework.Editor
 
         public void ResetAtlas(string atlasName)
         {
-            if (atlasName == UIStaticHelper.UIAtlasIgnore)
+            if (atlasName == UIConst.AtlasIgnore)
             {
                 return;
             }
 
-            var atlasFillName = $"{PkgPath}/{UIStaticHelper.UIAtlas}/Atlas_{PkgName}_{atlasName}.spriteatlas";
+            var atlasFillName = $"{PkgPath}/{UIConst.Atlas}/Atlas_{PkgName}_{atlasName}.spriteatlas";
 
             if (File.Exists(atlasFillName))
             {
@@ -237,9 +237,9 @@ namespace YIUIFramework.Editor
 
         public void CreateAtlas(string atlasName)
         {
-            if (atlasName == UIStaticHelper.UIAtlasIgnore) return;
+            if (atlasName == UIConst.AtlasIgnore) return;
 
-            var atlasFillName = $"{PkgPath}/{UIStaticHelper.UIAtlas}/Atlas_{PkgName}_{atlasName}.spriteatlas";
+            var atlasFillName = $"{PkgPath}/{UIConst.Atlas}/Atlas_{PkgName}_{atlasName}.spriteatlas";
 
             if (!File.Exists(atlasFillName))
             {
@@ -265,7 +265,7 @@ namespace YIUIFramework.Editor
             var packables = spriteAtlas.GetPackables();
             spriteAtlas.Remove(packables);
 
-            var itemPath = $"{PkgPath}/{UIStaticHelper.UISprites}/{atlasName}";
+            var itemPath = $"{PkgPath}/{UIConst.Sprites}/{atlasName}";
             spriteAtlas.Add(new[] { AssetDatabase.LoadMainAssetAtPath(itemPath) });
         }
 

@@ -8,14 +8,14 @@ namespace YIUIFramework
 {
     public sealed partial class UIPanelSplitData
     {
-        [OdinSerialize]
-        [LabelText("生成通用界面枚举")]
-        [ShowIf(nameof(ShowCreatePanelViewEnum))]
-        internal bool CreatePanelViewEnum = true;
-
         internal bool ShowCreatePanelViewEnum()
         {
-            return (AllCommonView.Count + AllCreateView.Count) >= 1;
+            if (ViewTabsStatic == null || ViewTabs == null)
+            {
+                return false;
+            }
+
+            return ViewTabsStatic.Count + ViewTabs.Count >= 1;
         }
 
         bool ShowCheckBtn()
@@ -25,7 +25,7 @@ namespace YIUIFramework
                 return false;
             }
 
-            return Panel.name.EndsWith(UIStaticHelper.UISource);
+            return Panel.name.EndsWith(UIConst.Source);
         }
 
         [GUIColor(0, 1, 1)]
@@ -41,18 +41,18 @@ namespace YIUIFramework
             if (!ResetParent()) return false;
             if (!CheckPanelName()) return false;
 
-            CheckViewName(AllCommonView);
-            CheckViewName(AllCreateView);
-            CheckViewName(AllPopupView);
+            CheckViewName(ViewTabsStatic);
+            CheckViewName(ViewTabs);
+            CheckViewName(ViewPopups);
 
-            CheckViewParent(AllCommonView, AllViewParent);
-            CheckViewParent(AllCreateView, AllViewParent);
-            CheckViewParent(AllPopupView, AllPopupViewParent);
+            CheckViewParent(ViewTabsStatic, ViewTabsParent);
+            CheckViewParent(ViewTabs, ViewTabsParent);
+            CheckViewParent(ViewPopups, ViewPopupsParent);
 
             var hashList = new HashSet<RectTransform>();
-            CheckRepetition(ref hashList, AllCommonView);
-            CheckRepetition(ref hashList, AllCreateView);
-            CheckRepetition(ref hashList, AllPopupView);
+            CheckRepetition(ref hashList, ViewTabsStatic);
+            CheckRepetition(ref hashList, ViewTabs);
+            CheckRepetition(ref hashList, ViewPopups);
 
             return true;
         }
@@ -65,25 +65,25 @@ namespace YIUIFramework
                 return false;
             }
 
-            string viewParentName = UIStaticHelper.UIAllViewParentName;
-            if (AllViewParent == null || AllViewParent.name != viewParentName)
+            string viewParentName = UIConst.ViewTabsName;
+            if (ViewTabsParent == null || ViewTabsParent.name != viewParentName)
             {
-                AllViewParent = Panel.transform.FindChildByName(viewParentName).GetComponent<RectTransform>();
+                ViewTabsParent = Panel.transform.FindChildByName(viewParentName).GetComponent<RectTransform>();
             }
 
-            if (AllViewParent == null)
+            if (ViewTabsParent == null)
             {
                 Debug.LogError($"没有找到 {Panel.name} {viewParentName}  这是必须存在的组件 你可以不用 但是不能没有");
                 return false;
             }
 
-            var popupViewParentName = UIStaticHelper.UIAllPopupViewParentName;
-            if (AllPopupViewParent == null || AllPopupViewParent.name != popupViewParentName)
+            var popupViewParentName = UIConst.ViewPopupsName;
+            if (ViewPopupsParent == null || ViewPopupsParent.name != popupViewParentName)
             {
-                AllPopupViewParent = Panel.transform.FindChildByName(popupViewParentName).GetComponent<RectTransform>();
+                ViewPopupsParent = Panel.transform.FindChildByName(popupViewParentName).GetComponent<RectTransform>();
             }
 
-            if (AllPopupViewParent == null)
+            if (ViewPopupsParent == null)
             {
                 Debug.LogError($"没有找到 {Panel.name} {popupViewParentName}  这是必须存在的组件 你可以不用 但是不能没有");
                 return false;
@@ -100,8 +100,8 @@ namespace YIUIFramework
                 Panel.name = qualifiedName;
             }
 
-            var panelSourceName = UIStaticHelper.UIPanelSourceName;
-            if (Panel.name == UIStaticHelper.UIYIUIPanelSourceName)
+            var panelSourceName = UIConst.PanelSourceName;
+            if (Panel.name == UIConst.PanelSourceName)
             {
                 Debug.LogError($"当前是默认名称 请手动修改名称 Xxx{panelSourceName}");
                 return false;
@@ -134,8 +134,8 @@ namespace YIUIFramework
                     current.name = qualifiedName;
                 }
 
-                var viewParentName = UIStaticHelper.UIViewParentName;
-                if (current.name == UIStaticHelper.UIYIUIViewParentName)
+                var viewParentName = UIConst.ViewParentName;
+                if (current.name == UIConst.YIUIViewParentName)
                 {
                     Debug.LogError($"当前是默认名称 请手动修改名称 Xxx{viewParentName}");
                     list.RemoveAt(i);
@@ -149,27 +149,27 @@ namespace YIUIFramework
                     continue;
                 }
 
-                var viewName = current.name.Replace(UIStaticHelper.UIParentName, "");
-                var viewCde = current.GetComponentInChildren<UIBindCDETable>();
-                
-                if (viewCde == null)
+                var viewName = current.name.Replace(UIConst.ParentName, "");
+                var viewTable = current.GetComponentInChildren<UITable>();
+
+                if (viewTable == null)
                 {
                     //如果这个子物体被隐藏了
                     if (current.transform.childCount >= 1)
                     {
                         var firstChild = current.transform.GetChild(0);
-                        viewCde = firstChild.GetComponent<UIBindCDETable>();
+                        viewTable = firstChild.GetComponent<UITable>();
                     }
                 }
-                
-                if (viewCde == null)
+
+                if (viewTable == null)
                 {
                     Debug.LogError($" {current.name} 父物体下必须有View  但是未找到View 请使用 右键 YIUI/Create UIView 创建符合要求的结构");
                     list.RemoveAt(i);
                     continue;
                 }
 
-                viewCde.gameObject.name = viewName;
+                viewTable.gameObject.name = viewName;
             }
         }
 
@@ -201,11 +201,11 @@ namespace YIUIFramework
                     //如果多了还是不要自动了
                     switch (parentP.name)
                     {
-                        case UIStaticHelper.UIAllViewParentName:
-                            AllCreateView.Add(current);
+                        case UIConst.ViewTabsName:
+                            ViewTabs.Add(current);
                             break;
-                        case UIStaticHelper.UIAllPopupViewParentName:
-                            AllPopupView.Add(current);
+                        case UIConst.ViewPopupsName:
+                            ViewPopups.Add(current);
                             break;
                     }
                 }

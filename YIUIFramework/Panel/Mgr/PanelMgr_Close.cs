@@ -114,12 +114,14 @@ namespace YIUIFramework
                 return;
             }
 
-            if (info.Panel.PanelOption.Has(EPanelOption.DisClose))
+            var panel = info.Panel;
+            
+            if (panel.PanelOption.Has(EPanelOption.DisClose))
             {
                 bool allowClose = false; //是否允许关闭
 
                 //如果继承禁止关闭接口 可返回是否允许关闭自行处理
-                if (info.Panel is IYIUIBanClose disClose)
+                if (panel is IBanClose disClose)
                 {
                     allowClose = disClose.DoBanClose();
                 }
@@ -131,10 +133,10 @@ namespace YIUIFramework
                 }
             }
 
-            if (!info.Panel.WindowLastClose)
+            if (!panel.WindowLastClose)
             {
-                await info.Panel.InternalOnWindowCloseTween(tween);
-                info.Panel.OnClose();
+                await panel.InternalOnWindowCloseTween(tween);
+                panel.OnClose();
             }
             
             if (!ignoreElse)
@@ -142,10 +144,10 @@ namespace YIUIFramework
                 await RemoveUIAddElse(info);
             }
             
-            if (info.Panel.WindowLastClose)
+            if (panel.WindowLastClose)
             {
-                await info.Panel.InternalOnWindowCloseTween(tween);
-                info.Panel.OnClose();
+                await panel.InternalOnWindowCloseTween(tween);
+                panel.OnClose();
             }
             
             RemoveUI(info);
@@ -160,7 +162,7 @@ namespace YIUIFramework
         /// 关闭一个窗口
         /// 异步等待关闭动画
         /// </summary>
-        public async UniTask ClosePanelAsync<T>(bool tween = true, bool ignoreElse = false) where T : BasePanel
+        public async UniTask ClosePanelAsync<T>(bool tween = true, bool ignoreElse = false) where T : UIPanel
         {
             await ClosePanelAsync(GetPanelName<T>(), tween, ignoreElse);
         }
@@ -169,7 +171,7 @@ namespace YIUIFramework
         /// 同步关闭窗口
         /// 无法等待关闭动画
         /// </summary>
-        public void ClosePanel<T>(bool tween = true, bool ignoreElse = false) where T : BasePanel
+        public void ClosePanel<T>(bool tween = true, bool ignoreElse = false) where T : UIPanel
         {
             ClosePanelAsync(GetPanelName<T>(), tween, ignoreElse).Forget();
         }

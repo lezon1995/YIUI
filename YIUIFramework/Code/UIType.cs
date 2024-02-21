@@ -1,6 +1,6 @@
 ﻿namespace YIUIFramework
 {
-    public enum EUICodeType
+    public enum UIType
     {
         Panel,
         View,

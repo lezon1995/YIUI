@@ -13,25 +13,25 @@ namespace YIUIFramework
         void AddUI(PanelInfo panelInfo)
         {
             var panel = panelInfo.Panel;
-            var panelLayer = panel.Layer;
+            var layer = panel.Layer;
             var priority = panel.Priority;
-            var uiRect = panel.Transform;
+            var transform = panel.Transform;
 
-            var layerRect = GetLayerRect(panelLayer);
+            var layerRect = GetLayerRect(layer);
             if (layerRect == null)
             {
-                panelLayer = EPanelLayer.Bottom;
-                layerRect = GetLayerRect(panelLayer);
-                Debug.LogError($"没有找到这个UILayer {panelLayer}  强制修改为使用最低层 请检查");
+                layer = EPanelLayer.Bottom;
+                layerRect = GetLayerRect(layer);
+                Debug.LogError($"没有找到这个UILayer {layer}  强制修改为使用最低层 请检查");
             }
 
             var addLast = true; //放到最后 也就是最前面
 
-            var infoList = GetLayerPanelInfoList(panelLayer);
+            var infoList = GetLayerPanelInfoList(layer);
             var removeResult = infoList.Remove(panelInfo);
             if (removeResult)
             {
-                uiRect.SetParent(UILayerRoot);
+                transform.SetParent(UILayerRoot);
             }
 
             /*
@@ -41,10 +41,10 @@ namespace YIUIFramework
              * 当前优先级 >= 目标优先级时 插入
              */
 
-            for (var i = infoList.Count - 1; i >= 0;)
+            for (var i = infoList.Count - 1; i >= 0; i--)
             {
                 var info = infoList[i];
-                var infoPriority = info.Panel != null ? info.Panel.Priority : 0;
+                var infoPriority = info.Panel ? info.Panel.Priority : 0;
 
                 if (i == infoList.Count - 1 && priority >= infoPriority)
                 {
@@ -54,8 +54,8 @@ namespace YIUIFramework
                 if (priority >= infoPriority)
                 {
                     infoList.Insert(i + 1, panelInfo);
-                    uiRect.SetParent(layerRect);
-                    uiRect.SetSiblingIndex(i + 1);
+                    transform.SetParent(layerRect);
+                    transform.SetSiblingIndex(i + 1);
                     addLast = false;
                     break;
                 }
@@ -63,8 +63,8 @@ namespace YIUIFramework
                 if (i <= 0)
                 {
                     infoList.Insert(0, panelInfo);
-                    uiRect.SetParent(layerRect);
-                    uiRect.SetSiblingIndex(0);
+                    transform.SetParent(layerRect);
+                    transform.SetSiblingIndex(0);
                     addLast = false;
                     break;
                 }
@@ -73,12 +73,12 @@ namespace YIUIFramework
             if (addLast)
             {
                 infoList.Add(panelInfo);
-                uiRect.SetParent(layerRect);
-                uiRect.SetAsLastSibling();
+                transform.SetParent(layerRect);
+                transform.SetAsLastSibling();
             }
 
-            uiRect.ResetToFullScreen();
-            uiRect.ResetLocalPosAndRot();
+            transform.ResetToFullScreen();
+            transform.ResetLocalPosAndRot();
             panel.StopCountDownDestroyPanel();
         }
 
@@ -96,8 +96,8 @@ namespace YIUIFramework
             var panel = panelInfo.Panel;
             var foreverCache = panel.PanelForeverCache;
             var timeCache = panel.PanelTimeCache;
-            var panelLayer = panel.Layer;
-            RemoveLayerPanelInfo(panelLayer, panelInfo);
+            var layer = panel.Layer;
+            RemoveLayerPanelInfo(layer, panelInfo);
 
             if (foreverCache || timeCache)
             {

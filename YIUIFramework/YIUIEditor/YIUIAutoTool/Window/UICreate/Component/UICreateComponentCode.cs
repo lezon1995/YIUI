@@ -17,8 +17,8 @@ namespace YIUIFramework.Editor
 
         public UICreateComponentCode(out bool result, string authorName, UICreateComponentData codeData) : base(authorName)
         {
-            var path = $"{UIStaticHelper.UICodeScriptsPath}/{codeData.PkgName}/{codeData.ResName}.cs";
-            var template = $"{UIStaticHelper.UITemplatePath}/UICreateComponentTemplate.txt";
+            var path = $"{UIConst.CodePath}/{codeData.PkgName}/{codeData.ResName}.cs";
+            var template = $"{UIConst.TemplatePath}/UICreateComponentTemplate.txt";
             CreateVo = new CreateVo(template, path);
 
             m_EventName = $"{codeData.ResName} 继承 {codeData.ResName}Base 创建";
@@ -33,13 +33,7 @@ namespace YIUIFramework.Editor
                 result = CreateNewFile();
             }
 
-            if (codeData.OverrideDic == null)
-            {
-                result = true;
-                return;
-            }
-
-            result = OverrideCheckCodeFile(codeData.OverrideDic);
+            result = true;
         }
     }
 }

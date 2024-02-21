@@ -17,7 +17,7 @@ namespace YIUIFramework.Editor
 
         /// <summary>
         /// 模板文件的基础路径
-        /// eg: Assets/Ediotr/Config/Decoder/Template/
+        /// eg: Assets/Editor/Config/Decoder/Template/
         /// 注意： 前面不要“/”，后央要“/”
         /// </summary>
         public static string TemplateBasePath;

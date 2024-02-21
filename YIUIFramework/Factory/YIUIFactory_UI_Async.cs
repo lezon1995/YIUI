@@ -29,7 +29,7 @@ namespace YIUIFramework
 
         public static async UniTask<UIBase> InstantiateAsync(string pkgName, string resName, RectTransform parent = null)
         {
-            if (UIBindHelper.TryGetBindVoByPath(pkgName, resName, out var vo))
+            if (UIBindHelper.TryGetBindVo(pkgName, resName, out var vo))
             {
                 return await InstantiateAsync(vo, parent);
             }
@@ -48,11 +48,11 @@ namespace YIUIFramework
             return await CreateAsync(vo, parent);
         }
 
-        internal static async UniTask<BasePanel> CreatePanelAsync(PanelInfo panelInfo)
+        internal static async UniTask<UIPanel> CreatePanelAsync(PanelInfo panelInfo)
         {
-            if (UIBindHelper.TryGetBindVoByPath(panelInfo.PkgName, panelInfo.ResName, out var vo))
+            if (UIBindHelper.TryGetBindVo(panelInfo.PkgName, panelInfo.ResName, out var vo))
             {
-                return await CreateAsync(vo) as BasePanel;
+                return await CreateAsync(vo) as UIPanel;
             }
 
             return null;
@@ -60,10 +60,10 @@ namespace YIUIFramework
 
         static async UniTask<UIBase> CreateAsync(UIBindVo vo, Transform parent = null)
         {
-            var obj = await YIUILoadHelper.LoadAssetAsyncInstantiate(vo.PkgName, vo.ResName);
-            if (obj)
+            var gameObject = await YIUILoadHelper.LoadAssetAsyncInstantiate(vo.PkgName, vo.ResName);
+            if (gameObject)
             {
-                return CreateByObjVo(vo, obj, parent);
+                return CreateByObjVo(vo, gameObject, parent);
             }
 
             Debug.LogError($"没有加载到这个资源 {vo.PkgName}/{vo.ResName}");

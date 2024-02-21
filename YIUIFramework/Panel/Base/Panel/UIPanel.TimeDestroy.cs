@@ -7,29 +7,29 @@ namespace YIUIFramework
     /// <summary>
     /// 倒计时摧毁面板 适用于倒计时缓存界面
     /// </summary>
-    public abstract partial class BasePanel
+    public abstract partial class UIPanel
     {
         protected virtual float CachePanelTime => 10;
 
-        CancellationTokenSource m_Cts;
+        CancellationTokenSource cts;
 
         internal void CacheTimeCountDownDestroyPanel()
         {
             StopCountDownDestroyPanel();
-            m_Cts = new CancellationTokenSource();
-            DoCountDownDestroyPanel(m_Cts.Token).Forget();
+            cts = new CancellationTokenSource();
+            DoCountDownDestroyPanel(cts.Token).Forget();
         }
 
         internal void StopCountDownDestroyPanel()
         {
-            if (m_Cts == null)
+            if (cts == null)
             {
                 return;
             }
 
-            m_Cts.Cancel();
-            m_Cts.Dispose();
-            m_Cts = null;
+            cts.Cancel();
+            cts.Dispose();
+            cts = null;
         }
 
         async UniTaskVoid DoCountDownDestroyPanel(CancellationToken token)

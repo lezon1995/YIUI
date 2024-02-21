@@ -15,9 +15,10 @@ namespace YIUIFramework.Editor
         [Button("创建", 30)]
         void Create()
         {
-            if (!UIOperationHelper.CheckUIOperation()) return;
-
-            Create(Name);
+            if (UIOperationHelper.CheckUIOperation())
+            {
+                Create(Name);
+            }
         }
 
         public static void Create(string createName)
@@ -30,13 +31,13 @@ namespace YIUIFramework.Editor
 
             createName = NameUtility.ToFirstUpper(createName);
 
-            var basePath = $"{UIStaticHelper.UIProjectResPath}/{createName}";
-            var prefabsPath = $"{basePath}/{UIStaticHelper.UIPrefabs}";
-            var spritesPath = $"{basePath}/{UIStaticHelper.UISprites}";
-            var spritesAtlas1Path = $"{basePath}/{UIStaticHelper.UISprites}/{UIStaticHelper.UISpritesAtlas1}";
-            var atlasIgnorePath = $"{basePath}/{UIStaticHelper.UISprites}/{UIStaticHelper.UIAtlasIgnore}";
-            var atlasPath = $"{basePath}/{UIStaticHelper.UIAtlas}";
-            var sourcePath = $"{basePath}/{UIStaticHelper.UISource}";
+            var basePath = $"{UIConst.ResPath}/{createName}";
+            var prefabsPath = $"{basePath}/{UIConst.Prefabs}";
+            var spritesPath = $"{basePath}/{UIConst.Sprites}";
+            var spritesAtlas1Path = $"{basePath}/{UIConst.Sprites}/{UIConst.SpritesAtlas1}";
+            var atlasIgnorePath = $"{basePath}/{UIConst.Sprites}/{UIConst.AtlasIgnore}";
+            var atlasPath = $"{basePath}/{UIConst.Atlas}";
+            var sourcePath = $"{basePath}/{UIConst.Source}";
 
             EditorHelper.CreateExistsDirectory(prefabsPath);
             EditorHelper.CreateExistsDirectory(spritesPath);

@@ -29,7 +29,7 @@ namespace YIUIFramework.Editor
         [ShowInInspector]
         [ReadOnly]
         public string UIRedDotKeyClassPath =
-            $"{UIStaticHelper.UIFrameworkPath}/Plugins/YIUIRedDot/Runtime/Key/RedDotKeyEnum.cs";
+            $"{UIConst.FrameworkPath}/Plugins/YIUIRedDot/Runtime/Key/RedDotKeyEnum.cs";
 
         [LabelText("红点关系配置资源路径")]
         [FolderPath]

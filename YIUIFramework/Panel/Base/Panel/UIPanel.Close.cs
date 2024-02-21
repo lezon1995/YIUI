@@ -5,7 +5,7 @@ namespace YIUIFramework
     /// <summary>
     /// 关闭
     /// </summary>
-    public abstract partial class BasePanel
+    public abstract partial class UIPanel
     {
         public void Close(bool tween = true, bool ignoreElse = false)
         {
@@ -17,7 +17,7 @@ namespace YIUIFramework
             await m_PanelMgr.ClosePanelAsync(UIResName, tween, ignoreElse);
         }
 
-        protected void Home<T>(bool tween = true) where T : BasePanel
+        protected void Home<T>(bool tween = true) where T : UIPanel
         {
             m_PanelMgr.HomePanel<T>(tween).Forget();
         }

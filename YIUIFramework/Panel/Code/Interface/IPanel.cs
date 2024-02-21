@@ -3,7 +3,7 @@
     /// <summary>
     /// 面板接口
     /// </summary>
-    public interface IYIUIPanel : IYIUIWindow
+    public interface IPanel : IWindow
     {
         /// <summary>
         /// 得到窗口所在的层

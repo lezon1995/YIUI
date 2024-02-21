@@ -5,11 +5,11 @@ using UnityEngine;
 namespace YIUIFramework
 {
     //打开泛型 异步
-    public abstract partial class BasePanel
+    public abstract partial class UIPanel
     {
         #region 异步通过泛型打开（泛型类型参数）
 
-        protected async UniTask<T> OpenViewAsync<T>() where T : BaseView, new()
+        protected async UniTask<T> OpenViewAsync<T>() where T : UIView, new()
         {
             var view = await GetView<T>();
             if (view == null) return default;
@@ -32,7 +32,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<T> OpenViewAsync<T, P1>(P1 p1) where T : BaseView, IYIUIOpen<P1>, new()
+        protected async UniTask<T> OpenViewAsync<T, P1>(P1 p1) where T : UIView, IOpen<P1>, new()
         {
             var view = await GetView<T>();
             if (view == null) return default;
@@ -55,7 +55,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<T> OpenViewAsync<T, P1, P2>(P1 p1, P2 p2) where T : BaseView, IYIUIOpen<P1, P2>, new()
+        protected async UniTask<T> OpenViewAsync<T, P1, P2>(P1 p1, P2 p2) where T : UIView, IOpen<P1, P2>, new()
         {
             var view = await GetView<T>();
             if (view == null) return default;
@@ -78,7 +78,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<T> OpenViewAsync<T, P1, P2, P3>(P1 p1, P2 p2, P3 p3) where T : BaseView, IYIUIOpen<P1, P2, P3>, new()
+        protected async UniTask<T> OpenViewAsync<T, P1, P2, P3>(P1 p1, P2 p2, P3 p3) where T : UIView, IOpen<P1, P2, P3>, new()
         {
             var view = await GetView<T>();
             if (view == null) return default;
@@ -101,7 +101,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<T> OpenViewAsync<T, P1, P2, P3, P4>(P1 p1, P2 p2, P3 p3, P4 p4) where T : BaseView, IYIUIOpen<P1, P2, P3, P4>, new()
+        protected async UniTask<T> OpenViewAsync<T, P1, P2, P3, P4>(P1 p1, P2 p2, P3 p3, P4 p4) where T : UIView, IOpen<P1, P2, P3, P4>, new()
         {
             var view = await GetView<T>();
             if (view == null) return default;
@@ -124,7 +124,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<T> OpenViewAsync<T, P1, P2, P3, P4, P5>(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) where T : BaseView, IYIUIOpen<P1, P2, P3, P4, P5>, new()
+        protected async UniTask<T> OpenViewAsync<T, P1, P2, P3, P4, P5>(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) where T : UIView, IOpen<P1, P2, P3, P4, P5>, new()
         {
             var view = await GetView<T>();
             if (view == null) return default;
@@ -151,9 +151,9 @@ namespace YIUIFramework
 
         #region 异步通过Name打开（object类型参数）
 
-        async UniTask<BaseView> GetView(string viewName)
+        async UniTask<UIView> GetView(string viewName)
         {
-            BaseView view;
+            UIView view;
             var parent = GetViewParent(viewName);
             if (parent == null)
             {
@@ -161,12 +161,12 @@ namespace YIUIFramework
                 return null;
             }
 
-            if (m_ExistView.TryGetValue(viewName, out view))
+            if (viewTabsStatic.TryGetValue(viewName, out view))
             {
                 return view;
             }
 
-            var success = UIBindHelper.TryGetBindVoByPath(UIPkgName, viewName, out var vo);
+            var success = UIBindHelper.TryGetBindVo(UIPkgName, viewName, out var vo);
             if (success == false)
             {
                 return null;
@@ -179,15 +179,15 @@ namespace YIUIFramework
             }
 
             AddOpening(viewName);
-            view = (BaseView)await YIUIFactory.InstantiateAsync(vo, parent);
+            view = (UIView)await YIUIFactory.InstantiateAsync(vo, parent);
             RemoveOpening(viewName);
 
-            m_ExistView.Add(viewName, view);
+            viewTabsStatic.Add(viewName, view);
 
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync(string viewName, object param)
+        protected async UniTask<UIView> OpenViewAsync(string viewName, object param)
         {
             var view = await GetView(viewName);
             if (view == null) return null;
@@ -212,7 +212,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync(string viewName, object param1, object param2)
+        protected async UniTask<UIView> OpenViewAsync(string viewName, object param1, object param2)
         {
             var paramList = ListPool<object>.Get();
             paramList.Add(param1);
@@ -222,7 +222,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync(string viewName, object param1, object param2, object param3)
+        protected async UniTask<UIView> OpenViewAsync(string viewName, object param1, object param2, object param3)
         {
             var paramList = ListPool<object>.Get();
             paramList.Add(param1);
@@ -233,7 +233,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync(string viewName, object param1, object param2, object param3, object param4)
+        protected async UniTask<UIView> OpenViewAsync(string viewName, object param1, object param2, object param3, object param4)
         {
             var paramList = ListPool<object>.Get();
             paramList.Add(param1);
@@ -245,7 +245,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync(string viewName, object param1, object param2, object param3, object param4, params object[] paramMore)
+        protected async UniTask<UIView> OpenViewAsync(string viewName, object param1, object param2, object param3, object param4, params object[] paramMore)
         {
             var paramList = ListPool<object>.Get();
             paramList.Add(param1);
@@ -266,7 +266,7 @@ namespace YIUIFramework
 
         #region 异步通过Name打开（泛型类型参数）
 
-        protected async UniTask<BaseView> OpenViewAsync(string viewName)
+        protected async UniTask<UIView> OpenViewAsync(string viewName)
         {
             var view = await GetView(viewName);
             if (view == null) return default;
@@ -289,7 +289,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync<P1>(string viewName, P1 p1)
+        protected async UniTask<UIView> OpenViewAsync<P1>(string viewName, P1 p1)
         {
             var view = await GetView(viewName);
             if (view == null) return default;
@@ -312,7 +312,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync<P1, P2>(string viewName, P1 p1, P2 p2)
+        protected async UniTask<UIView> OpenViewAsync<P1, P2>(string viewName, P1 p1, P2 p2)
         {
             var view = await GetView(viewName);
             if (view == null) return default;
@@ -335,7 +335,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync<P1, P2, P3>(string viewName, P1 p1, P2 p2, P3 p3)
+        protected async UniTask<UIView> OpenViewAsync<P1, P2, P3>(string viewName, P1 p1, P2 p2, P3 p3)
         {
             var view = await GetView(viewName);
             if (view == null) return default;
@@ -358,7 +358,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync<P1, P2, P3, P4>(string viewName, P1 p1, P2 p2, P3 p3, P4 p4)
+        protected async UniTask<UIView> OpenViewAsync<P1, P2, P3, P4>(string viewName, P1 p1, P2 p2, P3 p3, P4 p4)
         {
             var view = await GetView(viewName);
             if (view == null) return default;
@@ -381,7 +381,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync<P1, P2, P3, P4, P5>(string viewName, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
+        protected async UniTask<UIView> OpenViewAsync<P1, P2, P3, P4, P5>(string viewName, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
         {
             var view = await GetView(viewName);
             if (view == null) return default;
@@ -408,13 +408,13 @@ namespace YIUIFramework
 
         #region 异步通过Type打开（泛型类型参数）
 
-        async UniTask<BaseView> GetView(Type viewType)
+        async UniTask<UIView> GetView(Type viewType)
         {
             var viewName = viewType.Name;
             return await GetView(viewName);
         }
 
-        protected async UniTask<BaseView> OpenViewAsync(Type viewType)
+        protected async UniTask<UIView> OpenViewAsync(Type viewType)
         {
             var view = await GetView(viewType);
             if (view == null) return default;
@@ -437,7 +437,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync<P1>(Type viewType, P1 p1)
+        protected async UniTask<UIView> OpenViewAsync<P1>(Type viewType, P1 p1)
         {
             var view = await GetView(viewType);
             if (view == null) return default;
@@ -460,7 +460,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync<P1, P2>(Type viewType, P1 p1, P2 p2)
+        protected async UniTask<UIView> OpenViewAsync<P1, P2>(Type viewType, P1 p1, P2 p2)
         {
             var view = await GetView(viewType);
             if (view == null) return default;
@@ -483,7 +483,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync<P1, P2, P3>(Type viewType, P1 p1, P2 p2, P3 p3)
+        protected async UniTask<UIView> OpenViewAsync<P1, P2, P3>(Type viewType, P1 p1, P2 p2, P3 p3)
         {
             var view = await GetView(viewType);
             if (view == null) return default;
@@ -506,7 +506,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync<P1, P2, P3, P4>(Type viewType, P1 p1, P2 p2, P3 p3, P4 p4)
+        protected async UniTask<UIView> OpenViewAsync<P1, P2, P3, P4>(Type viewType, P1 p1, P2 p2, P3 p3, P4 p4)
         {
             var view = await GetView(viewType);
             if (view == null) return default;
@@ -529,7 +529,7 @@ namespace YIUIFramework
             return view;
         }
 
-        protected async UniTask<BaseView> OpenViewAsync<P1, P2, P3, P4, P5>(Type viewType, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
+        protected async UniTask<UIView> OpenViewAsync<P1, P2, P3, P4, P5>(Type viewType, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
         {
             var view = await GetView(viewType);
             if (view == null) return default;
@@ -556,32 +556,32 @@ namespace YIUIFramework
 
         #region 同步通过泛型打开（泛型类型参数）
 
-        protected void OpenView<T>() where T : BaseView, new()
+        protected void OpenView<T>() where T : UIView, new()
         {
             OpenViewAsync<T>().Forget();
         }
 
-        protected void OpenView<T, P1>(P1 p1) where T : BaseView, IYIUIOpen<P1>, new()
+        protected void OpenView<T, P1>(P1 p1) where T : UIView, IOpen<P1>, new()
         {
             OpenViewAsync<T, P1>(p1).Forget();
         }
 
-        protected void OpenView<T, P1, P2>(P1 p1, P2 p2) where T : BaseView, IYIUIOpen<P1, P2>, new()
+        protected void OpenView<T, P1, P2>(P1 p1, P2 p2) where T : UIView, IOpen<P1, P2>, new()
         {
             OpenViewAsync<T, P1, P2>(p1, p2).Forget();
         }
 
-        protected void OpenView<T, P1, P2, P3>(P1 p1, P2 p2, P3 p3) where T : BaseView, IYIUIOpen<P1, P2, P3>, new()
+        protected void OpenView<T, P1, P2, P3>(P1 p1, P2 p2, P3 p3) where T : UIView, IOpen<P1, P2, P3>, new()
         {
             OpenViewAsync<T, P1, P2, P3>(p1, p2, p3).Forget();
         }
 
-        protected void OpenView<T, P1, P2, P3, P4>(P1 p1, P2 p2, P3 p3, P4 p4) where T : BaseView, IYIUIOpen<P1, P2, P3, P4>, new()
+        protected void OpenView<T, P1, P2, P3, P4>(P1 p1, P2 p2, P3 p3, P4 p4) where T : UIView, IOpen<P1, P2, P3, P4>, new()
         {
             OpenViewAsync<T, P1, P2, P3, P4>(p1, p2, p3, p4).Forget();
         }
 
-        protected void OpenView<T, P1, P2, P3, P4, P5>(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) where T : BaseView, IYIUIOpen<P1, P2, P3, P4, P5>, new()
+        protected void OpenView<T, P1, P2, P3, P4, P5>(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) where T : UIView, IOpen<P1, P2, P3, P4, P5>, new()
         {
             OpenViewAsync<T, P1, P2, P3, P4, P5>(p1, p2, p3, p4, p5).Forget();
         }

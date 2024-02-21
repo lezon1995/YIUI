@@ -20,8 +20,8 @@ namespace YIUIFramework.Editor
             var componentObject = new GameObject();
             var viewRect = componentObject.GetOrAddComponent<RectTransform>();
             componentObject.GetOrAddComponent<CanvasRenderer>();
-            var cdeTable = componentObject.GetOrAddComponent<UIBindCDETable>();
-            cdeTable.UICodeType = EUICodeType.Component;
+            var table = componentObject.GetOrAddComponent<UITable>();
+            table.UICodeType = UIType.Component;
             viewRect.SetParent(activeObject.transform, false);
 
             componentObject.SetLayerRecursively(LayerMask.NameToLayer("UI"));

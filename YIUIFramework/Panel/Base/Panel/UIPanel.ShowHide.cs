@@ -2,7 +2,7 @@
 
 namespace YIUIFramework
 {
-    public partial class BasePanel
+    public partial class UIPanel
     {
         public async UniTask Show()
         {

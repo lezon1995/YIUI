@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
 
 namespace YIUIFramework
 {
@@ -29,7 +28,7 @@ namespace YIUIFramework
 
         public static UIBase Instantiate(string pkgName, string resName, Transform parent = null)
         {
-            if (UIBindHelper.TryGetBindVoByPath(pkgName, resName, out var vo))
+            if (UIBindHelper.TryGetBindVo(pkgName, resName, out var vo))
             {
                 return Instantiate(vo, parent);
             }

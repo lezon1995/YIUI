@@ -14,25 +14,25 @@ namespace YIUIFramework.Editor
         [LabelText("YIUI项目命名空间")]
         [ShowInInspector]
         [ReadOnly]
-        const string UINamespace = UIStaticHelper.UINamespace;
+        const string UINamespace = UIConst.Namespace;
 
         [LabelText("YIUI项目资源路径")]
         [FolderPath]
         [ShowInInspector]
         [ReadOnly]
-        const string UIProjectResPath = UIStaticHelper.UIProjectResPath;
+        const string UIProjectResPath = UIConst.ResPath;
 
         [LabelText("YIUI项目脚本路径")]
         [FolderPath]
         [ShowInInspector]
         [ReadOnly]
-        const string UIGenerationPath = UIStaticHelper.UIGenerationPath;
+        const string UIGenerationPath = UIConst.GenPath;
 
         [LabelText("YIUI项目自定义脚本路径")]
         [FolderPath]
         [ShowInInspector]
         [ReadOnly]
-        const string UICodeScriptsPath = UIStaticHelper.UICodeScriptsPath;
+        const string UICodeScriptsPath = UIConst.CodePath;
 
         [HideLabel]
         [ShowInInspector]
@@ -63,15 +63,15 @@ namespace YIUIFramework.Editor
 
         private static void CopyUIRoot()
         {
-            var loadRoot = (GameObject)AssetDatabase.LoadAssetAtPath(UIStaticHelper.UIRootPrefabPath, typeof(Object));
+            var loadRoot = (GameObject)AssetDatabase.LoadAssetAtPath(UIConst.RootPrefabPath, typeof(Object));
             if (loadRoot == null)
             {
-                Debug.LogError($"没有找到原始UIRoot {UIStaticHelper.UIRootPrefabPath}");
+                Debug.LogError($"没有找到原始UIRoot {UIConst.RootPrefabPath}");
                 return;
             }
 
             var newGameObj = Object.Instantiate(loadRoot);
-            var commonPath = $"{UIProjectResPath}/{m_CommonPkg}/{UIStaticHelper.UIPrefabs}/{PanelMgr.UIRootName}.prefab";
+            var commonPath = $"{UIProjectResPath}/{m_CommonPkg}/{UIConst.Prefabs}/{PanelMgr.UIRootName}.prefab";
             PrefabUtility.SaveAsPrefabAsset(newGameObj, commonPath);
             Object.DestroyImmediate(newGameObj);
         }

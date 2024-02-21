@@ -7,7 +7,7 @@ using YIUIFramework.Editor;
 namespace YIUIFramework
 {
     //Editor
-    public sealed partial class UIBindCDETable
+    public sealed partial class UITable
     {
         #region 界面参数
 
@@ -15,79 +15,79 @@ namespace YIUIFramework
         [HideLabel]
         [ReadOnly]
         [OnValueChanged(nameof(OnValueChangedEUICodeType))]
-        public EUICodeType UICodeType = EUICodeType.Component;
+        public UIType UICodeType = UIType.Component;
 
-        [HideIf(nameof(UICodeType), EUICodeType.Component)]
+        [HideIf(nameof(UICodeType), UIType.Component)]
         [LabelText("窗口选项")]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public EWindowOption WindowOption = EWindowOption.None;
 
-        [ShowIf(nameof(UICodeType), EUICodeType.Panel)]
+        [ShowIf(nameof(UICodeType), UIType.Panel)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         [OnValueChanged(nameof(OnValueChangedEPanelLayer))]
         public EPanelLayer PanelLayer = EPanelLayer.Panel;
 
-        [ShowIf(nameof(UICodeType), EUICodeType.Panel)]
+        [ShowIf(nameof(UICodeType), UIType.Panel)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public EPanelOption PanelOption = EPanelOption.None;
 
-        [ShowIf(nameof(UICodeType), EUICodeType.Panel)]
+        [ShowIf(nameof(UICodeType), UIType.Panel)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public EPanelStackOption PanelStackOption = EPanelStackOption.VisibleTween;
 
-        [ShowIf(nameof(UICodeType), EUICodeType.View)]
+        [ShowIf(nameof(UICodeType), UIType.View)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public EViewWindowType ViewWindowType = EViewWindowType.View;
 
-        [ShowIf(nameof(UICodeType), EUICodeType.View)]
+        [ShowIf(nameof(UICodeType), UIType.View)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public EViewStackOption ViewStackOption = EViewStackOption.VisibleTween;
 
-        [ShowIf(nameof(ShowCachePanelTime), EUICodeType.Panel)]
-        [LabelText("缓存时间")]
+        [ShowIf(nameof(ShowCachePanelTime), UIType.Panel)]
+        [LabelText("CacheTime")]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public float CachePanelTime = 10;
 
         bool ShowCachePanelTime => PanelOption.Has(EPanelOption.TimeCache);
 
         [Tooltip("同层级时，优先级高的在前面，相同时后打开的在前面")]
-        [LabelText("优先级")]
-        [ShowIf(nameof(UICodeType), EUICodeType.Panel)]
+        [LabelText("Priority")]
+        [ShowIf(nameof(UICodeType), UIType.Panel)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public int Priority;
 
         void OnValueChangedEUICodeType()
         {
-            var uiPanelName = UIStaticHelper.UIPanelName;
-            if (name.EndsWith(uiPanelName) || name.EndsWith(UIStaticHelper.UIPanelSourceName))
+            var uiPanelName = UIConst.PanelName;
+            if (name.EndsWith(uiPanelName) || name.EndsWith(UIConst.PanelSourceName))
             {
-                if (UICodeType != EUICodeType.Panel)
+                if (UICodeType != UIType.Panel)
                 {
                     Debug.LogWarning($"{name} 结尾{uiPanelName} 必须设定为{uiPanelName}类型");
                 }
 
-                UICodeType = EUICodeType.Panel;
+                UICodeType = UIType.Panel;
             }
             else
             {
-                var uiViewName = UIStaticHelper.UIViewName;
+                var uiViewName = UIConst.ViewName;
                 if (name.EndsWith(uiViewName))
                 {
-                    if (UICodeType != EUICodeType.View)
+                    if (UICodeType != UIType.View)
                     {
                         Debug.LogWarning($"{name} 结尾{uiViewName} 必须设定为{uiViewName}类型");
                     }
 
-                    UICodeType = EUICodeType.View;
+                    UICodeType = UIType.View;
                 }
                 else
                 {
-                    if (UICodeType != EUICodeType.Component)
+                    if (UICodeType != UIType.Component)
                     {
                         Debug.LogWarning($"{name} 想设定为其他类型 请按照规则设定 请勿强行修改");
                     }
 
-                    UICodeType = EUICodeType.Component;
+                    UICodeType = UIType.Component;
                 }
             }
         }
@@ -108,11 +108,16 @@ namespace YIUIFramework
             return UIOperationHelper.CheckUIOperation(false);
         }
 
-
         [GUIColor(1, 1, 0)]
-        [Button("自动检查所有", 30)]
+        [Button("Auto Check", 30)]
         [PropertyOrder(-100)]
-        [ShowIf(nameof(ShowAutoCheckBtn))]
+        // [ShowIf(nameof(ShowAutoCheckBtn))]
+        [HideIf(nameof(ShowCreateBtnByHierarchy))]
+        public void ManualAutoCheck()
+        {
+            AutoCheck();
+        }
+
         public bool AutoCheck()
         {
             if (!UIOperationHelper.CheckUIOperation(this))
@@ -127,7 +132,7 @@ namespace YIUIFramework
 
             OnValueChangedEUICodeType();
             OnValueChangedEPanelLayer();
-            if (UICodeType == EUICodeType.Panel && IsSplitData)
+            if (UICodeType == UIType.Panel && IsSplitData)
             {
                 PanelSplitData.Panel = gameObject;
                 if (!PanelSplitData.AutoCheck())
@@ -190,15 +195,15 @@ namespace YIUIFramework
 
             prefabStage.ClearDirtiness();
 
-            var cdeTable = AssetDatabase.LoadAssetAtPath<UIBindCDETable>(path);
-            if (cdeTable == null)
+            var table = AssetDatabase.LoadAssetAtPath<UITable>(path);
+            if (table == null)
             {
                 return;
             }
 
-            cdeTable.CreateUICode();
+            table.GenUICode();
 
-            AssetDatabase.OpenAsset(cdeTable);
+            AssetDatabase.OpenAsset(table);
         }
 
         bool ShowCreateBtn()
@@ -214,11 +219,11 @@ namespace YIUIFramework
         [GUIColor(0.7f, 0.4f, 0.8f)]
         [Button("Generate Code", 50)]
         [ShowIf(nameof(ShowCreateBtn))]
-        internal void CreateUICode()
+        internal void GenUICode()
         {
             if (UIOperationHelper.CheckUIOperation(this))
             {
-                CreateUICode(true, true);
+                GenUICode(true, true);
             }
         }
 
@@ -248,7 +253,7 @@ namespace YIUIFramework
             }
         }
 
-        internal void CreateUICode(bool refresh, bool tips)
+        internal void GenUICode(bool refresh, bool tips)
         {
             UICreateModule.Create(this, refresh, tips);
         }

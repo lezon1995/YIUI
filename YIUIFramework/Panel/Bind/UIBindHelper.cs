@@ -14,17 +14,17 @@ namespace YIUIFramework
         /// <summary>
         /// 根据创建时的类获取
         /// </summary>
-        static Dictionary<Type, UIBindVo> g_UITypeToPkgInfo = new Dictionary<Type, UIBindVo>();
+        static Dictionary<Type, UIBindVo> typeVoDict = new Dictionary<Type, UIBindVo>();
 
         /// <summary>
         /// 根据 pkg + res 双字典获取
         /// </summary>
-        static Dictionary<string, Dictionary<string, UIBindVo>> g_UIPathToPkgInfo = new Dictionary<string, Dictionary<string, UIBindVo>>();
+        static Dictionary<Key, UIBindVo> pathVoDict = new Dictionary<Key, UIBindVo>();
 
         /// <summary>
         /// 只有panel 的信息
         /// </summary>
-        static Dictionary<string, UIBindVo> g_UIPanelNameToPkgInfo = new Dictionary<string, UIBindVo>();
+        static Dictionary<string, UIBindVo> panelVoDict = new Dictionary<string, UIBindVo>();
 
         //改为dll过后 提供给外部的方法
         //1 从UI工具中自动生成绑定代码
@@ -34,7 +34,7 @@ namespace YIUIFramework
         //初始化记录
         public static bool IsInit { get; private set; }
 
-        public static Type BasePanelType = typeof(BasePanel);
+        public static Type BasePanelType = typeof(UIPanel);
 
         /// <summary>
         /// 初始化获取到所有UI相关的绑定关系
@@ -66,18 +66,17 @@ namespace YIUIFramework
                 return false;
             }
 
-            g_UITypeToPkgInfo = new Dictionary<Type, UIBindVo>(binds.Length);
-            g_UIPathToPkgInfo = new Dictionary<string, Dictionary<string, UIBindVo>>();
-            g_UIPanelNameToPkgInfo = new Dictionary<string, UIBindVo>(binds.Length);
+            typeVoDict = new Dictionary<Type, UIBindVo>(binds.Length);
+            pathVoDict = new Dictionary<Key, UIBindVo>();
+            panelVoDict = new Dictionary<string, UIBindVo>(binds.Length);
 
-            for (var i = 0; i < binds.Length; i++)
+            foreach (var vo in binds)
             {
-                var vo = binds[i];
-                g_UITypeToPkgInfo[vo.CreatorType] = vo;
-                AddPkgInfoToPathDic(vo);
+                typeVoDict[vo.CreatorType] = vo;
+                AddToPathDic(vo);
                 if (vo.CodeType == BasePanelType)
                 {
-                    g_UIPanelNameToPkgInfo[vo.ResName] = vo;
+                    panelVoDict[vo.ResName] = vo;
                 }
             }
 
@@ -85,24 +84,19 @@ namespace YIUIFramework
             return true;
         }
 
-        static void AddPkgInfoToPathDic(UIBindVo vo)
+        static void AddToPathDic(UIBindVo vo)
         {
             var pkgName = vo.PkgName;
             var resName = vo.ResName;
-            if (!g_UIPathToPkgInfo.ContainsKey(pkgName))
-            {
-                g_UIPathToPkgInfo.Add(pkgName, new Dictionary<string, UIBindVo>());
-            }
+            var key = new Key(pkgName, resName);
 
-            var dic = g_UIPathToPkgInfo[pkgName];
-
-            if (dic.ContainsKey(resName))
+            if (pathVoDict.ContainsKey(key))
             {
                 Debug.LogError($"重复资源 请检查 {pkgName} {resName}");
                 return;
             }
 
-            dic.Add(resName, vo);
+            pathVoDict.Add(key, vo);
         }
 
         /// <summary>
@@ -117,7 +111,7 @@ namespace YIUIFramework
                 return false;
             }
 
-            if (g_UITypeToPkgInfo.TryGetValue(uiType, out var vo))
+            if (typeVoDict.TryGetValue(uiType, out var vo))
             {
                 uiBindVo = vo;
                 return true;
@@ -141,7 +135,7 @@ namespace YIUIFramework
         /// 根据唯一ID获取
         /// 由pkg+res 拼接的唯一ID
         /// </summary>
-        public static bool TryGetBindVoByPath(string pkgName, string resName, out UIBindVo uiBindVo)
+        public static bool TryGetBindVo(string pkgName, string resName, out UIBindVo uiBindVo)
         {
             uiBindVo = default;
 
@@ -151,19 +145,14 @@ namespace YIUIFramework
                 return false;
             }
 
-            if (g_UIPathToPkgInfo.TryGetValue(pkgName, out var subDict))
+            var key = new Key(pkgName, resName);
+            if (pathVoDict.TryGetValue(key, out var vo))
             {
-                if (subDict.TryGetValue(resName, out var vo))
-                {
-                    uiBindVo = vo;
-                    return true;
-                }
-
-                Debug.LogError($"未获取到这个包信息 请检查  {pkgName} {resName}");
-                return false;
+                uiBindVo = vo;
+                return true;
             }
 
-            Debug.LogError($"不存在这个包信息 请检查 {pkgName}");
+            Debug.LogError($"未获取到这个包信息 请检查  {pkgName} {resName}");
             return false;
         }
 
@@ -172,7 +161,7 @@ namespace YIUIFramework
         /// 只有是panel才会存在的信息
         /// 非Panel请使用其他
         /// </summary>
-        internal static bool TryGetBindVoByPanelName(string panelName, out UIBindVo uiBindVo)
+        internal static bool TryGetBindVo(string panelName, out UIBindVo uiBindVo)
         {
             uiBindVo = default;
 
@@ -182,7 +171,7 @@ namespace YIUIFramework
                 return false;
             }
 
-            if (g_UIPanelNameToPkgInfo.TryGetValue(panelName, out var vo))
+            if (panelVoDict.TryGetValue(panelName, out var vo))
             {
                 uiBindVo = vo;
                 return true;
@@ -197,25 +186,55 @@ namespace YIUIFramework
         /// </summary>
         internal static void Reset()
         {
-            if (g_UITypeToPkgInfo != null)
+            if (typeVoDict != null)
             {
-                g_UITypeToPkgInfo.Clear();
-                g_UITypeToPkgInfo = null;
+                typeVoDict.Clear();
+                typeVoDict = null;
             }
 
-            if (g_UIPathToPkgInfo != null)
+            if (pathVoDict != null)
             {
-                g_UIPathToPkgInfo.Clear();
-                g_UIPathToPkgInfo = null;
+                pathVoDict.Clear();
+                pathVoDict = null;
             }
 
-            if (g_UIPanelNameToPkgInfo != null)
+            if (panelVoDict != null)
             {
-                g_UIPanelNameToPkgInfo.Clear();
-                g_UIPanelNameToPkgInfo = null;
+                panelVoDict.Clear();
+                panelVoDict = null;
             }
 
             IsInit = false;
+        }
+    }
+
+    public struct Key : IEquatable<Key>
+    {
+        //包名/模块名
+        string Pkg;
+
+        //资源名
+        string Res;
+
+        public Key(string pkg, string res)
+        {
+            Pkg = pkg;
+            Res = res;
+        }
+
+        public bool Equals(Key other)
+        {
+            return Pkg == other.Pkg && Res == other.Res;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Key other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Pkg, Res);
         }
     }
 }

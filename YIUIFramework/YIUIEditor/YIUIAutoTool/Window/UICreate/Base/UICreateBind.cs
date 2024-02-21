@@ -10,17 +10,15 @@ namespace YIUIFramework.Editor
     /// </summary>
     public static class UICreateBind
     {
-        public static string GetBind(UIBindCDETable cdeTable)
+        public static string GetBind(UITable table)
         {
             var sb = SbPool.Get();
-            cdeTable.GetComponentTable(sb);
-            cdeTable.GetDataTable(sb);
-            cdeTable.GetEventTable(sb);
-            cdeTable.GetCDETable(sb);
+            table.GetComponentTable(sb);
+            table.GetUITable(sb);
             return SbPool.PutAndToStr(sb);
         }
 
-        static void GetComponentTable(this UIBindCDETable self, StringBuilder sb)
+        static void GetComponentTable(this UITable self, StringBuilder sb)
         {
             var AllBindDic = self.AllBindDic;
             var count = AllBindDic.Count;
@@ -32,12 +30,7 @@ namespace YIUIFramework.Editor
             sb.AppendFormat("            //--------------------------------------Component---------------------------------------------------------------------------------------------------\r\n");
             foreach (var (name, component) in AllBindDic)
             {
-                if (string.IsNullOrEmpty(name))
-                {
-                    continue;
-                }
-
-                if (component == null)
+                if (name.IsEmpty() || component == null)
                 {
                     continue;
                 }
@@ -46,71 +39,16 @@ namespace YIUIFramework.Editor
             }
         }
 
-        static void GetDataTable(this UIBindCDETable self, StringBuilder sb)
+        static void GetUITable(this UITable self, StringBuilder sb)
         {
-            var DataDic = self.DataDic;
-            var count = DataDic.Count;
-            if (count == 0)
-            {
-                return;
-            }
-
-            sb.AppendFormat("            //--------------------------------------Data-----------------------------------------------------------------------------------------------------------\r\n");
-            foreach (var (name, uiData) in DataDic)
-            {
-                if (string.IsNullOrEmpty(name))
-                {
-                    continue;
-                }
-
-                var dataValue = uiData?.DataValue;
-                if (dataValue == null)
-                {
-                    continue;
-                }
-
-                sb.AppendFormat("            {1} = FindDataValue<{0}>(\"{1}\");\r\n", dataValue.GetType(), name);
-            }
-        }
-
-        static void GetEventTable(this UIBindCDETable self, StringBuilder sb)
-        {
-            var EventDic = self.EventDic;
-            var count = EventDic.Count;
-            if (count == 0)
-            {
-                return;
-            }
-
-            sb.AppendFormat("            //--------------------------------------Event----------------------------------------------------------------------------------------------------------\r\n");
-            foreach (var (name, uiEvent) in EventDic)
-            {
-                if (string.IsNullOrEmpty(name))
-                {
-                    continue;
-                }
-
-                if (uiEvent == null)
-                {
-                    continue;
-                }
-
-                sb.AppendFormat("            {1} = FindEvent<{0}>(\"{1}\");\r\n", uiEvent.GetEventType(), name);
-                sb.AppendFormat("            {0} = {1}.Add({2});\r\n", $"{name}Handle", name, $"OnEvent{name.Replace($"{NameUtility.FirstName}{NameUtility.EventName}", "")}Action");
-                sb.AppendLine();
-            }
-        }
-
-        static void GetCDETable(this UIBindCDETable self, StringBuilder sb)
-        {
-            var tab = self.ChildTables;
-            if (tab == null)
+            var tables = self.ChildTables;
+            if (tables == null || tables.Count == 0)
             {
                 return;
             }
 
             var existName = new HashSet<string>();
-            foreach (var table in tab)
+            foreach (var table in tables)
             {
                 var name = table.name;
                 if (string.IsNullOrEmpty(name))
@@ -125,7 +63,7 @@ namespace YIUIFramework.Editor
                     continue;
                 }
 
-                var newName = UICreateVariables.GetCDEUIName(name);
+                var newName = UICreateVariables.GetTableName(name);
                 if (existName.Contains(newName))
                 {
                     Debug.LogError($"{self.name} 内部公共组件存在同名 请修改 当前会被忽略");
@@ -133,33 +71,14 @@ namespace YIUIFramework.Editor
                 }
 
                 existName.Add(newName);
-                sb.AppendFormat("            {0} = CDETable.FindUIBase<{1}>(\"{2}\");\r\n", newName, $"{UIStaticHelper.UINamespace}.{resName}", name);
+                sb.AppendFormat("            {0} = Table.FindUIBase<{1}>(\"{2}\");\r\n", newName, $"{UIConst.Namespace}.{resName}", name);
             }
         }
 
-        public static string GetUnBind(UIBindCDETable cdeTable)
+        public static string GetUnBind(UITable table)
         {
             var sb = SbPool.Get();
-            cdeTable.GetUnEventTable(sb);
             return SbPool.PutAndToStr(sb);
-        }
-
-        static void GetUnEventTable(this UIBindCDETable self, StringBuilder sb)
-        {
-            foreach (var (name, uiEvent) in self.EventDic)
-            {
-                if (string.IsNullOrEmpty(name))
-                {
-                    continue;
-                }
-
-                if (uiEvent == null)
-                {
-                    continue;
-                }
-
-                sb.AppendFormat("            {0}.Remove({1});\r\n", name, $"{name}Handle");
-            }
         }
     }
 }

@@ -1,12 +1,11 @@
 ﻿namespace YIUIFramework
 {
-    public partial class BaseView : BaseWindow, IYIUIView
+    /// <summary>
+    /// 通用UI其他组件
+    /// </summary>
+    public partial class UIComponent : UIBase
     {
-        public virtual EViewWindowType ViewWindowType => EViewWindowType.View;
-
-        public virtual EViewStackOption StackOption => EViewStackOption.Visible;
-
-        #region 密封生命周期
+        #region 密封生命周期根据需求扩展
 
         protected sealed override void SealedInitialize()
         {

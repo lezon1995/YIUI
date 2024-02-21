@@ -17,8 +17,8 @@ namespace YIUIFramework.Editor
 
         public UICreatePanelCode(out bool result, string authorName, UICreatePanelData codeData) : base(authorName)
         {
-            var path = $"{UIStaticHelper.UICodeScriptsPath}/{codeData.PkgName}/{codeData.ResName}.cs";
-            var template = $"{UIStaticHelper.UITemplatePath}/UICreatePanelTemplate.txt";
+            var path = $"{UIConst.CodePath}/{codeData.PkgName}/{codeData.ResName}.cs";
+            var template = $"{UIConst.TemplatePath}/UICreatePanelTemplate.txt";
             CreateVo = new CreateVo(template, path);
 
             m_EventName = $"{codeData.ResName} 继承 {codeData.ResName}Base 创建";

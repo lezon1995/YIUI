@@ -5,7 +5,7 @@
     /// 参数info 是给你看触发你消息的是谁
     /// 不要滥用 不要修改里面的值
     /// </summary>
-    public interface IYIUIBack
+    public interface IBack
     {
         /// <summary>
         /// 是被关闭触发 (有界面打开 当前界面被关闭)

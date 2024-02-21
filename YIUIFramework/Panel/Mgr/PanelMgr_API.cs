@@ -14,7 +14,7 @@ namespace YIUIFramework
             return false;
         }
 
-        public bool IsActive<T>() where T : BasePanel
+        public bool IsActive<T>() where T : UIPanel
         {
             if (TryGetPanelInfo<T>(out var panelInfo))
             {
@@ -24,7 +24,7 @@ namespace YIUIFramework
             return false;
         }
 
-        public void Show<T>(bool tween = false) where T : BasePanel
+        public void Show<T>(bool tween = false) where T : UIPanel
         {
             if (TryGetPanelInfo<T>(out var panelInfo))
             {
@@ -39,7 +39,7 @@ namespace YIUIFramework
             }
         }
 
-        public void Hide<T>(bool tween = false) where T : BasePanel
+        public void Hide<T>(bool tween = false) where T : UIPanel
         {
             if (TryGetPanelInfo<T>(out var panelInfo))
             {

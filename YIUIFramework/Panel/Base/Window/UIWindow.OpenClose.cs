@@ -3,7 +3,7 @@
 namespace YIUIFramework
 {
     //打开关闭
-    public abstract partial class BaseWindow
+    public abstract partial class UIWindow
     {
         //打开有3种
         //1 无参打开 OnOpen

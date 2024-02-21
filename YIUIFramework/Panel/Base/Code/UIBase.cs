@@ -11,15 +11,12 @@ namespace YIUIFramework
     [HideReferenceObjectPicker]
     public abstract partial class UIBase
     {
-        #region 所有table表禁止public 不允许任何外界获取
-
-        protected UIBindCDETable Table { get; set; }
-
-        #endregion
+        protected UITable Table { get; private set; }
 
         public GameObject GameObject { get; private set; }
         public RectTransform Transform { get; private set; }
         public CanvasGroup CanvasGroup { get; private set; }
+        
         public bool UIBaseInit { get; private set; }
         protected PanelMgr m_PanelMgr { get; private set; }
 
@@ -57,10 +54,10 @@ namespace YIUIFramework
             GameObject = gameObject;
             CanvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
             Transform = gameObject.GetComponent<RectTransform>();
-            Table = GameObject.GetComponent<UIBindCDETable>();
+            Table = GameObject.GetComponent<UITable>();
             if (Table == null)
             {
-                Debug.LogError($"{GameObject.name} 没有UIBindCDETable组件 这是必须的");
+                Debug.LogError($"{GameObject.name} 没有UITable组件 这是必须的");
                 return false;
             }
 
@@ -70,6 +67,11 @@ namespace YIUIFramework
             Table.BindUIBase(this);
             UIBaseInitialize();
             return true;
+        }
+
+        protected T FindComponent<T>(string key) where T : Component
+        {
+            return Table.FindComponent<T>(key);
         }
 
         #region 公共方法
@@ -105,8 +107,8 @@ namespace YIUIFramework
 
         void UIBaseInitialize()
         {
-            Table.UIBaseOnEnable = UIBaseOnEnable;
-            Table.UIBaseStart = UIBaseStart;
+            Table.onEnable = UIBaseOnEnable;
+            Table.onStart = UIBaseStart;
             try
             {
                 SealedInitialize();
@@ -133,8 +135,8 @@ namespace YIUIFramework
         {
             SealedStart();
             Start();
-            Table.UIBaseOnDisable = UIBaseOnDisable;
-            Table.UIBaseOnDestroy = UIBaseOnDestroy;
+            Table.onDisable = UIBaseOnDisable;
+            Table.onDestroy = UIBaseOnDestroy;
         }
 
         //UIBase 生命周期顺序 4
@@ -199,5 +201,10 @@ namespace YIUIFramework
         #endregion
 
         #endregion
+
+        public static implicit operator bool(UIBase self)
+        {
+            return self != null;
+        }
     }
 }

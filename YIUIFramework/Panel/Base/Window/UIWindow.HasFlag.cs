@@ -4,7 +4,7 @@
     //所有窗口选项的属性
     //可快捷操作
     //亦可重写后根据需求动态调整
-    public abstract partial class BaseWindow
+    public abstract partial class UIWindow
     {
         /// <summary>
         /// 当打开的参数不一致时

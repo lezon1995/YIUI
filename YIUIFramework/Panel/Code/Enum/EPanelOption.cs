@@ -5,7 +5,7 @@ namespace YIUIFramework
 {
     //不要修改值 否则已存在的界面会错误
     //只能新增 不允许修改
-    [LabelText("界面选项")]
+    [LabelText("Option")]
     [Flags]
     public enum EPanelOption
     {

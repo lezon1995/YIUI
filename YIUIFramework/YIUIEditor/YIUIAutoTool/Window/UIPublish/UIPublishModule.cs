@@ -19,7 +19,7 @@ namespace YIUIFramework.Editor
         [LabelText("所有模块资源路径")]
         [ReadOnly]
         [ShowInInspector]
-        string m_AllPkgPath = UIStaticHelper.UIProjectResPath;
+        string m_AllPkgPath = UIConst.ResPath;
 
         [BoxGroup("创建模块", centerLabel: true)]
         [ShowInInspector]
@@ -58,16 +58,16 @@ namespace YIUIFramework.Editor
                 Tree.AddMenuItemAtPath(m_PublishName, new OdinMenuItem(Tree, pkgName, newUIPublishPackageModule)).AddIcon(EditorIcons.Folder);
 
                 //1 图集
-                Tree.AddAllAssetsAtPath($"{m_PublishName}/{pkgName}/{UIStaticHelper.UIAtlasCN}", $"{m_AllPkgPath}/{pkgName}/{UIStaticHelper.UIAtlas}", typeof(SpriteAtlas), true, false);
+                Tree.AddAllAssetsAtPath($"{m_PublishName}/{pkgName}/{UIConst.AtlasCN}", $"{m_AllPkgPath}/{pkgName}/{UIConst.Atlas}", typeof(SpriteAtlas), true, false);
 
                 //2 预制体
-                Tree.AddAllAssetsAtPath($"{m_PublishName}/{pkgName}/{UIStaticHelper.UIPrefabsCN}", $"{m_AllPkgPath}/{pkgName}/{UIStaticHelper.UIPrefabs}", typeof(UIBindCDETable), true, false);
+                Tree.AddAllAssetsAtPath($"{m_PublishName}/{pkgName}/{UIConst.PrefabsCN}", $"{m_AllPkgPath}/{pkgName}/{UIConst.Prefabs}", typeof(UITable), true, false);
 
                 //3 源文件
-                Tree.AddAllAssetsAtPath($"{m_PublishName}/{pkgName}/{UIStaticHelper.UISourceCN}", $"{m_AllPkgPath}/{pkgName}/{UIStaticHelper.UISource}", typeof(UIBindCDETable), true, false);
+                Tree.AddAllAssetsAtPath($"{m_PublishName}/{pkgName}/{UIConst.SourceCN}", $"{m_AllPkgPath}/{pkgName}/{UIConst.Source}", typeof(UITable), true, false);
 
                 //4 精灵
-                Tree.AddAllAssetImporterAtPath($"{m_PublishName}/{pkgName}/{UIStaticHelper.UISpritesCN}", $"{m_AllPkgPath}/{pkgName}/{UIStaticHelper.UISprites}", typeof(TextureImporter), true, false);
+                Tree.AddAllAssetImporterAtPath($"{m_PublishName}/{pkgName}/{UIConst.SpritesCN}", $"{m_AllPkgPath}/{pkgName}/{UIConst.Sprites}", typeof(TextureImporter), true, false);
 
                 m_AllUIPublishPackageModule.Add(newUIPublishPackageModule);
             }

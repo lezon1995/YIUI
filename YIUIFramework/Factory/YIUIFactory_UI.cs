@@ -16,7 +16,7 @@ namespace YIUIFramework
 
         internal static UIBase CreateCommon(string pkgName, string resName, GameObject obj)
         {
-            if (UIBindHelper.TryGetBindVoByPath(pkgName, resName, out var vo))
+            if (UIBindHelper.TryGetBindVo(pkgName, resName, out var vo))
             {
                 return CreateByObjVo(vo, obj);
             }
@@ -41,7 +41,7 @@ namespace YIUIFramework
 
         static UIBase Create(string pkgName, string resName)
         {
-            if (UIBindHelper.TryGetBindVoByPath(pkgName, resName, out var vo))
+            if (UIBindHelper.TryGetBindVo(pkgName, resName, out var vo))
             {
                 return Create(vo);
             }
@@ -51,48 +51,47 @@ namespace YIUIFramework
 
         static UIBase Create(UIBindVo vo, Transform parent = null)
         {
-            var obj = YIUILoadHelper.LoadAssetInstantiate(vo.PkgName, vo.ResName);
-            if (obj)
+            var gameObject = YIUILoadHelper.LoadAssetInstantiate(vo.PkgName, vo.ResName);
+            if (gameObject)
             {
-                return CreateByObjVo(vo, obj, parent);
+                return CreateByObjVo(vo, gameObject, parent);
             }
 
             Debug.LogError($"没有加载到这个资源 {vo.PkgName}/{vo.ResName}");
             return null;
         }
 
-        static UIBase CreateByObjVo(UIBindVo vo, GameObject obj, Transform parent = null)
+        static UIBase CreateByObjVo(UIBindVo vo, GameObject gameObject, Transform parent = null)
         {
-            var table = obj.GetComponent<UIBindCDETable>();
-            if (table)
+            if (gameObject.TryGetComponent<UITable>(out var table))
             {
-                table.CreateComponent();
+                table.NewChildUIComponents();
                 var uiBase = (UIBase)Activator.CreateInstance(vo.CreatorType);
-                SetParent(obj.transform, parent ? parent : PanelMgr.Inst.UICache);
-                uiBase.InitUIBase(vo, obj);
+                SetParent(gameObject.transform, parent ? parent : PanelMgr.Inst.UICache);
+                uiBase.InitUIBase(vo, gameObject);
                 return uiBase;
             }
 
-            Debug.LogError($"{obj.name} 没有 UIBindCDETable 组件 无法创建 请检查");
+            Debug.LogError($"{gameObject.name} 没有 UITable 组件 无法创建 请检查");
             return null;
         }
 
-        static void CreateComponent(this UIBindCDETable cdeTable)
+        static void NewChildUIComponents(this UITable self)
         {
-            foreach (var childTable in cdeTable.ChildTables)
+            foreach (var table in self.ChildTables)
             {
-                if (childTable == null)
+                if (table == null)
                 {
-                    Debug.LogError($"{cdeTable.name} 存在null对象的childCde 检查是否因为删除或丢失或未重新生成");
+                    Debug.LogError($"{self.name} 存在null对象的childTable 检查是否因为删除或丢失或未重新生成");
                     continue;
                 }
 
-                if (UIBindHelper.TryGetBindVoByPath(childTable.PkgName, childTable.ResName, out var vo))
+                if (UIBindHelper.TryGetBindVo(table.PkgName, table.ResName, out var vo))
                 {
-                    var childBase = (UIBase)Activator.CreateInstance(vo.CreatorType);
-                    childTable.CreateComponent();
-                    childBase.InitUIBase(vo, childTable.gameObject);
-                    cdeTable.AddUIBase(childTable.gameObject.name, childBase);
+                    var uiBase = (UIBase)Activator.CreateInstance(vo.CreatorType);
+                    table.NewChildUIComponents();
+                    uiBase.InitUIBase(vo, table.gameObject);
+                    self.AddUIBase(table.gameObject.name, uiBase);
                 }
             }
         }

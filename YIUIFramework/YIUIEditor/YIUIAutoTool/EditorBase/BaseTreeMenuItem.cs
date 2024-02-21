@@ -41,15 +41,13 @@ namespace YIUIFramework.Editor
         [HideReferenceObjectPicker]
         public T Instance { get; internal set; }
 
-        public TreeMenuItem(OdinMenuEditorWindow autoTool, OdinMenuTree tree, string menuName, Texture icon) : base(autoTool,
-            tree)
+        public TreeMenuItem(OdinMenuEditorWindow autoTool, OdinMenuTree tree, string menuName, Texture icon) : base(autoTool, tree)
         {
             Tree.Add(menuName, this, icon);
             ModuleName = menuName;
         }
 
-        public TreeMenuItem(OdinMenuEditorWindow autoTool, OdinMenuTree tree, string menuName, EditorIcon icon) : base(autoTool,
-            tree)
+        public TreeMenuItem(OdinMenuEditorWindow autoTool, OdinMenuTree tree, string menuName, EditorIcon icon) : base(autoTool, tree)
         {
             Tree.Add(menuName, this, icon);
             ModuleName = menuName;

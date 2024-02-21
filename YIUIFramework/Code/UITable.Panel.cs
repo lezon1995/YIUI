@@ -5,7 +5,7 @@ using UnityEngine;
 namespace YIUIFramework
 {
     //Panel的分块数据
-    public sealed partial class UIBindCDETable
+    public sealed partial class UITable
     {
         [OdinSerialize]
         [LabelText("源数据")]
@@ -28,7 +28,7 @@ namespace YIUIFramework
 #if UNITY_EDITOR
         bool ShowPanelSplitData
         {
-            get { return IsSplitData && UICodeType == EUICodeType.Panel; }
+            get { return IsSplitData && UICodeType == UIType.Panel; }
         }
 
         //拆分后的引用数据 
@@ -42,7 +42,7 @@ namespace YIUIFramework
 
         bool HidePanelSplitData
         {
-            get { return IsSplitData || UICodeType != EUICodeType.Panel; }
+            get { return IsSplitData || UICodeType != UIType.Panel; }
         }
 #endif
     }

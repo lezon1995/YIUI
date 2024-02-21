@@ -36,9 +36,9 @@ namespace YIUIFramework
             var asset = await LoadAssetAsync<GameObject>(pkgName, resName);
             if (asset)
             {
-                var obj = Object.Instantiate(asset);
-                g_ObjectMap.Add(obj, asset);
-                return obj;
+                var gameObject = Object.Instantiate(asset);
+                g_ObjectMap.Add(gameObject, asset);
+                return gameObject;
             }
 
             return null;

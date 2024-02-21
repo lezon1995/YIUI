@@ -4,16 +4,12 @@ using UnityEngine;
 
 namespace YIUIFramework
 {
-    /// <summary>
-    /// 动画
-    /// </summary>
-    public abstract partial class BasePanel
+    public partial class UIView
     {
         protected sealed override async UniTask SealedOnWindowOpenTween()
         {
             if (PanelMgr.IsLowQuality || WindowBanTween)
             {
-                OnOpenTweenEnd();
                 return;
             }
 
@@ -37,7 +33,6 @@ namespace YIUIFramework
         {
             if (!ActiveSelf || PanelMgr.IsLowQuality || WindowBanTween)
             {
-                OnCloseTweenEnd();
                 return;
             }
 
@@ -59,12 +54,12 @@ namespace YIUIFramework
 
         protected override async UniTask OnOpenTween()
         {
-            await WindowFadeAnim.In(this);
+            await UniTask.CompletedTask;
         }
 
         protected override async UniTask OnCloseTween()
         {
-            await WindowFadeAnim.Out(this);
+            await UniTask.CompletedTask;
         }
 
         protected override void OnOpenTweenStart()
