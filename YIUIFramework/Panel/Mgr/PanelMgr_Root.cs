@@ -33,7 +33,7 @@ namespace YIUIFramework
 
         //K1 = 层级枚举 V1 = 层级对应的rect
         //List = 当前层级中的当前所有UI 前面的代表这个UI在前面以此类推
-        readonly Dictionary<EPanelLayer, Dictionary<RectTransform, List<PanelInfo>>> panelLayers = new Dictionary<EPanelLayer, Dictionary<RectTransform, List<PanelInfo>>>();
+        Dictionary<EPanelLayer, (RectTransform, List<PanelInfo>)> panelLayers = new Dictionary<EPanelLayer, (RectTransform, List<PanelInfo>)>();
 
         async UniTask<bool> InitRoot()
         {
@@ -110,8 +110,9 @@ namespace YIUIFramework
             panelLayers.Clear();
             for (var i = len - 1; i >= 0; i--)
             {
-                var layer = new GameObject($"Layer{i}-{(EPanelLayer)i}");
-                var rect = layer.AddComponent<RectTransform>();
+                var layer = (EPanelLayer)i;
+                var layerRoot = new GameObject($"Layer{i}-{layer}");
+                var rect = layerRoot.AddComponent<RectTransform>();
                 rect.SetParent(UILayerRoot);
                 rect.localScale = Vector3.one;
                 rect.pivot = new Vector2(0.5f, 0.5f);
@@ -120,8 +121,7 @@ namespace YIUIFramework
                 rect.sizeDelta = Vector2.zero;
                 rect.localRotation = Quaternion.identity;
                 rect.localPosition = new Vector3(0, 0, i * LayerDistance); //这个是为了3D模型时穿插的问题
-                var rectDic = new Dictionary<RectTransform, List<PanelInfo>> { { rect, new List<PanelInfo>() } };
-                panelLayers.Add((EPanelLayer)i, rectDic);
+                panelLayers.Add(layer, (rect, new List<PanelInfo>()));
             }
 
             //所有层级初始化后添加一个终极屏蔽层 可根据API 定时屏蔽UI操作
@@ -131,7 +131,7 @@ namespace YIUIFramework
 
             UICamera.clearFlags = CameraClearFlags.Depth;
             UICamera.orthographic = true;
-            
+
             //根据需求可以修改摄像机的远剪裁平面大小 没必要设置的很大
             //UICamera.farClipPlane = ((len + 1) * LayerDistance) * UICanvasRoot.transform.localScale.x; 
             return true;
@@ -147,56 +147,43 @@ namespace YIUIFramework
             {
                 if (_UICache == null)
                 {
-                    _UICache = GetLayerRect(EPanelLayer.Cache);
+                    _UICache = GetLayerRoot(EPanelLayer.Cache);
                 }
 
                 return _UICache;
             }
         }
 
-
         #endregion
 
-        public RectTransform GetLayerRect(EPanelLayer panelLayer)
+        public RectTransform GetLayerRoot(EPanelLayer layer)
         {
-            panelLayers.TryGetValue(panelLayer, out var rectDic);
-            if (rectDic == null)
+            if (panelLayers.TryGetValue(layer, out var tuple))
             {
-                Debug.LogError($"没有这个层级 请检查 {panelLayer}");
-                return null;
+                var (rectTransform, _) = tuple;
+                return rectTransform;
             }
 
-            //只能有一个所以返回第一个
-            foreach (var rect in rectDic.Keys)
-            {
-                return rect;
-            }
-
+            Debug.LogError($"没有这个层级 请检查 {layer}");
             return null;
         }
 
-        List<PanelInfo> GetLayerPanelInfoList(EPanelLayer panelLayer)
+        List<PanelInfo> GetLayerList(EPanelLayer layer)
         {
-            panelLayers.TryGetValue(panelLayer, out var rectDic);
-            if (rectDic == null)
+            if (panelLayers.TryGetValue(layer, out var tuple))
             {
-                Debug.LogError($"没有这个层级 请检查 {panelLayer}");
-                return null;
+                var (_, list) = tuple;
+                return list;
             }
 
-            //只能有一个所以返回第一个
-            foreach (var infoList in rectDic.Values)
-            {
-                return infoList;
-            }
-
+            Debug.LogError($"没有这个层级 请检查 {layer}");
             return null;
         }
 
-        bool RemoveLayerPanelInfo(EPanelLayer panelLayer, PanelInfo panelInfo)
+        bool RemoveFromLayer(PanelInfo info, EPanelLayer layer)
         {
-            var list = GetLayerPanelInfoList(panelLayer);
-            return list != null && list.Remove(panelInfo);
+            var list = GetLayerList(layer);
+            return list != null && list.Remove(info);
         }
     }
 }

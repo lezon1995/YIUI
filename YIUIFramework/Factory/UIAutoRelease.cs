@@ -10,11 +10,11 @@ namespace YIUIFramework
     /// 如果你真的不知道什么时候移除 或者 不想管理 也接受多余消耗 可以挂载他
     /// UIBase 类无需
     /// </summary>
-    public class YIUIReleaseInstantiate : MonoBehaviour
+    public class UIAutoRelease : MonoBehaviour
     {
         void OnDestroy()
         {
-            YIUIFactory.Destroy(gameObject);
+            UIFactory.Destroy(gameObject);
         }
     }
 }

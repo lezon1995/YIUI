@@ -3,22 +3,22 @@ using UnityEngine;
 
 namespace YIUIFramework
 {
-    public static partial class YIUIFactory
+    public static partial class UIFactory
     {
         static void SetParent(Transform self, Transform parent)
         {
             self.SetParent(parent, false);
-            if (self is RectTransform rectTransform)
+            if (self is RectTransform transform)
             {
-                rectTransform.AutoReset();
+                transform.AutoReset();
             }
         }
 
-        internal static UIBase CreateCommon(string pkgName, string resName, GameObject obj)
+        internal static UIBase CreateCommon(string pkgName, string resName, GameObject gameObject)
         {
             if (UIBindHelper.TryGetBindVo(pkgName, resName, out var vo))
             {
-                return CreateByObjVo(vo, obj);
+                return InitializeUI(vo, gameObject);
             }
 
             return null;
@@ -54,21 +54,21 @@ namespace YIUIFramework
             var gameObject = YIUILoadHelper.LoadAssetInstantiate(vo.PkgName, vo.ResName);
             if (gameObject)
             {
-                return CreateByObjVo(vo, gameObject, parent);
+                return InitializeUI(vo, gameObject, parent);
             }
 
             Debug.LogError($"没有加载到这个资源 {vo.PkgName}/{vo.ResName}");
             return null;
         }
 
-        static UIBase CreateByObjVo(UIBindVo vo, GameObject gameObject, Transform parent = null)
+        static UIBase InitializeUI(UIBindVo vo, GameObject gameObject, Transform parent = null)
         {
             if (gameObject.TryGetComponent<UITable>(out var table))
             {
                 table.NewChildUIComponents();
                 var uiBase = (UIBase)Activator.CreateInstance(vo.CreatorType);
                 SetParent(gameObject.transform, parent ? parent : PanelMgr.Inst.UICache);
-                uiBase.InitUIBase(vo, gameObject);
+                uiBase.Initialize(vo, gameObject);
                 return uiBase;
             }
 
@@ -90,7 +90,7 @@ namespace YIUIFramework
                 {
                     var uiBase = (UIBase)Activator.CreateInstance(vo.CreatorType);
                     table.NewChildUIComponents();
-                    uiBase.InitUIBase(vo, table.gameObject);
+                    uiBase.Initialize(vo, table.gameObject);
                     self.AddUIBase(table.gameObject.name, uiBase);
                 }
             }

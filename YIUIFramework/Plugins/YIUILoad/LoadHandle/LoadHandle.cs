@@ -4,10 +4,10 @@ namespace YIUIFramework
 {
     internal class LoadHandle : IRefPool
     {
-        internal string PkgName { get; private set; }
-        internal string ResName { get; private set; }
-        internal int Handle { get; private set; }
-        internal int RefCount { get; private set; }
+        string PkgName { get; set; }
+        string ResName { get; set; }
+        int Handle { get; set; }
+        int RefCount { get; set; }
         internal Object Object { get; private set; }
 
         internal void SetGroupHandle(string pkgName, string resName)

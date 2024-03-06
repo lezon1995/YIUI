@@ -10,7 +10,7 @@ namespace YIUIFramework
         /// <summary>
         /// 资源验证
         /// </summary>
-        internal static bool VerifyAssetValidity(string pkgName, string resName)
+        static bool VerifyAssetValidity(string pkgName, string resName)
         {
             return YIUILoadDI.VerifyAsset(pkgName, resName);
         }

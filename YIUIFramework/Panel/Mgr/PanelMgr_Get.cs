@@ -3,7 +3,7 @@
     public partial class PanelMgr
     {
         //字符串类型获取 需要自己转换 建议不要使用
-        public UIPanel GetPanel(string panelName)
+        public UIPanel GetUIPanel(string panelName)
         {
             if (TryGetPanelInfo(panelName, out var info))
             {
@@ -19,7 +19,7 @@
         /// 这个只能表示对象存在
         /// 不应该滥用 UI与UI之间还是应该使用消息通信 这个是为了解决部分问题
         /// </summary>
-        public T GetPanel<T>() where T : UIPanel
+        public T GetUIPanel<T>() where T : UIPanel
         {
             if (TryGetPanelInfo<T>(out var info))
             {

@@ -16,9 +16,9 @@ namespace YIUIFramework
         public GameObject GameObject { get; private set; }
         public RectTransform Transform { get; private set; }
         public CanvasGroup CanvasGroup { get; private set; }
+        public bool Initialized { get; private set; }
         
-        public bool UIBaseInit { get; private set; }
-        protected PanelMgr m_PanelMgr { get; private set; }
+        protected PanelMgr manager { get; private set; }
 
         public string UIPkgName => m_UIBindVo.PkgName;
 
@@ -43,7 +43,7 @@ namespace YIUIFramework
         /// 初始化UIBase 由PanelMgr创建对象后调用
         /// 外部禁止
         /// </summary>
-        internal bool InitUIBase(UIBindVo uiBindVo, GameObject gameObject)
+        internal bool Initialize(UIBindVo uiBindVo, GameObject gameObject)
         {
             if (gameObject == null)
             {
@@ -61,10 +61,10 @@ namespace YIUIFramework
                 return false;
             }
 
-            UIBaseInit = true;
+            Initialized = true;
             m_UIBindVo = uiBindVo;
-            m_PanelMgr = PanelMgr.Inst;
-            Table.BindUIBase(this);
+            manager = PanelMgr.Inst;
+            Table.BindUI(this);
             UIBaseInitialize();
             return true;
         }
@@ -174,7 +174,7 @@ namespace YIUIFramework
             UnUIBind();
             OnDestroy();
             SealedOnDestroy();
-            YIUIFactory.Destroy(this);
+            UIFactory.Destroy(this);
         }
 
         #region 密封虚方法由(下级继承后)重写后密封 其他人可以不用关心

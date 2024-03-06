@@ -17,19 +17,18 @@ namespace YIUIFramework
             var priority = panel.Priority;
             var transform = panel.Transform;
 
-            var layerRect = GetLayerRect(layer);
-            if (layerRect == null)
+            var layerRoot = GetLayerRoot(layer);
+            if (layerRoot == null)
             {
                 layer = EPanelLayer.Bottom;
-                layerRect = GetLayerRect(layer);
+                layerRoot = GetLayerRoot(layer);
                 Debug.LogError($"没有找到这个UILayer {layer}  强制修改为使用最低层 请检查");
             }
 
             var addLast = true; //放到最后 也就是最前面
 
-            var infoList = GetLayerPanelInfoList(layer);
-            var removeResult = infoList.Remove(panelInfo);
-            if (removeResult)
+            var panels = GetLayerList(layer);
+            if (panels.Remove(panelInfo))
             {
                 transform.SetParent(UILayerRoot);
             }
@@ -41,20 +40,20 @@ namespace YIUIFramework
              * 当前优先级 >= 目标优先级时 插入
              */
 
-            for (var i = infoList.Count - 1; i >= 0; i--)
+            for (var i = panels.Count - 1; i >= 0; i--)
             {
-                var info = infoList[i];
+                var info = panels[i];
                 var infoPriority = info.Panel ? info.Panel.Priority : 0;
 
-                if (i == infoList.Count - 1 && priority >= infoPriority)
+                if (i == panels.Count - 1 && priority >= infoPriority)
                 {
                     break;
                 }
 
                 if (priority >= infoPriority)
                 {
-                    infoList.Insert(i + 1, panelInfo);
-                    transform.SetParent(layerRect);
+                    panels.Insert(i + 1, panelInfo);
+                    transform.SetParent(layerRoot);
                     transform.SetSiblingIndex(i + 1);
                     addLast = false;
                     break;
@@ -62,8 +61,8 @@ namespace YIUIFramework
 
                 if (i <= 0)
                 {
-                    infoList.Insert(0, panelInfo);
-                    transform.SetParent(layerRect);
+                    panels.Insert(0, panelInfo);
+                    transform.SetParent(layerRoot);
                     transform.SetSiblingIndex(0);
                     addLast = false;
                     break;
@@ -72,8 +71,8 @@ namespace YIUIFramework
 
             if (addLast)
             {
-                infoList.Add(panelInfo);
-                transform.SetParent(layerRect);
+                panels.Add(panelInfo);
+                transform.SetParent(layerRoot);
                 transform.SetAsLastSibling();
             }
 
@@ -97,15 +96,15 @@ namespace YIUIFramework
             var foreverCache = panel.PanelForeverCache;
             var timeCache = panel.PanelTimeCache;
             var layer = panel.Layer;
-            RemoveLayerPanelInfo(layer, panelInfo);
+            RemoveFromLayer(panelInfo, layer);
 
             if (foreverCache || timeCache)
             {
                 //缓存界面只是单纯的吧界面隐藏
                 //再次被打开 如何重构界面需要自行设置
-                var layerRect = GetLayerRect(EPanelLayer.Cache);
+                var layerRoot = GetLayerRoot(EPanelLayer.Cache);
                 var uiRect = panel.Transform;
-                uiRect.SetParent(layerRect, false);
+                uiRect.SetParent(layerRoot, false);
                 panel.SetActive(false);
 
                 if (timeCache && !foreverCache)
@@ -117,8 +116,7 @@ namespace YIUIFramework
             }
             else
             {
-                var uiObj = panel.GameObject;
-                Object.Destroy(uiObj);
+                Object.Destroy(panel.GameObject);
                 panelInfo.Panel = null;
             }
         }

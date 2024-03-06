@@ -81,7 +81,7 @@ namespace YIUIFramework
                 //如果没有则通用重新创建
                 if (view == null)
                 {
-                    view = YIUIFactory.CreateCommon(UIPkgName, viewName, transform.gameObject);
+                    view = UIFactory.CreateCommon(UIPkgName, viewName, transform.gameObject);
                 }
 
                 switch (view)
@@ -126,7 +126,7 @@ namespace YIUIFramework
                 }
 
                 AddOpening(viewName);
-                var view = await YIUIFactory.InstantiateAsync<T>(parent);
+                var view = await UIFactory.InstantiateAsync<T>(parent);
                 RemoveOpening(viewName);
 
                 viewTabsStatic.Add(viewName, view);

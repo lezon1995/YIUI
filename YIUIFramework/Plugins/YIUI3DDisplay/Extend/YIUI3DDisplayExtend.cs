@@ -53,7 +53,7 @@ namespace YIUIFramework
 
         private GameObject CreateObject(string resName)
         {
-            var obj = YIUIFactory.InstantiateGameObject("", resName);
+            var obj = UIFactory.InstantiateGameObject("", resName);
             if (obj == null)
             {
                 Debug.LogError($"实例化失败 {resName}  请检查为何没有加载成功 是否配置");

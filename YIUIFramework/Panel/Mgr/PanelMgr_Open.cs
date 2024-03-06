@@ -60,7 +60,7 @@ namespace YIUIFramework
         /// <summary>
         /// 打开之前
         /// </summary>
-        async UniTask OpenPanelBefore(PanelInfo info)
+        async UniTask BeforeOpen(PanelInfo info)
         {
             if (!info.Panel.WindowFirstOpen)
             {
@@ -71,7 +71,7 @@ namespace YIUIFramework
         /// <summary>
         /// 打开之后
         /// </summary>
-        async UniTask<UIPanel> OpenPanelAfter(PanelInfo info, bool success)
+        async UniTask<UIPanel> AfterOpen(PanelInfo info, bool success)
         {
             if (success)
             {
@@ -100,7 +100,7 @@ namespace YIUIFramework
             openings.Remove(name);
         }
 
-        public bool PanelIsOpening(string name)
+        bool IsOpening(string name)
         {
             return openings.Contains(name);
         }

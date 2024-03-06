@@ -24,7 +24,7 @@ namespace YIUIFramework
                 return;
             }
 
-            var layerList = GetLayerPanelInfoList(EPanelLayer.Panel);
+            var layerList = GetLayerList(EPanelLayer.Panel);
             var skipTween = info.Panel.WindowSkipOtherCloseTween;
 
             for (var i = layerList.Count - 1; i >= 0; i--)
@@ -87,7 +87,7 @@ namespace YIUIFramework
                 return;
             }
 
-            var layerList = GetLayerPanelInfoList(EPanelLayer.Panel);
+            var layerList = GetLayerList(EPanelLayer.Panel);
             var skipTween = info.Panel.WindowSkipOtherOpenTween;
 
             for (var i = layerList.Count - 1; i >= 0; i--)
@@ -143,7 +143,7 @@ namespace YIUIFramework
                 return;
             }
 
-            var layerList = GetLayerPanelInfoList(EPanelLayer.Panel);
+            var layerList = GetLayerList(EPanelLayer.Panel);
             var skipOtherCloseTween = home.Panel.WindowSkipOtherCloseTween;
             var skipHomeOpenTween = home.Panel.WindowSkipHomeOpenTween;
 

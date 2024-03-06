@@ -34,7 +34,7 @@ namespace YIUIFramework
         //初始化记录
         public static bool IsInit { get; private set; }
 
-        public static Type BasePanelType = typeof(UIPanel);
+        public static Type TypePanel = typeof(UIPanel);
 
         /// <summary>
         /// 初始化获取到所有UI相关的绑定关系
@@ -60,7 +60,7 @@ namespace YIUIFramework
             var binds = new UIBindProvider().Get();
 #endif
 
-            if (binds == null || binds.Length <= 0)
+            if (binds == null || binds.Length == 0)
             {
                 Debug.LogError("没有找到绑定信息 或者 没有绑定信息 请检查");
                 return false;
@@ -74,7 +74,7 @@ namespace YIUIFramework
             {
                 typeVoDict[vo.CreatorType] = vo;
                 AddToPathDic(vo);
-                if (vo.CodeType == BasePanelType)
+                if (vo.CodeType == TypePanel)
                 {
                     panelVoDict[vo.ResName] = vo;
                 }
@@ -90,13 +90,10 @@ namespace YIUIFramework
             var resName = vo.ResName;
             var key = new Key(pkgName, resName);
 
-            if (pathVoDict.ContainsKey(key))
+            if (pathVoDict.TryAdd(key, vo) == false)
             {
                 Debug.LogError($"重复资源 请检查 {pkgName} {resName}");
-                return;
             }
-
-            pathVoDict.Add(key, vo);
         }
 
         /// <summary>
@@ -139,7 +136,7 @@ namespace YIUIFramework
         {
             uiBindVo = default;
 
-            if (string.IsNullOrEmpty(pkgName) || string.IsNullOrEmpty(resName))
+            if (pkgName.IsEmpty() || resName.IsEmpty())
             {
                 Debug.LogError($"空名称 无法取到这个包信息 请检查");
                 return false;

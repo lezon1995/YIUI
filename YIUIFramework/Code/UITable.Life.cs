@@ -16,7 +16,7 @@ namespace YIUIFramework
         /// 由UIBase初始化后调用
         /// 目前还没用 预留这里而已 不知道以后是否会有用
         /// </summary>
-        internal void BindUIBase(UIBase ui)
+        internal void BindUI(UIBase ui)
         {
             if (UI)
             {

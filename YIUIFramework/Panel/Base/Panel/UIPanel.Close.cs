@@ -14,17 +14,17 @@ namespace YIUIFramework
 
         public async UniTask CloseAsync(bool tween = true, bool ignoreElse = false)
         {
-            await m_PanelMgr.ClosePanelAsync(UIResName, tween, ignoreElse);
+            await manager.ClosePanelAsync(UIResName, tween, ignoreElse);
         }
 
         protected void Home<T>(bool tween = true) where T : UIPanel
         {
-            m_PanelMgr.HomePanel<T>(tween).Forget();
+            manager.HomePanel<T>(tween).Forget();
         }
 
         protected void Home(string homeName, bool tween = true)
         {
-            m_PanelMgr.HomePanel(homeName, tween).Forget();
+            manager.HomePanel(homeName, tween).Forget();
         }
     }
 }

@@ -118,7 +118,7 @@ namespace YIUIFramework
 
         private TItemRenderer OnCreateItemRenderer()
         {
-            var uiBase = YIUIFactory.Instantiate<TItemRenderer>(m_BindVo);
+            var uiBase = UIFactory.Instantiate<TItemRenderer>(m_BindVo);
             AddItemRendererByDic(uiBase.Transform, uiBase);
             return AddOnClickEvent(uiBase);
         }

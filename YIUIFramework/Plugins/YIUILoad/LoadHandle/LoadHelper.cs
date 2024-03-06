@@ -4,65 +4,60 @@ namespace YIUIFramework
 {
     internal static partial class LoadHelper
     {
-        private static string s_NullPkgName = "Default";
-
-        private static readonly Dictionary<string, Dictionary<string, LoadHandle>> m_AllLoadDic = new Dictionary<string, Dictionary<string, LoadHandle>>();
+        static string defaultName = "Default";
+        static Dictionary<string, Dictionary<string, LoadHandle>> handleDict = new Dictionary<string, Dictionary<string, LoadHandle>>();
 
         internal static LoadHandle GetLoad(string pkgName, string resName)
         {
-            if (string.IsNullOrEmpty(pkgName))
+            if (pkgName.IsEmpty())
             {
-                pkgName = s_NullPkgName;
+                pkgName = defaultName;
             }
 
-            if (!m_AllLoadDic.ContainsKey(pkgName))
+            if (!handleDict.ContainsKey(pkgName))
             {
-                m_AllLoadDic.Add(pkgName, new Dictionary<string, LoadHandle>());
+                handleDict.Add(pkgName, new Dictionary<string, LoadHandle>());
             }
 
-            var pkgDic = m_AllLoadDic[pkgName];
+            var pkgDict = handleDict[pkgName];
 
-            if (pkgDic.TryGetValue(resName, out var load))
+            if (pkgDict.TryGetValue(resName, out var load))
             {
                 return load;
             }
 
             var handle = RefPool.Get<LoadHandle>();
             handle.SetGroupHandle(pkgName, resName);
-            pkgDic.Add(resName, handle);
+            pkgDict.Add(resName, handle);
 
             return handle;
         }
 
         internal static bool PutLoad(string pkgName, string resName)
         {
-            if (string.IsNullOrEmpty(pkgName))
+            if (pkgName.IsEmpty())
             {
-                pkgName = s_NullPkgName;
+                pkgName = defaultName;
             }
 
-            if (!m_AllLoadDic.ContainsKey(pkgName))
+            if (handleDict.TryGetValue(pkgName, out var pkgDic))
             {
+                if (pkgDic.Remove(resName, out var handle))
+                {
+                    RemoveLoadHandle(handle);
+                    RefPool.Put(handle);
+                    return true;
+                }
+
                 return false;
             }
 
-            var pkgDic = m_AllLoadDic[pkgName];
-
-            if (!pkgDic.ContainsKey(resName))
-            {
-                return false;
-            }
-
-            var handle = pkgDic[resName];
-            pkgDic.Remove(resName);
-            RemoveLoadHandle(handle);
-            RefPool.Put(handle);
-            return true;
+            return false;
         }
 
         internal static void PutAll()
         {
-            foreach (var pkgDic in m_AllLoadDic.Values)
+            foreach (var pkgDic in handleDict.Values)
             {
                 foreach (var handle in pkgDic.Values)
                 {
@@ -70,8 +65,8 @@ namespace YIUIFramework
                 }
             }
 
-            m_AllLoadDic.Clear();
-            m_ObjLoadHandle.Clear();
+            handleDict.Clear();
+            objHandles.Clear();
         }
     }
 }

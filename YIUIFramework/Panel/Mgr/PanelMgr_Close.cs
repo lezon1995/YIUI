@@ -25,7 +25,7 @@ namespace YIUIFramework
                     continue;
                 }
 
-                var list = GetLayerPanelInfoList(currentLayer);
+                var list = GetLayerList(currentLayer);
 
                 foreach (var info in list)
                 {

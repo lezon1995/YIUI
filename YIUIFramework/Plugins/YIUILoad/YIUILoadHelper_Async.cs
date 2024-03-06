@@ -14,7 +14,7 @@ namespace YIUIFramework
         /// 异步加载资源对象
         /// 返回类型
         /// </summary>
-        internal static async UniTask<T> LoadAssetAsync<T>(string pkgName, string resName) where T : Object
+        static async UniTask<T> LoadAssetAsync<T>(string pkgName, string resName) where T : Object
         {
             var handle = LoadHelper.GetLoad(pkgName, resName);
             var loadObj = handle.Object;

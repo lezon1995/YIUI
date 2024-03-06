@@ -17,7 +17,7 @@ namespace YIUIFramework
                 return;
             }
 
-            var foreverCode = WindowAllowOptionByTween ? 0 : m_PanelMgr.BanLayerOptionForever();
+            var foreverCode = WindowAllowOptionByTween ? 0 : manager.BanLayerOptionForever();
             try
             {
                 await OnOpenTween();
@@ -28,7 +28,7 @@ namespace YIUIFramework
             }
             finally
             {
-                m_PanelMgr.RecoverLayerOptionForever(foreverCode);
+                manager.RecoverLayerOptionForever(foreverCode);
                 OnOpenTweenEnd();
             }
         }
@@ -41,7 +41,7 @@ namespace YIUIFramework
                 return;
             }
 
-            var foreverCode = WindowAllowOptionByTween ? 0 : m_PanelMgr.BanLayerOptionForever();
+            var foreverCode = WindowAllowOptionByTween ? 0 : manager.BanLayerOptionForever();
             try
             {
                 await OnCloseTween();
@@ -52,7 +52,7 @@ namespace YIUIFramework
             }
             finally
             {
-                m_PanelMgr.RecoverLayerOptionForever(foreverCode);
+                manager.RecoverLayerOptionForever(foreverCode);
                 OnCloseTweenEnd();
             }
         }

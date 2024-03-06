@@ -66,9 +66,8 @@ namespace YIUIFramework
         /// </summary>
         internal static void ReleaseInstantiate(Object gameObject)
         {
-            if (g_ObjectMap.TryGetValue(gameObject, out var asset))
+            if (g_ObjectMap.Remove(gameObject, out var asset))
             {
-                g_ObjectMap.Remove(gameObject);
                 Release(asset);
             }
         }

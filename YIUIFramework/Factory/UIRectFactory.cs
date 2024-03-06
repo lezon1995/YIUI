@@ -5,7 +5,7 @@ namespace YIUIFramework
     /// <summary>
     /// 创建一个UI空对象时
     /// </summary>
-    public static class YIUIRectFactory
+    public static class UIRectFactory
     {
         public static RectTransform CreateUIRect(Transform parent)
         {

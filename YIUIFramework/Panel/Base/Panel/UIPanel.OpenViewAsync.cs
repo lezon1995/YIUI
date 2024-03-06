@@ -166,25 +166,24 @@ namespace YIUIFramework
                 return view;
             }
 
-            var success = UIBindHelper.TryGetBindVo(UIPkgName, viewName, out var vo);
-            if (success == false)
+            if (UIBindHelper.TryGetBindVo(UIPkgName, viewName, out var vo))
             {
-                return null;
+                if (ViewIsOpening(viewName))
+                {
+                    Debug.LogError($"请检查 {viewName} 正在异步打开中 请勿重复调用 请检查代码是否一瞬间频繁调用");
+                    return null;
+                }
+
+                AddOpening(viewName);
+                view = await UIFactory.InstantiateAsync<UIView>(vo, parent);
+                RemoveOpening(viewName);
+
+                viewTabsStatic.Add(viewName, view);
+
+                return view;
             }
 
-            if (ViewIsOpening(viewName))
-            {
-                Debug.LogError($"请检查 {viewName} 正在异步打开中 请勿重复调用 请检查代码是否一瞬间频繁调用");
-                return null;
-            }
-
-            AddOpening(viewName);
-            view = (UIView)await YIUIFactory.InstantiateAsync(vo, parent);
-            RemoveOpening(viewName);
-
-            viewTabsStatic.Add(viewName, view);
-
-            return view;
+            return null;
         }
 
         protected async UniTask<UIView> OpenViewAsync(string viewName, object param)

@@ -2,7 +2,7 @@
 
 namespace YIUIFramework
 {
-    public static partial class YIUIFactory
+    public static partial class UIFactory
     {
         internal static void Destroy(GameObject obj)
         {

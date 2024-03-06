@@ -5,17 +5,16 @@ namespace YIUIFramework
 {
     internal static partial class LoadHelper
     {
-        private static readonly Dictionary<Object, LoadHandle> m_ObjLoadHandle = new Dictionary<Object, LoadHandle>();
+        static Dictionary<Object, LoadHandle> objHandles = new Dictionary<Object, LoadHandle>();
 
         internal static bool AddLoadHandle(Object obj, LoadHandle handle)
         {
-            if (m_ObjLoadHandle.ContainsKey(obj))
+            if (!objHandles.TryAdd(obj, handle))
             {
                 Debug.LogError($"此obj {obj.name} Handle 已存在 请检查 请勿创建多个");
                 return false;
             }
 
-            m_ObjLoadHandle.Add(obj, handle);
             return true;
         }
 
@@ -32,9 +31,9 @@ namespace YIUIFramework
 
         private static bool RemoveLoadHandle(Object obj)
         {
-            if (m_ObjLoadHandle.ContainsKey(obj))
+            if (objHandles.ContainsKey(obj))
             {
-                return m_ObjLoadHandle.Remove(obj);
+                return objHandles.Remove(obj);
             }
 
             Debug.LogError($"此obj {obj.name} Handle 不存在 请检查 请先创建设置");
@@ -43,7 +42,7 @@ namespace YIUIFramework
 
         internal static LoadHandle GetLoadHandle(Object obj)
         {
-            if (m_ObjLoadHandle.TryGetValue(obj, out var handle))
+            if (objHandles.TryGetValue(obj, out var handle))
             {
                 return handle;
             }

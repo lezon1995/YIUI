@@ -13,7 +13,7 @@ namespace YIUIFramework
          * 外部有什么加载 应该走自己框架中的加载方式 自行管理
          * 比如你想自己new一个obj 既然不是用UI框架内部提供的方法 那就应该你自行实现不要调用这个类
          */
-        internal static T LoadAsset<T>(string pkgName, string resName) where T : Object
+        static T LoadAsset<T>(string pkgName, string resName) where T : Object
         {
             var handle = LoadHelper.GetLoad(pkgName, resName);
             var loadObj = handle.Object;
