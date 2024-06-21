@@ -11,8 +11,13 @@ namespace YIUIFramework
         {
             if (!objHandles.TryAdd(obj, handle))
             {
-                Debug.LogError($"此obj {obj.name} Handle 已存在 请检查 请勿创建多个");
-                return false;
+                if (objHandles[obj] != handle)
+                {
+                    Debug.LogError($"此obj {obj.name} Handle 已存在 且前后不一致 请检查 请勿创建多个");
+                    return false;
+                }
+
+                return true;
             }
 
             return true;

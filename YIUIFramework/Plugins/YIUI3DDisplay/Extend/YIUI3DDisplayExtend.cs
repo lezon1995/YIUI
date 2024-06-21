@@ -9,11 +9,12 @@ namespace YIUIFramework
     /// </summary>
     public partial class YIUI3DDisplayExtend
     {
-        private UI3DDisplay m_UI3DDisplay;
-        private Dictionary<string, GameObject> m_ObjPool = new Dictionary<string, GameObject>();
-        private Dictionary<GameObject, Dictionary<string, Camera>> m_CameraPool = new Dictionary<GameObject, Dictionary<string, Camera>>();
+        UI3DDisplay m_UI3DDisplay;
+        public UI3DDisplay UI3DDisplay => m_UI3DDisplay;
+        Dictionary<string, GameObject> m_ObjPool = new Dictionary<string, GameObject>();
+        Dictionary<GameObject, Dictionary<string, Camera>> m_CameraPool = new Dictionary<GameObject, Dictionary<string, Camera>>();
 
-        private YIUI3DDisplayExtend()
+        YIUI3DDisplayExtend()
         {
         }
 
@@ -33,12 +34,12 @@ namespace YIUIFramework
             var obj = GetDisplayObject(resName);
             if (obj == null) return null;
             var camera = string.IsNullOrEmpty(cameraName) ? m_UI3DDisplay.ShowCamera : GetCamera(obj, cameraName);
-            if (camera == null) return obj; 
+            if (camera == null) return obj;
             m_UI3DDisplay.Show(obj, camera);
             return obj;
         }
 
-        private GameObject GetDisplayObject(string resName)
+        GameObject GetDisplayObject(string resName)
         {
             if (m_ObjPool.TryGetValue(resName, out var displayObject))
             {
@@ -51,7 +52,7 @@ namespace YIUIFramework
             return displayObject;
         }
 
-        private GameObject CreateObject(string resName)
+        GameObject CreateObject(string resName)
         {
             var obj = UIFactory.InstantiateGameObject("", resName);
             if (obj == null)
@@ -62,7 +63,7 @@ namespace YIUIFramework
             return obj;
         }
 
-        private Camera GetCamera(GameObject obj, string cameraName)
+        Camera GetCamera(GameObject obj, string cameraName)
         {
             if (!m_CameraPool.ContainsKey(obj))
             {
@@ -78,11 +79,11 @@ namespace YIUIFramework
 
             camera = GetCameraByName(obj, cameraName);
             objDic.Add(cameraName, camera);
-            
+
             return camera;
         }
 
-        private Camera GetCameraByName(GameObject obj, string cameraName)
+        Camera GetCameraByName(GameObject obj, string cameraName)
         {
             var cameraTsf = obj.transform.FindChildByName(cameraName);
             if (cameraTsf == null)

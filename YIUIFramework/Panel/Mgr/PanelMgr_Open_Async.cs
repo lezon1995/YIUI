@@ -35,10 +35,6 @@ namespace YIUIFramework
 
         PanelInfo GetPanel(string panelName)
         {
-#if YIUIMACRO_PANEL_OPENCLOSE
-            Debug.Log($"<color=yellow> 打开UI: {panelName} </color>");
-#endif
-
             if (panelName.IsEmpty())
             {
                 Debug.LogError($"<color=red> 无法打开 这是一个空名称 </color>");
@@ -49,15 +45,7 @@ namespace YIUIFramework
             {
                 if (info.Panel == null)
                 {
-                    if (IsOpening(panelName))
-                    {
-                        Debug.LogError($"请检查 {panelName} 正在异步打开中 请勿重复调用 请检查代码是否一瞬间频繁调用");
-                        return null;
-                    }
-
-                    AddOpening(panelName);
                     var panel = UIFactory.Instantiate<UIPanel>(info.PkgName, info.ResName);
-                    RemoveOpening(panelName);
                     if (panel == null)
                     {
                         Debug.LogError($"面板[{panelName}]没有创建成功，packName={info.PkgName}, resName={info.ResName}");
@@ -78,29 +66,19 @@ namespace YIUIFramework
 
         async UniTask<PanelInfo> GetPanelAsync(string panelName)
         {
-#if YIUIMACRO_PANEL_OPENCLOSE
-            Debug.Log($"<color=yellow> 打开UI: {panelName} </color>");
-#endif
-
             if (panelName.IsEmpty())
             {
                 Debug.LogError($"<color=red> 无法打开 这是一个空名称 </color>");
                 return null;
             }
 
+
             if (panelInfos.TryGetValue(panelName, out var info))
             {
                 if (info.Panel == null)
                 {
-                    if (IsOpening(panelName))
-                    {
-                        Debug.LogError($"请检查 {panelName} 正在异步打开中 请勿重复调用 请检查代码是否一瞬间频繁调用");
-                        return null;
-                    }
-
-                    AddOpening(panelName);
+                    using var asyncLock = await AsyncLockMgr.Inst.Wait(panelName.GetHashCode());
                     var panel = await UIFactory.InstantiateAsync<UIPanel>(info.PkgName, info.ResName);
-                    RemoveOpening(panelName);
                     if (panel == null)
                     {
                         Debug.LogError($"面板[{panelName}]没有创建成功，packName={info.PkgName}, resName={info.ResName}");

@@ -14,6 +14,9 @@ namespace YIUIFramework
         [LabelText("YIUI项目命名空间")]
         public const string Namespace = "YIUI"; //所有生成文件的命名空间
 
+        [LabelText("YIUI项目编辑器资源路径")]
+        public const string EditorPath = "Assets/Editor/" + ProjectName; //编辑器才会用到的资源
+        
         [LabelText("YIUI项目资源路径")]
         public const string ResPath = "Assets/LocalResources/" + ProjectName; //玩家的预设/图片等资源存放的地方
         

@@ -74,7 +74,7 @@ namespace YIUIFramework
             delayTasksWithScale.Clear();
         }
 
-        /// <summary>
+        /*/// <summary>
         /// 检查调度器的实例是否存在，如果不存在则创建一个实例。
         /// 特性标签 会在游戏启动时 自动调用
         /// </summary>
@@ -82,7 +82,7 @@ namespace YIUIFramework
         private static void CreateInstance()
         {
             _ = Inst;
-        }
+        }*/
 
         //每帧更新时调用的方法，用于执行各个任务队列中的任务。
         private void Update()

@@ -28,6 +28,7 @@ namespace YIUIFramework
 
         protected override void OnDispose()
         {
+            ResetRoot();
             OnBlockDispose();
         }
     }

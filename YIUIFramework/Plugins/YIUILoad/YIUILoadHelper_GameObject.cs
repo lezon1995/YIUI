@@ -48,7 +48,7 @@ namespace YIUIFramework
         /// 异步加载资源对象
         /// 回调类型
         /// </summary>
-        internal static async void LoadAssetAsyncInstantiate(string pkgName, string resName, System.Action<Object> action)
+        internal static async UniTask LoadAssetAsyncInstantiate(string pkgName, string resName, System.Action<Object> action)
         {
             var obj = await LoadAssetAsyncInstantiate(pkgName, resName);
             if (obj)

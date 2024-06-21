@@ -16,10 +16,11 @@ namespace YIUIFramework
         static T LoadAsset<T>(string pkgName, string resName) where T : Object
         {
             var handle = LoadHelper.GetLoad(pkgName, resName);
+            handle.AddRefCount();
+
             var loadObj = handle.Object;
             if (loadObj)
             {
-                handle.AddRefCount();
                 return (T)loadObj;
             }
 
@@ -30,14 +31,14 @@ namespace YIUIFramework
                 return null;
             }
 
-            if (LoadHelper.AddLoadHandle(obj, handle))
+            if (!LoadHelper.AddLoadHandle(obj, handle))
             {
-                handle.ResetHandle(obj, hash);
-                handle.AddRefCount();
-                return (T)obj;
+                handle.RemoveRefCount();
+                return null;
             }
 
-            return null;
+            handle.ResetHandle(obj, hash);
+            return (T)obj;
         }
     }
 }

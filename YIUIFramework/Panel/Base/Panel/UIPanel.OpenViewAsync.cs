@@ -168,18 +168,9 @@ namespace YIUIFramework
 
             if (UIBindHelper.TryGetBindVo(UIPkgName, viewName, out var vo))
             {
-                if (ViewIsOpening(viewName))
-                {
-                    Debug.LogError($"请检查 {viewName} 正在异步打开中 请勿重复调用 请检查代码是否一瞬间频繁调用");
-                    return null;
-                }
-
-                AddOpening(viewName);
+                using var asyncLock = await AsyncLockMgr.Inst.Wait(viewName.GetHashCode());
                 view = await UIFactory.InstantiateAsync<UIView>(vo, parent);
-                RemoveOpening(viewName);
-
                 viewTabsStatic.Add(viewName, view);
-
                 return view;
             }
 

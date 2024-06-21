@@ -137,6 +137,14 @@ namespace YIUIFramework
             return true;
         }
 
+        void ResetRoot()
+        {
+            for (int i = UILayerRoot.transform.childCount - 1; i >= 0; i--)
+            {
+                Object.Destroy(UILayerRoot.transform.GetChild(i).gameObject);
+            }
+        }
+
         #region 快捷获取层级
 
         RectTransform _UICache;

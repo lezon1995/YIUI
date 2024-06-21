@@ -98,7 +98,7 @@ namespace YIUIFramework.Editor
             m_GlobalSpriteAtlasSettings.iPhone = iPhone;
         }
 
-        const string GlobalSaveSpriteAtlasSettingsPath = UIConst.ResPath + "/GlobalSpriteAtlasSettings.text";
+        const string GlobalSaveSpriteAtlasSettingsPath = UIConst.EditorPath + "/GlobalSpriteAtlasSettings.txt";
 
         class GlobalSpriteAtlasSettings
         {

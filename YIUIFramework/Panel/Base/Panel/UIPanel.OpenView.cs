@@ -39,8 +39,6 @@ namespace YIUIFramework
             }
         }
 
-        HashSet<string> openingViews = new HashSet<string>();
-
         void InitPanelViewData()
         {
             viewTabsStatic.Clear();
@@ -75,19 +73,13 @@ namespace YIUIFramework
                     continue;
                 }
 
-                //查看本地是否已经创建
-                var view = Table.FindUIBase<UIBase>(viewName);
-
-                //如果没有则通用重新创建
-                if (view == null)
-                {
-                    view = UIFactory.CreateCommon(UIPkgName, viewName, transform.gameObject);
-                }
+                //通用创建 这个时候通用UI一定是没有创建的 否则就有问题
+                var view = UIFactory.CreateCommon(UIPkgName, viewName, viewTab.gameObject);
+                if (view == null) continue;
+                viewTab.gameObject.SetActive(false);
 
                 switch (view)
                 {
-                    case null:
-                        continue;
                     case UIView uiView:
                         viewTabsStatic.Add(viewName, uiView);
                         break;
@@ -108,7 +100,7 @@ namespace YIUIFramework
             return null;
         }
 
-        async UniTask<T> GetView<T>() where T : UIView, new()
+        async UniTask<T> GetView<T>() where T : UIView
         {
             var viewName = typeof(T).Name;
             var parent = GetViewParent(viewName);
@@ -119,15 +111,9 @@ namespace YIUIFramework
                     return value as T;
                 }
 
-                if (ViewIsOpening(viewName))
-                {
-                    Debug.LogError($"请检查 {viewName} 正在异步打开中 请勿重复调用 请检查代码是否一瞬间频繁调用");
-                    return null;
-                }
+                using var asyncLock = await AsyncLockMgr.Inst.Wait(viewName.GetHashCode());
 
-                AddOpening(viewName);
                 var view = await UIFactory.InstantiateAsync<T>(parent);
-                RemoveOpening(viewName);
 
                 viewTabsStatic.Add(viewName, view);
 
@@ -136,6 +122,44 @@ namespace YIUIFramework
 
             Debug.LogError($"不存在这个View  请检查 {viewName}");
             return null;
+        }
+
+        public (bool, UIView) ExistView<T>() where T : UIView
+        {
+            if (!UIBindHelper.TryGetBindVo<T>(out var vo))
+                return (false, null);
+
+            var viewName = vo.ResName;
+            var viewParent = GetViewParent(viewName);
+            if (viewParent == null)
+            {
+                Debug.LogError($"不存在这个View  请检查 {viewName}");
+                return (false, null);
+            }
+
+            if (viewTabsStatic.TryGetValue(viewName, out var baseView))
+            {
+                return (true, baseView);
+            }
+
+            return (false, null);
+        }
+
+        public (bool, UIView) ExistView(string viewName)
+        {
+            var viewParent = GetViewParent(viewName);
+            if (viewParent == null)
+            {
+                Debug.LogError($"不存在这个View  请检查 {viewName}");
+                return (false, null);
+            }
+
+            if (viewTabsStatic.TryGetValue(viewName, out var baseView))
+            {
+                return (true, baseView);
+            }
+
+            return (false, null);
         }
 
         /// <summary>
@@ -208,19 +232,35 @@ namespace YIUIFramework
             curTabView = view;
         }
 
-        void AddOpening(string name)
+        public void CloseView<T>(bool tween = true) where T : UIView
         {
-            openingViews.Add(name);
+            CloseViewAsync<T>(tween).Forget();
         }
 
-        void RemoveOpening(string name)
+        public void CloseView(string resName, bool tween = true)
         {
-            openingViews.Remove(name);
+            CloseViewAsync(resName, tween).Forget();
         }
 
-        bool ViewIsOpening(string name)
+        public async UniTask<bool> CloseViewAsync<TView>(bool tween = true) where TView : UIView
         {
-            return openingViews.Contains(name);
+            var (exist, entity) = ExistView<TView>();
+            if (!exist) return false;
+            return await CloseViewAsync(entity, tween);
+        }
+
+        public async UniTask<bool> CloseViewAsync(string resName, bool tween = true)
+        {
+            var (exist, entity) = ExistView(resName);
+            if (!exist) return false;
+            return await CloseViewAsync(entity, tween);
+        }
+
+        private async UniTask<bool> CloseViewAsync(UIView view, bool tween)
+        {
+            if (view == null) return false;
+            await view.CloseAsync(tween);
+            return true;
         }
     }
 }

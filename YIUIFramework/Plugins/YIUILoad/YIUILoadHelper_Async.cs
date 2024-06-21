@@ -17,10 +17,10 @@ namespace YIUIFramework
         static async UniTask<T> LoadAssetAsync<T>(string pkgName, string resName) where T : Object
         {
             var handle = LoadHelper.GetLoad(pkgName, resName);
+            handle.AddRefCount();
             var loadObj = handle.Object;
             if (loadObj)
             {
-                handle.AddRefCount();
                 return (T)loadObj;
             }
 
@@ -35,7 +35,7 @@ namespace YIUIFramework
                     return (T)loadObj;
                 }
 
-                Debug.LogError($"错误这个时候不应该是null");
+                handle.RemoveRefCount();
                 return null;
             }
 
@@ -45,19 +45,21 @@ namespace YIUIFramework
 
             if (obj == null)
             {
+                handle.SetWaitAsync(false);
                 handle.RemoveRefCount();
                 return null;
             }
 
-            if (LoadHelper.AddLoadHandle(obj, handle))
+            if (!LoadHelper.AddLoadHandle(obj, handle))
             {
-                handle.ResetHandle(obj, hash);
-                handle.AddRefCount();
                 handle.SetWaitAsync(false);
-                return (T)obj;
+                handle.RemoveRefCount();
+                return null;
             }
 
-            return null;
+            handle.ResetHandle(obj, hash);
+            handle.SetWaitAsync(false);
+            return (T)obj;
         }
 
         /// <summary>

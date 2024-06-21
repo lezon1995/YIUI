@@ -109,48 +109,46 @@ namespace YIUIFramework
 
             panelInfos.TryGetValue(panelName, out var info);
 
-            if (info is not { Panel: not null })
+            if (info is { Panel: not null })
             {
-                return;
-            }
+                var panel = info.Panel;
 
-            var panel = info.Panel;
-            
-            if (panel.PanelOption.Has(EPanelOption.DisClose))
-            {
-                bool allowClose = false; //是否允许关闭
-
-                //如果继承禁止关闭接口 可返回是否允许关闭自行处理
-                if (panel is IBanClose disClose)
+                if (panel.PanelOption.Has(EPanelOption.DisClose))
                 {
-                    allowClose = disClose.DoBanClose();
+                    bool allowClose = false; //是否允许关闭
+
+                    //如果继承禁止关闭接口 可返回是否允许关闭自行处理
+                    if (panel is IBanClose disClose)
+                    {
+                        allowClose = disClose.DoBanClose();
+                    }
+
+                    if (!allowClose)
+                    {
+                        Debug.LogError($"{panelName} 这个界面禁止被关闭 请检查");
+                        return;
+                    }
                 }
 
-                if (!allowClose)
+                if (!panel.WindowLastClose)
                 {
-                    Debug.LogError($"{panelName} 这个界面禁止被关闭 请检查");
-                    return;
+                    await panel.InternalOnWindowCloseTween(tween);
+                    panel.OnClose();
                 }
-            }
 
-            if (!panel.WindowLastClose)
-            {
-                await panel.InternalOnWindowCloseTween(tween);
-                panel.OnClose();
+                if (!ignoreElse)
+                {
+                    await RemoveUIAddElse(info);
+                }
+
+                if (panel.WindowLastClose)
+                {
+                    await panel.InternalOnWindowCloseTween(tween);
+                    panel.OnClose();
+                }
+
+                RemoveUI(info);
             }
-            
-            if (!ignoreElse)
-            {
-                await RemoveUIAddElse(info);
-            }
-            
-            if (panel.WindowLastClose)
-            {
-                await panel.InternalOnWindowCloseTween(tween);
-                panel.OnClose();
-            }
-            
-            RemoveUI(info);
         }
 
         public void ClosePanel(string panelName, bool tween = true, bool ignoreElse = false)

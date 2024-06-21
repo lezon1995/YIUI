@@ -173,9 +173,7 @@ namespace YIUIFramework
         internal void CreateUICodeByHierarchy()
         {
             if (!ShowCreateBtnByHierarchy())
-            {
                 return;
-            }
 
             var prefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
             if (prefabStage == null)
@@ -197,9 +195,7 @@ namespace YIUIFramework
 
             var table = AssetDatabase.LoadAssetAtPath<UITable>(path);
             if (table == null)
-            {
                 return;
-            }
 
             table.GenUICode();
 

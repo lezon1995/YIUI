@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace YIUIFramework
 {
@@ -26,7 +27,8 @@ namespace YIUIFramework
                 {
                     if (SingletonMgr.Disposing)
                     {
-                        throw new ObjectDisposedException(typeof(T).Name, "正在释放中, 不能再创建");
+                        Debug.LogError($" {typeof(T).Name} 单例管理器已释放或未初始化 禁止使用");
+                        return null;
                     }
 
                     g_Inst = new T();

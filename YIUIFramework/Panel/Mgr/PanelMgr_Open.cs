@@ -10,8 +10,7 @@ namespace YIUIFramework
         /// K = C#文件名
         /// 主要是作为缓存PanelInfo
         /// </summary>
-        readonly Dictionary<string, PanelInfo> panelInfos = new Dictionary<string, PanelInfo>();
-        readonly HashSet<string> openings = new HashSet<string>();
+        Dictionary<string, PanelInfo> panelInfos = new Dictionary<string, PanelInfo>();
 
         /// <summary>
         /// 获取PanelInfo
@@ -88,21 +87,6 @@ namespace YIUIFramework
             }
 
             return info.Panel;
-        }
-
-        void AddOpening(string name)
-        {
-            openings.Add(name);
-        }
-
-        void RemoveOpening(string name)
-        {
-            openings.Remove(name);
-        }
-
-        bool IsOpening(string name)
-        {
-            return openings.Contains(name);
         }
     }
 }

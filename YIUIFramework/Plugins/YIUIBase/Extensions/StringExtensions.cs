@@ -11,7 +11,7 @@ namespace YIUIFramework
     /// <summary>
     ///     Provides extension methods to the <see cref="string">System.string</see> object.
     /// </summary>
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         /// <summary>
         ///     Checks if date with dateFormat is parse-able to System.DateTime format returns boolean value if true else false
