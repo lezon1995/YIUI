@@ -11,33 +11,27 @@ namespace YIUIFramework
     [HideReferenceObjectPicker]
     public abstract partial class UIBase
     {
-        protected UITable Table { get; private set; }
-
+        public UITable Table { get; private set; }
         public GameObject GameObject { get; private set; }
         public RectTransform Transform { get; private set; }
         public CanvasGroup CanvasGroup { get; private set; }
-        public bool Initialized { get; private set; }
-        
         protected PanelMgr manager { get; private set; }
 
-        public string UIPkgName => m_UIBindVo.PkgName;
+        public string UIPkgName => _uiBindVo.PkgName;
 
-        public string UIResName => m_UIBindVo.ResName;
+        public string UIResName => _uiBindVo.ResName;
 
 
-        UIBindVo m_UIBindVo;
+        UIBindVo _uiBindVo;
 
-        internal UIBindVo UIBindVo => m_UIBindVo;
+        internal UIBindVo UIBindVo => _uiBindVo;
 
         /// <summary>
         /// 当前显示状态  显示/隐藏
         /// 不要使用这个设置显影
         /// 应该使用控制器 或调用方法 SetActive();
         /// </summary>
-        public bool ActiveSelf
-        {
-            get { return GameObject && GameObject.activeSelf; }
-        }
+        public bool ActiveSelf => GameObject && GameObject.activeSelf;
 
         /// <summary>
         /// 初始化UIBase 由PanelMgr创建对象后调用
@@ -61,8 +55,7 @@ namespace YIUIFramework
                 return false;
             }
 
-            Initialized = true;
-            m_UIBindVo = uiBindVo;
+            _uiBindVo = uiBindVo;
             manager = PanelMgr.Inst;
             Table.BindUI(this);
             UIBaseInitialize();

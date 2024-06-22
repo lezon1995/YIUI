@@ -1,7 +1,8 @@
 ﻿#if UNITY_EDITOR
 using Sirenix.OdinInspector;
-using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
 using YIUIFramework.Editor;
 
 namespace YIUIFramework
@@ -11,10 +12,7 @@ namespace YIUIFramework
     {
         #region 界面参数
 
-        [HorizontalGroup("UIInfo", 0.2F)]
-        [HideLabel]
-        [ReadOnly]
-        [OnValueChanged(nameof(OnValueChangedEUICodeType))]
+        [ReadOnly, HideLabel, HorizontalGroup("UIInfo", 0.2F), OnValueChanged(nameof(OnChangeUIType))]
         public UIType UICodeType = UIType.Component;
 
         [HideIf(nameof(UICodeType), UIType.Component)]
@@ -24,7 +22,7 @@ namespace YIUIFramework
 
         [ShowIf(nameof(UICodeType), UIType.Panel)]
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
-        [OnValueChanged(nameof(OnValueChangedEPanelLayer))]
+        [OnValueChanged(nameof(OnChangePanelLayer))]
         public EPanelLayer PanelLayer = EPanelLayer.Panel;
 
         [ShowIf(nameof(UICodeType), UIType.Panel)]
@@ -56,7 +54,7 @@ namespace YIUIFramework
         [EnableIf("@UIOperationHelper.CommonShowIf()")]
         public int Priority;
 
-        void OnValueChangedEUICodeType()
+        void OnChangeUIType()
         {
             var uiPanelName = UIConst.PanelName;
             if (name.EndsWith(uiPanelName) || name.EndsWith(UIConst.PanelSourceName))
@@ -92,7 +90,7 @@ namespace YIUIFramework
             }
         }
 
-        void OnValueChangedEPanelLayer()
+        void OnChangePanelLayer()
         {
             if (PanelLayer >= EPanelLayer.Cache)
             {
@@ -111,8 +109,7 @@ namespace YIUIFramework
         [GUIColor(1, 1, 0)]
         [Button("Auto Check", 30)]
         [PropertyOrder(-100)]
-        // [ShowIf(nameof(ShowAutoCheckBtn))]
-        [HideIf(nameof(ShowCreateBtnByHierarchy))]
+        [ShowIf(nameof(ShowAutoCheckBtn))]
         public void ManualAutoCheck()
         {
             AutoCheck();
@@ -121,42 +118,31 @@ namespace YIUIFramework
         public bool AutoCheck()
         {
             if (!UIOperationHelper.CheckUIOperation(this))
-            {
                 return false;
-            }
 
             if (!UICreateModule.InitVoName(this))
-            {
                 return false;
-            }
 
-            OnValueChangedEUICodeType();
-            OnValueChangedEPanelLayer();
+            OnChangeUIType();
+            OnChangePanelLayer();
             if (UICodeType == UIType.Panel && IsSplitData)
             {
                 PanelSplitData.Panel = gameObject;
                 if (!PanelSplitData.AutoCheck())
-                {
                     return false;
-                }
             }
 
             UICreateModule.RefreshChildTable(this);
-
             return true;
         }
 
         bool ShowCreateBtnByHierarchy()
         {
             if (string.IsNullOrEmpty(PkgName) || string.IsNullOrEmpty(ResName))
-            {
                 return false;
-            }
 
             if (ResName.Contains("Source"))
-            {
                 return false;
-            }
 
             if (UIOperationHelper.CheckUIOperation(this, false))
             {
@@ -175,7 +161,7 @@ namespace YIUIFramework
             if (!ShowCreateBtnByHierarchy())
                 return;
 
-            var prefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
+            var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
             if (prefabStage == null)
             {
                 Debug.LogError($"当前不在预制体编辑器模式下");
@@ -198,23 +184,9 @@ namespace YIUIFramework
                 return;
 
             table.GenUICode();
-
             AssetDatabase.OpenAsset(table);
         }
 
-        bool ShowCreateBtn()
-        {
-            if (IsSplitData)
-            {
-                return false;
-            }
-
-            return UIOperationHelper.CheckUIOperationAll(this, false);
-        }
-
-        [GUIColor(0.7f, 0.4f, 0.8f)]
-        [Button("Generate Code", 50)]
-        [ShowIf(nameof(ShowCreateBtn))]
         internal void GenUICode()
         {
             if (UIOperationHelper.CheckUIOperation(this))
@@ -252,6 +224,74 @@ namespace YIUIFramework
         internal void GenUICode(bool refresh, bool tips)
         {
             UICreateModule.Create(this, refresh, tips);
+        }
+
+
+        /// <summary>
+        /// 检查所有绑定命名
+        /// 必须m_ 开头
+        /// 如果没用命名则使用对象的名字拼接
+        /// 会尝试强制修改
+        /// 如果还有同名则报错
+        /// </summary>
+        internal void AddComponent(Component component)
+        {
+            if (UIOperationHelper.CheckUIOperation(this))
+            {
+                var oldName = component.gameObject.name;
+                if (component == null)
+                {
+                    Logger.LogErrorContext(this, $"{name} 空对象  所以 {oldName} 已忽略");
+                    return;
+                }
+
+                var newName = oldName;
+
+                var cName = NameUtility.ComponentName;
+                if (!oldName.CheckFirstName(cName))
+                {
+                    if (newName.IsEmpty())
+                    {
+                        if (component)
+                        {
+                            newName = $"{NameUtility.FirstName}{cName}{component.name}";
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        newName = $"{NameUtility.FirstName}{cName}{oldName}";
+                    }
+                }
+
+                newName = newName.ChangeToBigName(cName);
+
+                if (newName.IsEmpty())
+                {
+                    Logger.LogErrorContext(this, $"{name} 存在空名称 {component.name} 已忽略");
+                    return;
+                }
+
+                if (component == null)
+                {
+                    Logger.LogErrorContext(this, $"{name} 空对象  所以 {newName} 已忽略");
+                    return;
+                }
+
+                if (m_AllBindDic.ContainsValue(component))
+                {
+                    Logger.LogErrorContext(component, $"{name} 这个组件已经存在了 重复对象 {component.name} 已忽略");
+                    return;
+                }
+
+                if (!m_AllBindDic.TryAdd(newName, component))
+                {
+                    Logger.LogErrorContext(component, $"{name} 这个命名已经存在了 重复添加 {newName} 已忽略");
+                }
+            }
         }
     }
 }

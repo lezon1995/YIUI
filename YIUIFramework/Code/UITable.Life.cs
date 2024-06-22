@@ -26,52 +26,9 @@ namespace YIUIFramework
             UI = ui;
         }
 
-        void OnEnable()
-        {
-            try
-            {
-                onEnable?.Invoke();
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
-        }
-
-        void Start()
-        {
-            try
-            {
-                onStart?.Invoke();
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
-        }
-
-        void OnDisable()
-        {
-            try
-            {
-                onDisable?.Invoke();
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
-        }
-
-        void OnDestroy()
-        {
-            try
-            {
-                onDestroy?.Invoke();
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
-        }
+        void OnEnable() => onEnable?.Invoke();
+        void Start() => onStart?.Invoke();
+        void OnDisable() => onDisable?.Invoke();
+        void OnDestroy() => onDestroy?.Invoke();
     }
 }

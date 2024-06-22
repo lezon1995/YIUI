@@ -11,7 +11,8 @@ namespace YIUIFramework.Editor
     {
         internal static void Create(UITable table, bool refresh, bool tips)
         {
-            if (!UIOperationHelper.CheckUIOperation()) return;
+            if (!UIOperationHelper.CheckUIOperation())
+                return;
 
             /*
             //留在这里看的 方便以后查API
@@ -51,9 +52,7 @@ namespace YIUIFramework.Editor
             }
 
             if (!table.AutoCheck())
-            {
                 return;
-            }
 
             var baseData = new UICreateBaseData
             {
@@ -73,9 +72,7 @@ namespace YIUIFramework.Editor
             _ = new UICreateBaseCode(out var resultBase, YIUIAutoTool.Author, baseData);
 
             if (!resultBase)
-            {
                 return;
-            }
 
             switch (table.UICodeType)
             {
@@ -93,9 +90,7 @@ namespace YIUIFramework.Editor
                     _ = new UICreatePanelCode(out var result, YIUIAutoTool.Author, data);
 
                     if (result)
-                    {
                         break;
-                    }
 
                     return;
                 }
@@ -113,9 +108,7 @@ namespace YIUIFramework.Editor
                     _ = new UICreateViewCode(out var result, YIUIAutoTool.Author, data);
 
                     if (result)
-                    {
                         break;
-                    }
 
                     return;
                 }
@@ -134,9 +127,7 @@ namespace YIUIFramework.Editor
                     _ = new UICreateComponentCode(out var result, YIUIAutoTool.Author, data);
 
                     if (result)
-                    {
                         break;
-                    }
 
                     return;
                 }
@@ -193,14 +184,10 @@ namespace YIUIFramework.Editor
                 {
                     var parentInfo = Directory.GetParent(path);
                     if (parentInfo == null)
-                    {
                         return currentName;
-                    }
 
                     if (parentInfo.Name == UIConst.ProjectName)
-                    {
                         return currentName;
-                    }
 
                     path = parentInfo.FullName;
                     currentName = parentInfo.Name;
@@ -223,20 +210,21 @@ namespace YIUIFramework.Editor
         //如果自己是panel 则还需要额外检查 是不是把自己的view给收集进去了
         static void CheckAddUITable(ref List<UITable> tables, UITable table)
         {
-            if (table.UICodeType != UIType.Panel && !table.IsSplitData)
-                return;
-
-            for (var i = tables.Count - 1; i >= 0; i--)
+            if (table.UICodeType == UIType.Panel || table.IsSplitData)
             {
-                var targetTable = tables[i];
-                var parent = (RectTransform)targetTable.gameObject.transform.parent;
-                var parentName = parent.name;
-                //这里使用的是强判断 如果使用|| 可以弱判断根据需求  如果遵守View规则是没有问题的
-                if (parentName.Contains(UIConst.ParentName) && parentName.Contains(targetTable.gameObject.name))
+                for (var i = tables.Count - 1; i >= 0; i--)
                 {
-                    //常驻View 不需要移除
-                    if (table.PanelSplitData.ViewTabsStatic.Contains(parent)) break;
-                    tables.RemoveAt(i);
+                    var targetTable = tables[i];
+                    var parent = (RectTransform)targetTable.gameObject.transform.parent;
+                    var parentName = parent.name;
+                    //这里使用的是强判断 如果使用|| 可以弱判断根据需求  如果遵守View规则是没有问题的
+                    if (parentName.Contains(UIConst.ParentName) && parentName.Contains(targetTable.gameObject.name))
+                    {
+                        //常驻View 不需要移除
+                        if (table.PanelSplitData.ViewTabsStatic.Contains(parent))
+                            break;
+                        tables.RemoveAt(i);
+                    }
                 }
             }
         }
@@ -245,9 +233,7 @@ namespace YIUIFramework.Editor
         {
             var childCount = transform.childCount;
             if (childCount == 0)
-            {
                 return;
-            }
 
             for (var i = childCount - 1; i >= 0; i--)
             {
@@ -261,9 +247,7 @@ namespace YIUIFramework.Editor
                 }
 
                 if (table.PkgName.IsEmpty() || table.ResName.IsEmpty())
-                {
                     continue;
-                }
 
                 if (table.UICodeType == UIType.Panel)
                 {
@@ -271,12 +255,7 @@ namespace YIUIFramework.Editor
                     continue;
                 }
 
-                var newName = Regex.Replace(table.name, NameUtility.NameRegex, "");
-                if (table.name != newName)
-                {
-                    table.name = newName;
-                }
-
+                table.name = Regex.Replace(table.name, NameUtility.NameRegex, "");
                 tableList.Add(table);
             }
         }
