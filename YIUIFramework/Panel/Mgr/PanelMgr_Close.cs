@@ -133,7 +133,7 @@ namespace YIUIFramework
                 if (!panel.WindowLastClose)
                 {
                     await panel.InternalOnWindowCloseTween(tween);
-                    panel.OnClose();
+                    panel.OnWindowClose();
                 }
 
                 if (!ignoreElse)
@@ -144,7 +144,7 @@ namespace YIUIFramework
                 if (panel.WindowLastClose)
                 {
                     await panel.InternalOnWindowCloseTween(tween);
-                    panel.OnClose();
+                    panel.OnWindowClose();
                 }
 
                 RemoveUI(info);

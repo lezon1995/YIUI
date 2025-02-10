@@ -27,9 +27,7 @@ namespace YIUIFramework
             {
                 var name = type.Name;
                 if (panelInfos.TryGetValue(name, out panelInfo))
-                {
                     return true;
-                }
 
                 panelInfo = new PanelInfo(name, vo.PkgName, vo.ResName);
                 panelInfos.Add(name, panelInfo);

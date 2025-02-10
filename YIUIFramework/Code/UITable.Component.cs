@@ -45,12 +45,6 @@ namespace YIUIFramework
             if (UIOperationHelper.CheckUIOperation(this))
             {
                 var oldName = component.gameObject.name;
-                if (component == null)
-                {
-                    Logger.LogErrorContext(this, $"{name} 空对象  所以 {oldName} 已忽略");
-                    return;
-                }
-
                 var newName = oldName;
 
                 var cName = NameUtility.ComponentName;
@@ -78,12 +72,6 @@ namespace YIUIFramework
                 if (newName.IsEmpty())
                 {
                     Logger.LogErrorContext(this, $"{name} 存在空名称 {component.name} 已忽略");
-                    return;
-                }
-
-                if (component == null)
-                {
-                    Logger.LogErrorContext(this, $"{name} 空对象  所以 {newName} 已忽略");
                     return;
                 }
 
